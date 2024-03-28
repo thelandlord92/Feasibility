@@ -1,0 +1,1493 @@
+{
+  "Uuid": "d6043956-99ed-45b5-8bd2-161f2cbd7490",
+  "IsCustomNode": false,
+  "Description": "",
+  "Name": "Building Types",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "# Load the Python Standard and DesignScript Libraries\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\nclr.AddReference('GeometryColor')\r\nfrom Modifiers import GeometryColor\r\n\r\nclr.AddReference('DSCoreNodes')\r\nfrom DSCore import *\r\n\r\nsys.path.append(r'G:\\02_Onile\\05_Operations\\Software and App Development\\Erven Optimization')\r\nfrom onile_feasibility import listtools \r\nfrom onile_feasibility.geometrytools import sweep_profile\r\n\r\nfrom math import atan, degrees\r\n\r\n# Inputs.\r\nbuilding_width = IN[0]\r\nbuilding_length = IN[1]\r\nfloor_height = IN[2]\r\nfloor_number = IN[3]\r\nroof_height = IN[4]\r\nplane = IN[5]\r\ncustom_path = IN[6]\r\n\r\n\r\nclass Building: \r\n    \"\"\"\r\n    Represents a building with various sub classes, methods, and attributes.\r\n    \r\n    Subclasses:\r\n        BuildingShapes: Defines various profiles, paths, and geometry for creating various \r\n                        required building types.        \r\n        BuildingTypesPrimitive: Represents primitive building types.\r\n        BuildingTypesComplex: Represents complex building types.\r\n        BuildingPatterns: Defines patterns for arranging buildings.\r\n        \r\n    Attributes:\r\n        name (str): The name of the building.\r\n    \"\"\"\r\n  \r\n    \r\n    def __init__(\r\n               self, \r\n               name = \"default\",\r\n    ):\r\n        \"\"\"\r\n        Initializes a new Building instance.\r\n        \r\n        Args:\r\n            name (str): The name of the building.\r\n        \"\"\"\r\n        \r\n        # Raise errors if inputs are entered incorrectly.\r\n        if not isinstance(name, str):\r\n            raise TypeError(\"Name must be a string\")\r\n            \r\n            \r\n        self.name = name\r\n\r\n\r\nclass BuildingShapes(Building):\r\n    \"\"\"\r\n    Defines various profiles, paths, and geometry for creating various \r\n    required building types.\r\n    \r\n    Subclasses:\r\n        BasePaths: Defines generic sweep paths for the building base.\r\n        BaseProfiles: Defines vertical generic profiles for the building base to be swept along the \r\n                      base paths.\r\n        RoofProfiles: Defines various roof profile shapes.\r\n        BaseShapes: Defines various generic solids for the building base. \r\n        RoofShapes: Defines various generic roof solid shapes. \r\n    \"\"\" \r\n    \r\n    def __init__(self, name = \"default\"):\r\n        \"\"\"\r\n        Initialize a new building shape instance.\r\n        \r\n        Args:\r\n            name (str): The name of the building shape.\r\n        \"\"\"  \r\n        \r\n        super().__init__(name)\r\n             \r\n        \r\nclass BasePaths(BuildingShapes):\r\n    \"\"\"\r\n    Defines horizontal generic sweep paths for the building base.\r\n    \r\n    Attributes:\r\n        name (str): The name of the path.\r\n        rotation (float): The rotation of the path around the z-axis.\r\n        plane: The base horizontal plane of the path.\r\n        \r\n    Methods:\r\n        square_path: Creates a square path.\r\n        c_path: Creates a C-shaped path.\r\n        straight_path: Creates a straight path.\r\n    \"\"\"\r\n    \r\n    def __init__(\r\n                self,\r\n                name = \"default\",\r\n                rotation = 0,\r\n                plane = Plane.XY()\r\n    ):\r\n        \"\"\"\r\n        Initialize a new base path instance.\r\n        \r\n        \r\n        Args:\r\n            name (str): The name of the path.\r\n            rotation (float): The rotation of the path around the z axis.\r\n            plane: The base horizontal plane of the path.\r\n            \r\n        \"\"\"\r\n        \r\n        # Raise errors if inputs are entered incorrectly.\r\n        if not isinstance(plane, Plane):\r\n            raise TypeError(\"The plane input must be a plane object\")\r\n        if not plane.Normal.Z == 1:\r\n            raise TypeError(\"The building plane must be horizontal\")\r\n        if not isinstance(rotation, (int, float)):\r\n            raise TypeError(\"Rotation value must be a number\")\r\n        \r\n        super().__init__(name)\r\n        \r\n        self.rotation = rotation\r\n        self.plane = plane\r\n       \r\n        \r\n    def square_path(self, width=5, length=10):\r\n        \"\"\"\r\n        Creates a square path.\r\n        \r\n        Args:\r\n            width (float): The width of the path.\r\n            length (float): The length of the path.\r\n        \"\"\"\r\n        \r\n        # Raise errors if inputs are entered incorrectly.\r\n        if not isinstance(width, (int, float)):\r\n            raise TypeError(\"Width must be a number\")\r\n        if not isinstance(length, (int, float)):\r\n            raise TypeError(\"Length must be a number\") \r\n            \r\n        # Create the path rectangle.\r\n        base_rectangle = Rectangle.ByWidthLength(\r\n            self.plane, \r\n            width, \r\n            length\r\n        )\r\n        \r\n        # Rotate the path rectangle.\r\n        rotated_rectangle = Geometry.Rotate(\r\n            base_rectangle,\r\n            self.plane,\r\n            self.rotation\r\n        )\r\n            \r\n        return rotated_rectangle\r\n\r\n    \r\n    def c_path(self, width=5, length=10):\r\n        \"\"\"\r\n        Creates a C-shaped path.\r\n        \r\n        Args:\r\n            width (float): The width of the path.\r\n            length (float): The length of the path.\r\n        \"\"\"\r\n        \r\n        # Raise errors if inputs are entered incorrectly.\r\n        if not isinstance(width, (int, float)):\r\n            raise TypeError(\"Width must be a number\")\r\n        if not isinstance(length, (int, float)):\r\n            raise TypeError(\"Length must be a number\")\r\n            \r\n        # Create the path rectangle.\r\n        base_rectangle = self.square_path(\r\n            width,\r\n            length\r\n        )\r\n        \r\n        # Explode the base rectangle.\r\n        exploded_rectangle = listtools.list_flatten(base_rectangle.Explode())\r\n        \r\n        # Return a polycurve.\r\n        return PolyCurve.ByJoinedCurves(exploded_rectangle[1:])\r\n        \r\n    \r\n    def straight_path(self, length=10):\r\n        \"\"\"\r\n        Creates a straight path.\r\n        \r\n        Args:\r\n            length (float): The length of the path.\r\n        \"\"\"\r\n        \r\n        # Raise errors if inputs are entered incorrectly.\r\n        if not isinstance(length, (int, float)):\r\n            raise TypeError(\"Length must be a number\")\r\n      \r\n        # Create the path line.\r\n        path_line = Line.ByStartPointDirectionLength(\r\n                Point.ByCoordinates(),\r\n                Vector.YAxis(),\r\n                length\r\n        )\r\n        \r\n        # Create a plane on the path for transformation.\r\n        path_plane = Plane.ByOriginNormal(\r\n            path_line.PointAtParameter(0.5),\r\n            Vector.ZAxis()\r\n        )\r\n        \r\n        # Get the coordinate systems for the transformation.\r\n        from_coord = CoordinateSystem.ByPlane(self.plane)\r\n        to_coord = CoordinateSystem.ByPlane(path_plane)\r\n        \r\n        # Transform the path line to the input plane.\r\n        transformed_path = path_line.Transform(\r\n                to_coord,\r\n                from_coord\r\n        )\r\n        \r\n        # Rotate the path.\r\n        rotated_path = Geometry.Rotate(\r\n            transformed_path,\r\n            self.plane,\r\n            self.rotation\r\n        )\r\n        \r\n        return rotated_path\r\n\r\n\r\nclass BaseProfiles(BuildingShapes):\r\n    \"\"\"\r\n    Defines vertical generic profiles for the building base to be swept along the \r\n    base paths.\r\n    \r\n    Attributes:\r\n        name (str): The name of the profile.\r\n        width (float): The width of the profile.\r\n        height (float): The height of the profile.\r\n        mirrored (bool): To determime if the profile was mirrored.\r\n        \r\n    Methods:\r\n        square_profile: Creates a square building base profile.\r\n    \"\"\" \r\n    \r\n    def __init__(\r\n                self,\r\n                name = \"default\",\r\n                width = 5,\r\n                height = 3,\r\n                mirrored = False\r\n    ):\r\n        \"\"\"\r\n        Initializes a new base profile instance.\r\n        \r\n        Args:\r\n            name (str): The name of the profile.\r\n            width (float): The width of the profile.\r\n            height (float): The height of the profile.\r\n            mirrored (bool): Mirror the profile.\r\n        \"\"\" \r\n        \r\n        # Raise errors if inputs are entered incorrectly.\r\n        if not isinstance(width, (int, float)):\r\n            raise TypeError(\"Width must be a number\")\r\n        if not isinstance(height, (int, float)):\r\n            raise TypeError(\"Height must be a number\")\r\n        if not isinstance(mirrored, bool):\r\n            raise TypeError(\"The mirrored input must be a boolean\")\r\n            \r\n            \r\n        super().__init__(name)\r\n        \r\n        self.width = width\r\n        self.height = height\r\n        self.mirrored = mirrored\r\n        \r\n        \r\n    def square_profile(self):\r\n        \"\"\"Creates a square building base profile\"\"\"\r\n        \r\n        # The base plane of the profile.\r\n        base_plane = Plane.XZ()\r\n        \r\n        # Create the profile.\r\n        profile = Rectangle.ByWidthLength(\r\n            base_plane,\r\n            self.height,\r\n            self.width\r\n        )\r\n        \r\n        # Move plane vertically to align base with XY plane.\r\n        moved_profile_XY = profile.Translate(\r\n                    Vector.ZAxis(), \r\n                    self.height/2\r\n        )\r\n        \r\n        # Move plane vertically to align base with YZ plane.\r\n        moved_profile_YZ = moved_profile_XY.Translate(\r\n                    Vector.XAxis(), \r\n                    self.width/2\r\n        )\r\n        \r\n        # Mirror the profile along the YZ axis if required.\r\n        if self.mirrored == True:\r\n            mirror_profile = moved_profile_YZ.Mirror(Plane.YZ())\r\n        else:\r\n            mirror_profile = moved_profile_YZ\r\n            \r\n        return mirror_profile\r\n        \r\n\r\nclass RoofProfiles(BuildingShapes):\r\n    \"\"\"\r\n    Defines various roof profile shapes.\r\n    \r\n    Attributes:\r\n        name (str): The name of the profile.\r\n        width (float): The width of the profile.\r\n        height (float): The height of the profile.\r\n        mirrored (bool): To determime if the profile was mirrored.\r\n        pitch (int): The angle of the profile to the horizontal plane.\r\n        \r\n    Methods:\r\n        mono_pitch_profile: Creates a roof monopitch profile.\r\n        double_pitch_profile: Creates a roof double pitch profile.\r\n        flat_roof_profile: Creates a flat roof profile.\r\n    \"\"\"\r\n    \r\n    def __init__(\r\n                self,\r\n                name = \"default\",\r\n                width = 5,\r\n                height = 2.5,\r\n                mirrored = False,\r\n                pitch = 0\r\n    ):\r\n        \"\"\"\r\n        Initializes a new roof profile instance.\r\n        \r\n        Args:\r\n            name (str): The name of the profile.\r\n            width (float): The width of the profile.\r\n            height (float): The height of the profile.\r\n            mirrored (bool): Mirror the profile.\r\n        \"\"\" \r\n        \r\n        # Raise errors if inputs are entered incorrectly.\r\n        if not isinstance(width, (int, float)):\r\n            raise TypeError(\"Width must be a number\")\r\n        if not isinstance(height, (int, float)):\r\n            raise TypeError(\"Height must be a number\")\r\n        if not isinstance(mirrored, bool):\r\n            raise TypeError(\"The mirrored input must be a boolean\")\r\n        if width <= 0:\r\n            raise AttributeError(\"Width must be greater than 0\")\r\n        if height <= 0:\r\n            raise AttributeError(\"Height must be greater than 0\")\r\n            \r\n            \r\n        super().__init__(name)\r\n        \r\n        self.width = width\r\n        self.height = height\r\n        self.mirrored = mirrored\r\n        self.pitch = 0\r\n        \r\n    \r\n    def mono_pitch_profile(self, fascia_height=0):\r\n        \"\"\"\r\n        Creates a monopitch roof profile.\r\n        \r\n        Args:\r\n            fascia_height (float): The height of the profile's fascia edge.\r\n        \"\"\"\r\n        \r\n        # Raise errors if inputs are entered incorrectly.\r\n        if not isinstance(fascia_height, (int, float)):\r\n            raise TypeError(\"Fascia height must be a number\")\r\n        \r\n        # Create the first profile point.\r\n        profile_point_1 = Point.ByCoordinates()\r\n        \r\n        # Create the second profile point.\r\n        profile_point_2 = Point.ByCoordinates(self.width, 0, 0)\r\n        \r\n        # Create the third profile point.\r\n        profile_point_3 = Point.ByCoordinates(self.width, 0, fascia_height)\r\n        \r\n        # Create the fourth profile point.\r\n        profile_point_4 = Point.ByCoordinates(0, 0, self.height)\r\n        \r\n        # Create the profile polycurve.\r\n        points = [\r\n                profile_point_1, \r\n                profile_point_2, \r\n                profile_point_3, \r\n                profile_point_4\r\n        ]\r\n        profile_curve = PolyCurve.ByPoints(Point.PruneDuplicates(points), True)\r\n        \r\n        # Mirror the profile along the YZ axis if required.\r\n        if self.mirrored == True:\r\n            mirror_profile = profile_curve.Mirror(Plane.YZ())\r\n        else:\r\n            mirror_profile = profile_curve\r\n            \r\n        # Update the roof pitch value.\r\n        self.pitch = degrees(atan((self.height - fascia_height) / self.width))\r\n            \r\n        return mirror_profile\r\n        \r\n        \r\n    def double_pitch_profile(self, fascia_height=0):\r\n        \"\"\"\r\n        Creates a double pitch roof profile.\r\n        \r\n        Args:\r\n            fascia_height (float): The height of the profile's fascia edge.\r\n        \"\"\"\r\n        \r\n        # Raise errors if inputs are entered incorrectly.\r\n        if not isinstance(fascia_height, (int, float)):\r\n            raise TypeError(\"Fascia height must be a number\")\r\n\r\n        # Create the first profile point.\r\n        profile_point_1 = Point.ByCoordinates()\r\n        \r\n        # Create the second profile point.\r\n        profile_point_2 = Point.ByCoordinates(self.width, 0, 0)\r\n        \r\n        # Create the third profile point.\r\n        profile_point_3 = Point.ByCoordinates(self.width, 0, fascia_height)\r\n        \r\n        # Create the fourth profile point.\r\n        profile_point_4 = Point.ByCoordinates(self.width/2, 0, self.height)\r\n        \r\n        # Create the fifth profile point.\r\n        profile_point_5 = Point.ByCoordinates(0, 0, fascia_height)\r\n        \r\n        # Create the profile polycurve.\r\n        points = [\r\n                profile_point_1, \r\n                profile_point_2, \r\n                profile_point_3,\r\n                profile_point_4,\r\n                profile_point_5\r\n        ]\r\n        profile_curve = PolyCurve.ByPoints(Point.PruneDuplicates(points), True)\r\n        \r\n        # Mirror the profile along the YZ axis if required.\r\n        if self.mirrored == True:\r\n            mirror_profile = profile_curve.Mirror(Plane.YZ())\r\n        else:\r\n            mirror_profile = profile_curve\r\n            \r\n        # Update the roof pitch value.\r\n        self.pitch = degrees(atan(self.height / (self.width/2)))\r\n        \r\n        return mirror_profile\r\n        \r\n        \r\n    def flat_roof_profile(\r\n                        self,  \r\n                        parapet_thickness=0.25,\r\n                        roof_thickness=0.25\r\n    ):\r\n        \"\"\"\r\n        Creates a flat roof profile. The parapet height and width values \r\n        must be greater than zero to make parapets visible.\r\n        \r\n        Args:\r\n            parapet_thickness (float): The thickness of the parapet.\r\n        \r\n        \"\"\"\r\n        \r\n        # Raise errors if inputs are entered incorrectly.\r\n        if not isinstance(parapet_thickness, (int, float)):\r\n            raise TypeError(\"Parapet thickness must be a number\")\r\n        if not isinstance(roof_thickness, (int, float)):\r\n            raise TypeError(\"Roof thickness must be a number\")\r\n        if parapet_thickness <= 0:\r\n            raise AttributeError(\"Parapet thickness must be greater than 0\")\r\n        if roof_thickness <= 0:\r\n            raise AttributeError(\"Roof thickness must be greater than 0\")\r\n        \r\n        # Define the profile points.   \r\n        # Create the first profile point.\r\n        profile_point_1 = Point.ByCoordinates()\r\n        \r\n        # Create the second profile point.\r\n        profile_point_2 = Point.ByCoordinates(self.width, 0, 0)\r\n        \r\n        # Create the third profile point.\r\n        profile_point_3 = Point.ByCoordinates(self.width, 0, self.height)\r\n        \r\n        # Create the fourth profile point.\r\n        profile_point_4 = Point.ByCoordinates(\r\n                                        self.width - parapet_thickness,\r\n                                        0, \r\n                                        self.height\r\n        )\r\n        \r\n        # Create the fifth profile point.\r\n        profile_point_5 = Point.ByCoordinates(\r\n                                        self.width - parapet_thickness,\r\n                                        0, \r\n                                        roof_thickness\r\n        )\r\n        \r\n        # Create the sixth profile point.\r\n        profile_point_6 = Point.ByCoordinates(\r\n                                        parapet_thickness,\r\n                                        0, \r\n                                        roof_thickness\r\n        )\r\n        \r\n        # Create the seventh profile point.\r\n        profile_point_7 = Point.ByCoordinates(\r\n                                        parapet_thickness,\r\n                                        0, \r\n                                        self.height\r\n        )\r\n        \r\n        # Create the eighth profile point.\r\n        profile_point_8 = Point.ByCoordinates(\r\n                                        0,\r\n                                        0, \r\n                                        self.height\r\n        )\r\n        \r\n        # Create the profile polycurve.\r\n        points = [\r\n                profile_point_1, \r\n                profile_point_2, \r\n                profile_point_3,\r\n                profile_point_4,\r\n                profile_point_5,\r\n                profile_point_6,\r\n                profile_point_7,\r\n                profile_point_8,\r\n        ]\r\n        profile_curve = PolyCurve.ByPoints(Point.PruneDuplicates(points), True)\r\n        \r\n        # Mirror the profile along the YZ axis if required.\r\n        if self.mirrored == True:\r\n            mirror_profile = profile_curve.Mirror(Plane.YZ())\r\n        else:\r\n            mirror_profile = profile_curve\r\n        \r\n        return mirror_profile\r\n\r\n#####CONTINUE HERE#####\r\n# Remove cross width and cross height parameters and use bounding box dimensions to offset along path x axis for path intersection.\r\n# Update to allow flexibility in the position and orientation of the custom profile.\r\n# Complete roof shapes methods.\r\n\r\nclass BaseShapes(BuildingShapes):\r\n    \"\"\"\r\n    Defines various generic solids for the building base.\r\n    \r\n    Attributes:\r\n        name (str): The name of the shape.\r\n        cross_width (float): The cross-sectional width of the shape.\r\n        cross_height (float): The cross-sectional height of the shape.\r\n        mirrored (bool): To determime if the shape's profile was mirrored\r\n                         along the path.\r\n        path_length (float): The length of the shape's path.\r\n        path_width (float): The width of the shape's path.\r\n        path_type (str): The type of path selected for the shape.\r\n        path: The path along which the profile is swept.\r\n        profile: The profile swept along the shape's path.\r\n        profile_type (str): The type of profile selected for the shape.\r\n        rotation (float): The rotation of the shape around the z-axis.\r\n        plane: The base horizontal plane of the shape.\r\n        color_alpha (int): The alpha value of the shape's colour.\r\n        color_r (int): The red component of the shape's colour.\r\n        color_g (int): The green component of the shape's colour.\r\n        color_b (int): The blue component of the shape's colour.\r\n        \r\n    Methods:\r\n        custom_shape: Creates a building base shape along a custom path.\r\n        square_shape: Creates a square building base shape.\r\n        c_shape: Creates a c-shaped building base shape.\r\n        straight_shape: Creates a straight building base shape. \r\n    \"\"\"\r\n    \r\n    def __init__(\r\n                self,\r\n                name = \"default\",\r\n                cross_width = 5,\r\n                cross_height = 2.5,\r\n                mirrored = False,\r\n                path_length = 20,\r\n                rotation = 0,\r\n                plane = Plane.XY(),\r\n                color_alpha = 255,\r\n                color_r = 0,\r\n                color_g = 0,\r\n                color_b = 0\r\n    ):\r\n        \"\"\"\r\n        Initializes a new base shape instance.\r\n        \r\n        Args:\r\n            name (str): The name of the shape.\r\n            cross_width (float): The cross-sectional width of the shape.\r\n            cross_height (float): The cross-sectional height of the shape.\r\n            mirrored (bool): Mirror the profile.\r\n            path_length (float): The length of the shape's path.\r\n            rotation (float): The rotation of the shape around the z-axis.\r\n            plane: The base horizontal plane of the shape.\r\n            color_alpha (int): The alpha value of the shape's colour.\r\n            color_r (int): The red component of the shape's colour.\r\n            color_g (int): The green component of the shape's colour.\r\n            color_b (int): The blue component of the shape's colour.\r\n        \"\"\" \r\n        \r\n        # Raise errors if inputs are entered incorrectly.\r\n        if not isinstance(cross_width, (int, float)):\r\n            raise TypeError(\"Cross-sectional width must be a number\")\r\n        if not isinstance(cross_height, (int, float)):\r\n            raise TypeError(\"Cross-sectional height must be a number\")\r\n        if not isinstance(mirrored, bool):\r\n            raise TypeError(\"The mirrored input must be a boolean\")\r\n        if not isinstance(path_length, (int, float)):\r\n            raise TypeError(\"Path length must be a number\")\r\n        if not isinstance(rotation, (int, float)):\r\n            raise TypeError(\"Rotation value must be a number\")\r\n        if not isinstance(plane, Plane):\r\n            raise TypeError(\"The plane input must be a plane object\")\r\n        if not plane.Normal.Z == 1:\r\n            raise TypeError(\"The building plane must be horizontal\")\r\n        if not isinstance(color_alpha, int):\r\n            raise TypeError(\"Color alpha value must be an integer\")\r\n        if not isinstance(color_r, int):\r\n            raise TypeError(\"Color r value must be an integer\")\r\n        if not isinstance(color_g, int):\r\n            raise TypeError(\"Color g value must be an integer\")\r\n        if not isinstance(color_b, int):\r\n            raise TypeError(\"Color b value must be an integer\")\r\n        if cross_width <= 0:\r\n            raise AttributeError(\"Cross-sectional width must be greater than 0\")\r\n        if cross_height <= 0:\r\n            raise AttributeError(\"Cross-sectional height must be greater than 0\")\r\n        if path_length <= 0:\r\n            raise AttributeError(\"Path length must be greater than 0\")\r\n        if not color_alpha in range(256):\r\n            raise AttributeError(\"Invalid color alpha value\")\r\n        if not color_r in range(256):\r\n            raise AttributeError(\"Invalid color r value\")\r\n        if not color_g in range(256):\r\n            raise AttributeError(\"Invalid color g value\")\r\n        if not color_b in range(256):\r\n            raise AttributeError(\"Invalid color b value\")\r\n        \r\n        super().__init__(name)\r\n        \r\n        self.cross_width = cross_width\r\n        self.cross_height = cross_height\r\n        self.mirrored = mirrored\r\n        self.path_length = path_length\r\n        self.path_width = 0\r\n        self.path_type = None\r\n        self.path = None\r\n        self.profile = None\r\n        self.rotation = rotation\r\n        self.plane = plane\r\n        self.color_alpha = color_alpha\r\n        self.color_r = color_r\r\n        self.color_g = color_g\r\n        self.color_b = color_b\r\n        \r\n        \r\n    def custom_shape(\r\n                    self, \r\n                    profile,\r\n                    path_type=\"custom\", \r\n                    path_width=20,\r\n                    custom_path=Rectangle.ByWidthLength(50, 50),\r\n                    path_placement=\"center\"\r\n    ):\r\n        \"\"\"\r\n        Creates a building shape along a custom path. \r\n        \r\n        Args:\r\n            path_type (str): The type of path selected for the shape.\r\n            path_width (float): The width of the shape's path.\r\n            profile: The profile swept along the shape's path. Default profile\r\n                     is a square profile from the BaseProfiles class.\r\n            custom_path: The custom curve path to be used if the path type\r\n                         is set to \"custom\". The default path is set to a fixed \r\n                         50 x 50 rectangle.\r\n            path_placement (str): To indicate the placement location of the\r\n                                  path. \"center\" of the path's bounding box \r\n                                  or \"start\" of the path's curve.\r\n                       \r\n        \"\"\"\r\n        \r\n        # Raise errors if inputs are entered incorrectly.\r\n        if not isinstance(path_type, str):\r\n            raise TypeError(\"Path type must be a string\")\r\n        if not isinstance(path_width, (int, float)):\r\n            raise TypeError(\"Path width must be a number\")\r\n        if path_width <= 0:\r\n            raise AttributeError(\"Path width must be greater than 0\")\r\n        if not isinstance(profile, (PolyCurve, NurbsCurve)):\r\n            raise TypeError(\"Profile must be curve object\")\r\n        if not profile.IsClosed == True:\r\n            raise AttributeError(\"Profile must be a closed curve\")\r\n        if not profile.IsPlanar == True:\r\n            raise AttributeError(\"Profile must be a planar curve\")\r\n        if not isinstance(custom_path, (Line, PolyCurve, NurbsCurve)):\r\n            raise TypeError(\"The custom path must be a curve\")\r\n        if path_placement != \"center\" and path_placement != \"start\":\r\n            raise AttributeError(\"Path placement must be 'center' or 'start'\")\r\n        \r\n        # Create the base path to sweep the profile.   \r\n        path_instance = BasePaths(rotation=self.rotation, plane=self.plane)\r\n        \r\n        # Get the path instance bounding box.\r\n        bounding_box = BoundingBox.ByGeometry(custom_path)\r\n        \r\n        if path_type == \"custom\":\r\n            # Transform the custom path onto the input plane.\r\n            \r\n            # Create diagonal line at bounding box corners.\r\n            box_diagonal = PolyCurve.ByPoints([\r\n                                               bounding_box.MaxPoint,\r\n                                               bounding_box.MinPoint\r\n                                               ]\r\n            )\r\n            \r\n            # Allow for selection of center or start path placement point.\r\n            if path_placement == \"center\":\r\n                placement_point = box_diagonal.PointAtParameter(0.5)\r\n            elif path_placement == \"start\":\r\n                placement_point = custom_path.PointAtParameter(0)\r\n            \r\n            # Transform path.                                                                   \r\n            center_plane = Plane.ByOriginNormal(placement_point, Vector.ZAxis())\r\n            rotate_path = custom_path.Rotate(center_plane, self.rotation)\r\n            transform_path = rotate_path.Transform(\r\n                                                  center_plane.ToCoordinateSystem(),\r\n                                                  self.plane.ToCoordinateSystem()\r\n            )\r\n            base_path = transform_path \r\n        elif path_type == \"straight\":\r\n            base_path = path_instance.straight_path(self.path_length)\r\n        elif path_type == \"c\":\r\n            base_path = path_instance.c_path(path_width, self.path_length)\r\n        elif path_type == \"square\":\r\n            base_path = path_instance.square_path(path_width, self.path_length)\r\n        \r\n        # Create a plane on the path for profile transformation.\r\n        path_plane = base_path.PlaneAtParameter(0)\r\n        \r\n        # Get the path plane coordinate system.\r\n        path_plane_coordsys = path_plane.ToCoordinateSystem()\r\n        \r\n        # Get the profile plane coordiante system.\r\n        profile_plane_coordsys = Plane.XZ().ToCoordinateSystem()\r\n        \r\n        # Create a profile for sweeping.\r\n        base_profile = profile\r\n        \r\n        \r\n        # Sweep the profile along the path.\r\n        try:\r\n            # Sweep the profile.     \r\n            sweep_solid = sweep_profile(\r\n                                        base_profile, \r\n                                        base_path, \r\n                                        path_type, \r\n                                        self.cross_width\r\n            )\r\n        \r\n        except:\r\n            # Flip the profile if an exception is returned.\r\n            if self.mirrored == True:\r\n                profile_instance.mirrored = False\r\n                \r\n                # Create a profile for sweeping.\r\n                base_profile = profile_instance.square_profile()\r\n                \r\n                # Sweep the profile.     \r\n                sweep_solid = sweep_profile(\r\n                                            base_profile, \r\n                                            base_path, \r\n                                            path_type, \r\n                                            self.cross_width\r\n                )\r\n                \r\n        # Color the swept solid.\r\n        color = Color.ByARGB(\r\n                            self.color_alpha,\r\n                            self.color_r,\r\n                            self.color_g,\r\n                            self.color_b\r\n        )\r\n        \r\n        color_geometry = GeometryColor.ByGeometryColor(sweep_solid[0], color)\r\n        \r\n        # Update the path width value.########UPDATE TO REFELCT CUSTOM SHAPE BOUNDING BOX########\r\n        if path_type == \"custom\":\r\n            bounding_box_cuboid = bounding_box.ToCuboid()\r\n            self.path_width = bounding_box_cuboid.Width\r\n            self.path_length = bounding_box_cuboid.Length\r\n        else:\r\n            self.path_width = path_width\r\n        \r\n        # Update the path value.\r\n        self.path = base_path\r\n        \r\n        # Update the path type value.\r\n        self.path_type = \"custom\"\r\n        \r\n        # Update the path value.\r\n        self.profile = sweep_solid[1]\r\n        \r\n        return sweep_solid, color_geometry, \r\n        \r\n       \r\n    def square_shape(\r\n                    self,\r\n                    profile, \r\n                    path_width=20\r\n    ):\r\n        \"\"\"\r\n        Creates a square building base shape.\r\n            \r\n        Args:\r\n            path_width (float): The width of the shape's path.\r\n        \"\"\"\r\n            \r\n        # Raise errors if inputs are entered incorrectly.\r\n        if not isinstance(path_width, (int, float)):\r\n            raise TypeError(\"Path width must be a number\")\r\n            \r\n        # Create the sweep solid, color geometry and base_path.\r\n        elements = self.custom_shape(\r\n                                    profile = profile,\r\n                                    path_type = \"square\",\r\n                                    path_width = path_width\r\n        )\r\n        \r\n        # Update the path type value.\r\n        self.path_type = \"square\"\r\n            \r\n        return elements\r\n           \r\n            \r\n    def c_shape(\r\n               self,\r\n               profile, \r\n               path_width=20\r\n    ):\r\n        \"\"\"\r\n        Creates a C-shaped building base shape.\r\n            \r\n        Args:\r\n            path_width (float): The width of the shape's path.\r\n        \"\"\"\r\n            \r\n        # Raise errors if inputs are entered incorrectly.\r\n        if not isinstance(path_width, (int, float)):\r\n            raise TypeError(\"Path width must be a number\")\r\n            \r\n        # Create the sweep solid, color geometry and base_path.\r\n        elements = self.custom_shape(\r\n                                    profile = profile,\r\n                                    path_type = \"c\",\r\n                                    path_width = path_width\r\n        )\r\n        \r\n        # Update the path type value.\r\n        self.path_type = \"c\"\r\n            \r\n        return elements\r\n       \r\n           \r\n    def straight_shape(self, profile):\r\n        \"\"\"\r\n        Creates a straight building base shape.\r\n        \"\"\"\r\n            \r\n        # Create the sweep solid, color geometry and base_path.\r\n        elements = self.custom_shape(profile = profile, path_type = \"straight\")\r\n        \r\n        # Update the path type value.\r\n        self.path_type = \"straight\"\r\n        \r\n        # Update the path width value.\r\n        self.path_width = 0\r\n            \r\n        return elements\r\n  \r\n              \r\nclass RoofShapes(BuildingShapes):\r\n    \"\"\"\r\n    Defines various generic roof solid shapes.\r\n    \r\n    Attributes:\r\n        name (str): The name of the shape.\r\n        cross_width (float): The cross-sectional width of the shape.\r\n        cross_height (float): The cross-sectional height of the shape.\r\n        mirrored (bool): To determime if the shape's profile was mirrored\r\n                         along the path.\r\n        path_length (float): The length of the shape's path.\r\n        path_width (float): The width of the shape's path.\r\n        path_type (str): The type of path selected for the shape.\r\n        profile_type (str): The type of profile selected for the shape.\r\n        rotation (float): The rotation of the shape around the z-axis.\r\n        plane: The base horizontal plane of the shape.\r\n        color_alpha (int): The alpha value of the shape's colour.\r\n        color_r (int): The red component of the shape's colour.\r\n        color_g (int): The green component of the shape's colour.\r\n        color_b (int): The blue component of the shape's colour.\r\n        \r\n    Methods:\r\n        custom_shape: Creates a roof shape along a custom path.\r\n        square_shape: Creates a square roof shape.\r\n        c_shape: Creates a c-shaped roof shape.\r\n        straight_shape: Creates a straight roof shape.\r\n    \"\"\"\r\n    \r\n    def __init__(\r\n                self,\r\n                name = \"default\",\r\n                cross_width = 5,\r\n                cross_height = 2.5,\r\n                mirrored = False,\r\n                path_length = 20,\r\n                rotation = 0,\r\n                plane = Plane.XY(),\r\n                color_alpha = 255,\r\n                color_r = 0,\r\n                color_g = 0,\r\n                color_b = 0\r\n    ):\r\n        \"\"\"\r\n        Initializes a new roof shape instance.\r\n        \r\n        Args:\r\n            name (str): The name of the shape.\r\n            cross_width (float): The cross-sectional width of the shape.\r\n            cross_height (float): The cross-sectional height of the shape.\r\n            mirrored (bool): Mirror the profile.\r\n            path_length (float): The length of the shape's path.\r\n            profile_type (str): The type of profile selected for the shape.\r\n            rotation (float): The rotation of the shape around the z-axis.\r\n            plane: The base horizontal plane of the shape.\r\n            color_alpha (int): The alpha value of the shape's colour.\r\n            color_r (int): The red component of the shape's colour.\r\n            color_g (int): The green component of the shape's colour.\r\n            color_b (int): The blue component of the shape's colour.\r\n        \"\"\" \r\n        \r\n        # Raise errors if inputs are entered incorrectly.\r\n        if not isinstance(cross_width, (int, float)):\r\n            raise TypeError(\"Cross-sectional width must be a number\")\r\n        if not isinstance(cross_height, (int, float)):\r\n            raise TypeError(\"Cross-sectional height must be a number\")\r\n        if not isinstance(mirrored, bool):\r\n            raise TypeError(\"The mirrored input must be a boolean\")\r\n        if not isinstance(path_length, (int, float)):\r\n            raise TypeError(\"Path length must be a number\")\r\n        if not isinstance(rotation, (int, float)):\r\n            raise TypeError(\"Rotation value must be a number\")\r\n        if not isinstance(plane, Plane):\r\n            raise TypeError(\"The plane input must be a plane object\")\r\n        if not plane.Normal.Z == 1:\r\n            raise TypeError(\"The plane must be horizontal\")\r\n        if not isinstance(color_alpha, int):\r\n            raise TypeError(\"Color alpha value must be an integer\")\r\n        if not isinstance(color_r, int):\r\n            raise TypeError(\"Color r value must be an integer\")\r\n        if not isinstance(color_g, int):\r\n            raise TypeError(\"Color g value must be an integer\")\r\n        if not isinstance(color_b, int):\r\n            raise TypeError(\"Color b value must be an integer\")\r\n        if cross_width <= 0:\r\n            raise AttributeError(\"Cross-sectional width must be greater than 0\")\r\n        if cross_height <= 0:\r\n            raise AttributeError(\"Cross-sectional height must be greater than 0\")\r\n        if path_length <= 0:\r\n            raise AttributeError(\"Path length must be greater than 0\")\r\n        if not color_alpha in range(256):\r\n            raise AttributeError(\"Invalid color alpha value\")\r\n        if not color_r in range(256):\r\n            raise AttributeError(\"Invalid color r value\")\r\n        if not color_g in range(256):\r\n            raise AttributeError(\"Invalid color g value\")\r\n        if not color_b in range(256):\r\n            raise AttributeError(\"Invalid color b value\")\r\n        \r\n        super().__init__(name)\r\n        \r\n        self.cross_width = cross_width\r\n        self.cross_height = cross_height\r\n        self.mirrored = mirrored\r\n        self.path_length = path_length\r\n        self.path_width = 0\r\n        self.path_type = None\r\n        self.path = None\r\n        self.profile = None\r\n        self.rotation = rotation\r\n        self.plane = plane\r\n        self.color_alpha = color_alpha\r\n        self.color_r = color_r\r\n        self.color_g = color_g\r\n        self.color_b = color_b\r\n        \r\n    \r\n    def custom_shape(\r\n                    self, \r\n                    path_type=\"custom\", \r\n                    path_width=20,\r\n                    profile = RoofProfiles().mono_pitch_profile(),\r\n                    custom_path=Rectangle.ByWidthLength(50, 50),\r\n                    path_placement=\"center\"\r\n    ):\r\n        \"\"\"\r\n        Creates a roof shape along a custom path. \r\n        \r\n        Args:\r\n            path_type (str): The type of path selected for the shape.\r\n            path_width (float): The width of the shape's path.\r\n            custom_path: The custom curve path to be used if the path type\r\n                         is set to \"custom\". The default path is set to a \r\n                         50 x 50 rectangle.\r\n            path_placement (str): To indicate the placement location of the\r\n                                  path. \"center\" of the path's bounding box \r\n                                  or \"start\" of the path's curve.\r\n                       \r\n        \"\"\"\r\n        \r\n        # Create the roof sweep solid, color geometry and base_path.\r\n        base_shape_instance = BaseShapes(\r\n                                         cross_width = self.cross_width,\r\n                                         cross_height = self.cross_height,\r\n                                         mirrored = self.mirrored,\r\n                                         path_length = self.path_length,\r\n                                         rotation = self.rotation,\r\n                                         plane = self.plane,\r\n                                         color_alpha = self.color_alpha,\r\n                                         color_r = self.color_r,\r\n                                         color_g = self.color_g,\r\n                                         color_b = self.color_b\r\n         )\r\n         \r\n        elements = base_shape_instance.custom_shape(\r\n                                                   path_type = path_type,\r\n                                                   path_width = path_width,\r\n                                                   profile = profile,\r\n                                                   custom_path = custom_path,\r\n                                                   path_placement = path_placement\r\n        )\r\n        \r\n        # Update the path width value.########UPDATE TO REFELCT CUSTOM SHAPE BOUNDING BOX########\r\n        self.path_width = path_width\r\n        \r\n        # Update the path value.\r\n        self.path = base_shape_instance.path\r\n        \r\n        # Update the path type value.\r\n        self.path_type = \"custom\"\r\n        \r\n        # Update the path value.\r\n        self.profile = base_shape_instance.profile\r\n            \r\n        return elements\r\n\r\n\r\n    def square_shape():\r\n        pass\r\n        \r\n    def c_shape():\r\n        pass\r\n        \r\n    def straight_shape():\r\n        pass\r\n        \r\n\r\n\r\n###############################################################################\r\n# Output.\r\nbase_shape_instance = BaseShapes(path_length=180, cross_width=15)\r\nprofile_instance = RoofProfiles(width=10, height=15, mirrored=True).flat_roof_profile()\r\nOUT = base_shape_instance.c_shape(profile_instance, path_width=50), base_shape_instance.path_width,",
+      "Engine": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "1572ce0d3dc14dfe8f132bbf6b94f5d6",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "26eba7245dd74b5bb2f5d4d3d7ff4dfb",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f9c7b2b8844848749291ed0e8b76f39a",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "8611efdd176748a69e1137ef1cca0e6e",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "eacbf79c45e84208a52d404b88ab5078",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1af6e06085c34f26827d6068b50dba06",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9d993870d9084b1fa55b256ab37c51a7",
+          "Name": "IN[5]",
+          "Description": "Input #5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "319093405dfb4c03a783cbf11573a3b1",
+          "Name": "IN[6]",
+          "Description": "Input #6",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "228d918748b7414081b983a2a34be4ce",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded Python script."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 100.0,
+      "MinimumValue": 1.0,
+      "StepValue": 1.0,
+      "Id": "9f532afd2cfa4c8187da6859f18a3115",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "dd448244e8654ef382dc7c31660b8399",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Produces numeric values",
+      "InputValue": 21.0
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 100.0,
+      "MinimumValue": 1.0,
+      "StepValue": 1.0,
+      "Id": "0ce43424ecb44516a45a4a215c754c18",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "c55c42764c0e4d419aa10e7fa829a499",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Produces numeric values",
+      "InputValue": 46.0
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 5.0,
+      "MinimumValue": 1.0,
+      "StepValue": 1.0,
+      "Id": "39de7dea1fbc4653ad75a2ebc1a126ae",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "2393c1e0ee594162820208f48f81a33f",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Produces numeric values",
+      "InputValue": 3.0
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.IntegerSlider, CoreNodeModels",
+      "NumberType": "Integer",
+      "MaximumValue": 10,
+      "MinimumValue": 1,
+      "StepValue": 1,
+      "Id": "7b00b2f6254047fb9b7e3cdda3d6be94",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "6c0663c44ca64acbad9c4e67183b6408",
+          "Name": "",
+          "Description": "Int64",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Produces integer values",
+      "InputValue": 7
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 50.0,
+      "MinimumValue": 1.0,
+      "StepValue": 1.0,
+      "Id": "12f19dd132f04d8087a7a96acf7d4f22",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "b1ac6a86da83442e9393e6a76d089675",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Produces numeric values",
+      "InputValue": 18.0
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "# Load the Python Standard and DesignScript Libraries\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\nsys.path.append(r'C:\\Users\\Bayonle\\Downloads\\Erven Optimization')\r\nfrom onile_feasibility import listtools \r\n\r\n# Inputs.\r\nbuilding_width = IN[0]\r\nbuilding_length = IN[1]\r\nfloor_height = IN[2]\r\nfloor_number = IN[3]\r\nroof_height = IN[4]\r\n\r\n# Function to create the double pitch building type. \r\n\r\n# Create the base rectangle.\r\nbase_rectangle = Rectangle.ByWidthLength(\r\n    Plane.XY(), \r\n    building_width, \r\n    building_length\r\n)\r\n\r\n# Extrude the base rectangle.\r\nextrude_base = Curve.Extrude(\r\n    base_rectangle,\r\n    Vector.ZAxis(),\r\n    floor_height\r\n)\r\n                            \r\n# Create floors.\r\nfloors = []\r\nmovement_distances = listtools.sequence(0, floor_number, floor_height)\r\nfor distance in movement_distances:\r\n    floors.append(Geometry.Translate(\r\n        extrude_base, \r\n        Vector.ZAxis(), \r\n        distance\r\n    ))\r\n    \r\n# Copy the base rectangle to the roof u/s.\r\nmoved_rectangle = Geometry.Translate(\r\n    base_rectangle,\r\n    Vector.ZAxis(),\r\n    floor_height * floor_number\r\n)\r\n\r\n# Create the double pitched roof.\r\nbase_curves = moved_rectangle.Curves()  # The curves of the roof base rectangle.\r\n\r\n# The X axis of the base curve coordinate system.\r\ncurve_coord_X = [\r\n    (curve.CoordinateSystemAtParameter(0)).XAxis for curve in base_curves\r\n]\r\n\r\n# The dot product of the curve X vectors and X axis.\r\nvector_dot = [\r\n    vector.Dot(Vector.XAxis()) for vector in curve_coord_X\r\n] \r\n\r\n# Filter the base curve by the dot products.\r\nfiltered_curves = [\r\n    curve for curve, dot in zip(base_curves, vector_dot) if dot != 0\r\n]\r\n\r\n# Add points to the filtered curves for roof pitch.\r\ncurve_points = []\r\nparameters = [0, 0.5, 1]\r\nfor curve in filtered_curves:\r\n    points_on_curve = [curve.PointAtParameter(param) for param in parameters]\r\n    curve_points.append(points_on_curve)\r\n\r\n# Move the center points vertically.\r\nmoved_points = [\r\n    Geometry.Translate(point[1], Vector.ZAxis(), roof_height) for point in curve_points\r\n    ]\r\n\r\n# Replace the center points in the curve points list.\r\nnew_curve_points = []\r\nfor moved_point, point_list in zip(moved_points, curve_points):\r\n    point_list[1] = moved_point\r\n    new_curve_points.append(point_list)\r\n    \r\n# Create the sloped roof surface.\r\nsloped_curves = [\r\n    PolyCurve.ByPoints(points) for points in new_curve_points\r\n]\r\nsloped_surface = Surface.ByLoft(sloped_curves)\r\n\r\n# Create the gable roof surface.\r\ngable_curves = [\r\n    PolyCurve.ByPoints(points, True) for points in new_curve_points\r\n]\r\ngable_surface = [\r\n    Surface.ByPatch(curve) for curve in gable_curves\r\n]\r\n\r\n# Combine the surfaces into one poly surface.\r\ncombined_surfaces = listtools.list_flatten([floors, sloped_surface, gable_surface])   \r\njoined_surfaces =  PolySurface.ByJoinedSurfaces(combined_surfaces)\r\n\r\n# Create the edge curves of the combined surfaces.\r\nedges = joined_surfaces.Edges\r\nedge_curves = [edge.CurveGeometry for edge in edges]\r\n\r\n###############################################################################\r\n\r\n# Output.\r\nOUT = joined_surfaces, edge_curves,",
+      "Engine": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "b65f6d8abe8246b99df99167b8e6bbc2",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "e897b4cff21e40dcb22a08bbe58ec09b",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "040cdafc0bd440f0af7964eb7b5f9cf2",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "de3f61cdeaaf427db96d2b72148b4ec6",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d8df308fb6814677b1e32eed7ea6cfbb",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "345479f9184a462ea80d5cf7b870c790",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "678330e74fd240fd95a17860058f55cf",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded Python script."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "# Load the Python Standard and DesignScript Libraries\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\nsys.path.append(r'C:\\Users\\Bayonle\\Downloads\\Erven Optimization')\r\nfrom onile_feasibility import listtools \r\n\r\n# Inputs.\r\nbuilding_width = IN[0]\r\nbuilding_length = IN[1]\r\nfloor_height = IN[2]\r\nfloor_number = IN[3]\r\nroof_height = IN[4]\r\n\r\n\r\nclass Building: \r\n    \"\"\"\r\n    Represents a building with various sub classes, methods, and attributes.\r\n    \r\n    Subclasses:\r\n        BuildingShapes: Defines various shapes for buildings.\r\n        BuildingPatterns: Defines patterns for arranging buildings.\r\n        BuildingTypesPrimitive: Represents primitive building types.\r\n        BuildingTypesComplex: Represents complex building types.\r\n        \r\n    Attributes:\r\n        name (str): The name of the building.\r\n        building_height (float): The height of the building.\r\n        building_width (float): The width of the building.\r\n        building_length (float): The length of the building.\r\n        floor_height (float): The floor of the floor height of the building.\r\n        floor_number (int): The number of floors in the building.\r\n    \"\"\"\r\n  \r\n    \r\n    def __init__(\r\n               self, \r\n               name = \"default\",\r\n               building_height = 10,\r\n               building_width = 5,\r\n               building_length = 10,\r\n               floor_height = 3,\r\n               floor_number = 5\r\n    ):\r\n        \"\"\"\r\n        Initializes a new Building instance.\r\n        \r\n        Args:\r\n            name (str): The name of the building.\r\n            building_height (float): The height of the building.\r\n            building_width (float): The width of the building.\r\n            building_length (float): The length of the building.\r\n            floor_height (float): The floor of the floor height of the building.\r\n            floor_number (int): The number of floors in the building.\r\n        \"\"\"\r\n        \r\n        # Raise errors if inputs are entered incorrectly.\r\n        if not isinstance(name, str):\r\n            raise TypeError(\"building names must be a string\")\r\n        if not isinstance(building_height, (int, float)):\r\n            raise TypeError(\"building height must be a number\")\r\n        if not isinstance(building_width, (int, float)):\r\n            raise TypeError(\"building width must be a number\")\r\n        if not isinstance(building_length, (int, float)):\r\n            raise TypeError(\"building length must be a number\")\r\n        if not isinstance(floor_height, (int, float)):\r\n            raise TypeError(\"floor height must be a number\")\r\n        if not isinstance(floor_number, int):\r\n            raise TypeError(\"floor number must be an integer\")\r\n            \r\n            \r\n        self.name = name\r\n        self.building_height = building_height\r\n        self.building_width = building_width\r\n        self.building_length = building_length\r\n        self.floor_height = floor_height\r\n        self.floor_number = floor_number\r\n\r\n        \r\nclass BuildingShapes(Building):\r\n    \"\"\"\r\n    Defines various shapes for buildings.\r\n    \r\n    Attributes:\r\n        name (str): The name of the building.\r\n        building_height (float): The height of the building.\r\n        building_width (float): The width of the building.\r\n        building_length (float): The length of the building.\r\n        floor_height (float): The floor of the floor height of the building.\r\n        floor_number (int): The number of floors in the building.\r\n    \r\n    \"\"\"\r\n    \r\n    def __init__(\r\n               self, \r\n               name = \"default\",\r\n               building_height = 10,\r\n               building_width = 5,\r\n               building_length = 10,\r\n               floor_height = 3,\r\n               floor_number = 5\r\n    ):\r\n        \"\"\"\r\n        Initialize a new Building Shape instance.\r\n        \r\n        Args:\r\n            name (str): The name of the building.\r\n            building_height (float): The height of the building.\r\n            building_width (float): The width of the building.\r\n            building_length (float): The length of the building.\r\n            floor_height (float): The floor of the floor height of the building.\r\n            floor_number (int): The number of floors in the building.\r\n        \"\"\"\r\n        \r\n        super().__init__(\r\n               name=name,\r\n               building_height=building_height,\r\n               building_width=building_width,\r\n               building_length=building_length,\r\n               floor_height=floor_height,\r\n               floor_number=floor_number\r\n        )\r\n            \r\n    def flat_roof_building(self, plane = Plane.XY()):\r\n        \"\"\"\r\n        Creates the flat roof building type.\r\n        \r\n        Args:\r\n            plane: The horizontal base plane of the building.\r\n        \"\"\"\r\n        \r\n        # Raise error if plane is not horizontal.\r\n        if not plane.Normal.Z == 1:\r\n            raise TypeError(\"The building plane must be horizontal\")\r\n        \r\n        # Create the base rectangle.\r\n        base_rectangle = Rectangle.ByWidthLength(\r\n            plane, \r\n            self.building_width, \r\n            self.building_length\r\n        )\r\n        \r\n        # Extrude the base rectangle.\r\n        extrude_base = Curve.Extrude(\r\n            base_rectangle,\r\n            Vector.ZAxis(),\r\n            self.floor_height\r\n        )\r\n                                    \r\n        # Create floors.\r\n        floors = []\r\n        movement_distances = listtools.sequence(0, self.floor_number, self.floor_height)\r\n        for distance in movement_distances:\r\n            floors.append(Geometry.Translate(\r\n                extrude_base, \r\n                Vector.ZAxis(), \r\n                distance\r\n            ))\r\n            \r\n        # Copy the base rectangle to the roof u/s.\r\n        moved_rectangle = Geometry.Translate(\r\n            base_rectangle,\r\n            Vector.ZAxis(),\r\n            self.floor_height * self.floor_number\r\n        )\r\n        \r\n        # Create the roof surface.\r\n        roof_surface = Surface.ByPatch(moved_rectangle)\r\n        \r\n        # Combine the surfaces into one polysurface.\r\n        combined_surfaces = listtools.list_flatten([floors, roof_surface])\r\n        joined_surfaces =  PolySurface.ByJoinedSurfaces(combined_surfaces)\r\n        \r\n        # Create the edge curves of the combined surfaces.\r\n        edges = joined_surfaces.Edges\r\n        edge_curves = [edge.CurveGeometry for edge in edges] \r\n        \r\n        return joined_surfaces, edge_curves, moved_rectangle\r\n    \r\n\r\n    def double_pitch_building(self, plane=Plane.XY(), roof_height=3):\r\n        \"\"\"\r\n        Creates the pitch roof building type.\r\n        \r\n        Args:\r\n            plane = The horizontal base plane of the building.\r\n            roof_height (float) = The height of the building's roof.\r\n        \"\"\"\r\n        \r\n        # Raise error if plane is not horizontal.\r\n        if not isinstance (roof_height, (float,int)):\r\n            raise TypeError(\"The roof height must be a number\")\r\n            \r\n        # Update the building height to include the roof height.\r\n        self.building_height = self.building_height + roof_height\r\n        \r\n        # Use the flat roof building method to create the building base.\r\n        building_base = self.flat_roof_building(plane)[0]\r\n        \r\n        \r\n        # Create the double pitched roof.\r\n        base_curves = self.flat_roof_building(plane)[2].Curves()  # The curves of the roof base rectangle.\r\n        \r\n        # The X axis of the base curve coordinate system.\r\n        curve_coord_X = [\r\n            (curve.CoordinateSystemAtParameter(0)).XAxis for curve in base_curves\r\n        ]\r\n        \r\n        # The dot product of the curve X vectors and X axis.\r\n        vector_dot = [\r\n            vector.Dot(Vector.XAxis()) for vector in curve_coord_X\r\n        ]\r\n        \r\n        # Filter the base curve by the dot products.\r\n        filtered_curves = [\r\n            curve for curve, dot in zip(base_curves, vector_dot) if dot != 0\r\n        ]\r\n        \r\n        # Add points to the filtered curves for roof pitch.\r\n        curve_points = []\r\n        parameters = [0, 0.5, 1]\r\n        for curve in filtered_curves:\r\n            points_on_curve = [curve.PointAtParameter(param) for param in parameters]\r\n            curve_points.append(points_on_curve)\r\n                \r\n        # Move the center points vertically.\r\n        moved_points = [\r\n            Geometry.Translate(point[1], Vector.ZAxis(), roof_height) for point in curve_points\r\n        ]\r\n        \r\n        # Replace the center points in the curve points list.\r\n        new_curve_points = []\r\n        for moved_point, point_list in zip(moved_points, curve_points):\r\n            point_list[1] = moved_point\r\n            new_curve_points.append(point_list)\r\n            \r\n        # Create the sloped roof surface.\r\n        sloped_curves = [\r\n            PolyCurve.ByPoints(points) for points in new_curve_points\r\n        ]\r\n        sloped_surface = Surface.ByLoft(sloped_curves)\r\n        \r\n        # Create the gable roof surface.\r\n        gable_curves = [\r\n            PolyCurve.ByPoints(points, True) for points in new_curve_points\r\n        ]\r\n        gable_surface = [\r\n            Surface.ByPatch(curve) for curve in gable_curves\r\n        ]\r\n        \r\n        # Combine the surfaces into one poly surface.\r\n        combined_surfaces = listtools.list_flatten([building_base, sloped_surface, gable_surface])   \r\n        joined_surfaces =  PolySurface.ByJoinedSurfaces(combined_surfaces)\r\n        \r\n        # Create the edge curves of the combined surfaces.\r\n        edges = joined_surfaces.Edges\r\n        edge_curves = [edge.CurveGeometry for edge in edges]\r\n\r\n        return joined_surfaces, edge_curves,\r\n        \r\n        \r\n    def mono_pitch_building(self, plane=Plane.XY(), roof_height=3):\r\n        \"\"\"\r\n        Creates the mono pitch roof building type.\r\n        \r\n        Args:\r\n            plane = The horizontal base plane of the building.\r\n            roof_height (float) = The height of the building's roof.\r\n        \"\"\"\r\n        \r\n        # Raise error if plane is not horizontal.\r\n        if not isinstance (roof_height, (float,int)):\r\n            raise TypeError(\"The roof height must be a number\")\r\n            \r\n        # Update the building height to include the roof height.\r\n        self.building_height = self.building_height + roof_height\r\n        \r\n        # Use the flat roof building method to create the building base.\r\n        building_base = self.flat_roof_building(plane)[0] \r\n        \r\n        \r\n        # Create the mono pitched roof.\r\n        base_curves = self.flat_roof_building(plane)[2].Curves()  # The curves of the roof base rectangle.\r\n        \r\n        # The X axis of the base curve coordinate system.\r\n        curve_coord_X = [\r\n            (curve.CoordinateSystemAtParameter(0)).XAxis for curve in base_curves \r\n        ]  \r\n        \r\n        # The dot product of the curve X vectors and X axis.\r\n        vector_dot = [\r\n            vector.Dot(Vector.XAxis()) for vector in curve_coord_X\r\n        ] \r\n\r\n        # Filter the base curve by the dot products.\r\n        filtered_curves = [\r\n            curve for curve, dot in zip(base_curves, vector_dot) if dot != 0\r\n        ]\r\n        \r\n        # Reverse the second curve and add it to the filtered curve list.\r\n        reversed_curve = filtered_curves[1].Reverse()\r\n        filtered_curves[1] = reversed_curve\r\n        \r\n        # Add points to the filtered curves for roof pitch.\r\n        curve_points = []\r\n        parameters = [0, 1]\r\n        for curve in filtered_curves:\r\n            points_on_curve = [curve.PointAtParameter(param) for param in parameters]\r\n            curve_points.append(points_on_curve)\r\n            \r\n        # Move the end points vertically.\r\n        moved_points = [\r\n            Geometry.Translate(point[1], Vector.ZAxis(), roof_height) for point in curve_points\r\n        ]\r\n        \r\n        # Replace the center points in the curve points list.\r\n        new_curve_points = []\r\n        for moved_point, point_list in zip(moved_points, curve_points):\r\n            point_list.insert(1, moved_point)\r\n            new_curve_points.append(point_list)\r\n            \r\n        # Create the sloped roof surface.\r\n        sloped_curves = [\r\n            PolyCurve.ByPoints(points) for points in new_curve_points\r\n        ]\r\n        sloped_surface = Surface.ByLoft(sloped_curves)\r\n        \r\n        # Create the gable roof surface.\r\n        gable_curves = [\r\n            PolyCurve.ByPoints(points, True) for points in new_curve_points\r\n        ]\r\n        gable_surface = [\r\n            Surface.ByPatch(curve) for curve in gable_curves\r\n        ]\r\n        \r\n        # Combine the surfaces into one poly surface.\r\n        combined_surfaces = listtools.list_flatten([building_base, sloped_surface, gable_surface])   \r\n        joined_surfaces =  PolySurface.ByJoinedSurfaces(combined_surfaces)\r\n        \r\n        # Create the edge curves of the combined surfaces.\r\n        edges = joined_surfaces.Edges\r\n        edge_curves = [edge.CurveGeometry for edge in edges]\r\n        \r\n        return  joined_surfaces, edge_curves\r\n          \r\n\r\n###############################################################################\r\n\r\nsample_building = BuildingShapes(name=\"tall\", building_width=building_width, floor_number=floor_number)\r\n\r\n# Output.\r\nOUT = sample_building.mono_pitch_building(), sample_building.building_height",
+      "Engine": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "30684a44fc874928a983c959d1f6c10d",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "2f4bb4313cdf4adc9c6b09035ed58ce0",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1504c112026a4d2588ddf5ade34ee431",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ccfd2d5b91654544ab2cbdb0b779b851",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d21a283dab6342df947da945dcf9c4fc",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0d84ec7894cd45e5a636440ebe2e81e4",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "878702bc720d4309bcdcb10cceb2f2ae",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded Python script."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "0c7b8b2e8d874530aeb0b48cec9ff0a9",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "33b602c52cb347e7a3266aef056e66fa",
+          "Name": "origin",
+          "Description": "Origin point of plane\n\nPoint\nDefault value : Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 0, 0)",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2f32dbd6a3114f599599af6890ee9665",
+          "Name": "normal",
+          "Description": "Normal direction vector of plane\n\nVector\nDefault value : Autodesk.DesignScript.Geometry.Vector.ByCoordinates(0, 0, 1)",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "5e81e0b2704d4de3b6633f37abfebfc0",
+          "Name": "Plane",
+          "Description": "Plane created by origin and normal",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Plane.ByOriginNormal@Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Vector",
+      "Replication": "Auto",
+      "Description": "Create a Plane centered at root Point, with input normal Vector.\n\nPlane.ByOriginNormal (origin: Point = Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 0, 0), normal: Vector = Autodesk.DesignScript.Geometry.Vector.ByCoordinates(0, 0, 1)): Plane"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "96e4d6a1537b4c07a7948c2d5f5850a4",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "75128dec9a1d4548bffe9401be5291cc",
+          "Name": "x",
+          "Description": "X coordinate\n\ndouble\nDefault value : 0",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "296e8aacf2394e3b8412b65cb5f13541",
+          "Name": "y",
+          "Description": "Y coordinate\n\ndouble\nDefault value : 0",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "2fb46e34469348e3a535d17f6e5400df",
+          "Name": "Point",
+          "Description": "Point created by coordinates",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Point.ByCoordinates@double,double",
+      "Replication": "Auto",
+      "Description": "Form a Point in the XY plane given two 2 cartesian coordinates. The Z component is 0.\n\nPoint.ByCoordinates (x: double = 0, y: double = 0): Point"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 50.0,
+      "MinimumValue": 0.0,
+      "StepValue": 1.0,
+      "Id": "f3a7bbcd26e048c2a2804848c2545b23",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "18effc701c7a4639ac5163efa59d088c",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Produces numeric values",
+      "InputValue": 7.0
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 50.0,
+      "MinimumValue": 0.0,
+      "StepValue": 1.0,
+      "Id": "a01d5c564f474ff6956976f14a68ac5a",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "152b46f7a911484d9c718b7d261b7b32",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Produces numeric values",
+      "InputValue": 43.0
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "4686bf343460491185b7eff97455b136",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [
+        {
+          "Id": "c086aa96c80a428f827d8ad023a08800",
+          "Name": "r",
+          "Description": "r",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "8dd8eccb63374cdd820ba5c9326c62d3",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "r[2];"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "6ae992c4a3974db5929dcee112f18407",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "d079df972c49486d82419a6c37b73c89",
+          "Name": "x",
+          "Description": "X coordinate\n\ndouble\nDefault value : 0",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "528cd00639ad4e9799c738c368a7b3d8",
+          "Name": "y",
+          "Description": "Y coordinate\n\ndouble\nDefault value : 0",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "9290dcd76c264557a49f4e42f6449769",
+          "Name": "Point",
+          "Description": "Point created by coordinates",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Point.ByCoordinates@double,double",
+      "Replication": "Auto",
+      "Description": "Form a Point in the XY plane given two 2 cartesian coordinates. The Z component is 0.\n\nPoint.ByCoordinates (x: double = 0, y: double = 0): Point"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "720feb95bf604836b770cda201d23ff4",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "1c3246c57e934a4e95825069f2dade8b",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "5226063077ca4751a91e6d3ca0c061f6",
+          "Name": "",
+          "Description": "Value of expression at line 2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "[0, 50, 100, 150, 80];\n[0, 100, 100, 30, 50];"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "7e17c7115d9549e1b0cf93de1803f1f6",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "cc737de233d74f1b8d8ad5abe7efac24",
+          "Name": "points",
+          "Description": "Points to make polycurve\n\nPoint[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9802a145d9244c5f8287179fd67f8428",
+          "Name": "connectLastToFirst",
+          "Description": "True to connect last point to first point, false to leave open\n\nbool\nDefault value : false",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "18df4d7ea46046efb49b1ec9c938098e",
+          "Name": "PolyCurve",
+          "Description": "Polycurve created by points",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.PolyCurve.ByPoints@Autodesk.DesignScript.Geometry.Point[],bool",
+      "Replication": "Auto",
+      "Description": "Make PolyCurve by connecting points. Set the 'connectLastToFirst' input to true to close the PolyCurve.\n\nPolyCurve.ByPoints (points: Point[], connectLastToFirst: bool = false): PolyCurve"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "6fe0872945a44b3a9425772ec71da1d8",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "3b27de1c220b4435a844975c15606e02",
+          "Name": "curve",
+          "Description": "Autodesk.DesignScript.Geometry.Curve",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "9ae2c26ee41b471abde63014b3a57630",
+          "Name": "Curve",
+          "Description": "A new Curve with the opposite direction",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Curve.Reverse",
+      "Replication": "Auto",
+      "Description": "Reverse the direction of the curve\n\nCurve.Reverse ( ): Curve"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "aea078870a5842dca6f60c14bdc00c09",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "e086c5dc972f4ac580462395f0ffbcf5",
+          "Name": "curve",
+          "Description": "Autodesk.DesignScript.Geometry.Curve",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "850968c8379943c39c017f7312ea70b0",
+          "Name": "bool",
+          "Description": "bool",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Curve.IsClosed",
+      "Replication": "Auto",
+      "Description": "Returns True if a curve is closed, False otherwise.\n\nCurve.IsClosed: bool"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "54639ce7c1aa41d5bbc4aa718193a661",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "4f1ae7a91d4447cc86de4ac4d7e9d330",
+          "Name": "boundingBox",
+          "Description": "Autodesk.DesignScript.Geometry.BoundingBox",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "6a4204f737d3405e87b0af87ec34c01e",
+          "Name": "Cuboid",
+          "Description": "Returns cuboid representation of the bounding box.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.BoundingBox.ToCuboid",
+      "Replication": "Auto",
+      "Description": "Get the bounding box as a solid cuboid.\n\nBoundingBox.ToCuboid ( ): Cuboid"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "64efbf74e8684319a412a3ad750bd667",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "1fdc9447c65b40629728acc44c9cc25a",
+          "Name": "geom",
+          "Description": "Geometry[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "d1eefdb07f864206af8f277489a2af4f",
+          "Name": "BoundingBox",
+          "Description": "BoundingBox",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.BoundingBox.ByGeometry@Autodesk.DesignScript.Geometry.Geometry[]",
+      "Replication": "Auto",
+      "Description": "Create an axis-aligned BoundingBox around input Geometry.\n\nBoundingBox.ByGeometry (geom: Geometry[]): BoundingBox"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "599515c1afa54e048525a17912e064d7",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "1eef129f271c452a8c25e45aaac98ef8",
+          "Name": "cuboid",
+          "Description": "Autodesk.DesignScript.Geometry.Cuboid",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "230ca6d8cde84a4088b49866f3b8a61c",
+          "Name": "double",
+          "Description": "double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Cuboid.Width",
+      "Replication": "Auto",
+      "Description": "Returns width distance. Note: This return the input dimensions of the Cuboid, NOT the actual world space dimensions. In other words, if you create a Cuboid width (X-axis) length 10, and transform it to a CoordinateSystem with 2 times scaling in X, the width will still be 10. ASM does not allow you to extract the Vertices of a body in any predictable order, so it impossible to determine the dimensions after a transform.\n\nCuboid.Width: double"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "48045fe8a61249348005e781109874f8",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "f0c34974d2af406e8a42e8e60f267ab1",
+          "Name": "cuboid",
+          "Description": "Autodesk.DesignScript.Geometry.Cuboid",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "f3c16e4d842345deb4489e953d7f7007",
+          "Name": "double",
+          "Description": "double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Cuboid.Length",
+      "Replication": "Auto",
+      "Description": "Returns length distance. Note: This return the input dimensions of the Cuboid, NOT the actual world space dimensions. In other words, if you create a Cuboid width (X-axis) length 10, and transform it to a CoordinateSystem with 2 times scaling in X, the width will still be 10. ASM does not allow you to extract the Vertices of a body in any predictable order, so it impossible to determine the dimensions after a transform.\n\nCuboid.Length: double"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "fad8cb0afbbd4abb8a5aafe7c0dd0de5",
+      "NodeType": "FunctionNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "8bcb5925aa974d579c6915d0bc3d75c7",
+          "Name": "Plane",
+          "Description": "Plane at XY plane of world",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Plane.XY",
+      "Replication": "Auto",
+      "Description": "Creates a plane in the world XY\n\nPlane.XY ( ): Plane"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "b1322a9850314505a6b93a93f8597a09",
+      "NodeType": "FunctionNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "9af87d0326fa40ad9ea152245324a966",
+          "Name": "Plane",
+          "Description": "Plane at XZ plane of world",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Plane.XZ",
+      "Replication": "Auto",
+      "Description": "Creates a plane in the world XZ plane\n\nPlane.XZ ( ): Plane"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "9402feeeb253467db5f5fbf6f40ba03d",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "6b6ca87183f840c1b7569fd76b9637d3",
+          "Name": "plane",
+          "Description": "Plane used to center rectangle\n\nPlane",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "aee051d82af1451ba17c0349f9db4b54",
+          "Name": "width",
+          "Description": "Width of rectangle\n\ndouble\nDefault value : 1",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "20005a6aa59140ba9764692ec15ff9bf",
+          "Name": "length",
+          "Description": "Length of rectangle\n\ndouble\nDefault value : 1",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "85a8cd052d064d1d836fbaf2fb866ac2",
+          "Name": "Rectangle",
+          "Description": "Rectangle created by width and length",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Rectangle.ByWidthLength@Autodesk.DesignScript.Geometry.Plane,double,double",
+      "Replication": "Auto",
+      "Description": "Create a Rectangle centered at input Plane root, with input width (Plane X axis length), and length (Plane Y axis length).\n\nRectangle.ByWidthLength (plane: Plane, width: double = 1, length: double = 1): Rectangle"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "f0a667d78b0045128ca157f5e4adeb8e",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "5d858eeb73e54265831a61cfc57e6d31",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "50;"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "170b8af29f654824a48e46d8d36ccc26",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "50ad27f414044662a6c1a23119b86a46",
+          "Name": "polyCurve",
+          "Description": "Autodesk.DesignScript.Geometry.PolyCurve",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "a6fc91b026d7406c9a24d1fe350d97ce",
+          "Name": "Plane",
+          "Description": "Plane",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.PolyCurve.BasePlane",
+      "Replication": "Auto",
+      "Description": "Returns plane of planar polycurve\n\nPolyCurve.BasePlane ( ): Plane"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "1578715c96d44226b24342e28c98be21",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "0f4cf48d02a24849ae884a9a926dfb93",
+          "Name": "geometry",
+          "Description": "Autodesk.DesignScript.Geometry.Geometry",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "98bed177079b4852ae69dd4ca190571d",
+          "Name": "BoundingBox",
+          "Description": "BoundingBox",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Geometry.OrientedBoundingBox",
+      "Replication": "Auto",
+      "Description": "Gets the minimum-volume, oriented bounding box containing the given geometry.\n\nGeometry.OrientedBoundingBox: BoundingBox"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "228d918748b7414081b983a2a34be4ce",
+      "End": "c086aa96c80a428f827d8ad023a08800",
+      "Id": "1730d1af3eb44bb6bebcfca004abda56",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "dd448244e8654ef382dc7c31660b8399",
+      "End": "26eba7245dd74b5bb2f5d4d3d7ff4dfb",
+      "Id": "6a52b8f9d2664835ab0889eab3bc6632",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "c55c42764c0e4d419aa10e7fa829a499",
+      "End": "f9c7b2b8844848749291ed0e8b76f39a",
+      "Id": "8fa7d2138107494caf952594c5f34ccb",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "2393c1e0ee594162820208f48f81a33f",
+      "End": "8611efdd176748a69e1137ef1cca0e6e",
+      "Id": "0d890fadbf334a6ab2ea6aa8c394fde2",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "6c0663c44ca64acbad9c4e67183b6408",
+      "End": "eacbf79c45e84208a52d404b88ab5078",
+      "Id": "ae9a5616a71b4b1aabb2428331d07df2",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "b1ac6a86da83442e9393e6a76d089675",
+      "End": "1af6e06085c34f26827d6068b50dba06",
+      "Id": "86c98ad916e14498ad1dafc9c2db4aae",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "5e81e0b2704d4de3b6633f37abfebfc0",
+      "End": "9d993870d9084b1fa55b256ab37c51a7",
+      "Id": "69bb950ae38c4bd6ae3523f5dd547bbe",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "2fb46e34469348e3a535d17f6e5400df",
+      "End": "33b602c52cb347e7a3266aef056e66fa",
+      "Id": "b3352516f05147c0ae165bfdf87732b1",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "18effc701c7a4639ac5163efa59d088c",
+      "End": "75128dec9a1d4548bffe9401be5291cc",
+      "Id": "f4947804cbe143a7a2a60364b33925e5",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "152b46f7a911484d9c718b7d261b7b32",
+      "End": "296e8aacf2394e3b8412b65cb5f13541",
+      "Id": "6cbc184ab6404a6cbfac62d1bce05328",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "9290dcd76c264557a49f4e42f6449769",
+      "End": "cc737de233d74f1b8d8ad5abe7efac24",
+      "Id": "4def60fd75f54736a3f00369a2c0f99f",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "1c3246c57e934a4e95825069f2dade8b",
+      "End": "d079df972c49486d82419a6c37b73c89",
+      "Id": "c4096cbd0fc44cf78c3a8604461340b8",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "5226063077ca4751a91e6d3ca0c061f6",
+      "End": "528cd00639ad4e9799c738c368a7b3d8",
+      "Id": "f656968bbc744ad7866668586ef455c3",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "18df4d7ea46046efb49b1ec9c938098e",
+      "End": "3b27de1c220b4435a844975c15606e02",
+      "Id": "0491dbb7406e48d1b4749159efe46b5b",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "9ae2c26ee41b471abde63014b3a57630",
+      "End": "319093405dfb4c03a783cbf11573a3b1",
+      "Id": "d1075ce2378445fc885e502f26eff244",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "9ae2c26ee41b471abde63014b3a57630",
+      "End": "1fdc9447c65b40629728acc44c9cc25a",
+      "Id": "23502e3413064cd18b81c4aa387a66da",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "6a4204f737d3405e87b0af87ec34c01e",
+      "End": "1eef129f271c452a8c25e45aaac98ef8",
+      "Id": "d65cb25a0597475dba90b8ac64560b72",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "6a4204f737d3405e87b0af87ec34c01e",
+      "End": "f0c34974d2af406e8a42e8e60f267ab1",
+      "Id": "233b80280d3d4ff09644b4816f27ebbe",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "d1eefdb07f864206af8f277489a2af4f",
+      "End": "4f1ae7a91d4447cc86de4ac4d7e9d330",
+      "Id": "bef874a3db694e5ca4107c061b95d8e4",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "9af87d0326fa40ad9ea152245324a966",
+      "End": "6b6ca87183f840c1b7569fd76b9637d3",
+      "Id": "d33b70cbdfad45c79467032d4dc75628",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "85a8cd052d064d1d836fbaf2fb866ac2",
+      "End": "50ad27f414044662a6c1a23119b86a46",
+      "Id": "528160242d39441a8b8522bd3c317bd4",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "85a8cd052d064d1d836fbaf2fb866ac2",
+      "End": "0f4cf48d02a24849ae884a9a926dfb93",
+      "Id": "1f84d6a6d5324f7388a7201aa9c82d7d",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "5d858eeb73e54265831a61cfc57e6d31",
+      "End": "aee051d82af1451ba17c0349f9db4b54",
+      "Id": "20c5af97087149fd9e8046194a7963b3",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "5d858eeb73e54265831a61cfc57e6d31",
+      "End": "20005a6aa59140ba9764692ec15ff9bf",
+      "Id": "d21e4b9395484ae1bc18ad4e48bdb047",
+      "IsHidden": "False"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "EnableLegacyPolyCurveBehavior": true,
+  "Thumbnail": "",
+  "GraphDocumentationURL": null,
+  "ExtensionWorkspaceData": [
+    {
+      "ExtensionGuid": "28992e1d-abb9-417f-8b1b-05e053bee670",
+      "Name": "Properties",
+      "Version": "3.0",
+      "Data": {}
+    }
+  ],
+  "Author": "",
+  "Linting": {
+    "activeLinter": "None",
+    "activeLinterId": "7b75fb44-43fd-4631-a878-29f4d5d8399a",
+    "warningCount": 0,
+    "errorCount": 0
+  },
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "3.0.3.7597",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "_Background Preview",
+      "EyeX": -164.39125061035156,
+      "EyeY": 308.8185729980469,
+      "EyeZ": 231.08828735351562,
+      "LookX": 141.26332092285156,
+      "LookY": -307.892822265625,
+      "LookZ": -246.7530975341797,
+      "UpX": 0.36500561237335205,
+      "UpY": 0.6784239411354065,
+      "UpZ": -0.6375828981399536
+    },
+    "ConnectorPins": [],
+    "NodeViews": [
+      {
+        "Id": "1572ce0d3dc14dfe8f132bbf6b94f5d6",
+        "Name": "Python Script",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1162.8441430529365,
+        "Y": 412.22388231836663
+      },
+      {
+        "Id": "9f532afd2cfa4c8187da6859f18a3115",
+        "Name": "Width",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -205.9499221634237,
+        "Y": 422.1776079809505
+      },
+      {
+        "Id": "0ce43424ecb44516a45a4a215c754c18",
+        "Name": "Length",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -204.21349993346678,
+        "Y": 603.6888174280513
+      },
+      {
+        "Id": "39de7dea1fbc4653ad75a2ebc1a126ae",
+        "Name": "Floor Height",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -197.49951538854873,
+        "Y": 808.7575377534779
+      },
+      {
+        "Id": "7b00b2f6254047fb9b7e3cdda3d6be94",
+        "Name": "Floor Number",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -202.0508623856989,
+        "Y": 1023.6066267703005
+      },
+      {
+        "Id": "12f19dd132f04d8087a7a96acf7d4f22",
+        "Name": "Roof Height",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -206.90023730128746,
+        "Y": 1242.3481712370804
+      },
+      {
+        "Id": "b65f6d8abe8246b99df99167b8e6bbc2",
+        "Name": "Python Script",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": true,
+        "ShowGeometry": false,
+        "X": 3184.247830642996,
+        "Y": 399.8270723746594
+      },
+      {
+        "Id": "30684a44fc874928a983c959d1f6c10d",
+        "Name": "Python Script",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": true,
+        "ShowGeometry": true,
+        "X": 1902.4213134713361,
+        "Y": 438.08865083015996
+      },
+      {
+        "Id": "0c7b8b2e8d874530aeb0b48cec9ff0a9",
+        "Name": "Plane.ByOriginNormal",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 653.5248059299017,
+        "Y": 1485.083272479232
+      },
+      {
+        "Id": "96e4d6a1537b4c07a7948c2d5f5850a4",
+        "Name": "Point.ByCoordinates",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 291.8552551581656,
+        "Y": 1485.5409182718195
+      },
+      {
+        "Id": "f3a7bbcd26e048c2a2804848c2545b23",
+        "Name": "X",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -204.53008323114148,
+        "Y": 1489.3411539204642
+      },
+      {
+        "Id": "a01d5c564f474ff6956976f14a68ac5a",
+        "Name": "Y",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -205.4114008522032,
+        "Y": 1646.1736979425975
+      },
+      {
+        "Id": "4686bf343460491185b7eff97455b136",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1448.4527598302584,
+        "Y": 411.641720509225
+      },
+      {
+        "Id": "6ae992c4a3974db5929dcee112f18407",
+        "Name": "Point.ByCoordinates",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 142.86530704825645,
+        "Y": 2266.042734449238
+      },
+      {
+        "Id": "720feb95bf604836b770cda201d23ff4",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -184.63014016930333,
+        "Y": 2290.478891933389
+      },
+      {
+        "Id": "7e17c7115d9549e1b0cf93de1803f1f6",
+        "Name": "PolyCurve.ByPoints",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 591.8598970151129,
+        "Y": 2268.732552986361
+      },
+      {
+        "Id": "6fe0872945a44b3a9425772ec71da1d8",
+        "Name": "Curve.Reverse",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1012.0821143110568,
+        "Y": 2271.339080291128
+      },
+      {
+        "Id": "aea078870a5842dca6f60c14bdc00c09",
+        "Name": "Curve.IsClosed",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1258.050089423087,
+        "Y": 938.6921667303487
+      },
+      {
+        "Id": "54639ce7c1aa41d5bbc4aa718193a661",
+        "Name": "BoundingBox.ToCuboid",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1893.4138795551671,
+        "Y": 2266.501526702468
+      },
+      {
+        "Id": "64efbf74e8684319a412a3ad750bd667",
+        "Name": "BoundingBox.ByGeometry",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1437.8315230723856,
+        "Y": 2269.7869763886415
+      },
+      {
+        "Id": "599515c1afa54e048525a17912e064d7",
+        "Name": "Cuboid.Width",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 2335.8544372932524,
+        "Y": 2265.406376807076
+      },
+      {
+        "Id": "48045fe8a61249348005e781109874f8",
+        "Name": "Cuboid.Length",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 2327.7945410930074,
+        "Y": 2004.5297405361505
+      },
+      {
+        "Id": "fad8cb0afbbd4abb8a5aafe7c0dd0de5",
+        "Name": "Plane.XY",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 518.480222846294,
+        "Y": 2827.556356800244
+      },
+      {
+        "Id": "b1322a9850314505a6b93a93f8597a09",
+        "Name": "Plane.XZ",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 946.5983906642939,
+        "Y": 2911.9706420129137
+      },
+      {
+        "Id": "9402feeeb253467db5f5fbf6f40ba03d",
+        "Name": "Rectangle.ByWidthLength",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1279.3672650367967,
+        "Y": 2914.462889338461
+      },
+      {
+        "Id": "f0a667d78b0045128ca157f5e4adeb8e",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 931.6114551550627,
+        "Y": 3073.737769991784
+      },
+      {
+        "Id": "170b8af29f654824a48e46d8d36ccc26",
+        "Name": "PolyCurve.BasePlane",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1716.1290521304604,
+        "Y": 2916.2146065671045
+      },
+      {
+        "Id": "1578715c96d44226b24342e28c98be21",
+        "Name": "Geometry.OrientedBoundingBox",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1712.6920904986393,
+        "Y": 3089.638688622137
+      }
+    ],
+    "Annotations": [
+      {
+        "Id": "9a55fb16ecf04106b4fd5a4a3ac51502",
+        "Title": "Inputs",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "9f532afd2cfa4c8187da6859f18a3115",
+          "0ce43424ecb44516a45a4a215c754c18",
+          "39de7dea1fbc4653ad75a2ebc1a126ae",
+          "7b00b2f6254047fb9b7e3cdda3d6be94",
+          "12f19dd132f04d8087a7a96acf7d4f22",
+          "f3a7bbcd26e048c2a2804848c2545b23",
+          "a01d5c564f474ff6956976f14a68ac5a"
+        ],
+        "HasNestedGroups": false,
+        "Left": -216.90023730128746,
+        "Top": 349.1776079809505,
+        "Width": 377.40072191273873,
+        "Height": 1428.9960899616472,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 422.1776079809505,
+        "InitialHeight": 1368.9960899616472,
+        "TextblockHeight": 63.0,
+        "Background": "#FF848484"
+      },
+      {
+        "Id": "39139f3f12324901b7b463c1a036c3d8",
+        "Title": "Superseded\r\n",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "b65f6d8abe8246b99df99167b8e6bbc2"
+        ],
+        "HasNestedGroups": false,
+        "Left": 3174.247830642996,
+        "Top": 283.8270723746594,
+        "Width": 207.33666666666667,
+        "Height": 394.99999999999994,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 399.8270723746594,
+        "InitialHeight": 145.0,
+        "TextblockHeight": 106.0,
+        "Background": "#FFFF7BAC"
+      }
+    ],
+    "X": -724.1877257119681,
+    "Y": -1826.549171809148,
+    "Zoom": 0.7936976243447985
+  }
+}
