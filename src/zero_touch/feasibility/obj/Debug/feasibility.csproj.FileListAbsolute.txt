@@ -1,0 +1,6 @@
+C:\Users\omoba\OneDrive\Documents\GitHub\Feasibility\src\zero_touch\feasibility\bin\Debug\feasibility.dll
+C:\Users\omoba\OneDrive\Documents\GitHub\Feasibility\src\zero_touch\feasibility\bin\Debug\feasibility.pdb
+C:\Users\omoba\OneDrive\Documents\GitHub\Feasibility\src\zero_touch\feasibility\obj\Debug\feasibility.csproj.AssemblyReference.cache
+C:\Users\omoba\OneDrive\Documents\GitHub\Feasibility\src\zero_touch\feasibility\obj\Debug\feasibility.csproj.CoreCompileInputs.cache
+C:\Users\omoba\OneDrive\Documents\GitHub\Feasibility\src\zero_touch\feasibility\obj\Debug\feasibility.dll
+C:\Users\omoba\OneDrive\Documents\GitHub\Feasibility\src\zero_touch\feasibility\obj\Debug\feasibility.pdb

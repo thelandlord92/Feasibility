@@ -1,0 +1,231 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>UnitsNodeModels</name>
+    </assembly>
+    <members>
+        <member name="T:UnitsUI.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.AreaFromStringDescription">
+            <summary>
+              Looks up a localized string similar to Enter an area..
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.AreaFromStringPortDataAreaToolTip">
+            <summary>
+              Looks up a localized string similar to The area. Stored internally as decimal meters squared..
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.AreaFromStringSearchTags">
+            <summary>
+              Looks up a localized string similar to Imperial;Metric;Area;Project;units.
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.ConvertUnitsDescription">
+            <summary>
+              Looks up a localized string similar to Converts a value between selected unit systems.
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.ConvertUnitsSearchTags">
+            <summary>
+              Looks up a localized string similar to .
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.CovertUnitInputTooltip">
+            <summary>
+              Looks up a localized string similar to A value to convert.
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.CovertUnitOutputTooltip">
+            <summary>
+              Looks up a localized string similar to Converted value.
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.EditHeader">
+            <summary>
+              Looks up a localized string similar to Edit....
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.LegthFromStringObsoleteMessage">
+            <summary>
+              Looks up a localized string similar to is obsolete, please use the Parse Unit Input node..
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.LengthFromStringDescription">
+            <summary>
+              Looks up a localized string similar to A length defined as feet and inches is turned into a number representation in feet..
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.LengthFromStringPortDataLengthToolTip">
+            <summary>
+              Looks up a localized string similar to Number representation in feet.
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.LengthFromStringSearchTags">
+            <summary>
+              Looks up a localized string similar to Imperial;Metric;Length;Project;units.
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.ParseUnitInputDescription">
+            <summary>
+              Looks up a localized string similar to Converts an input string with unit values into the equivalent value of the expression.
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.ParseUnitInputSearchTags">
+            <summary>
+              Looks up a localized string similar to .
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.ParseUnitInputUnitTooltip">
+            <summary>
+              Looks up a localized string similar to Selected Unit.
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.ParseUnitInputValueTooltip">
+            <summary>
+              Looks up a localized string similar to Converted value of expresion.
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.QuantitiesUIDescription">
+            <summary>
+              Looks up a localized string similar to Select a Quantity type.
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.QuantitiesUISearchTags">
+            <summary>
+              Looks up a localized string similar to .
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.SchemaLoadWarning">
+            <summary>
+              Looks up a localized string similar to There was an issue loading Unit Schemas from the specified path:.
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.SymbolsUIDescription">
+            <summary>
+              Looks up a localized string similar to Select a Symbol type.
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.SymbolsUISearchTags">
+            <summary>
+              Looks up a localized string similar to .
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.UnitsUIDescription">
+            <summary>
+              Looks up a localized string similar to Select a Unit type.
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.UnitsUISearchTags">
+            <summary>
+              Looks up a localized string similar to .
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.UnitTypesDescription">
+            <summary>
+              Looks up a localized string similar to Select a unit of measurement..
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.UnitTypesObsoleteMessage">
+            <summary>
+              Looks up a localized string similar to is obsolete, please use the Units dropdown node..
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.UnitTypesSearchTags">
+            <summary>
+              Looks up a localized string similar to units;unittypes;.
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.VolumeFromStringDescription">
+            <summary>
+              Looks up a localized string similar to Enter a volume..
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.VolumeFromStringPortDataVolumeToolTip">
+            <summary>
+              Looks up a localized string similar to The volume. Stored internally as decimal meters cubed..
+            </summary>
+        </member>
+        <member name="P:UnitsUI.Properties.Resources.VolumeFromStringSearchTags">
+            <summary>
+              Looks up a localized string similar to Imperial;Metric;volume;Project;units.
+            </summary>
+        </member>
+        <member name="T:UnitsUI.MeasurementInputBase">
+            <summary>
+            Class defining the behaviour of a nodemodel which has no inputs, but rather uses wpf comboboxes to select items from collections.
+            It then outputs a formatted string from the selections made.
+            </summary>
+        </member>
+        <member name="P:UnitsUI.MeasurementInputBase.Value">
+            <summary>
+            Numerical value entered into the textbox (to be formatted).
+            </summary>
+        </member>
+        <member name="P:UnitsUI.UnitInput.Items">
+            <summary>
+            Collection of unit type ids.
+            </summary>
+        </member>
+        <member name="P:UnitsUI.UnitInput.SelectedUnit">
+            <summary>
+            Selected unit type id to convert to.
+            </summary>
+        </member>
+        <member name="P:UnitsUI.DynamoUnitConvert.QuantityConversionSource">
+            <summary>
+            This corresponds to the list of available quantities we can select to convert in.
+            Examples of this would be 'length', 'time', 'volume'.
+            </summary>
+        </member>
+        <member name="P:UnitsUI.DynamoUnitConvert.SelectedFromConversionSource">
+            <summary>
+            This corresponds to the a list of available units we are converting FROM.
+            Examples of this are 'meters', 'millimeters', 'feet'.
+            </summary>
+        </member>
+        <member name="P:UnitsUI.DynamoUnitConvert.SelectedToConversionSource">
+            <summary>
+            This corresponds to the a list of available units we are converting TO.
+            Examples of this are 'meters', 'millimeters', 'feet'.
+            </summary>
+        </member>
+        <member name="P:UnitsUI.DynamoUnitConvert.SelectedQuantityConversion">
+            <summary>
+            This corresponds to selected quantity we will be converting in.
+            An example of this is 'length'.
+            </summary>
+        </member>
+        <member name="P:UnitsUI.DynamoUnitConvert.SelectedFromConversion">
+            <summary>
+            This corresponds to the selected unit we are converting FROM.
+            An example of this would be 'meters'.
+            </summary>
+        </member>
+        <member name="P:UnitsUI.DynamoUnitConvert.SelectedToConversion">
+            <summary>
+            This corresponds to the selected unit we are converting TO.
+            An example of this would be 'feet'.
+            </summary>
+        </member>
+        <member name="M:UnitsUI.DynamoUnitConvert.SwitchUnitsDropdownValues">
+            <summary>
+            This methods flips the 'to' and 'from' unit of the conversion.
+            </summary>
+        </member>
+    </members>
+</doc>
