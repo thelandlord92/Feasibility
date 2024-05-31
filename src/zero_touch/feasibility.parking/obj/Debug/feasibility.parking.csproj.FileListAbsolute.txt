@@ -1,6 +1,0 @@
-C:\Users\omoba\OneDrive\Documents\GitHub\Feasibility\src\zero_touch\feasibility.parking\bin\Debug\feasibility.parking.dll
-C:\Users\omoba\OneDrive\Documents\GitHub\Feasibility\src\zero_touch\feasibility.parking\bin\Debug\feasibility.parking.pdb
-C:\Users\omoba\OneDrive\Documents\GitHub\Feasibility\src\zero_touch\feasibility.parking\obj\Debug\feasibility.parking.csproj.AssemblyReference.cache
-C:\Users\omoba\OneDrive\Documents\GitHub\Feasibility\src\zero_touch\feasibility.parking\obj\Debug\feasibility.parking.csproj.CoreCompileInputs.cache
-C:\Users\omoba\OneDrive\Documents\GitHub\Feasibility\src\zero_touch\feasibility.parking\obj\Debug\feasibility.parking.dll
-C:\Users\omoba\OneDrive\Documents\GitHub\Feasibility\src\zero_touch\feasibility.parking\obj\Debug\feasibility.parking.pdb

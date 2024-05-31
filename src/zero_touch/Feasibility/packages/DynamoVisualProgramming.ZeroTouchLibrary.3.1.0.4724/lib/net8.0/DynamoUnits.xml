@@ -1,0 +1,401 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DynamoUnits</name>
+    </assembly>
+    <members>
+        <member name="P:DynamoUnits.Location.Name">
+            <summary>
+            Gets the name value from a location
+            </summary>
+            <returns name="string">Name of location</returns>
+        </member>
+        <member name="P:DynamoUnits.Location.Latitude">
+            <summary>
+            The Location's latitude in degrees between -90.0 and 90.0
+            </summary>
+            <returns name="double">Latitude geographic coordinate of location</returns>
+        </member>
+        <member name="P:DynamoUnits.Location.Longitude">
+            <summary>
+            The Location's Longitude in degrees between -180.0 and 180.0
+            </summary>
+            <returns name="double">Longitude geographic coordinate of location</returns>
+        </member>
+        <member name="M:DynamoUnits.Location.ByLatitudeAndLongitude(System.Double,System.Double,System.String)">
+            <summary>
+            Create a Location object by specifying a latitude and a longitude.
+            </summary>
+            <param name="latitude">Angle, in degrees, between -90.0 and 90.0</param>
+            <param name="longitude">Angle, in degrees, between -180.0 and 180.0</param>
+            <param name="name">A name for the location</param>
+            <returns name="location">Location object</returns>
+        </member>
+        <member name="T:DynamoUnits.Quantity">
+            <summary>
+            An object representing a property which is measurable.  A Quantity can be defined or derived from other quantities.
+            </summary>
+        </member>
+        <member name="P:DynamoUnits.Quantity.TypeId">
+            <summary>
+            Gets the Forge type schema identifier for a Quantity
+            </summary>
+            <returns name="string">Forge TypeId</returns>
+        </member>
+        <member name="P:DynamoUnits.Quantity.Name">
+            <summary>
+            Gets the Name of for a Quantity
+            </summary>
+            <returns name="string">Name of Quantity</returns>
+        </member>
+        <member name="P:DynamoUnits.Quantity.Units">
+            <summary>
+            Gets all available Units associated with a Quantity.
+            </summary>
+            <returns name="Unit[]">List of Units</returns>
+        </member>
+        <member name="M:DynamoUnits.Quantity.ByTypeID(System.String)">
+            <summary>
+            Creates a Quantity object from its Forge type schema identifier string.
+            </summary>
+            <param name="typeId">Forge TypeId string</param>
+            <returns name="Quantity">Quantity object</returns>
+        </member>
+        <member name="T:DynamoUnits.Symbol">
+            <summary>
+            A text symbol used to associate a value with a Unit system.
+            </summary>
+        </member>
+        <member name="P:DynamoUnits.Symbol.TypeId">
+            <summary>
+            Gets the Forge type schema identifier for a Symbol
+            </summary>
+            <returns name="string">Forge TypeId</returns>
+        </member>
+        <member name="P:DynamoUnits.Symbol.Unit">
+            <summary>
+            Gets the corresponding Unit of a Symbol
+            </summary>
+            <returns name="Unit">Unit object</returns>
+        </member>
+        <member name="P:DynamoUnits.Symbol.Text">
+            <summary>
+            Gets the string representation of a Symbol.
+            </summary>
+            <returns name="string">Symbol text</returns>
+        </member>
+        <member name="P:DynamoUnits.Symbol.Space">
+            <summary>
+            Gets a boolean indicating if there is typically a space between the unit value and symbol.
+            </summary>
+            <returns name="bool">Space between unit and symbol</returns>
+        </member>
+        <member name="M:DynamoUnits.Symbol.ByTypeID(System.String)">
+            <summary>
+            Creates a Symbol object from its Forge type schema identifier string.
+            </summary>
+            <param name="typeId">Forge TypeId string</param>
+            <returns name="Symbol">Symbol object</returns>
+        </member>
+        <member name="M:DynamoUnits.Symbol.SymbolsByUnit(DynamoUnits.Unit)">
+            <summary>
+            Gets all available Symbols associated with a Unit.
+            </summary>
+            <param name="unit">Unit object</param>
+            <returns name="Symbol[]">List of Symbols</returns>
+        </member>
+        <member name="M:DynamoUnits.Symbol.StringifyDecimal(System.Double,System.Int32,DynamoUnits.Symbol,System.Boolean)">
+            <summary>
+            Returns the formatted unit expression for a given value and symbol in a decimal format.
+            </summary>
+            <param name="value">Number value for the unit</param>
+            <param name="precision">Decimal precision for the expression</param>
+            <param name="symbol">Symbol type</param>
+            <param name="removeTrailingZeros">Remove trailing zeros in the output</param>
+            <returns name="string">Formatted unit expression</returns>
+        </member>
+        <member name="M:DynamoUnits.Symbol.StringifyFraction(System.Double,System.Int32,DynamoUnits.Symbol)">
+            <summary>
+            Returns the formatted expression for a given value and symbol in a fraction format.
+            </summary>
+            <param name="value">Number value for the expression</param>
+            <param name="precision">Bits of precision for the resulting fraction - i.e 2-> 1/4, 7 -> 1/128. Max supported precision is 9 bits</param>
+            <param name="symbol">Symbol type</param>
+            <returns name="string">Formatted unit expression</returns>
+        </member>
+        <member name="T:DynamoUnits.Unit">
+            <summary>
+            An object representing a standard system for measuring a quantity.
+            </summary>
+        </member>
+        <member name="P:DynamoUnits.Unit.Name">
+            <summary>
+            Gets the Name of for a Unit
+            </summary>
+            <returns name="string">Name of Unit</returns>
+        </member>
+        <member name="P:DynamoUnits.Unit.TypeId">
+            <summary>
+            Gets the Forge type schema identifier for a Unit
+            </summary>
+            <returns name="string">Forge TypeId</returns>
+        </member>
+        <member name="P:DynamoUnits.Unit.ConvertibleUnits">
+            <summary>
+            Gets all Units which are convertible from a Unit.
+            </summary>
+            <returns name="Unit[]">List of Units</returns>
+        </member>
+        <member name="P:DynamoUnits.Unit.QuantitiesContainingUnit">
+            <summary>
+            Gets all Quantity objects which contain a Unit. 
+            </summary>
+            /// <returns name="Quantity[]">List of Quantities</returns>
+        </member>
+        <member name="M:DynamoUnits.Unit.ByTypeID(System.String)">
+            <summary>
+            Creates a Unit object from its Forge type schema identifier string.
+            </summary>
+            <param name="typeId">Forge TypeId string</param>
+            <returns name="Unit">Unit object</returns>
+        </member>
+        <member name="M:DynamoUnits.Unit.AreUnitsConvertible(DynamoUnits.Unit,DynamoUnits.Unit)">
+            <summary>
+            Determine whether two Unit objects are convertible
+            </summary>
+            <param name="fromUnit">Unit Object</param>
+            <param name="toUnit">Unit Object</param>
+        </member>
+        <member name="P:DynamoUnits.SIUnit.Value">
+            <summary>
+            The internal value of the unit.
+            </summary>
+        </member>
+        <member name="P:DynamoUnits.SIUnit.UnitValue">
+            <summary>
+            The value of the unit converted into the
+            unit type stored on the unit. Ex. If the object
+            has LengthUnit.DecimalFoot, for a Value of 1.0, this
+            will return 3.28084
+            </summary>
+        </member>
+        <member name="M:DynamoUnits.SIUnit.#ctor(System.Double)">
+            <summary>
+            Construct an SIUnit object with a value.
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:DynamoUnits.SIUnit.SetValueFromString(System.String)">
+            <summary>
+            Implemented in child classes to control how units are converted
+            from a string representation to an SI value.
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="T:DynamoUnits.Length">
+            <summary>
+            A length stored in meters. This length can represent any unit type, but internally this 
+            is stored as meters to make algorithms simpler.
+            </summary>
+        </member>
+        <member name="T:DynamoUnits.Area">
+            <summary>
+            An area stored in square meters.
+            </summary>
+        </member>
+        <member name="T:DynamoUnits.Volume">
+            <summary>
+            A volume stored in cubic meters.
+            </summary>
+        </member>
+        <member name="T:DynamoUnits.Insolation">
+            <summary>
+            An insolation stored in killowatt hours per meter squared.
+            </summary>
+        </member>
+        <member name="T:DynamoUnits.Utils">
+            <summary>
+            Utility class for operating on units of measure.
+            </summary>
+        </member>
+        <member name="M:DynamoUnits.Utils.CreateFraction(System.Double,System.Double)">
+            <summary>
+            Given a double value, create a string fraction with given precision.
+            </summary>
+            <param name="value">The value to convert to a fractional representation.</param>
+            <param name="precision">Fractional precision described as a double. i.e. 1/64th -> 0.015625</param>
+            <returns>A string representing the fraction.</returns>
+        </member>
+        <member name="M:DynamoUnits.Utils.FromFeetAndFractionalInches(System.String)">
+            <summary>
+            Convert from feet and fractional inches to decimal feet.
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DynamoUnits.Utils.ToFeetAndFractionalInches(System.Double)">
+            <summary>
+            Convert from decimal feet to feet and fractional inches
+            </summary>
+            <param name="decimalFeet"></param>
+            <returns></returns>
+        </member>
+        <member name="T:DynamoUnits.Utilities">
+            <summary>
+            Utility functions for unit conversion work flows and helper functions.
+            </summary>
+        </member>
+        <member name="P:DynamoUnits.Utilities.SchemaDirectory">
+            <summary>
+            Path to the directory used load the schema definitions.
+            </summary>
+        </member>
+        <member name="M:DynamoUnits.Utilities.Initialize">
+            <summary>
+            Is used by static constructor, or during testing to reset schemas and units engine to default state.
+            </summary>
+        </member>
+        <member name="M:DynamoUnits.Utilities.SetTestEngine(System.String)">
+            <summary>
+            only use this method during tests - allows setting a different schema location without
+            worrying about distributing a test configuration file.
+            </summary>
+        </member>
+        <member name="M:DynamoUnits.Utilities.ConvertByUnits(System.Double,DynamoUnits.Unit,DynamoUnits.Unit)">
+            <summary>
+            Converts a value from one Unit System to another Unit System
+            </summary>
+            <param name="value">Value to convert</param>
+            <param name="fromUnit">Unit object</param>
+            <param name="toUnit">Unit object</param>
+            <returns name="double">Converted value</returns>
+        </member>
+        <member name="M:DynamoUnits.Utilities.ConvertByUnitIds(System.Double,System.String,System.String)">
+            <summary>
+            Wrapper function that converts between a double value between one unit and another.
+            </summary>
+            <param name="value"></param>
+            <param name="fromUnit"></param>
+            <param name="toUnit"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DynamoUnits.Utilities.ParseExpressionByUnit(DynamoUnits.Unit,System.String)">
+            <summary>
+            Parses a string containing values with units and math functions to a unit value.
+            For example, "1ft + 2.54cm + 3in" could be converted to 14in
+            </summary>
+            <param name="targetUnit">Unit system to target</param>
+            <param name="expression">String to convert to a value</param>
+            <returns name="double">Converted value</returns>
+        </member>
+        <member name="M:DynamoUnits.Utilities.ParseExpressionByUnitId(System.String,System.String)">
+            <summary>
+            Parses a string to a unit value.
+            </summary>
+            <param name="targetUnit"></param>
+            <param name="expression"></param>
+            <returns name="double">Converted value</returns>
+        </member>
+        <member name="M:DynamoUnits.Utilities.ParseExpression(System.String)">
+            <summary>
+            Parses a string containing math functions to a unit value.
+            For example, "(1 + 3)^2 - 4 * 2" could be converted to 8
+            </summary>
+            <param name="expression">String to convert to a value</param>
+            <returns name="double">Converted value</returns>
+        </member>
+        <member name="P:DynamoUnits.Utilities.ForgeUnitsEngine">
+            <summary>
+            Engine which loads schemas and is responsible for all ForgeUnit operations.
+            </summary>
+        </member>
+        <member name="M:DynamoUnits.Utilities.GetAllQuantities">
+            <summary>
+            Get all the loaded Quantities within the Dynamo session.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DynamoUnits.Utilities.GetAllUnits">
+            <summary>
+            Get all the loaded Units within the Dynamo session.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DynamoUnits.Utilities.GetAllSymbols">
+            <summary>
+            Get all the loaded Symbols within the Dynamo session.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DynamoUnits.Utilities.CovertForgeQuantityDictionaryToCollection(System.Collections.Generic.Dictionary{System.String,Autodesk.ForgeUnits.Quantity})">
+            <summary>
+            Converts a dictionary of Forge SDK Quantities to a collection of Quantities
+            </summary>
+            <param name="forgeDictionary">A dictionary keyed by a forge typeID and Forge SDK Quantities as values</param>
+            <returns></returns>
+        </member>
+        <member name="M:DynamoUnits.Utilities.ConvertForgeSymbolDictionaryToCollection(System.Collections.Generic.Dictionary{System.String,Autodesk.ForgeUnits.Symbol})">
+            <summary>
+            Converts a dictionary of Forge SDK Symbols to a collection of Symbols
+            </summary>
+            <param name="forgeDictionary">A dictionary keyed by a forge typeID and Forge SDK Symbols as values</param>
+            <returns></returns>
+        </member>
+        <member name="M:DynamoUnits.Utilities.ConvertForgeUnitDictionaryToCollection(System.Collections.Generic.Dictionary{System.String,Autodesk.ForgeUnits.Unit})">
+            <summary>
+            Converts a dictionary of Forge SDK Units to a collection of Units
+            </summary>
+            <param name="forgeDictionary">A dictionary keyed by a forge typeID and Forge SDK Units as values</param>
+            <returns></returns>
+        </member>
+        <member name="M:DynamoUnits.Utilities.GetAllRegisteredQuantityVersions">
+            <summary>
+            Get latest versions of registered Quantities within the Dynamo session.
+            </summary>
+            <returns>A dictionary keyed by a version-less typeID and the latest registered version as value</returns>
+        </member>
+        <member name="M:DynamoUnits.Utilities.GetAllRegisteredQuantityVersions(System.Collections.Generic.Dictionary{System.String,Autodesk.ForgeUnits.Quantity})">
+            <summary>
+            Get latest versions of registered Quantities from a dictionary of Forge SDK Quantities
+            </summary>
+            <param name="forgeDictionary">A dictionary keyed by a forge typeID and Forge SDK Quantities as values</param>
+            <returns>A dictionary keyed by a version-less typeID and the latest registered version as value</returns>
+        </member>
+        <member name="M:DynamoUnits.Utilities.GetAllLastestRegisteredSymbolVersions">
+            <summary>
+            Get latest versions of registered Symbols within the Dynamo session.
+            </summary>
+            <returns>A dictionary keyed by a version-less typeID and the latest registered version as value</returns>
+        </member>
+        <member name="M:DynamoUnits.Utilities.GetAllLastestRegisteredSymbolVersions(System.Collections.Generic.Dictionary{System.String,Autodesk.ForgeUnits.Symbol})">
+            <summary>
+            Get latest versions of registered Symbols from a dictionary of Forge SDK Symbols
+            </summary>
+            <param name="forgeDictionary">A dictionary keyed by a forge typeID and Forge SDK Symbols as values</param>
+            <returns>A dictionary keyed by a version-less typeID and the latest registered version as value</returns>
+        </member>
+        <member name="M:DynamoUnits.Utilities.GetAllLatestRegisteredUnitVersions">
+            <summary>
+            Get latest versions of registered Units within the Dynamo session.
+            </summary>
+            <returns>A dictionary keyed by a version-less typeID and the latest registered version as value</returns>
+        </member>
+        <member name="M:DynamoUnits.Utilities.GetAllLatestRegisteredUnitVersions(System.Collections.Generic.Dictionary{System.String,Autodesk.ForgeUnits.Unit})">
+            <summary>
+            Get latest versions of registered Units from a dictionary of Forge SDK Units
+            </summary>
+            <param name="forgeDictionary">A dictionary keyed by a forge typeID and Forge SDK Units as values</param>
+            <returns>A dictionary keyed by a version-less typeID and the latest registered version as value</returns>
+        </member>
+        <member name="M:DynamoUnits.Utilities.TryParseTypeId(System.String,System.String@,System.Version@)">
+            <summary>
+            Try to get a valid typeName and version from a Forge TypeID string
+            By convention the Id should be in the format of "foo-1.0.2" where a "-" is the divider between typeName and version.
+            </summary>
+            <param name="typeId">Forge TypeID string</param>
+            <param name="typeName">Type name for the TypeID. This is the TypeID stripped of version.</param>
+            <param name="version">Version object</param>
+            <returns>True if the format is valid</returns>
+        </member>
+    </members>
+</doc>

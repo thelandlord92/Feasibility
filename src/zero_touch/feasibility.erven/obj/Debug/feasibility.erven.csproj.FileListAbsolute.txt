@@ -1,6 +1,0 @@
-C:\Users\omoba\OneDrive\Documents\GitHub\Feasibility\src\zero_touch\feasibility.erven\bin\Debug\feasibility.erven.dll
-C:\Users\omoba\OneDrive\Documents\GitHub\Feasibility\src\zero_touch\feasibility.erven\bin\Debug\feasibility.erven.pdb
-C:\Users\omoba\OneDrive\Documents\GitHub\Feasibility\src\zero_touch\feasibility.erven\obj\Debug\feasibility.erven.csproj.AssemblyReference.cache
-C:\Users\omoba\OneDrive\Documents\GitHub\Feasibility\src\zero_touch\feasibility.erven\obj\Debug\feasibility.erven.csproj.CoreCompileInputs.cache
-C:\Users\omoba\OneDrive\Documents\GitHub\Feasibility\src\zero_touch\feasibility.erven\obj\Debug\feasibility.erven.dll
-C:\Users\omoba\OneDrive\Documents\GitHub\Feasibility\src\zero_touch\feasibility.erven\obj\Debug\feasibility.erven.pdb
