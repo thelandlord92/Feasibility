@@ -6,7 +6,16 @@ using System.Threading.Tasks;
 
 namespace Feasibility.Parking
 {
-    internal class Parking
+    public class Parking
     {
+        // this hides the overall class as a node.
+        private Parking() { }
+
+        public static Autodesk.DesignScript.Geometry.Point CreatePoint(int x, int y)
+        {
+            var point = Autodesk.DesignScript.Geometry.Point.ByCoordinates(x, y);
+
+            return point;
+        }
     }
 }

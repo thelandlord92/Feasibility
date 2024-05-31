@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Watch3DNodeModels</name>
+    </assembly>
+    <members>
+        <member name="T:Watch3DNodeModels.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Watch3DNodeModels.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Watch3DNodeModels.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Watch3DNodeModels.Properties.Resources.Watch3DDescription">
+            <summary>
+              Looks up a localized string similar to Shows a dynamic preview of geometry.
+            </summary>
+        </member>
+        <member name="P:Watch3DNodeModels.Properties.Resources.Watch3DPortDataInputToolTip">
+            <summary>
+              Looks up a localized string similar to Incoming geometry objects..
+            </summary>
+        </member>
+        <member name="P:Watch3DNodeModels.Properties.Resources.Watch3DPortDataOutputToolTip">
+            <summary>
+              Looks up a localized string similar to Watch contents, passed through.
+            </summary>
+        </member>
+        <member name="P:Watch3DNodeModels.Properties.Resources.Watch3DSearchTags">
+            <summary>
+              Looks up a localized string similar to panel;3dview;view;inspect;debug;watch geo;watch3d;.
+            </summary>
+        </member>
+        <member name="T:Watch3DNodeModels.Watch3DCamera">
+            <summary>
+            Class used for representation of Helix camera.
+            </summary>
+        </member>
+        <member name="P:Watch3DNodeModels.Watch3DCamera.Name">
+            <summary>
+            Name of watch3d camera, e.g. "761132b8-b5fa-46b2-98a9-82436e0d8812 Preview"
+            </summary>
+        </member>
+        <member name="P:Watch3DNodeModels.Watch3DCamera.EyeX">
+            <summary>
+            EyeX of Watch 3d camera
+            </summary>
+        </member>
+        <member name="P:Watch3DNodeModels.Watch3DCamera.EyeY">
+            <summary>
+            EyeY of Watch 3d camera
+            </summary>
+        </member>
+        <member name="P:Watch3DNodeModels.Watch3DCamera.EyeZ">
+            <summary>
+            EyeZ of Watch 3d camera
+            </summary>
+        </member>
+        <member name="P:Watch3DNodeModels.Watch3DCamera.LookX">
+            <summary>
+            LookX of Watch 3d camera
+            </summary>
+        </member>
+        <member name="P:Watch3DNodeModels.Watch3DCamera.LookY">
+            <summary>
+            LookY of Watch 3d camera
+            </summary>
+        </member>
+        <member name="P:Watch3DNodeModels.Watch3DCamera.LookZ">
+            <summary>
+            LookZ of Watch 3d camera
+            </summary>
+        </member>
+        <member name="P:Watch3DNodeModels.Watch3DCamera.UpX">
+            <summary>
+            UpX of Watch 3d camera
+            </summary>
+        </member>
+        <member name="P:Watch3DNodeModels.Watch3DCamera.UpY">
+            <summary>
+            UpY of Watch 3d camera
+            </summary>
+        </member>
+        <member name="P:Watch3DNodeModels.Watch3DCamera.UpZ">
+            <summary>
+            UpZ of Watch 3d camera
+            </summary>
+        </member>
+        <member name="M:Watch3DNodeModels.Watch3D.DeserializeCamera">
+            <summary>
+            Deserializes camera from XML, if there is no any Deserialized action.
+            It's used for creation of camera, that will be sent to Flood.
+            </summary>
+        </member>
+    </members>
+</doc>

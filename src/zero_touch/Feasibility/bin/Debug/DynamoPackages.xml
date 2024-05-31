@@ -1,0 +1,664 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DynamoPackages</name>
+    </assembly>
+    <members>
+        <member name="M:Dynamo.PackageManager.FailFunc.TryExecute``1(System.Func{``0},``0)">
+            <summary>
+                Attempt to run a computation.  If the function throws, return the second 
+                argument unmodified
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="func">The function</param>
+            <param name="failureResult">The result</param>
+            <returns></returns>
+        </member>
+        <member name="T:Dynamo.PackageManager.IPathRemapper">
+            <summary>
+                A simplified interface for remapping the file path of a CustomNodeWorkspace.
+                Useful for when a custom node will be moved by a package creation operation.
+            </summary>
+        </member>
+        <member name="M:Dynamo.PackageManager.IPathRemapper.SetPath(System.String,System.String)">
+            <summary>
+                Remap the custom node path
+            </summary>
+            <param name="originalPath">The original path</param>
+            <param name="newDirectoryPath">The final directory path</param>
+            <returns>If successful, returns true</returns>
+        </member>
+        <member name="T:Dynamo.PackageManager.CustomNodePathRemapper">
+            <summary>
+                An IPathRemapper that requires a CustomNodeManager to mutate a custom node workspace path
+            </summary>
+        </member>
+        <member name="T:Dynamo.PackageManager.Interfaces.IFileCompressor">
+            <summary>
+                An abstract IFileCompressor for mocking purposes
+            </summary>
+        </member>
+        <member name="T:Dynamo.PackageManager.IFileSystem">
+            <summary>
+                An abstract FileSystem for mocking purposes
+            </summary>
+        </member>
+        <member name="T:Dynamo.PackageManager.MutatingFileCompressor">
+            <summary>
+                An IFileCompressor that actually attempts to compress a directory
+            </summary>
+        </member>
+        <member name="T:Dynamo.PackageManager.MutatingFileSystem">
+            <summary>
+                An IFileSystem that actually mutates the underlying file system
+            </summary>
+        </member>
+        <member name="T:Dynamo.PackageManager.PackageLoadState">
+            <summary>
+            Describes a package's load state
+            </summary>
+        </member>
+        <member name="T:Dynamo.PackageManager.PackageLoadState.StateTypes">
+            <summary>
+            The current load state of a package
+            </summary>
+        </member>
+        <member name="F:Dynamo.PackageManager.PackageLoadState.StateTypes.None">
+            <summary>
+            Invalid state. The initial state for every package, before it is interpreted by Dynamo
+            </summary>
+        </member>
+        <member name="F:Dynamo.PackageManager.PackageLoadState.StateTypes.Loaded">
+            <summary>
+            The package is fully loaded and is ready to be used
+            </summary>
+        </member>
+        <member name="F:Dynamo.PackageManager.PackageLoadState.StateTypes.Unloaded">
+            <summary>
+            The package is not loaded in Dynamo and not deleted from package locations
+            </summary>
+        </member>
+        <member name="F:Dynamo.PackageManager.PackageLoadState.StateTypes.Error">
+            <summary>
+            The package was not loaded in Dynamo because of an error. See the Error property for more information
+            </summary>
+        </member>
+        <member name="T:Dynamo.PackageManager.PackageLoadState.ScheduledTypes">
+            <summary>
+            The scheduled load state of a package
+            </summary>
+        </member>
+        <member name="F:Dynamo.PackageManager.PackageLoadState.ScheduledTypes.None">
+            <summary>
+            Invalid scheduled state. The initial state for every package, before it is interpreted by Dynamo
+            </summary>
+        </member>
+        <member name="F:Dynamo.PackageManager.PackageLoadState.ScheduledTypes.ScheduledForUnload">
+            <summary>
+            The package is scheduled to be unloaded. After the next Dynamo restart, the package will be in an Unloaded state
+            </summary>
+        </member>
+        <member name="F:Dynamo.PackageManager.PackageLoadState.ScheduledTypes.ScheduledForDeletion">
+            <summary>
+            The package is scheduled to be deleted. After the next Dynamo restart, the package will deleted from the package locations
+            </summary>
+        </member>
+        <member name="P:Dynamo.PackageManager.Package.NodeDocumentaionDirectory">
+            <summary>
+            Directory path to where node documentation markdown files should be placed.
+            </summary>
+        </member>
+        <member name="P:Dynamo.PackageManager.Package.HostDependencies">
+            <summary>
+            Package Host Dependencies, e.g. specifying "Revit" in the list means this package can be guaranteed to work in this host environment only
+            </summary>
+        </member>
+        <member name="P:Dynamo.PackageManager.Package.ContainsBinaries">
+            <summary>
+                Determines if there are binaries in the package
+            </summary>
+        </member>
+        <member name="P:Dynamo.PackageManager.Package.NodeLibraries">
+            <summary>
+                List the LoadedAssemblies whose IsNodeLibrary attribute is true
+            </summary>
+        </member>
+        <member name="P:Dynamo.PackageManager.Package.Header">
+            <summary>
+                A header used to create the package, this data does not reflect runtime
+                changes to the package, but instead reflects how the package was formed.
+            </summary>
+        </member>
+        <member name="P:Dynamo.PackageManager.Package.RequiresSignedEntryPoints">
+            <summary>
+            Is set to true if the Package is located in a directory that requires certificate verification of its node library dlls.
+            </summary>
+        </member>
+        <member name="M:Dynamo.PackageManager.Package.AddAssemblies(System.Collections.Generic.IEnumerable{Dynamo.PackageManager.PackageAssembly})">
+            <summary>
+                Add assemblies at runtime to the package.  Does not load the assembly into the node library.
+                If the package is already present in LoadedAssemblies, this will mutate it's IsNodeLibrary property.
+            </summary>
+            <param name="assems">A list of assemblies</param>
+        </member>
+        <member name="M:Dynamo.PackageManager.Package.EnumerateAndLoadAssembliesInBinDirectory">
+            <summary>
+                Enumerates all assemblies in the package. This method currently has the side effect that it will
+                load all binaries in the package bin folder unless the package is loaded from a special package path
+                I.E. Builtin Packages.
+            </summary>
+            <returns>The list of all node library assemblies</returns>
+        </member>
+        <member name="M:Dynamo.PackageManager.Package.IsFileSpecifiedInPackageJsonManifest(System.Collections.Generic.IEnumerable{System.String},System.String,System.String)">
+            <summary>
+            Checks if a specific file is specified in the Node Libraries section of the package manifest json.
+            </summary>
+            <param name="nodeLibraries">node libraries defined in package manifest json.</param>
+            <param name="filename">filename of dll file to check</param>
+            <param name="path">path of the packages</param>
+            <returns></returns>
+        </member>
+        <member name="M:Dynamo.PackageManager.Package.IsNodeLibrary(System.Collections.Generic.IEnumerable{System.String},System.Reflection.AssemblyName,System.Collections.Generic.IList{Dynamo.Logging.ILogMessage}@)">
+            <summary>
+                Determine if an assembly is in the "node_libraries" list for the package.
+            
+                This algorithm accepts assemblies that don't have the same version, but the same name.
+                This is important when a package author has updated a dll in their package.  
+            
+                This algorithm assumes all of the entries in nodeLibraryFullNames are properly formatted
+                as returned by the Assembly.FullName property.  If they are not, it ignores the entry.
+            </summary>
+        </member>
+        <member name="M:Dynamo.PackageManager.Package.MarkForUninstall(Dynamo.Interfaces.IPreferences)">
+            <summary>
+            Marks built-in package for unload.
+            Any other custom package will be marked for deletion.
+            </summary>
+            <param name="prefs"></param>
+        </member>
+        <member name="M:Dynamo.PackageManager.Package.UnmarkForUninstall(Dynamo.Interfaces.IPreferences)">
+            <summary>
+            Resets scheduled state to 'None' for given package.
+            Custom package will no longer be uninstalled.
+            Package load state will remain unaffected.
+            </summary>
+            <param name="prefs"></param>
+        </member>
+        <member name="M:Dynamo.PackageManager.Package.MarkForUnload">
+            <summary>
+            Marks any given package for unload.
+            The package will not be marked for deletion.
+            </summary>
+            <param name="prefs"></param>
+        </member>
+        <member name="M:Dynamo.PackageManager.Package.UnmarkForUnload">
+            <summary>
+            Resets scheduled state to 'None' for given package.
+            Package will no longer be unloaded.
+            Package load state will remain unaffected.
+            </summary>
+            <param name="prefs"></param>
+        </member>
+        <member name="T:Dynamo.PackageManager.PackageDirectoryBuilder">
+            <summary>
+                This class provides all of the tools to build a Package directory of the correct structure.
+            </summary>
+        </member>
+        <member name="M:Dynamo.PackageManager.PackageDirectoryBuilder.#ctor(Dynamo.PackageManager.IFileSystem,Dynamo.PackageManager.IPathRemapper)">
+            <summary>
+                The class constructor
+            </summary>
+            <param name="fileSystem">For moving files around</param>
+            <param name="pathRemapper">For modifying custom node paths</param>
+        </member>
+        <member name="M:Dynamo.PackageManager.PackageDirectoryBuilder.BuildDirectory(Dynamo.PackageManager.Package,System.String,System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+                Forms a properly formed package directory
+            </summary>
+            <param name="package">The package to be formed</param>
+            <param name="packagesDirectory">The parent directory for the parent directory</param>
+            <param name="files">The collection of files to be moved</param>
+            <returns></returns>
+        </member>
+        <member name="T:Dynamo.PackageManager.PackageDownloadHandle">
+            <summary>
+            View model for the installation of a package
+            </summary>
+        </member>
+        <member name="T:Dynamo.PackageManager.PackageDownloadHandle.State">
+            <summary>
+            Possible states for a package installation
+            </summary>
+        </member>
+        <member name="P:Dynamo.PackageManager.PackageDownloadHandle.ErrorString">
+            <summary>
+            Error message that resulted from an unsuccessful installation
+            </summary>
+        </member>
+        <member name="P:Dynamo.PackageManager.PackageDownloadHandle.DownloadState">
+            <summary>
+            State of the installation of the package
+            </summary>
+        </member>
+        <member name="P:Dynamo.PackageManager.PackageDownloadHandle.Name">
+            <summary>
+            Name of the package
+            </summary>
+        </member>
+        <member name="P:Dynamo.PackageManager.PackageDownloadHandle.Id">
+            <summary>
+            Identifier of the package
+            </summary>
+        </member>
+        <member name="P:Dynamo.PackageManager.PackageDownloadHandle.DownloadPath">
+            <summary>
+            Path where the package is downloaded to
+            </summary>
+        </member>
+        <member name="P:Dynamo.PackageManager.PackageDownloadHandle.VersionName">
+            <summary>
+            Version of the package
+            </summary>
+        </member>
+        <member name="M:Dynamo.PackageManager.PackageDownloadHandle.#ctor">
+            <summary>
+            Creates an empty view model for a package installation 
+            </summary>
+        </member>
+        <member name="M:Dynamo.PackageManager.PackageDownloadHandle.Error(System.String)">
+            <summary>
+            Transitions the installation to error with an error message
+            </summary>
+            <param name="errorString">Error message</param>
+        </member>
+        <member name="M:Dynamo.PackageManager.PackageDownloadHandle.Done(System.String)">
+            <summary>
+            Transition the installation to downloaded with a path to the file
+            </summary>
+            <param name="filePath">Path to the file</param>
+        </member>
+        <member name="M:Dynamo.PackageManager.PackageDownloadHandle.Extract(Dynamo.Models.DynamoModel,System.String,Dynamo.PackageManager.Package@)">
+            <summary>
+            Extracts and parses the metadata of a downloaded package
+            </summary>
+            <param name="dynamoModel">Dynamo model</param>
+            <param name="installDirectory">If specified, overrides Dynamo's default base folder for packages</param>
+            <param name="pkg">Metatda parsed from the package</param>
+            <returns>Whether the operation succeeded or not</returns>
+        </member>
+        <member name="P:Dynamo.PackageManager.PackageFileInfo.RelativePath">
+            <summary>
+            Filename relative to the package root directory
+            </summary>
+        </member>
+        <member name="E:Dynamo.PackageManager.PackageLoader.PackageAdded">
+            <summary>
+            This event is raised when a package is first added to the list of packages this package loader is loading.
+            This event occurs before the package is fully loaded. 
+            </summary>
+        </member>
+        <member name="E:Dynamo.PackageManager.PackageLoader.PackgeLoaded">
+            <summary>
+            This event is raised when a package is fully loaded. It will be true that when this event is raised
+            Packge.Loaded will be true for the package.
+            </summary>
+        </member>
+        <member name="E:Dynamo.PackageManager.PackageLoader.PackageRemoved">
+            <summary>
+            This event is raised when the package is removed from the list of packages loaded by this packageLoader.
+            </summary>
+        </member>
+        <member name="P:Dynamo.PackageManager.PackageLoader.RequestedExtensions">
+            <summary>
+            Collection of ViewExtensions the ViewExtensionSource requested be loaded.
+            </summary>
+        </member>
+        <member name="P:Dynamo.PackageManager.PackageLoader.DefaultPackagesDirectory">
+            <summary>
+            Returns the default package directory where new packages will be installed
+            This is the first non builtin packages directory
+            The first entry is the builtin packages.
+            </summary>
+            <returns>Returns the path to the DefaultPackagesDirectory if found - or null if something has gone wrong.</returns>
+        </member>
+        <member name="M:Dynamo.PackageManager.PackageLoader.TransformPath(System.String,System.String)">
+            <summary>
+            Combines the extension with the root path and returns it if the path exists. 
+            If not, the root path is returned unchanged.
+            </summary>
+            <param name="root">root path to transform</param>
+            <param name="userDataFolder"></param>
+            <param name="extension">subdirectory or subpath</param>
+            <returns>combined root and extension path</returns>
+        </member>
+        <member name="M:Dynamo.PackageManager.PackageLoader.TryLoadPackageIntoLibrary(Dynamo.PackageManager.Package)">
+            <summary>
+            Try loading package into Library (including all node libraries and custom nodes)
+            and add to LocalPackages.
+            </summary>
+            <param name="package"></param>
+        </member>
+        <member name="E:Dynamo.PackageManager.PackageLoader.ConflictingCustomNodePackageLoaded">
+            <summary>
+            Event raised when a custom node package containing conflicting node definition
+            with an existing package is tried to load.
+            </summary>
+        </member>
+        <member name="M:Dynamo.PackageManager.PackageLoader.Load(Dynamo.PackageManager.Package)">
+            <summary>
+                Load the package into Dynamo (including all node libraries and custom nodes)
+                and add to LocalPackages.
+            </summary>
+        </member>
+        <member name="M:Dynamo.PackageManager.PackageLoader.LoadAll(Dynamo.PackageManager.LoadPackageParams)">
+            <summary>
+                Scan the PackagesDirectory for packages and attempt to load all of them.  Beware! Fails silently for duplicates.
+            </summary>
+        </member>
+        <member name="M:Dynamo.PackageManager.PackageLoader.LoadPackages(System.Collections.Generic.IEnumerable{Dynamo.PackageManager.Package})">
+            <summary>
+            Loads and imports all packages. 
+            </summary>
+            <param name="packages"></param>
+        </member>
+        <member name="M:Dynamo.PackageManager.PackageLoader.LoadCustomNodesAndPackagesHelper(System.Collections.Generic.IEnumerable{System.String},Dynamo.Interfaces.IPreferences,Dynamo.Core.CustomNodeManager)">
+            <summary>
+            Helper function to load new custom nodes and packages.
+            </summary>
+            <param name="newPaths">New package paths to load custom nodes and packages from.</param>
+            <param name="preferences">Can be a temporary local preferences object.</param>
+            <param name="customNodeManager"></param>
+        </member>
+        <member name="M:Dynamo.PackageManager.PackageLoader.LoadNewCustomNodesAndPackages(System.Collections.Generic.IEnumerable{System.String},Dynamo.Core.CustomNodeManager)">
+            <summary>
+            This method is used when custom nodes and packages need to be loaded from new package paths 
+            that have been added to preference settings.
+            </summary>
+            <param name="newPaths">New package paths to load custom nodes and packages from.</param>
+            <param name="customNodeManager"></param>
+        </member>
+        <member name="M:Dynamo.PackageManager.PackageLoader.LoadCustomNodesAndPackages(Dynamo.PackageManager.LoadPackageParams,Dynamo.Core.CustomNodeManager)">
+            <summary>
+            LoadCustomNodesAndPackages can be used to load custom nodes and packages
+            from temporary paths that do not need to be added to preference settings. 
+            To load from temporary custom paths, initialize a local PreferenceSettings object 
+            and add the paths to its CustomPackageFolders property, then initialize a new 
+            LoadPackageParams with this preferences object and use as input to this method.
+            To load from custom paths that need to be persisted to the preferences, 
+            initialize a LoadPackageParams from an existing preferences object.
+            </summary>
+            <param name="loadPackageParams">LoadPackageParams initialized with local PreferenceSettings object containing custom package path.</param>
+            <param name="customNodeManager"></param>
+        </member>
+        <member name="M:Dynamo.PackageManager.PackageLoader.CheckAndGetPackageVersion(System.String,System.String,System.String)">
+            <summary>
+            Check and get the version from the version string. Throw a library load exception if anything is wrong with the version
+            </summary>
+            <param name="version">the version string</param>
+            <param name="name">name of the package</param>
+            <param name="directory">package directory</param>
+            <returns>Returns a valid Version</returns>
+        </member>
+        <member name="M:Dynamo.PackageManager.PackageLoader.CheckPackageNodeLibraryCertificates(System.String,Dynamo.PackageManager.Package)">
+            <summary>
+            Check the node libraries defined in the package json file are valid and have a valid certificate
+            </summary>
+            <param name="packageDirectoryPath">path to package location</param>
+            <param name="discoveredPkg">package object to check</param>
+        </member>
+        <member name="M:Dynamo.PackageManager.PackageLoader.TryReflectionOnlyLoadFrom(System.String,System.Reflection.Assembly@)">
+            <summary>
+                Attempt to load a managed assembly in to ReflectionOnlyLoadFrom context. 
+            </summary>
+            <param name="filename">The filename of a DLL</param>
+            <param name="assem">out Assembly - the passed value does not matter and will only be set if loading succeeds</param>
+            <returns>Returns Success if success, NotManagedAssembly if BadImageFormatException, AlreadyLoaded if FileLoadException</returns>
+        </member>
+        <member name="M:Dynamo.PackageManager.PackageLoader.TryLoadFrom(System.String,System.Reflection.Assembly@)">
+            <summary>
+                Attempt to load a managed assembly in to LoadFrom context. 
+            </summary>
+            <param name="filename">The filename of a DLL</param>
+            <param name="assem">out Assembly - the passed value does not matter and will only be set if loading succeeds</param>
+            <returns>Returns true if success, false if BadImageFormatException (i.e. not a managed assembly)</returns>
+        </member>
+        <member name="F:Dynamo.PackageManager.PackageManagerClient.packageUploadDirectory">
+            <summary>
+                The directory where new packages are created during the upload process.
+            </summary>
+        </member>
+        <member name="F:Dynamo.PackageManager.PackageManagerClient.packageMaintainers">
+            <summary>
+                The dictionay stores the package name corresponding to the boolean result of whether the user is an author of that package or not.
+            </summary>
+        </member>
+        <member name="P:Dynamo.PackageManager.PackageManagerClient.BaseUrl">
+            <summary>
+                The URL of the package manager website
+            </summary>
+        </member>
+        <member name="M:Dynamo.PackageManager.PackageManagerClient.CleanPackagesWithWrongVersions(System.Collections.Generic.List{Greg.Responses.PackageHeader})">
+            <summary>
+            For every package Checks its versions and exclude the ones with errors
+            </summary>
+            <param name="packages"></param>
+        </member>
+        <member name="M:Dynamo.PackageManager.PackageManagerClient.GetPackageMaintainers(Dynamo.Graph.Workspaces.IPackageInfo)">
+            <summary>
+            Gets maintainers for a specific package
+            </summary>
+            <param name="packageInfo"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dynamo.PackageManager.PackageManagerClient.GetUsersLatestPackages">
+            <summary>
+            Gets last published version of all the packages published by the current user.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Dynamo.PackageManager.PackageManagerClient.GetPackageVersionHeader(Dynamo.Graph.Workspaces.IPackageInfo)">
+            <summary>
+            Gets the metadata for a specific version of a package.
+            </summary>
+            <param name="packageInfo">Name and version of a package</param>
+            <returns>Package version metadata</returns>
+        </member>
+        <member name="M:Dynamo.PackageManager.PackageManagerClient.GetPackageVersionHeader(System.String,System.String)">
+            <summary>
+            Gets the metadata for a specific version of a package.
+            </summary>
+            <param name="packageInfo">Name and version of a package</param>
+            <returns>Package version metadata</returns>
+        </member>
+        <member name="M:Dynamo.PackageManager.PackageManagerClient.GetKnownHosts">
+            <summary>
+            Make a call to Package Manager to get the known
+            supported hosts for package publishing and filtering
+            </summary>
+        </member>
+        <member name="F:Dynamo.PackageManager.PackageManagerExtension.CustomNodePackageDictionary">
+            <summary>
+            Dictionary mapping a custom node functionID to the package that contains it.
+            Used for package dependency serialization.
+            </summary>
+        </member>
+        <member name="F:Dynamo.PackageManager.PackageManagerExtension.NodePackageDictionary">
+            <summary>
+            Dictionary mapping the AssemblyName.FullName of an assembly to the package that contains it.
+            Used for package dependency serialization.
+            </summary>
+        </member>
+        <member name="P:Dynamo.PackageManager.PackageManagerExtension.PackageLoader">
+            <summary>
+                Manages loading of packages (property meant solely for tests)
+            </summary>
+        </member>
+        <member name="P:Dynamo.PackageManager.PackageManagerExtension.PackageManagerClient">
+            <summary>
+                Dynamo Package Manager Instance.
+            </summary>
+        </member>
+        <member name="M:Dynamo.PackageManager.PackageManagerExtension.Startup(Dynamo.Extensions.StartupParams)">
+            <summary>
+                Validate the package manager url and initialize the PackageManagerClient object
+            </summary>
+        </member>
+        <member name="T:Dynamo.PackageManager.PackageManagerSearchElement">
+            <summary>
+            A search element representing an element from the package manager </summary>
+        </member>
+        <member name="E:Dynamo.PackageManager.PackageManagerSearchElement.UpvoteRequested">
+            <summary>
+                An event that's invoked when the user has attempted to upvote this
+                package.
+            </summary>
+        </member>
+        <member name="E:Dynamo.PackageManager.PackageManagerSearchElement.DownvoteRequested">
+            <summary>
+                An event that's invoked when the user has attempted to downvote this
+                package.
+            </summary>
+        </member>
+        <member name="P:Dynamo.PackageManager.PackageManagerSearchElement.Hosts">
+            <summary>
+            Hosts dependencies specified for latest version of particular package
+            </summary>
+        </member>
+        <member name="P:Dynamo.PackageManager.PackageManagerSearchElement.HostsString">
+            <summary>
+            Hosts dependencies string specified for latest version of particular package
+            Used for package search element UI
+            </summary>
+        </member>
+        <member name="P:Dynamo.PackageManager.PackageManagerSearchElement.Header">
+            <summary>
+            Header property </summary>
+            <value>
+            The PackageHeader used to instantiate this object </value>
+        </member>
+        <member name="P:Dynamo.PackageManager.PackageManagerSearchElement.Type">
+            <summary>
+            Type property </summary>
+            <value>
+            A string describing the type of object </value>
+        </member>
+        <member name="P:Dynamo.PackageManager.PackageManagerSearchElement.Name">
+            <summary>
+            Name property </summary>
+            <value>
+            The name of the node </value>
+        </member>
+        <member name="P:Dynamo.PackageManager.PackageManagerSearchElement.Description">
+            <summary>
+            Description property </summary>
+            <value>
+            A string describing what the node does</value>
+        </member>
+        <member name="P:Dynamo.PackageManager.PackageManagerSearchElement.Weight">
+            <summary>
+            Weight property </summary>
+            <value>
+            Number defining the relative importance of the element in search. 
+            Higher = closer to the top of search results </value>
+        </member>
+        <member name="P:Dynamo.PackageManager.PackageManagerSearchElement.Guid">
+            <summary>
+            Guid property </summary>
+            <value>
+            A string that uniquely defines the CustomNodeDefinition </value>
+        </member>
+        <member name="P:Dynamo.PackageManager.PackageManagerSearchElement.Id">
+            <summary>
+            Id property </summary>
+            <value>
+            A string that uniquely defines the Package on the server  </value>
+        </member>
+        <member name="M:Dynamo.PackageManager.PackageManagerSearchElement.#ctor(Greg.Responses.PackageHeader)">
+            <summary>
+                The class constructor
+            </summary>
+            <param name="header">The PackageHeader object describing the element</param>
+        </member>
+        <member name="M:Dynamo.PackageManager.PackageUploadBuilder.NewPackageUpload(Dynamo.PackageManager.Package,System.String,System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String},Dynamo.PackageManager.PackageUploadHandle)">
+            <summary>
+            Build a new package and upload
+            </summary>
+            <param name="package"></param>
+            <param name="packagesDirectory"></param>
+            <param name="files"></param>
+            <param name="markdownFiles"></param>
+            <param name="handle"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Dynamo.PackageManager.PackageUploadBuilder.NewPackageVersionUpload(Dynamo.PackageManager.Package,System.String,System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String},Dynamo.PackageManager.PackageUploadHandle)">
+            <summary>
+            Build a new version of the package and upload
+            </summary>
+            <param name="package"></param>
+            <param name="packagesDirectory"></param>
+            <param name="files"></param>
+            <param name="markdownFiles"></param>
+            <param name="handle"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Dynamo.PackageManager.PackageUtilities.FilterFuturePackages(System.Collections.Generic.IEnumerable{System.Tuple{Greg.Responses.PackageHeader,Greg.Responses.PackageVersion}},System.Version,System.Int32)">
+            <summary>
+            Obtain the packages from a list of packages that were created using a newer version
+            of Dynamo than this one.
+            </summary>
+        </member>
+        <member name="T:Dynamo.PackageManager.RealDirectoryInfo">
+            <summary>
+                An IDirectoryInfo representing a real DirectoryInfo object
+            </summary>
+        </member>
+        <member name="T:Dynamo.PackageManager.RealFileInfo">
+            <summary>
+                An IFileInfo representing a real file on disk
+            </summary>
+        </member>
+        <member name="T:DynamoPackages.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:DynamoPackages.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:DynamoPackages.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:DynamoPackages.Properties.Resources.InvalidPackageFolderWarning">
+            <summary>
+              Looks up a localized string similar to The folder &apos;{0}&apos; does not exist.
+            </summary>
+        </member>
+        <member name="P:DynamoPackages.Properties.Resources.InvalidPackageMalformedNodeLibraryDefinition">
+            <summary>
+              Looks up a localized string similar to &quot;A package called {0} found at {1} has improperly defined its node libraries in the package manifest.  Ignoring it.&quot;.
+            </summary>
+        </member>
+        <member name="P:DynamoPackages.Properties.Resources.InvalidPackageNodeLibraryIsNotSigned">
+            <summary>
+              Looks up a localized string similar to &quot;A package called {0} found at {1} could not be verified to have signed dll files.  {2}  Ignoring it.&quot;.
+            </summary>
+        </member>
+        <member name="P:DynamoPackages.Properties.Resources.InvalidPackageNoNodeLibrariesDefinedInPackageJson">
+            <summary>
+              Looks up a localized string similar to A package called {0} found at {1} includes dll files but none are defined in node libraries in the package manifest.  Ignoring it..
+            </summary>
+        </member>
+        <member name="P:DynamoPackages.Properties.Resources.PackagesDirectorySkipped">
+            <summary>
+              Looks up a localized string similar to {0} was not scanned for packages because a preference setting disabled loading from that location.&quot;.
+            </summary>
+        </member>
+    </members>
+</doc>
