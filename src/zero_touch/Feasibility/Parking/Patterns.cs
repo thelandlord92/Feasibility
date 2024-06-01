@@ -93,11 +93,28 @@ namespace Parking
                 linePlanes.Add(plane);
             }
 
+            // get the plane coordinate systems.
+            List<CoordinateSystem> planeCS = new List<CoordinateSystem>();
+            foreach (Plane plane in linePlanes)
+            { 
+                CoordinateSystem coordSys = CoordinateSystem.ByPlane(plane);
+                planeCS.Add(coordSys);
+            }
+
+            // create the initial parking bay rectangle.
+            Rectangle bayRectangle = Rectangle.ByWidthLength(bayLength, bayWidth);
+
+            // create plane to rotate rectangle.
+            Plane rotatePlane = Plane.ByOriginNormal(startPoint, Vector.ZAxis());
+
+            // rotate the initial parking rectangle.
+            Rectangle rotateRectangle = bayRectangle.Rotate(rotatePlane, bayAngle) as Rectangle;
+
             return new Dictionary<string, object> 
             {
                 { "Points", locationPoints },
                 { "Line" , movedLine },
-                { "Planes", linePlanes },
+                { "Planes", planeCS },
             };
         }
     }
