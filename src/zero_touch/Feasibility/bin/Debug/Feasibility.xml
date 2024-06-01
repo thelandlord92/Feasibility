@@ -28,8 +28,7 @@
             </summary>
             <param name="x">the x coordinate value</param>
             <param name="y">the y coordinate value</param>
-            <returns name="point">the created point</returns>
-            <returns name="number">the random number</returns>
+            <returns></returns>
         </member>
     </members>
 </doc>
