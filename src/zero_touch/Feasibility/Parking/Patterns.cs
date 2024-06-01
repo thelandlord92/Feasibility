@@ -37,5 +37,32 @@ namespace Parking
                 { "Numbers", numbers },
             };
         }
+
+        /// <summary>
+        /// Creates the non interlocking parking pattern.
+        /// </summary>
+        /// <param name="bayWidth">the width of the parking bays</param>
+        /// <param name="bayLength">the length of the parking bays</param>
+        /// <param name="bayAngle">the angle of the parking bays</param>
+        /// <param name="patternLength">the length of the parking pattern</param>
+        /// <param name="islandWidth">the width of the island at the pattern center</param>
+        /// <returns name="pattern">the non interlocking parking pattern rectangles</returns>
+        public static Line NonInterlockedPattern(float bayWidth, float bayLength, float bayAngle, float patternLength,  float islandWidth) 
+        {
+            // calculate the bay width against the pattern center line.
+            float actualWidth = (float)bayWidth / (float)DSCore.Math.Cos((float)bayAngle);
+
+            // calculate number of bays to copy along center line.
+            int copyNumber = (int)DSCore.Math.Ceiling(patternLength / actualWidth);
+
+            // create the line points.
+            Point startPoint = Point.ByCoordinates(0, 0);
+            Point endPoint = Point.ByCoordinates(0, patternLength);
+
+            // create the center line.
+            Line centerLine = Line.ByStartPointEndPoint(startPoint, endPoint);
+
+            return centerLine;
+        }
     }
 }
