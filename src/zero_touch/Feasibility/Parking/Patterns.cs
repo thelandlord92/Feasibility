@@ -57,12 +57,21 @@ namespace Parking
 
             // create the line points.
             Point startPoint = Point.ByCoordinates(0, 0);
-            Point endPoint = Point.ByCoordinates(0, patternLength);
+            Point endPoint = Point.ByCoordinates(patternLength, 0);
 
             // create the center line.
-            Line centerLine = Line.ByStartPointEndPoint(startPoint, endPoint);
+            Line centerLine = Line.ByStartPointEndPoint(startPoint, endPoint) as Line;
 
-            return centerLine;
+            // get the line start point coordinate system.
+            CoordinateSystem lineCoord = centerLine.CoordinateSystemAtParameter(0) as CoordinateSystem;
+
+            // get the x vector of the coordinate system.
+            Vector coordVector = lineCoord.XAxis as Vector;
+
+            // move center line to offset bays from the island.
+            Line movedLine = centerLine.Translate(coordVector, (float)islandWidth / 2) as Line;
+
+            return movedLine;
         }
     }
 }
