@@ -50,7 +50,8 @@
             <param name="bayAngle">the angle of the parking bays</param>
             <param name="patternLength">the length of the parking pattern</param>
             <param name="islandWidth">the width of the island at the pattern center</param>
-            <returns name="pattern">the non interlocking parking pattern rectangles</returns>
+            <returns name="Points">the non interlocking parking pattern rectangles</returns>
+            <returns name="Line"></returns>
         </member>
     </members>
 </doc>

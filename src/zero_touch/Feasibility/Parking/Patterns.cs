@@ -46,8 +46,10 @@ namespace Parking
         /// <param name="bayAngle">the angle of the parking bays</param>
         /// <param name="patternLength">the length of the parking pattern</param>
         /// <param name="islandWidth">the width of the island at the pattern center</param>
-        /// <returns name="pattern">the non interlocking parking pattern rectangles</returns>
-        public static List<Point> NonInterlockedPattern(float bayWidth, float bayLength, float bayAngle, float patternLength,  float islandWidth) 
+        /// <returns name="Points">the non interlocking parking pattern rectangles</returns>
+        /// <returns name="Line"></returns>
+        [MultiReturn(new[] { "Points", "Numbers" })]
+        public static Dictionary<string, object> NonInterlockedPattern(float bayWidth, float bayLength, float bayAngle, float patternLength,  float islandWidth) 
         {
             // calculate the bay width against the pattern center line.
             float actualWidth = (float)bayWidth / (float)DSCore.Math.Cos((float)bayAngle);
@@ -82,7 +84,11 @@ namespace Parking
             // remove the last point from the list.
             locationPoints.RemoveAt(locationPoints.Count - 1);
 
-            return locationPoints;
+            return new Dictionary<string, object> 
+            {
+                { "Points", locationPoints },
+                { "Line" , movedLine }
+            };
         }
     }
 }
