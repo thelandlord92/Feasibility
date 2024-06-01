@@ -25,5 +25,35 @@ namespace Common
             // returns the addition of two integers.
             return a + b; 
         }
+
+        /// <summary>
+        /// Divides a range into a required number count.
+        /// </summary>
+        /// <param name="start">the start number of the range</param>
+        /// <param name="end">the end number of the range</param>
+        /// <param name="count"></param>
+        /// <returns name="numbers">the range of numbers</returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static List<double> Range(double start=0, double end=9, int count=10) 
+        {
+            // create a new list to hold the numbers.
+            var range = new List<double>();
+
+            // check if the count input is less than 1.
+            if (count < 2)
+                throw new ArgumentException("Count must be at least 2.");
+
+            // create the step value.
+            double step = (end - start) / (count - 1);
+
+            // add the range of values to the list.
+            for (int i = 0; i < count; i++)
+            { 
+                range.Add(start + i * step);  
+            }
+
+            return range;
+        }
+
     }
 }

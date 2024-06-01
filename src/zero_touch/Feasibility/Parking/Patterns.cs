@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common;
 
 namespace Parking
 {
@@ -21,19 +22,19 @@ namespace Parking
         /// </summary>
         /// <param name="x">the x coordinate value</param>
         /// <param name="y">the y coordinate value</param>
-        /// <returns></returns>
-        [MultiReturn(new[] { "Point", "Number" })]
+        /// <returns name="Point">the output point</returns>
+        /// <returns name="Number">the output numbers</returns>
+        [MultiReturn(new[] { "Point", "Numbers" })]
         public static Dictionary<string, object> CreatePoint(int x, int y)
         {
             var point = Autodesk.DesignScript.Geometry.Point.ByCoordinates(x, y);
 
-            var number = 25;
-
+            var numbers = Common.Math.Range(2, 20, 3);
 
             return new Dictionary<string, object> 
             { 
                 { "Point", point },
-                { "Number", number },
+                { "Numbers", numbers },
             };
         }
     }

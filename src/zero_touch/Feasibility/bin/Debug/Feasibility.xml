@@ -17,6 +17,16 @@
             <param name="b">the second integer</param>
             <returns name="value">the added value</returns>
         </member>
+        <member name="M:Common.Math.Range(System.Double,System.Double,System.Int32)">
+            <summary>
+            Divides a range into a required number count.
+            </summary>
+            <param name="start">the start number of the range</param>
+            <param name="end">the end number of the range</param>
+            <param name="count"></param>
+            <returns name="numbers">the range of numbers</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
         <member name="T:Parking.Patterns">
             <summary>
             Wrapper class for the parking patterns.
@@ -28,7 +38,8 @@
             </summary>
             <param name="x">the x coordinate value</param>
             <param name="y">the y coordinate value</param>
-            <returns></returns>
+            <returns name="Point">the output point</returns>
+            <returns name="Number">the output numbers</returns>
         </member>
     </members>
 </doc>

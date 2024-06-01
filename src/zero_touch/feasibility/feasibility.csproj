@@ -136,7 +136,11 @@
     <Compile Include="Buildings\Buildings.cs" />
     <Compile Include="Common\Common.cs" />
     <Compile Include="Erven\Erven.cs" />
-    <Compile Include="Parking\Parking.cs" />
+    <Compile Include="Parking\BoundingRectangle.cs" />
+    <Compile Include="Parking\ExclusionBays.cs" />
+    <Compile Include="Parking\InternalBays.cs" />
+    <Compile Include="Parking\Patterns.cs" />
+    <Compile Include="Parking\PerimeterBays.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
