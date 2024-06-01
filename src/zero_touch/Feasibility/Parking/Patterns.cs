@@ -47,7 +47,7 @@ namespace Parking
         /// <param name="patternLength">the length of the parking pattern</param>
         /// <param name="islandWidth">the width of the island at the pattern center</param>
         /// <returns name="pattern">the non interlocking parking pattern rectangles</returns>
-        public static Line NonInterlockedPattern(float bayWidth, float bayLength, float bayAngle, float patternLength,  float islandWidth) 
+        public static List<Point> NonInterlockedPattern(float bayWidth, float bayLength, float bayAngle, float patternLength,  float islandWidth) 
         {
             // calculate the bay width against the pattern center line.
             float actualWidth = (float)bayWidth / (float)DSCore.Math.Cos((float)bayAngle);
@@ -71,7 +71,18 @@ namespace Parking
             // move center line to offset bays from the island.
             Line movedLine = centerLine.Translate(coordVector, (float)islandWidth / 2) as Line;
 
-            return movedLine;
+            // add the parking bay location points to the moved line.
+            List<Point> locationPoints = new List<Point>();
+            foreach (float number in Common.Math.Range(0, 1, copyNumber))
+            { 
+                Point point = movedLine.PointAtParameter(number) as Point;
+                locationPoints.Add(point);
+            }
+
+            // remove the last point from the list.
+            locationPoints.RemoveAt(locationPoints.Count - 1);
+
+            return locationPoints;
         }
     }
 }
