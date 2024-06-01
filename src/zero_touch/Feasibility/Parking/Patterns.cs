@@ -110,11 +110,26 @@ namespace Parking
             // rotate the initial parking rectangle.
             Rectangle rotateRectangle = bayRectangle.Rotate(rotatePlane, bayAngle) as Rectangle;
 
+            // get the plane at the start point of the rotated rectangle.
+            Plane bayPlane = Plane.ByOriginNormal(rotateRectangle.StartPoint, Vector.ZAxis());
+
+            // get the bay plane coordinate system.
+            CoordinateSystem bayCS = CoordinateSystem.ByPlane(bayPlane);
+
+            // copy the bay rectangle to the line points.
+            List<Rectangle> copiedBays = new List<Rectangle>();
+            foreach (CoordinateSystem coordSys in planeCS)  
+            { 
+                Rectangle transformedRectangle = rotateRectangle.Transform(bayCS, coordSys) as Rectangle;
+                copiedBays.Add(transformedRectangle);
+
+            }
+
             return new Dictionary<string, object> 
             {
                 { "Points", locationPoints },
                 { "Line" , movedLine },
-                { "Planes", planeCS },
+                { "Planes", copiedBays },
             };
         }
     }
