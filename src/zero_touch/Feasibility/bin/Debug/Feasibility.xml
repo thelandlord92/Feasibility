@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Feasibility</name>
+    </assembly>
+    <members>
+        <member name="T:Common.Math">
+            <summary>
+            A class containing methods for common math operations.
+            </summary>
+        </member>
+        <member name="M:Common.Math.IntAdd(System.Int32,System.Int32)">
+            <summary>
+            Add two integer values.
+            </summary>
+            <param name="a">the first integer</param>
+            <param name="b">the second integer</param>
+            <returns name="value">the added value</returns>
+        </member>
+        <member name="T:Parking.Patterns">
+            <summary>
+            Wrapper class for the parking patterns.
+            </summary>
+        </member>
+        <member name="M:Parking.Patterns.CreatePoint(System.Int32,System.Int32)">
+            <summary>
+            Creates a point.
+            </summary>
+            <param name="x">the x coordinate value</param>
+            <param name="y">the y coordinate value</param>
+            <returns name="Point">the created point</returns>
+            <returns name="Number">the random number</returns>
+        </member>
+    </members>
+</doc>
