@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Autodesk.DesignScript.Geometry;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,22 +20,16 @@ namespace Parking
         /// </summary>
         /// <param name="x">the x coordinate value</param>
         /// <param name="y">the y coordinate value</param>
-        /// <returns name="Point">the created point</returns>
-        /// <returns name="Number">the random number</returns>
-        public static Dictionary<string, object> CreatePoint(int x, int y)
+        /// <returns name="point">the created point</returns>
+        /// <returns name="number">the random number</returns>
+        public static Tuple<Point, int> CreatePoint(int x, int y)
         {
             var point = Autodesk.DesignScript.Geometry.Point.ByCoordinates(x, y);
 
-            var intNumber = 25;
+            var number = 25;
 
-            // Create a dictionary to hold the outputs.
-            var outputs = new Dictionary<string, object>();
 
-            // Add the various outputs to the dictionary.
-            outputs["Point"] = point as Autodesk.DesignScript.Geometry.Point;
-            outputs["Number"] = intNumber;
-
-            return outputs;
+            return Tuple.Create(point, number);
         }
     }
 }
