@@ -52,6 +52,7 @@
             <param name="islandWidth">the width of the island at the pattern center</param>
             <returns name="Points">the non interlocking parking pattern rectangles</returns>
             <returns name="Line"></returns>
+            /// <returns name="Planes"></returns>
         </member>
     </members>
 </doc>

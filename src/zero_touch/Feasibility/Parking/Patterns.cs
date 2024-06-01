@@ -48,7 +48,8 @@ namespace Parking
         /// <param name="islandWidth">the width of the island at the pattern center</param>
         /// <returns name="Points">the non interlocking parking pattern rectangles</returns>
         /// <returns name="Line"></returns>
-        [MultiReturn(new[] { "Points", "Numbers" })]
+        /// /// <returns name="Planes"></returns>
+        [MultiReturn(new[] { "Points", "Line", "Planes" })]
         public static Dictionary<string, object> NonInterlockedPattern(float bayWidth, float bayLength, float bayAngle, float patternLength,  float islandWidth) 
         {
             // calculate the bay width against the pattern center line.
@@ -84,10 +85,19 @@ namespace Parking
             // remove the last point from the list.
             locationPoints.RemoveAt(locationPoints.Count - 1);
 
+            // add planes at the points.
+            List<Plane> linePlanes = new List<Plane>();
+            foreach (Point point in locationPoints)
+            {
+                Plane plane = Plane.ByOriginNormal(point, Vector.ZAxis());
+                linePlanes.Add(plane);
+            }
+
             return new Dictionary<string, object> 
             {
                 { "Points", locationPoints },
-                { "Line" , movedLine }
+                { "Line" , movedLine },
+                { "Planes", linePlanes },
             };
         }
     }
