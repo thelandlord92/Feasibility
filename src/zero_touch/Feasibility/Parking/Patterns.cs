@@ -51,7 +51,12 @@ namespace Parking
         /// <returns name="planes">planes at the start points of the rectangles</returns>
         /// <returns name="mirrorPlane">plane to mirror the pattern along the center line</returns>
         [MultiReturn(new[] { "rectangles", "centerLine", "planes", "mirrorPlane" })]
-        public static Dictionary<string, object> HalfPattern(float bayWidth=(float)2.5, float bayLength=5, float bayAngle=30, float patternLength=100,  float islandWidth=0) 
+        public static Dictionary<string, object> HalfPattern(
+            float bayWidth=(float)2.5, 
+            float bayLength=5, 
+            float bayAngle=30, 
+            float patternLength=100,  
+            float islandWidth=0) 
         {
             // calculate the bay width against the pattern center line.
             float actualWidth = (float)bayWidth / (float)DSCore.Math.Cos((float)bayAngle);
@@ -147,10 +152,17 @@ namespace Parking
         /// <param name="bayAngle">the angle of the parking bays</param>
         /// <param name="patternLength">the length of the parking pattern</param>
         /// <param name="islandWidth">the width of the island at the pattern center</param>
+        /// <param name="patternRotation">the rotation angle of the overall pattern</param>
         /// <returns name="rectangles">the parking pattern rectangles</returns>
         /// <returns name="centerLine">the centerline of the pattern</returns>
         [MultiReturn(new[] { "rectangles", "centerLine" })]
-        public static Dictionary<string, object> NonInterlockingPattern(float bayWidth = (float)2.5, float bayLength = 5, float bayAngle = 30, float patternLength = 100, float islandWidth = 0) 
+        public static Dictionary<string, object> NonInterlockingPattern(
+            float bayWidth=(float)2.5, 
+            float bayLength=5, 
+            float bayAngle=30, 
+            float patternLength=100, 
+            float islandWidth=0, 
+            float patternRotation=0) 
         {
             // create half of the parking pattern.
             Dictionary<string, object> halfPattern = HalfPattern(bayWidth, bayLength, bayAngle, patternLength, islandWidth);
@@ -160,6 +172,9 @@ namespace Parking
 
             // get the mirror plane.
             Plane mirrorPlane = halfPattern["mirrorPlane"] as Plane;
+
+            // get the center line.
+            Line centerLine = halfPattern["centerLine"] as Line;
 
             // mirror the bays along the center line.
             List<Rectangle> mirrorBays = new List<Rectangle>();
@@ -174,10 +189,30 @@ namespace Parking
             combinedBays.Add(halfBays);
             combinedBays.Add(mirrorBays);
 
+            // flatten the combined bays.
+            List<Rectangle> flattenedBays = combinedBays.SelectMany(bays => bays).ToList() as List<Rectangle>;
+
+            // rotate the full pattern.
+            List<Rectangle> rotatedBays = new List<Rectangle>();
+            Point rotationPoint = centerLine.PointAtParameter(0.5);
+            Plane rotationPlane = Plane.ByOriginNormal(rotationPoint, Vector.ZAxis());
+            foreach (Rectangle bay in flattenedBays)
+            {
+                Rectangle rotatedBay = bay.Rotate(rotationPlane, patternRotation) as Rectangle;
+                rotatedBays.Add(rotatedBay);
+            }
+
+            // rotate the full pattern for two-way parking.
+            List<Rectangle> rotatedBaysTwoWay = new List<Rectangle>();
+            foreach (Rectangle bay in rotatedBays)
+            {
+                Rectangle rotatedBayTwoWay = bay.Rotate(rotationPlane, patternRotation) as Rectangle;
+                rotatedBaysTwoWay.Add(rotatedBayTwoWay);
+            }
 
             return new Dictionary<string, object>
             {
-                { "rectangles", combinedBays },
+                { "rectangles", rotatedBaysTwoWay },
                 { "centerLine" , halfPattern["centerLine"] },
             };
         }

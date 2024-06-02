@@ -55,7 +55,7 @@
             <returns name="planes">planes at the start points of the rectangles</returns>
             <returns name="mirrorPlane">plane to mirror the pattern along the center line</returns>
         </member>
-        <member name="M:Parking.Patterns.NonInterlockingPattern(System.Single,System.Single,System.Single,System.Single,System.Single)">
+        <member name="M:Parking.Patterns.NonInterlockingPattern(System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)">
             <summary>
             Creates the non interlocking parking pattern.
             </summary>
@@ -64,6 +64,7 @@
             <param name="bayAngle">the angle of the parking bays</param>
             <param name="patternLength">the length of the parking pattern</param>
             <param name="islandWidth">the width of the island at the pattern center</param>
+            <param name="patternRotation">the rotation angle of the overall pattern</param>
             <returns name="rectangles">the parking pattern rectangles</returns>
             <returns name="centerLine">the centerline of the pattern</returns>
         </member>
