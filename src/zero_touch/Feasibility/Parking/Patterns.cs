@@ -153,12 +153,31 @@ namespace Parking
         public static Dictionary<string, object> NonInterlockingPattern(float bayWidth = (float)2.5, float bayLength = 5, float bayAngle = 30, float patternLength = 100, float islandWidth = 0) 
         {
             // create half of the parking pattern.
-            Dictionary<string, object> halfPattern = HalfPattern();
+            Dictionary<string, object> halfPattern = HalfPattern(bayWidth, bayLength, bayAngle, patternLength, islandWidth);
+
+            // get the half pattern rectangles.
+            List<Rectangle> halfBays = halfPattern["rectangles"] as List<Rectangle>;
+
+            // get the mirror plane.
+            Plane mirrorPlane = halfPattern["mirrorPlane"] as Plane;
+
+            // mirror the bays along the center line.
+            List<Rectangle> mirrorBays = new List<Rectangle>();
+            foreach (Rectangle bay in halfBays as List<Rectangle>) 
+            {
+                Rectangle mirrorBay = bay.Mirror(mirrorPlane) as Rectangle; 
+                mirrorBays.Add(mirrorBay);
+            }
+
+            // combine the patterns into one list.
+            List<List<Rectangle>> combinedBays = new List<List<Rectangle>>();
+            combinedBays.Add(halfBays);
+            combinedBays.Add(mirrorBays);
 
 
             return new Dictionary<string, object>
             {
-                { "rectangles", halfPattern["rectangles"] },
+                { "rectangles", combinedBays },
                 { "centerLine" , halfPattern["centerLine"] },
             };
         }
