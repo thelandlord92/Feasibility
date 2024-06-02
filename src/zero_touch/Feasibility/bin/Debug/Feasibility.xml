@@ -53,6 +53,7 @@
             <returns name="rectangles">the parking pattern rectangles</returns>
             <returns name="centerLine">the centerline of the pattern</returns>
             <returns name="planes">planes at the start points of the rectangles</returns>
+            <returns name="mirrorPlane">plane to mirror the pattern along the center line</returns>
         </member>
         <member name="M:Parking.Patterns.NonInterlockingPattern(System.Single,System.Single,System.Single,System.Single,System.Single)">
             <summary>

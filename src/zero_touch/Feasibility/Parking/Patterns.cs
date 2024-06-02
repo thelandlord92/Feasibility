@@ -49,7 +49,8 @@ namespace Parking
         /// <returns name="rectangles">the parking pattern rectangles</returns>
         /// <returns name="centerLine">the centerline of the pattern</returns>
         /// <returns name="planes">planes at the start points of the rectangles</returns>
-        [MultiReturn(new[] { "rectangles", "centerLine", "planes" })]
+        /// <returns name="mirrorPlane">plane to mirror the pattern along the center line</returns>
+        [MultiReturn(new[] { "rectangles", "centerLine", "planes", "mirrorPlane" })]
         public static Dictionary<string, object> HalfPattern(float bayWidth=(float)2.5, float bayLength=5, float bayAngle=30, float patternLength=100,  float islandWidth=0) 
         {
             // calculate the bay width against the pattern center line.
@@ -70,6 +71,9 @@ namespace Parking
 
             // get the x vector of the coordinate system.
             Vector coordVector = lineCoord.XAxis.Reverse() as Vector;
+
+            // create the pattern mirror plane.
+            Plane mirrorPlane = Plane.ByOriginNormal(startPoint, coordVector);
 
             // move center line to offset bays from the island.
             Line movedLine = centerLine.Translate(coordVector, (float)islandWidth / 2) as Line;
@@ -130,8 +134,10 @@ namespace Parking
                 { "rectangles", copiedBays },
                 { "centerLine" , centerLine },
                 { "planes", linePlanes },
+                { "mirrorPlane", mirrorPlane },
             };
         }
+
 
         /// <summary>
         /// Creates the non interlocking parking pattern.
@@ -146,6 +152,7 @@ namespace Parking
         [MultiReturn(new[] { "rectangles", "centerLine" })]
         public static Dictionary<string, object> NonInterlockingPattern(float bayWidth = (float)2.5, float bayLength = 5, float bayAngle = 30, float patternLength = 100, float islandWidth = 0) 
         {
+            // create half of the parking pattern.
             Dictionary<string, object> halfPattern = HalfPattern();
 
 
