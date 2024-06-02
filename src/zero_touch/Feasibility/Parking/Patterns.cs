@@ -132,5 +132,28 @@ namespace Parking
                 { "planes", linePlanes },
             };
         }
+
+        /// <summary>
+        /// Creates the non interlocking parking pattern.
+        /// </summary>
+        /// <param name="bayWidth">the width of the parking bays</param>
+        /// <param name="bayLength">the length of the parking bays</param>
+        /// <param name="bayAngle">the angle of the parking bays</param>
+        /// <param name="patternLength">the length of the parking pattern</param>
+        /// <param name="islandWidth">the width of the island at the pattern center</param>
+        /// <returns name="rectangles">the parking pattern rectangles</returns>
+        /// <returns name="centerLine">the centerline of the pattern</returns>
+        [MultiReturn(new[] { "rectangles", "centerLine" })]
+        public static Dictionary<string, object> NonInterlockingPattern(float bayWidth = (float)2.5, float bayLength = 5, float bayAngle = 30, float patternLength = 100, float islandWidth = 0) 
+        {
+            Dictionary<string, object> halfPattern = HalfPattern();
+
+
+            return new Dictionary<string, object>
+            {
+                { "rectangles", halfPattern["rectangles"] },
+                { "centerLine" , halfPattern["centerLine"] },
+            };
+        }
     }
 }
