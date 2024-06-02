@@ -41,18 +41,18 @@
             <returns name="Point">the output point</returns>
             <returns name="Number">the output numbers</returns>
         </member>
-        <member name="M:Parking.Patterns.NonInterlockedPattern(System.Single,System.Single,System.Single,System.Single,System.Single)">
+        <member name="M:Parking.Patterns.HalfPattern(System.Single,System.Single,System.Single,System.Single,System.Single)">
             <summary>
-            Creates the non interlocking parking pattern.
+            Creates half of the parking pattern.
             </summary>
             <param name="bayWidth">the width of the parking bays</param>
             <param name="bayLength">the length of the parking bays</param>
             <param name="bayAngle">the angle of the parking bays</param>
             <param name="patternLength">the length of the parking pattern</param>
             <param name="islandWidth">the width of the island at the pattern center</param>
-            <returns name="Points">the non interlocking parking pattern rectangles</returns>
-            <returns name="Line"></returns>
-            /// <returns name="Planes"></returns>
+            <returns name="rectangles">the parking pattern rectangles</returns>
+            <returns name="centerLine">the centerline of the pattern</returns>
+            <returns name="planes">planes at the start points of the rectangles</returns>
         </member>
     </members>
 </doc>

@@ -39,18 +39,18 @@ namespace Parking
         }
 
         /// <summary>
-        /// Creates the non interlocking parking pattern.
+        /// Creates half of the parking pattern.
         /// </summary>
         /// <param name="bayWidth">the width of the parking bays</param>
         /// <param name="bayLength">the length of the parking bays</param>
         /// <param name="bayAngle">the angle of the parking bays</param>
         /// <param name="patternLength">the length of the parking pattern</param>
         /// <param name="islandWidth">the width of the island at the pattern center</param>
-        /// <returns name="Points">the non interlocking parking pattern rectangles</returns>
-        /// <returns name="Line"></returns>
-        /// /// <returns name="Planes"></returns>
-        [MultiReturn(new[] { "Points", "Line", "Planes" })]
-        public static Dictionary<string, object> NonInterlockedPattern(float bayWidth, float bayLength, float bayAngle, float patternLength,  float islandWidth) 
+        /// <returns name="rectangles">the parking pattern rectangles</returns>
+        /// <returns name="centerLine">the centerline of the pattern</returns>
+        /// <returns name="planes">planes at the start points of the rectangles</returns>
+        [MultiReturn(new[] { "rectangles", "centerLine", "planes" })]
+        public static Dictionary<string, object> HalfPattern(float bayWidth=(float)2.5, float bayLength=5, float bayAngle=30, float patternLength=100,  float islandWidth=0) 
         {
             // calculate the bay width against the pattern center line.
             float actualWidth = (float)bayWidth / (float)DSCore.Math.Cos((float)bayAngle);
@@ -60,7 +60,7 @@ namespace Parking
 
             // create the line points.
             Point startPoint = Point.ByCoordinates(0, 0);
-            Point endPoint = Point.ByCoordinates(patternLength, 0);
+            Point endPoint = Point.ByCoordinates(0, patternLength);
 
             // create the center line.
             Line centerLine = Line.ByStartPointEndPoint(startPoint, endPoint) as Line;
@@ -69,7 +69,7 @@ namespace Parking
             CoordinateSystem lineCoord = centerLine.CoordinateSystemAtParameter(0) as CoordinateSystem;
 
             // get the x vector of the coordinate system.
-            Vector coordVector = lineCoord.XAxis as Vector;
+            Vector coordVector = lineCoord.XAxis.Reverse() as Vector;
 
             // move center line to offset bays from the island.
             Line movedLine = centerLine.Translate(coordVector, (float)islandWidth / 2) as Line;
@@ -115,7 +115,7 @@ namespace Parking
 
             // get the bay plane coordinate system.
             CoordinateSystem bayCS = CoordinateSystem.ByPlane(bayPlane);
-
+            
             // copy the bay rectangle to the line points.
             List<Rectangle> copiedBays = new List<Rectangle>();
             foreach (CoordinateSystem coordSys in planeCS)  
@@ -127,9 +127,9 @@ namespace Parking
 
             return new Dictionary<string, object> 
             {
-                { "Points", locationPoints },
-                { "Line" , movedLine },
-                { "Planes", copiedBays },
+                { "rectangles", copiedBays },
+                { "centerLine" , centerLine },
+                { "planes", linePlanes },
             };
         }
     }
