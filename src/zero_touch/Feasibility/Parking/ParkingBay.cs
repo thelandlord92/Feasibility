@@ -78,6 +78,20 @@ namespace Parking
             // rotate the rectangle. 
             Rectangle rotatedRectangle = baseRectangle.Rotate(rotatePlane, BayAngle) as Rectangle;
 
+            // get the coordinate system of the rotation plane.
+            CoordinateSystem planeCS = CoordinateSystem.ByPlane(rotatePlane);
+
+            // create a plane at the target position.
+            Plane targetPlane = Plane.ByOriginNormal(TargetPosition, Vector.ZAxis()); 
+            
+            // get the coordinate system of the target plane.
+            CoordinateSystem targetCS = CoordinateSystem.ByPlane(targetPlane);
+
+            // transform the rectangle to the target plane.
+            Rectangle transRectangle = rotatedRectangle.Transform(planeCS, targetCS) as Rectangle;
+
+
+
             
 
 
