@@ -27,6 +27,51 @@
             <returns name="numbers">the range of numbers</returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
+        <member name="T:Parking.ParkingBay">
+            <summary>
+            Wrapper class for the parking bay.
+            </summary>
+        </member>
+        <member name="P:Parking.ParkingBay.TargetPosition">
+            <summary>
+            The target position of the parking bay.
+            </summary>
+        </member>
+        <member name="P:Parking.ParkingBay.BayWidth">
+            <summary>
+            The width of the parking bay.
+            </summary>
+        </member>
+        <member name="P:Parking.ParkingBay.BayLength">
+            <summary>
+            The length of the parking bay.
+            </summary>
+        </member>
+        <member name="P:Parking.ParkingBay.BayAngle">
+            <summary>
+            The angle of the parking bay.
+            </summary>
+        </member>
+        <member name="P:Parking.ParkingBay.Geometry">
+            <summary>
+            The parking bay rectangle geometry.
+            </summary>
+        </member>
+        <member name="M:Parking.ParkingBay.#ctor(Autodesk.DesignScript.Geometry.Point,System.Single,System.Single,System.Single)">
+            <summary>
+            Creates a parking bay instance.
+            </summary>
+            <param name="targetPosition"></param>
+            <param name="bayWidth"></param>
+            <param name="bayLength"></param>
+            <param name="bayAngle"></param>
+        </member>
+        <member name="M:Parking.ParkingBay.CreateGeometry">
+            <summary>
+            Creates the parking rectangle geometry.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Parking.Patterns">
             <summary>
             Wrapper class for the parking patterns.

@@ -206,7 +206,7 @@ namespace Parking
             List<Rectangle> rotatedBaysTwoWay = new List<Rectangle>();
             foreach (Rectangle bay in rotatedBays)
             {
-                Rectangle rotatedBayTwoWay = bay.Rotate(rotationPlane, patternRotation) as Rectangle;
+                Rectangle rotatedBayTwoWay = bay.Rotate(rotationPlane, 180) as Rectangle;
                 rotatedBaysTwoWay.Add(rotatedBayTwoWay);
             }
 
