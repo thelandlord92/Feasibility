@@ -15,12 +15,12 @@ namespace Parking
         /// <summary>
         /// The target position of the parking bay.
         /// </summary>
-        public Point TargetPosition {  get; set; }
+        public Point TargetPosition {  private get; set; }
 
         /// <summary>
         /// The center of the pattern for rotation.
         /// </summary>
-        public Point PatternCenter { get; set; }
+        public Point PatternCenter { private get; set; }
 
         /// <summary>
         /// The width of the parking bay.
@@ -38,6 +38,11 @@ namespace Parking
         public float BayAngle { get; set; }
 
         /// <summary>
+        /// The rotation angle of the pattern.
+        /// </summary>
+        public float PatternRotation { private get; set; }
+
+        /// <summary>
         /// The parking bay rectangle geometry.
         /// </summary>
         public Rectangle Geometry { get; private set; }
@@ -45,12 +50,12 @@ namespace Parking
         /// <summary>
         /// Flip the parking bay horizontally.
         /// </summary>
-        public Boolean FlipHorizontal { get; set; }
+        public Boolean FlipHorizontal { private get; set; }
 
         /// <summary>
         /// Flip the parking bay vertically.
         /// </summary>
-        public Boolean FlipVertical { get; set; }
+        public Boolean FlipVertical { private get; set; }
 
         // hides the overall class as a node.
         private ParkingBay() { }
@@ -63,6 +68,7 @@ namespace Parking
         /// <param name="bayWidth">the width of the parking bay.</param>
         /// <param name="bayLength">the length of the parking bay.</param>
         /// <param name="bayAngle">the angle of the parking bay.</param>
+        /// <param name="patternRotation">the rotation angle of the parking bay around the pattern center point.</param>
         /// <param name="flipHorizontal">flip the parking bay horizontally.</param>
         /// <param name="flipVertical">flip the parking bay vertically</param>
         public ParkingBay(
@@ -71,6 +77,7 @@ namespace Parking
             float bayWidth = (float)2.5,
             float bayLength = 5,
             float bayAngle = 30,
+            float patternRotation = 0,
             bool flipHorizontal = false,
             bool flipVertical = false)
         { 
@@ -79,6 +86,7 @@ namespace Parking
             BayWidth = bayWidth;
             BayLength = bayLength;
             BayAngle = bayAngle;
+            PatternRotation = patternRotation;
             Geometry = CreateRectangle();
             FlipHorizontal = flipHorizontal;
             FlipVertical = flipVertical;
@@ -146,8 +154,13 @@ namespace Parking
             // transform the rectangle to the target plane.
             Rectangle transRectangle = bayVerticalMirror.Transform(planeCS, targetCS) as Rectangle;
 
+            // create a plane at the pattern center point.
+            Plane patternCenterPlane = Plane.ByOriginNormal(PatternCenter, Vector.ZAxis());
 
-            return transRectangle;
+            // rotate the transformed rectangle around the pattern center point.
+            Rectangle patternRotate = transRectangle.Rotate(patternCenterPlane, PatternRotation) as Rectangle;
+
+            return patternRotate;
         }
 
         /// <summary>

@@ -57,6 +57,11 @@
             The angle of the parking bay.
             </summary>
         </member>
+        <member name="P:Parking.ParkingBay.PatternRotation">
+            <summary>
+            The rotation angle of the pattern.
+            </summary>
+        </member>
         <member name="P:Parking.ParkingBay.Geometry">
             <summary>
             The parking bay rectangle geometry.
@@ -72,7 +77,7 @@
             Flip the parking bay vertically.
             </summary>
         </member>
-        <member name="M:Parking.ParkingBay.#ctor(Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point,System.Single,System.Single,System.Single,System.Boolean,System.Boolean)">
+        <member name="M:Parking.ParkingBay.#ctor(Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point,System.Single,System.Single,System.Single,System.Single,System.Boolean,System.Boolean)">
             <summary>
             Creates a parking bay instance.
             </summary>
@@ -81,12 +86,25 @@
             <param name="bayWidth">the width of the parking bay.</param>
             <param name="bayLength">the length of the parking bay.</param>
             <param name="bayAngle">the angle of the parking bay.</param>
+            <param name="patternRotation">the rotation angle of the parking bay around the pattern center point.</param>
             <param name="flipHorizontal">flip the parking bay horizontally.</param>
             <param name="flipVertical">flip the parking bay vertically</param>
         </member>
-        <member name="M:Parking.ParkingBay.CreateGeometry">
+        <member name="M:Parking.ParkingBay.CreateRectangle">
             <summary>
             Creates the parking rectangle geometry.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Parking.ParkingBay.GetCenterPoint">
+            <summary>
+            Gets the center points of the placed parking bays.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Parking.ParkingBay.GetRotationAngle">
+            <summary>
+            Gets the rotation angle of the bays from the y axis.
             </summary>
             <returns></returns>
         </member>
