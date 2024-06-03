@@ -79,7 +79,7 @@ namespace Parking
             BayWidth = bayWidth;
             BayLength = bayLength;
             BayAngle = bayAngle;
-            Geometry = CreateGeometry();
+            Geometry = CreateRectangle();
             FlipHorizontal = flipHorizontal;
             FlipVertical = flipVertical;
         }
@@ -88,7 +88,7 @@ namespace Parking
         /// Creates the parking rectangle geometry.
         /// </summary>
         /// <returns></returns>
-        public Rectangle CreateGeometry() 
+        public Rectangle CreateRectangle() 
         {
             // create the base rectangle.
             Rectangle baseRectangle = Rectangle.ByWidthLength(BayLength, BayWidth);
@@ -148,6 +148,24 @@ namespace Parking
 
 
             return transRectangle;
+        }
+
+        /// <summary>
+        /// Gets the center points of the placed parking bays.
+        /// </summary>
+        /// <returns></returns>
+        public Point GetCenterPoint() 
+        {
+            return Point.ByCoordinates(0, 0);
+        }
+
+        /// <summary>
+        /// Gets the rotation angle of the bays from the y axis.
+        /// </summary>
+        /// <returns></returns>
+        public float GetRotationAngle() 
+        {
+            return (float)34;
         }
     }
 }
