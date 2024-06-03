@@ -169,7 +169,13 @@ namespace Parking
         /// <returns></returns>
         public Point GetCenterPoint() 
         {
-            return Point.ByCoordinates(0, 0);
+            // get the parking bay rectangle.
+            Rectangle parkingRectangle = CreateRectangle();
+
+            // get the center of the parking bay.
+            Point parkingCenter = parkingRectangle.Center();
+
+            return parkingCenter;
         }
 
         /// <summary>
