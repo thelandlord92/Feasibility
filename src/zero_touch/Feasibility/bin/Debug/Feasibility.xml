@@ -37,6 +37,11 @@
             The target position of the parking bay.
             </summary>
         </member>
+        <member name="P:Parking.ParkingBay.PatternCenter">
+            <summary>
+            The center of the pattern for rotation.
+            </summary>
+        </member>
         <member name="P:Parking.ParkingBay.BayWidth">
             <summary>
             The width of the parking bay.
@@ -57,14 +62,27 @@
             The parking bay rectangle geometry.
             </summary>
         </member>
-        <member name="M:Parking.ParkingBay.#ctor(Autodesk.DesignScript.Geometry.Point,System.Single,System.Single,System.Single)">
+        <member name="P:Parking.ParkingBay.FlipHorizontal">
+            <summary>
+            Flip the parking bay horizontally.
+            </summary>
+        </member>
+        <member name="P:Parking.ParkingBay.FlipVertical">
+            <summary>
+            Flip the parking bay vertically.
+            </summary>
+        </member>
+        <member name="M:Parking.ParkingBay.#ctor(Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point,System.Single,System.Single,System.Single,System.Boolean,System.Boolean)">
             <summary>
             Creates a parking bay instance.
             </summary>
-            <param name="targetPosition"></param>
-            <param name="bayWidth"></param>
-            <param name="bayLength"></param>
-            <param name="bayAngle"></param>
+            <param name="targetPosition">the target transform position of the parking bay.</param>
+            <param name="patternCenter">the center of the pattern.</param>
+            <param name="bayWidth">the width of the parking bay.</param>
+            <param name="bayLength">the length of the parking bay.</param>
+            <param name="bayAngle">the angle of the parking bay.</param>
+            <param name="flipHorizontal">flip the parking bay horizontally.</param>
+            <param name="flipVertical">flip the parking bay vertically</param>
         </member>
         <member name="M:Parking.ParkingBay.CreateGeometry">
             <summary>
