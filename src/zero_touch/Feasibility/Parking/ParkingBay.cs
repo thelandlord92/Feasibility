@@ -114,10 +114,28 @@ namespace Parking
             Plane verticalMirroPlane = Plane.ByOriginNormal(startPoint, coordy);
 
             // mirror the parking bay horizontally.
-            Rectangle bayHorizontalMirror = rotatedRectangle.Mirror(horizotalMirrorPlane) as Rectangle;
+            Rectangle bayHorizontalMirror;
+
+            if (FlipHorizontal == true)
+            {
+                bayHorizontalMirror = rotatedRectangle.Mirror(horizotalMirrorPlane) as Rectangle;
+            }
+            else 
+            {
+                bayHorizontalMirror = rotatedRectangle;
+            }
 
             // mirror the parking bay vertically.
-            Rectangle bayVerticalMirror = bayHorizontalMirror.Mirror(verticalMirroPlane) as Rectangle;
+            Rectangle bayVerticalMirror;
+
+            if (FlipVertical == true) 
+            {
+                bayVerticalMirror = bayHorizontalMirror.Mirror(verticalMirroPlane) as Rectangle;
+            }
+            else
+            {
+                bayVerticalMirror= bayHorizontalMirror;
+            }
 
             // create a plane at the target position.
             Plane targetPlane = Plane.ByOriginNormal(TargetPosition, Vector.ZAxis());
@@ -127,10 +145,6 @@ namespace Parking
 
             // transform the rectangle to the target plane.
             Rectangle transRectangle = bayVerticalMirror.Transform(planeCS, targetCS) as Rectangle;
-
-
-
-
 
 
             return transRectangle;
