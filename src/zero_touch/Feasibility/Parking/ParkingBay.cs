@@ -66,8 +66,22 @@ namespace Parking
         /// <returns></returns>
         public Rectangle CreateGeometry() 
         {
-            Rectangle baseRectangle = Rectangle.ByWidthLength(BayWidth, BayLength);
-            return baseRectangle;
+            // create the base rectangle.
+            Rectangle baseRectangle = Rectangle.ByWidthLength(BayLength, BayWidth);
+
+            // get the start point of the base rectangle.
+            Point startPoint = baseRectangle.StartPoint as Point;
+
+            // create plane at rectangle start point for rotation.
+            Plane rotatePlane = Plane.ByOriginNormal(startPoint, Vector.ZAxis());
+
+            // rotate the rectangle. 
+            Rectangle rotatedRectangle = baseRectangle.Rotate(rotatePlane, BayAngle) as Rectangle;
+
+            
+
+
+            return rotatedRectangle;
         }
     }
 }
