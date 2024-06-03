@@ -184,7 +184,22 @@ namespace Parking
         /// <returns></returns>
         public float GetRotationAngle() 
         {
-            return (float)34;
+            // get the parking bay rectangle.
+            Rectangle parkingRectangle = CreateRectangle();
+
+            // explode the parking rectangle to get an array of geometry.
+            Geometry[] rectangleGeometries = parkingRectangle.Explode();
+
+            // convert the array of Geometry to a list of Line.
+            List<Line> rectangleLines = rectangleGeometries.OfType<Line>().ToList();
+
+            // get the vector of a line at the length of the parking bay.
+            Vector lengthVector = rectangleLines[1].Direction;
+
+            // compute the rotation angle of the parking bay.
+            float rotationAngle = (float)lengthVector.AngleAboutAxis(Vector.YAxis(), Vector.ZAxis());
+
+            return rotationAngle;
         }
     }
 }

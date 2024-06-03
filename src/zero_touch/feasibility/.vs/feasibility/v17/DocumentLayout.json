@@ -7,12 +7,12 @@
       "RelativeMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|solutionrelative:parking\\parkingbay.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\parking\\patterns.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|solutionrelative:parking\\patterns.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\common\\common.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|solutionrelative:common\\common.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\parking\\patterns.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|solutionrelative:parking\\patterns.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -32,34 +32,36 @@
               "RelativeDocumentMoniker": "Parking\\ParkingBay.cs",
               "ToolTip": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\Parking\\ParkingBay.cs",
               "RelativeToolTip": "Parking\\ParkingBay.cs",
-              "ViewState": "AQIAAJ8AAAAAAAAAAAAiwK4AAAAxAAAA",
+              "ViewState": "AQIAAKoAAAAAAAAAAAAmwMwAAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-06-03T10:26:10.024Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Patterns.cs",
               "DocumentMoniker": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\Parking\\Patterns.cs",
               "RelativeDocumentMoniker": "Parking\\Patterns.cs",
               "ToolTip": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\Parking\\Patterns.cs",
               "RelativeToolTip": "Parking\\Patterns.cs",
-              "ViewState": "AQIAAC0AAAAAAAAAAAAYwDgAAAAMAAAA",
+              "ViewState": "AQIAAHEAAAAAAAAAAAAgwDgAAAAMAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-01T14:27:32.977Z"
+              "WhenOpened": "2024-06-01T14:27:32.977Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "Common.cs",
               "DocumentMoniker": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\Common\\Common.cs",
               "RelativeDocumentMoniker": "Common\\Common.cs",
               "ToolTip": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\Common\\Common.cs",
               "RelativeToolTip": "Common\\Common.cs",
-              "ViewState": "AQIAABAAAAAAAAAAAAAQwDcAAAAJAAAA",
+              "ViewState": "AQIAAB4AAAAAAAAAAAAYwDcAAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T16:40:20.793Z"
+              "WhenOpened": "2024-05-31T16:40:20.793Z",
+              "EditorCaption": ""
             }
           ]
         }
