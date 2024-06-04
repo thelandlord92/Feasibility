@@ -66,7 +66,7 @@ namespace Parking
 
             // create the line points.
             Point startPoint = Point.ByCoordinates(0, 0);
-            Point endPoint = Point.ByCoordinates(0, patternLength);
+            Point endPoint = Point.ByCoordinates(0, actualWidth * copyNumber);
 
             // create the center line.
             Line centerLine = Line.ByStartPointEndPoint(startPoint, endPoint) as Line;
@@ -85,14 +85,14 @@ namespace Parking
 
             // add the parking bay location points to the moved line.
             List<Point> locationPoints = new List<Point>();
-            foreach (float number in Common.Math.Range(0, 1, copyNumber))
+            foreach (float number in Common.Math.Range(0, 1, copyNumber+1))
             { 
                 Point point = movedLine.PointAtParameter(number) as Point;
                 locationPoints.Add(point);
             }
 
             // remove the last point from the list.
-            locationPoints.RemoveAt(locationPoints.Count - 1);
+            // locationPoints.RemoveAt(locationPoints.Count - 1);
 
             // add planes at the points.
             List<Plane> linePlanes = new List<Plane>();
