@@ -171,7 +171,7 @@ namespace Parking
         /// <param name="stripeThickness">The thickness of the parking stripe.</param>
         /// <param name="stripeOpeningWidth">The opening width of the parking stripe.</param>
         /// <returns></returns>
-        public Rectangle CreateStripe(float stripeThickness=(float)0.1, float stripeOpeningWidth = (float)2) 
+        public PolyCurve CreateStripe(float stripeThickness=(float)0.1, float stripeOpeningWidth = (float)1.8) 
         {
             // create the parking rectangle. 
             Rectangle parkingRectangle = CreateRectangle();
@@ -223,16 +223,21 @@ namespace Parking
             Rectangle entryRectangle = Rectangle.ByWidthLength(centerPlane, stripeOpeningWidth, stripeThickness * 3);
 
             // rotate the entry cut rectangle.
-            Rectangle rotateRectangle = entryRectangle.Rotate(centerPlane, GetRotationAngle()) as Rectangle;
+            Rectangle rotateRectangle = entryRectangle.Rotate(centerPlane, -GetRotationAngle()) as Rectangle;
 
+            // move the entry rectangle to the parking bay entrance.
+            Rectangle moveRectangle = rotateRectangle.Translate(GetParkingDirection(), parkingRectangle.Width/2) as Rectangle;
 
+            // create a surface from the entry rectangle for subtraction.
+            List<Surface> entrySurface = new List<Surface> { Surface.ByPatch(moveRectangle) };
 
-            // create
-            // float f = GetRotationAngle();
+            // subtract the entry rectangle from the subtracted surface.
+            Surface stripeSurface = subtractedSurface.Difference(entrySurface);
 
+            // get the perimeter curve of the stripe surface.
+            PolyCurve stripeCurve = PolyCurve.ByJoinedCurves(stripeSurface.PerimeterCurves(), 0.001, false, 0);
 
-
-            return rotateRectangle;
+            return stripeCurve;
         }
 
 
