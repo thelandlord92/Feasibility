@@ -142,6 +142,9 @@
     <Compile Include="Parking\ParkingBay.cs" />
     <Compile Include="Parking\Patterns.cs" />
     <Compile Include="Parking\PerimeterBays.cs" />
+    <Compile Include="Parking\Shapes.cs" />
+    <Compile Include="Parking\Signage.cs" />
+    <Compile Include="Parking\Symbols.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

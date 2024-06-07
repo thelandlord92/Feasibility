@@ -96,6 +96,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Parking.ParkingBay.CreateStripe(System.Single)">
+            <summary>
+            Creates the parking stripe geometry.
+            </summary>
+            <param name="stripeThickness">The thickness of the parking stripe.</param>
+            <returns></returns>
+        </member>
         <member name="M:Parking.ParkingBay.GetCenterPoint">
             <summary>
             Gets the center points of the placed parking bays.

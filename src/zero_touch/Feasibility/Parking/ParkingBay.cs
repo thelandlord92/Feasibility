@@ -1,4 +1,6 @@
 ﻿using Autodesk.DesignScript.Geometry;
+using DSCore;
+using Modifiers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,7 +60,7 @@ namespace Parking
         public Boolean FlipVertical { private get; set; }
 
         // hides the overall class as a node.
-        private ParkingBay() { }
+        // private ParkingBay() { }
 
         /// <summary>
         /// Creates a parking bay instance.
@@ -161,6 +163,63 @@ namespace Parking
             Rectangle patternRotate = transRectangle.Rotate(patternCenterPlane, PatternRotation) as Rectangle;
 
             return patternRotate;
+        }
+
+        /// <summary>
+        /// Creates the parking stripe geometry.
+        /// </summary>
+        /// <param name="stripeThickness">The thickness of the parking stripe.</param>
+        /// <returns></returns>
+        public Surface CreateStripe(float stripeThickness=(float)0.1) 
+        {
+            // create the parking rectangle. 
+            Rectangle parkingRectangle = CreateRectangle();
+
+            // try catch block to ensure internal surface is smaller than the parking surface.
+            Surface subtractedSurface = null;
+            try 
+            {
+                // offset the parking rectangle by the strip thickness.
+                Curve[] stripeOffset = parkingRectangle.OffsetMany(-stripeThickness, Vector.ZAxis()) as Curve[];
+
+                // join the offset curves.
+                Curve joinedCurves = PolyCurve.ByJoinedCurves(stripeOffset, 0.01, false, 0) as Curve;
+
+                // create the parking spot surface.
+                Surface parkingSurface = Surface.ByPatch(parkingRectangle);
+
+                // create the internal surface for subtraction from parking surface.
+                List<Surface> internalSurface = new List<Surface> { Surface.ByPatch(joinedCurves) };
+
+                // subtract the internal surface from the parking surface.
+                subtractedSurface = parkingSurface.Difference(internalSurface);
+            }
+            catch 
+            {
+                // offset the parking rectangle by the strip thickness.
+                Curve[] stripeOffset = parkingRectangle.OffsetMany(stripeThickness, Vector.ZAxis()) as Curve[];
+
+                // join the offset curves.
+                Curve joinedCurves = PolyCurve.ByJoinedCurves(stripeOffset, 0.01, false, 0) as Curve;
+
+                // create the parking spot surface.
+                Surface parkingSurface = Surface.ByPatch(parkingRectangle);
+
+                // create the internal surface for subtraction from parking surface.
+                List<Surface> internalSurface = new List<Surface> { Surface.ByPatch(joinedCurves) };
+
+                // subtract the internal surface from the parking surface.
+                subtractedSurface = parkingSurface.Difference(internalSurface);
+            }
+
+
+
+            // create
+            // float f = GetRotationAngle();
+
+
+
+            return subtractedSurface;
         }
 
         /// <summary>
