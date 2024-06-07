@@ -14,29 +14,63 @@ namespace Parking
     /// Wrapper class for the parking patterns.
     /// </summary>
     public class Patterns
-    {
-        // this hides the overall class as a node.
-        private Patterns() { }
+    {   
+        /// <summary>
+        /// The input line indicating the location of the pattern.
+        /// </summary>
+        public Line LocationLine {  private get; set; }
 
         /// <summary>
-        /// Creates a point.
+        /// Set the parking pattern type.
+        /// 1 for the non interlocking pattern.
+        /// 2 for the interlocing pattern.
+        /// 3 for the herringbone pattern.
         /// </summary>
-        /// <param name="x">the x coordinate value</param>
-        /// <param name="y">the y coordinate value</param>
-        /// <returns name="Point">the output point</returns>
-        /// <returns name="Number">the output numbers</returns>
-        [MultiReturn(new[] { "Point", "Numbers" })]
-        public static Dictionary<string, object> CreatePoint(int x, int y)
-        {
-            var point = Autodesk.DesignScript.Geometry.Point.ByCoordinates(x, y);
+        public int PatternType { private get; set; }
 
-            var numbers = Common.Math.Range(2, 20, 3);
+        /// <summary>
+        /// The width of the parking bays.
+        /// </summary>
+        public float BayWidth { private get; set; }
 
-            return new Dictionary<string, object> 
-            { 
-                { "Point", point },
-                { "Numbers", numbers },
-            };
+        /// <summary>
+        /// The length of the parking bays.
+        /// </summary>
+        public float BayLength { private get; set; }
+
+        /// <summary>
+        /// The angle of the parking bays.
+        /// </summary>
+        public float BayAngle { private get; set; }
+
+        /// <summary>
+        /// The rotation angle of the pattern.
+        /// </summary>
+        public float PatternRotation { private get; set; }
+
+        /// <summary>
+        /// Creates instances of the parking pattern class.
+        /// </summary>
+        /// <param name="locationLine">The input line indicating the location of the pattern.</param>
+        /// <param name="patternType">Set the parking pattern type.</param>
+        /// <param name="bayWidth">the width of the parking bays.</param>
+        /// <param name="bayLength">the length of the parking bays.</param>
+        /// <param name="bayAngle">the angle of the parking bays.</param>
+        /// <param name="patternRotation">The rotation angle of the pattern.</param>
+        public Patterns(
+            Line locationLine,
+            int patternType = 1,
+            float bayWidth = (float)2.5,
+            float bayLength = 5,
+            float bayAngle = 30,
+            float patternRotation = 0) 
+        { 
+            LocationLine = locationLine;
+            PatternType = patternType;
+            BayWidth = bayWidth;
+            BayLength = bayLength;
+            BayAngle = bayAngle;
+            PatternRotation = patternRotation;  
         }
 
         /// <summary>
