@@ -96,22 +96,29 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Parking.ParkingBay.CreateStripe(System.Single)">
+        <member name="M:Parking.ParkingBay.CreateStripe(System.Single,System.Single)">
             <summary>
             Creates the parking stripe geometry.
             </summary>
             <param name="stripeThickness">The thickness of the parking stripe.</param>
+            <param name="stripeOpeningWidth">The opening width of the parking stripe.</param>
             <returns></returns>
         </member>
-        <member name="M:Parking.ParkingBay.GetCenterPoint">
+        <member name="M:Parking.ParkingBay.GetParkingDirection">
             <summary>
-            Gets the center points of the placed parking bays.
+            Get the vector along the length of the parking spots.
             </summary>
             <returns></returns>
         </member>
         <member name="M:Parking.ParkingBay.GetRotationAngle">
             <summary>
             Gets the rotation angle of the bays from the y axis.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Parking.ParkingBay.GetCenterPoint">
+            <summary>
+            Gets the center points of the placed parking bays.
             </summary>
             <returns></returns>
         </member>

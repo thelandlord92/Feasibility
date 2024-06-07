@@ -169,8 +169,9 @@ namespace Parking
         /// Creates the parking stripe geometry.
         /// </summary>
         /// <param name="stripeThickness">The thickness of the parking stripe.</param>
+        /// <param name="stripeOpeningWidth">The opening width of the parking stripe.</param>
         /// <returns></returns>
-        public Surface CreateStripe(float stripeThickness=(float)0.1) 
+        public Rectangle CreateStripe(float stripeThickness=(float)0.1, float stripeOpeningWidth = (float)2) 
         {
             // create the parking rectangle. 
             Rectangle parkingRectangle = CreateRectangle();
@@ -212,7 +213,17 @@ namespace Parking
                 subtractedSurface = parkingSurface.Difference(internalSurface);
             }
 
-            Rectangle parking = parkingRectangle;
+            // get the center of the parking spot.
+            Point parkingCenter = parkingRectangle.Center();
+
+            // create a plane at the center point.
+            Plane centerPlane = Plane.ByOriginNormal(parkingCenter, Vector.ZAxis());
+
+            // create the parking stripe entry cut rectangle.
+            Rectangle entryRectangle = Rectangle.ByWidthLength(centerPlane, stripeOpeningWidth, stripeThickness * 3);
+
+            // rotate the entry cut rectangle.
+            Rectangle rotateRectangle = entryRectangle.Rotate(centerPlane, GetRotationAngle()) as Rectangle;
 
 
 
@@ -221,23 +232,9 @@ namespace Parking
 
 
 
-            return subtractedSurface;
+            return rotateRectangle;
         }
 
-        /// <summary>
-        /// Gets the center points of the placed parking bays.
-        /// </summary>
-        /// <returns></returns>
-        public Point GetCenterPoint() 
-        {
-            // get the parking bay rectangle.
-            Rectangle parkingRectangle = CreateRectangle();
-
-            // get the center of the parking bay.
-            Point parkingCenter = parkingRectangle.Center();
-
-            return parkingCenter;
-        }
 
         /// <summary>
         /// Get the vector along the length of the parking spots.
@@ -260,6 +257,7 @@ namespace Parking
             return lengthVector;
         }
 
+
         /// <summary>
         /// Gets the rotation angle of the bays from the y axis.
         /// </summary>
@@ -270,6 +268,22 @@ namespace Parking
             float rotationAngle = (float)GetParkingDirection().AngleAboutAxis(Vector.YAxis(), Vector.ZAxis());
 
             return rotationAngle;
+        }
+
+
+        /// <summary>
+        /// Gets the center points of the placed parking bays.
+        /// </summary>
+        /// <returns></returns>
+        public Point GetCenterPoint()
+        {
+            // get the parking bay rectangle.
+            Rectangle parkingRectangle = CreateRectangle();
+
+            // get the center of the parking bay.
+            Point parkingCenter = parkingRectangle.Center();
+
+            return parkingCenter;
         }
     }
 }
