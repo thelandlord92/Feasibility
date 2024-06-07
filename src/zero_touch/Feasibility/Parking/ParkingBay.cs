@@ -176,7 +176,7 @@ namespace Parking
             Rectangle parkingRectangle = CreateRectangle();
 
             // try catch block to ensure internal surface is smaller than the parking surface.
-            Surface subtractedSurface = null;
+            Surface subtractedSurface;
             try 
             {
                 // offset the parking rectangle by the strip thickness.
@@ -212,6 +212,8 @@ namespace Parking
                 subtractedSurface = parkingSurface.Difference(internalSurface);
             }
 
+            Rectangle parking = parkingRectangle;
+
 
 
             // create
@@ -238,10 +240,10 @@ namespace Parking
         }
 
         /// <summary>
-        /// Gets the rotation angle of the bays from the y axis.
+        /// Get the vector along the length of the parking spots.
         /// </summary>
         /// <returns></returns>
-        public float GetRotationAngle() 
+        public Vector GetParkingDirection() 
         {
             // get the parking bay rectangle.
             Rectangle parkingRectangle = CreateRectangle();
@@ -255,8 +257,17 @@ namespace Parking
             // get the vector of a line at the length of the parking bay.
             Vector lengthVector = rectangleLines[1].Direction;
 
+            return lengthVector;
+        }
+
+        /// <summary>
+        /// Gets the rotation angle of the bays from the y axis.
+        /// </summary>
+        /// <returns></returns>
+        public float GetRotationAngle() 
+        {
             // compute the rotation angle of the parking bay.
-            float rotationAngle = (float)lengthVector.AngleAboutAxis(Vector.YAxis(), Vector.ZAxis());
+            float rotationAngle = (float)GetParkingDirection().AngleAboutAxis(Vector.YAxis(), Vector.ZAxis());
 
             return rotationAngle;
         }
