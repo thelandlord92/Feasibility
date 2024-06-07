@@ -20,13 +20,26 @@ namespace Parking
         /// </summary>
         public Line LocationLine {  private get; set; }
 
+        private int _patternType;
+
         /// <summary>
         /// Set the parking pattern type.
         /// 1 for the non interlocking pattern.
         /// 2 for the interlocing pattern.
         /// 3 for the herringbone pattern.
         /// </summary>
-        public int PatternType { private get; set; }
+        public int PatternType
+        {
+            private get { return _patternType; }
+            set
+            {
+                if (value < 1 || value > 3)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(PatternType), "PatternType must be between 1 an 3.");
+                }
+                _patternType = value;
+            }
+        }
 
         /// <summary>
         /// The width of the parking bays.
@@ -47,6 +60,7 @@ namespace Parking
         /// The rotation angle of the pattern.
         /// </summary>
         public float PatternRotation { private get; set; }
+
 
         /// <summary>
         /// Creates instances of the parking pattern class.
