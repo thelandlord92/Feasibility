@@ -13,6 +13,7 @@ namespace Parking
     /// <summary>
     /// Wrapper class for the parking patterns.
     /// </summary>
+    [IsVisibleInDynamoLibrary(true)]
     public class Patterns
     {   
         /// <summary>
@@ -79,6 +80,7 @@ namespace Parking
         /// <param name="bayAngle">the angle of the parking bays.</param>
         /// <param name="patternRotation">The rotation angle of the pattern.</param>
         /// <param name="islandWidth">The width of the non interlocking pattern island.</param>
+        [IsVisibleInDynamoLibrary(true)]
         public Patterns(
             Line locationLine,
             int patternType = 1,
