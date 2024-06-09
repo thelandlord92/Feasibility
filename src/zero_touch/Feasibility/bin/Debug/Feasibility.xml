@@ -160,7 +160,12 @@
             The rotation angle of the pattern.
             </summary>
         </member>
-        <member name="M:Parking.Patterns.#ctor(Autodesk.DesignScript.Geometry.Line,System.Int32,System.Single,System.Single,System.Single,System.Single)">
+        <member name="P:Parking.Patterns.IslandWidth">
+            <summary>
+            The width of the non interlocking pattern island.
+            </summary>
+        </member>
+        <member name="M:Parking.Patterns.#ctor(Autodesk.DesignScript.Geometry.Line,System.Int32,System.Single,System.Single,System.Single,System.Single,System.Single)">
             <summary>
             Creates instances of the parking pattern class.
             </summary>
@@ -170,6 +175,7 @@
             <param name="bayLength">the length of the parking bays.</param>
             <param name="bayAngle">the angle of the parking bays.</param>
             <param name="patternRotation">The rotation angle of the pattern.</param>
+            <param name="islandWidth">The width of the non interlocking pattern island.</param>
         </member>
         <member name="M:Parking.Patterns.ParkingCopyNumber">
             <summary>
@@ -190,18 +196,29 @@
             </summary>
             <returns name="rotationAngle"></returns>
         </member>
-        <member name="M:Parking.Patterns.NonInterlockingPattern(System.Single)">
+        <member name="M:Parking.Patterns.NonInterlockingPattern">
             <summary>
             Creates the non interlocking parking pattern.
             </summary>
-            <param name="centerIslandWidth">The width of the parking island.</param>
             <returns name="parkingBays">The parking bay instances.</returns>
         </member>
         <member name="M:Parking.Patterns.ElongatedNonInterlockingRectangles">
             <summary>
             Creates the extended non interlocing bay rectangles for cutting the island surface.
             </summary>
-            <returns name="extendedRectangles">The extended parking bays.</returns>
+            <returns name="extendedRectangles">The extended parking bay rectangles.</returns>
+        </member>
+        <member name="P:Parking.Patterns.NonInterlockingPatternWidth">
+            <summary>
+            Calculates the width of the non interlocking pattern.
+            </summary>
+            <returns name="patternWidth">The width of the non interlocking pattern.</returns>
+        </member>
+        <member name="M:Parking.Patterns.NonInterlockingPatternSurface">
+            <summary>
+            Creates a rectangle covering the width of the pattern and length of the location line.
+            </summary>
+            <returns name="patternSurface">The pattern surface.</returns>
         </member>
     </members>
 </doc>

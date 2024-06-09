@@ -258,20 +258,38 @@ namespace Parking
         /// <summary>
         /// Calculates the width of the non interlocking pattern.
         /// </summary>
-        /// <returns></returns>
-        private float NonInterlockingPatternWidth() 
-        { 
-            // calculate the overall pattern width.
-            float width1 = (float)(BayWidth * DSCore.Math.Sin(BayAngle)); // closest triangle width to the center island.
-            float width2 = (float)(DSCore.Math.Cos(BayAngle) * BayLength); // furthermost trinagle wifth from the center island.
-            float patternWidth = (float)(width1 + width2 + IslandWidth);
+        /// <returns name="patternWidth">The width of the non interlocking pattern.</returns>
+        private float NonInterlockingPatternWidth
+        {
+            get
+            {
+                // calculate the overall pattern width.
+                float width1 = (float)(BayWidth * DSCore.Math.Sin(BayAngle)); // closest triangle width to the center island.
+                float width2 = (float)(DSCore.Math.Cos(BayAngle) * BayLength); // furthermost trinagle wifth from the center island.
+                float patternWidth = (float)(width1 + width2 + IslandWidth);
 
-            return patternWidth;
+                return patternWidth;
+            }
+        }
 
 
-            // create a rectangle covering the width of the pattern and length of the location line.
+        /// <summary>
+        /// Creates a rectangle covering the width of the pattern and length of the location line.
+        /// </summary>
+        /// <returns name="patternSurface">The pattern surface.</returns>
+        public Surface NonInterlockingPatternSurface() 
+        {
+            // create the surface rectangle.
+            Plane centerPlane = Plane.ByOriginNormal(LocationLine.PointAtParameter(0.5), Vector.ZAxis());
+            Rectangle surfaceRectangle = Rectangle.ByWidthLength(centerPlane, NonInterlockingPatternWidth, LocationLine.Length);
 
+            // rotate the rectangle.
+            Rectangle rotatedRectangle = surfaceRectangle.Rotate(centerPlane, PatternRotation) as Rectangle;
 
+            // create the surface.
+            Surface patternSurface = Surface.ByPatch(rotatedRectangle);
+
+            return patternSurface;
         }
     }
 }
