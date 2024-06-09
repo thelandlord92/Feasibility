@@ -232,5 +232,11 @@
             </summary>
             <returns name="parkingBays">The parking bay instances.</returns>
         </member>
+        <member name="M:Parking.Patterns.HerringbonePattern">
+            <summary>
+            Creates the herringbone pattern.
+            </summary>
+            <returns name="parkingBays">The parking bay instances.</returns>
+        </member>
     </members>
 </doc>

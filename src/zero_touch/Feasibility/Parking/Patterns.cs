@@ -380,5 +380,60 @@ namespace Parking
 
             return parkingBays;
         }
+
+
+        /// <summary>
+        /// Creates the herringbone pattern.
+        /// </summary>
+        /// <returns name="parkingBays">The parking bay instances.</returns>
+        public List<ParkingBay> HerringbonePattern() 
+        {
+            // create the first half of the parking bay target points.
+            List<Point> locationPoints = HalfPoints(-(float)(BayWidth * DSCore.Math.Sin(45)) / 2);
+
+            // create the mirror plane to mirror the target points along the location line.
+            Plane mirrorPlane = LocationLineMirrorPlane();
+
+            // create the second half of the parking bay target points.
+            List<Point> secondLocationPoints = new List<Point>();
+            foreach (Point point in locationPoints)
+            {
+                Point mirrorPoint = point.Mirror(mirrorPlane) as Point;
+                secondLocationPoints.Add(mirrorPoint);
+            }
+
+            // get the direction of the location line.
+            Vector locationLineDir = LocationLine.Direction;
+
+            // move the mirrored points along the pattern location line.
+            float moveDistance = (float)(-(DSCore.Math.Sin(45) * BayWidth));
+            List<Point> movedPoints = new List<Point>();
+            foreach (Point point in secondLocationPoints)
+            {
+                Point movedPoint = point.Translate(locationLineDir, moveDistance) as Point;
+                movedPoints.Add(movedPoint);
+            }
+
+            // get the center of the location line.
+            Point locationCenter = LocationLine.PointAtParameter(0.5);
+
+            // add the parking bay instances to the first half target points.
+            List<ParkingBay> firstParkingBays = new List<ParkingBay>();
+            foreach (Point point in locationPoints)
+            {
+                ParkingBay bay = new ParkingBay(
+                    point,
+                    locationCenter,
+                    BayWidth,
+                    BayLength,
+                    BayAngle + GetLineRotationAngle(),
+                    PatternRotation,
+                    false,
+                    true);
+                firstParkingBays.Add(bay);
+            }
+
+            return firstParkingBays;
+        }
     }
 }
