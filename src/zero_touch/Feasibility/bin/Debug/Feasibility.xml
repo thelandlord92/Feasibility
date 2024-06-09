@@ -153,6 +153,8 @@
         <member name="P:Parking.Patterns.BayAngle">
             <summary>
             The angle of the parking bays.
+            Note that the angle is not applied to the herringbone pattern.
+            The herringbone pattern is always 45 degrees.
             </summary>
         </member>
         <member name="P:Parking.Patterns.PatternRotation">

@@ -53,6 +53,8 @@ namespace Parking
 
         /// <summary>
         /// The angle of the parking bays.
+        /// Note that the angle is not applied to the herringbone pattern.
+        /// The herringbone pattern is always 45 degrees.
         /// </summary>
         public float BayAngle { private get; set; }
 
@@ -100,10 +102,21 @@ namespace Parking
         /// Calculates the number of parking bays to copy along the location line.
         /// </summary>
         /// <returns></returns>
-        public int ParkingCopyNumber() 
+        private int ParkingCopyNumber() 
         {
+            // make the bay angle 45 degrees if the pattern type is herringbone.
+            float bayAngle;
+            if (PatternType == 3)
+            {
+                bayAngle = 45;
+            }
+            else
+            { 
+                bayAngle = BayAngle;
+            }
+    
             // calculate the actual bay width against the pattern location line.
-            float actualWidth = (float)BayWidth / (float)DSCore.Math.Cos((float)BayAngle);
+            float actualWidth = (float)BayWidth / (float)DSCore.Math.Cos((float)bayAngle);
 
             // calculate the number of bays to copy along the location line.
             int copyNumber = (int)DSCore.Math.Ceiling(LocationLine.Length / actualWidth);
@@ -117,8 +130,19 @@ namespace Parking
         /// </summary>
         /// <param name="patternOffset">The offset distance of the pattern points from the location line.</param>
         /// <returns name="locationPoints">A list of points to host parking bays.</returns>
-        public List<Point> HalfPoints(float patternOffset = 1) 
+        private List<Point> HalfPoints(float patternOffset = 1) 
         {
+            // make the bay angle 45 degrees if the pattern type is herringbone.
+            float bayAngle;
+            if (PatternType == 3)
+            {
+                bayAngle = 45;
+            }
+            else
+            {
+                bayAngle = BayAngle;
+            }
+
             // get the location line start coordinate system.
             CoordinateSystem lineCoord = LocationLine.CoordinateSystemAtParameter(0);
 
@@ -126,7 +150,7 @@ namespace Parking
             Vector coordVector = lineCoord.XAxis.Reverse();
 
             // extend the location line if required to ensure the bays fit accurately.
-            float newLineLength = ((float)BayWidth / (float)DSCore.Math.Cos((float)BayAngle)) * ParkingCopyNumber();
+            float newLineLength = ((float)BayWidth / (float)DSCore.Math.Cos((float)bayAngle)) * ParkingCopyNumber();
             float extensionLength = (float)newLineLength - (float)LocationLine.Length;
             Line extendedLine = LocationLine.ExtendEnd(extensionLength) as Line;
 
@@ -386,7 +410,7 @@ namespace Parking
         /// Creates the herringbone pattern.
         /// </summary>
         /// <returns name="parkingBays">The parking bay instances.</returns>
-        public List<ParkingBay> HerringbonePattern() 
+        public List<List<ParkingBay>> HerringbonePattern() 
         {
             // create the first half of the parking bay target points.
             List<Point> locationPoints = HalfPoints(-(float)(BayWidth * DSCore.Math.Sin(45)) / 2);
@@ -426,14 +450,35 @@ namespace Parking
                     locationCenter,
                     BayWidth,
                     BayLength,
-                    BayAngle + GetLineRotationAngle(),
+                    45 + GetLineRotationAngle(),
                     PatternRotation,
                     false,
                     true);
                 firstParkingBays.Add(bay);
             }
 
-            return firstParkingBays;
+            // add the parking bay instances to the second half target points.
+            List<ParkingBay> secondParkingBays = new List<ParkingBay>();
+            foreach (Point point in movedPoints)
+            {
+                ParkingBay bay = new ParkingBay(
+                    point,
+                    locationCenter,
+                    BayWidth,
+                    BayLength,
+                    45 + GetLineRotationAngle(),
+                    PatternRotation,
+                    true,
+                    true);
+                secondParkingBays.Add(bay);
+            }
+
+            // add the lists of parking bays to a single list.
+            List<List<ParkingBay>> parkingBays = new List<List<ParkingBay>>();
+            parkingBays.Add(firstParkingBays);
+            parkingBays.Add(secondParkingBays);
+
+            return parkingBays;
         }
     }
 }
