@@ -310,7 +310,7 @@ namespace Parking
         /// Creates the interlocking pattern.
         /// </summary>
         /// <returns name="parkingBays">The parking bay instances.</returns>
-        public List<ParkingBay> InterlockingPattern() 
+        public List<List<ParkingBay>> InterlockingPattern() 
         {
             // create the first half of the parking bay target points.
             List<Point> locationPoints = HalfPoints(-(float)(BayWidth * DSCore.Math.Sin(BayAngle)) / 2);
@@ -324,6 +324,18 @@ namespace Parking
             {
                 Point mirrorPoint = point.Mirror(mirrorPlane) as Point;
                 secondLocationPoints.Add(mirrorPoint);
+            }
+
+            // get the direction of the location line.
+            Vector locationLineDir = LocationLine.Direction;
+
+            // move the mirrored points along the pattern location line.
+            float moveDistance = (float)(-(DSCore.Math.Sin(90 - BayAngle) * BayWidth));
+            List<Point> movedPoints = new List<Point>();
+            foreach (Point point in secondLocationPoints) 
+            { 
+                Point movedPoint = point.Translate(locationLineDir, moveDistance) as Point;
+                movedPoints.Add(movedPoint);
             }
 
             // get the center of the location line.
@@ -345,7 +357,28 @@ namespace Parking
                 firstParkingBays.Add(bay);
             }
 
-            return firstParkingBays;
+            // add the parking bay instances to the second half target points.
+            List<ParkingBay> secondParkingBays = new List<ParkingBay>();
+            foreach (Point point in movedPoints)
+            {
+                ParkingBay bay = new ParkingBay(
+                    point,
+                    locationCenter,
+                    BayWidth,
+                    BayLength,
+                    BayAngle + GetLineRotationAngle(),
+                    PatternRotation,
+                    true,
+                    false);
+                secondParkingBays.Add(bay);
+            }
+
+            // add the lists of parking bays to a single list.
+            List<List<ParkingBay>> parkingBays = new List<List<ParkingBay>>();
+            parkingBays.Add(firstParkingBays);
+            parkingBays.Add(secondParkingBays);
+
+            return parkingBays;
         }
     }
 }
