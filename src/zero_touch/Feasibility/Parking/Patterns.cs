@@ -61,6 +61,11 @@ namespace Parking
         /// </summary>
         public float PatternRotation { private get; set; }
 
+        /// <summary>
+        /// The width of the non interlocking pattern island.
+        /// </summary>
+        public float IslandWidth { private get; set; }
+
 
         /// <summary>
         /// Creates instances of the parking pattern class.
@@ -71,20 +76,23 @@ namespace Parking
         /// <param name="bayLength">the length of the parking bays.</param>
         /// <param name="bayAngle">the angle of the parking bays.</param>
         /// <param name="patternRotation">The rotation angle of the pattern.</param>
+        /// <param name="islandWidth">The width of the non interlocking pattern island.</param>
         public Patterns(
             Line locationLine,
             int patternType = 1,
             float bayWidth = (float)2.5,
             float bayLength = 5,
             float bayAngle = 30,
-            float patternRotation = 0) 
+            float patternRotation = 0,
+            float islandWidth = 1) 
         { 
             LocationLine = locationLine;
             PatternType = patternType;
             BayWidth = bayWidth;
             BayLength = bayLength;
             BayAngle = bayAngle;
-            PatternRotation = patternRotation;  
+            PatternRotation = patternRotation;
+            IslandWidth = islandWidth;
         }
 
 
@@ -156,12 +164,11 @@ namespace Parking
         /// <summary>
         /// Creates the non interlocking parking pattern.
         /// </summary>
-        /// <param name="centerIslandWidth">The width of the parking island.</param>
         /// <returns name="parkingBays">The parking bay instances.</returns>
-        public List<List<ParkingBay>> NonInterlockingPattern(float centerIslandWidth = 1) 
+        public List<List<ParkingBay>> NonInterlockingPattern() 
         {
             // create the first half of the parking bay target points.
-            List<Point> locationPoints = HalfPoints(centerIslandWidth / 2);
+            List<Point> locationPoints = HalfPoints(IslandWidth / 2);
 
             // create the mirror plane to mirror the target points along the location line.
             Point lineStartPoint = LocationLine.StartPoint;
@@ -222,10 +229,10 @@ namespace Parking
 
 
         /// <summary>
-        /// Creates the entended non interlocing bays for cutting the island surface.
+        /// Creates the extended non interlocing bay rectangles for cutting the island surface.
         /// </summary>
-        /// <returns name-"extendedBays">The extended parking bays.</returns>
-        public List<ParkingBay> ElongatedNonInterlockingPattern() 
+        /// <returns name="extendedRectangles">The extended parking bay rectangles.</returns>
+        public List<Rectangle> ElongatedNonInterlockingRectangles() 
         {
             // add the parking bays to a list.
             List<List<ParkingBay>> parkingBays = NonInterlockingPattern();
@@ -234,17 +241,37 @@ namespace Parking
             float additionalLength = (float)(BayWidth * DSCore.Math.Tan(BayAngle));
 
             // extend the parking bays.
-            List<ParkingBay> extendedBays =  new List<ParkingBay>();
+            List<Rectangle> extendedRectangles =  new List<Rectangle>();
             foreach (List<ParkingBay> bayList in parkingBays) 
             {
                 foreach (ParkingBay bay in bayList) 
                 { 
                     bay.BayLength = additionalLength + BayLength;
-                    extendedBays.Add(bay);
+                    extendedRectangles.Add(bay.CreateRectangle());
                 }
             }
 
-            return extendedBays;
+            return extendedRectangles;
+        }
+
+
+        /// <summary>
+        /// Calculates the width of the non interlocking pattern.
+        /// </summary>
+        /// <returns></returns>
+        private float NonInterlockingPatternWidth() 
+        { 
+            // calculate the overall pattern width.
+            float width1 = (float)(BayWidth * DSCore.Math.Sin(BayAngle)); // closest triangle width to the center island.
+            float width2 = (float)(DSCore.Math.Cos(BayAngle) * BayLength); // furthermost trinagle wifth from the center island.
+            float patternWidth = (float)(width1 + width2 + IslandWidth);
+
+            return patternWidth;
+
+
+            // create a rectangle covering the width of the pattern and length of the location line.
+
+
         }
     }
 }

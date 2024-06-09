@@ -197,6 +197,11 @@
             <param name="centerIslandWidth">The width of the parking island.</param>
             <returns name="parkingBays">The parking bay instances.</returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Parking.Patterns.ElongatedNonInterlockingPattern" -->
+        <member name="M:Parking.Patterns.ElongatedNonInterlockingRectangles">
+            <summary>
+            Creates the extended non interlocing bay rectangles for cutting the island surface.
+            </summary>
+            <returns name="extendedRectangles">The extended parking bays.</returns>
+        </member>
     </members>
 </doc>
