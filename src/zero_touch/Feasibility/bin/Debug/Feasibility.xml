@@ -196,6 +196,12 @@
             </summary>
             <returns name="rotationAngle"></returns>
         </member>
+        <member name="M:Parking.Patterns.LocationLineMirrorPlane">
+            <summary>
+            Creates a mirror plane at the pattern location line.
+            </summary>
+            <returns name="mirrorPlane">The location line mirror plane.</returns>
+        </member>
         <member name="M:Parking.Patterns.NonInterlockingPattern">
             <summary>
             Creates the non interlocking parking pattern.
@@ -219,6 +225,12 @@
             Creates a rectangle covering the width of the pattern and length of the location line.
             </summary>
             <returns name="patternSurface">The pattern surface.</returns>
+        </member>
+        <member name="M:Parking.Patterns.InterlockingPattern">
+            <summary>
+            Creates the interlocking pattern.
+            </summary>
+            <returns name="parkingBays">The parking bay instances.</returns>
         </member>
     </members>
 </doc>

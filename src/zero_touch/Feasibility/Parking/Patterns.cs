@@ -162,6 +162,22 @@ namespace Parking
 
 
         /// <summary>
+        /// Creates a mirror plane at the pattern location line.
+        /// </summary>
+        /// <returns name="mirrorPlane">The location line mirror plane.</returns>
+        private Plane LocationLineMirrorPlane() 
+        {
+            // create the mirror plane to mirror the target points along the location line.
+            Point lineStartPoint = LocationLine.StartPoint;
+            CoordinateSystem lineCoord = LocationLine.CoordinateSystemAtParameter(0);
+            Vector coordVector = lineCoord.XAxis;
+            Plane mirrorPlane = Plane.ByOriginNormal(lineStartPoint, coordVector);
+
+            return mirrorPlane;
+        }
+
+
+        /// <summary>
         /// Creates the non interlocking parking pattern.
         /// </summary>
         /// <returns name="parkingBays">The parking bay instances.</returns>
@@ -171,10 +187,7 @@ namespace Parking
             List<Point> locationPoints = HalfPoints(IslandWidth / 2);
 
             // create the mirror plane to mirror the target points along the location line.
-            Point lineStartPoint = LocationLine.StartPoint;
-            CoordinateSystem lineCoord = LocationLine.CoordinateSystemAtParameter(0);
-            Vector coordVector = lineCoord.XAxis;
-            Plane mirrorPlane = Plane.ByOriginNormal(lineStartPoint, coordVector);
+            Plane mirrorPlane = LocationLineMirrorPlane();
 
             // create the second half of the parking bay target points.
             List<Point> secondLocationPoints = new List<Point>();
@@ -290,6 +303,49 @@ namespace Parking
             Surface patternSurface = Surface.ByPatch(rotatedRectangle);
 
             return patternSurface;
+        }
+
+
+        /// <summary>
+        /// Creates the interlocking pattern.
+        /// </summary>
+        /// <returns name="parkingBays">The parking bay instances.</returns>
+        public List<ParkingBay> InterlockingPattern() 
+        {
+            // create the first half of the parking bay target points.
+            List<Point> locationPoints = HalfPoints(-(float)(BayWidth * DSCore.Math.Sin(BayAngle)) / 2);
+
+            // create the mirror plane to mirror the target points along the location line.
+            Plane mirrorPlane = LocationLineMirrorPlane();
+
+            // create the second half of the parking bay target points.
+            List<Point> secondLocationPoints = new List<Point>();
+            foreach (Point point in locationPoints)
+            {
+                Point mirrorPoint = point.Mirror(mirrorPlane) as Point;
+                secondLocationPoints.Add(mirrorPoint);
+            }
+
+            // get the center of the location line.
+            Point locationCenter = LocationLine.PointAtParameter(0.5);
+
+            // add the parking bay instances to the first half target points.
+            List<ParkingBay> firstParkingBays = new List<ParkingBay>();
+            foreach (Point point in locationPoints)
+            {
+                ParkingBay bay = new ParkingBay(
+                    point,
+                    locationCenter,
+                    BayWidth,
+                    BayLength,
+                    BayAngle + GetLineRotationAngle(),
+                    PatternRotation,
+                    false,
+                    true);
+                firstParkingBays.Add(bay);
+            }
+
+            return firstParkingBays;
         }
     }
 }
