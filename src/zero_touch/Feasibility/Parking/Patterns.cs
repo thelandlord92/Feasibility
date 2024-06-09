@@ -266,7 +266,7 @@ namespace Parking
                 // calculate the overall pattern width.
                 float width1 = (float)(BayWidth * DSCore.Math.Sin(BayAngle)); // closest triangle width to the center island.
                 float width2 = (float)(DSCore.Math.Cos(BayAngle) * BayLength); // furthermost trinagle wifth from the center island.
-                float patternWidth = (float)(width1 + width2 + IslandWidth);
+                float patternWidth = (float)((width1 + width2) * 2 + IslandWidth);
 
                 return patternWidth;
             }
