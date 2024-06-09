@@ -137,7 +137,7 @@ namespace Parking
         }
 
 
-        public List<Point> NewNonInterlockingPattern(float islandWidth = 1) 
+        public List<ParkingBay> NewNonInterlockingPattern(float islandWidth = 1, bool flipVertical = false) 
         {
             // create the first half of the parking bay target points.
             List<Point> locationPoints = HalfPoints(islandWidth / 2);
@@ -156,14 +156,34 @@ namespace Parking
                 secondLocationPoints.Add(mirrorPoint);
             }
 
+            // get the center of the location line.
+            Point locationCenter = LocationLine.PointAtParameter(0.5);
+
+            // add the parking bay instances to the first half target points.
+            List<ParkingBay> firstParkingBays = new List<ParkingBay>();  
+
+            foreach (Point point in locationPoints) 
+            {
+                ParkingBay bay = new ParkingBay(
+                    point, 
+                    locationCenter, 
+                    BayWidth, 
+                    BayLength, 
+                    BayAngle, 
+                    PatternRotation,
+                    false,
+                    flipVertical);
+                firstParkingBays.Add(bay);
+            }
+
             // add the lists of parking bays to a single list.
-            List<Point> parkingBays = new List<Point>();
-            parkingBays.AddRange(locationPoints);
-            parkingBays.AddRange(secondLocationPoints);
+            List<List<Point>> parkingBays = new List<List<Point>>();
+            parkingBays.Add(locationPoints);
+            parkingBays.Add(secondLocationPoints);
 
 
 
-            return parkingBays;
+            return firstParkingBays;
         }
 
 
