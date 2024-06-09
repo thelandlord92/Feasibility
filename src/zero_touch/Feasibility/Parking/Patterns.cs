@@ -153,10 +153,15 @@ namespace Parking
         }
 
 
-        public List<List<ParkingBay>> NonInterlockingPattern(float islandWidth = 1) 
+        /// <summary>
+        /// Creates the non interlocking parking pattern.
+        /// </summary>
+        /// <param name="centerIslandWidth">The width of the parking island.</param>
+        /// <returns name="parkingBays">The parking bay instances.</returns>
+        public List<List<ParkingBay>> NonInterlockingPattern(float centerIslandWidth = 1) 
         {
             // create the first half of the parking bay target points.
-            List<Point> locationPoints = HalfPoints(islandWidth / 2);
+            List<Point> locationPoints = HalfPoints(centerIslandWidth / 2);
 
             // create the mirror plane to mirror the target points along the location line.
             Point lineStartPoint = LocationLine.StartPoint;
@@ -213,6 +218,33 @@ namespace Parking
             parkingBays.Add(secondParkingBays);
 
             return parkingBays;
+        }
+
+
+        /// <summary>
+        /// Creates the entended non interlocing bays for cutting the island surface.
+        /// </summary>
+        /// <returns name-"extendedBays">The extended parking bays.</returns>
+        public List<ParkingBay> ElongatedNonInterlockingPattern() 
+        {
+            // add the parking bays to a list.
+            List<List<ParkingBay>> parkingBays = NonInterlockingPattern();
+
+            // calculate the additional length to extend the parking bay.
+            float additionalLength = (float)(BayWidth * DSCore.Math.Tan(BayAngle));
+
+            // extend the parking bays.
+            List<ParkingBay> extendedBays =  new List<ParkingBay>();
+            foreach (List<ParkingBay> bayList in parkingBays) 
+            {
+                foreach (ParkingBay bay in bayList) 
+                { 
+                    bay.BayLength = additionalLength + BayLength;
+                    extendedBays.Add(bay);
+                }
+            }
+
+            return extendedBays;
         }
     }
 }
