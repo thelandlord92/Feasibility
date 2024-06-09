@@ -119,7 +119,7 @@ namespace Parking
             Vector coordx = planeCS.XAxis;
             Vector coordy = planeCS.YAxis;
 
-            // create the vertical and horiztal mirror planes.
+            // create the vertical and horizontal mirror planes.
             Plane horizotalMirrorPlane = Plane.ByOriginNormal(startPoint, coordx);
             Plane verticalMirroPlane = Plane.ByOriginNormal(startPoint, coordy);
 
