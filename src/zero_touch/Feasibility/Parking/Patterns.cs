@@ -107,8 +107,8 @@ namespace Parking
         /// <summary>
         /// Creates half of the parking pattern points.
         /// </summary>
-        /// <param name="patternOffset"></param>
-        /// <returns></returns>
+        /// <param name="patternOffset">The offset distance of the pattern points from the location line.</param>
+        /// <returns name="locationPoints">A list of points to host parking bays.</returns>
         public List<Point> HalfPoints(float patternOffset = 1) 
         {
             // get the location line start coordinate system.
@@ -135,6 +135,37 @@ namespace Parking
 
             return locationPoints;
         }
+
+
+        public List<Point> NewNonInterlockingPattern(float islandWidth = 1) 
+        {
+            // create the first half of the parking bay target points.
+            List<Point> locationPoints = HalfPoints(islandWidth / 2);
+
+            // create the mirror plane to mirror the target points along the location line.
+            Point lineStartPoint = LocationLine.StartPoint;
+            CoordinateSystem lineCoord = LocationLine.CoordinateSystemAtParameter(0);
+            Vector coordVector = lineCoord.XAxis;
+            Plane mirrorPlane = Plane.ByOriginNormal(lineStartPoint, coordVector);
+
+            // create the second half of the parking bay target points.
+            List<Point> secondLocationPoints = new List<Point>();
+            foreach (Point point in locationPoints) 
+            { 
+                Point mirrorPoint = point.Mirror(mirrorPlane) as Point;
+                secondLocationPoints.Add(mirrorPoint);
+            }
+
+            // add the lists of parking bays to a single list.
+            List<Point> parkingBays = new List<Point>();
+            parkingBays.AddRange(locationPoints);
+            parkingBays.AddRange(secondLocationPoints);
+
+
+
+            return parkingBays;
+        }
+
 
         /// <summary>
         /// Creates half of the parking pattern.

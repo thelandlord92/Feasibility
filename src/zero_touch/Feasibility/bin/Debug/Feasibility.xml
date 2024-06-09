@@ -181,8 +181,8 @@
             <summary>
             Creates half of the parking pattern points.
             </summary>
-            <param name="patternOffset"></param>
-            <returns></returns>
+            <param name="patternOffset">The offset distance of the pattern points from the location line.</param>
+            <returns name="locationPoints">A list of points to host parking bays.</returns>
         </member>
         <member name="M:Parking.Patterns.HalfPattern(System.Single,System.Single,System.Single,System.Single,System.Single)">
             <summary>
