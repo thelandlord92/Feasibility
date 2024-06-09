@@ -117,8 +117,13 @@ namespace Parking
             // get the x vector of the coordinate system.
             Vector coordVector = lineCoord.XAxis.Reverse();
 
+            // extend the location line if required to ensure the bays fit accurately.
+            float newLineLength = ((float)BayWidth / (float)DSCore.Math.Cos((float)BayAngle)) * ParkingCopyNumber();
+            float extensionLength = (float)newLineLength - (float)LocationLine.Length;
+            Line extendedLine = LocationLine.ExtendEnd(extensionLength) as Line;
+
             // move the location line to offset the bays in relation to the location line.
-            Line movedLine = LocationLine.Translate(coordVector, patternOffset) as Line;
+            Line movedLine = extendedLine.Translate(coordVector, patternOffset) as Line;
 
             // add the parking bay location points to the moved line.
             List<Point> locationPoints = new List<Point>();
