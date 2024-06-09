@@ -97,7 +97,7 @@ namespace Parking
         /// <summary>
         /// Creates the parking rectangle geometry.
         /// </summary>
-        /// <returns></returns>
+        /// <returns name="parkingRectangles">The parking rectangle geometry.</returns>
         public Rectangle CreateRectangle() 
         {
             // create the base rectangle.
@@ -170,7 +170,7 @@ namespace Parking
         /// </summary>
         /// <param name="stripeThickness">The thickness of the parking stripe.</param>
         /// <param name="stripeOpeningWidth">The opening width of the parking stripe.</param>
-        /// <returns></returns>
+        /// <returns name="parkingStripe">The parking stripe curve.</returns>
         public PolyCurve CreateStripe(float stripeThickness=(float)0.1, float stripeOpeningWidth = (float)1.8) 
         {
             // create the parking rectangle. 
@@ -244,7 +244,7 @@ namespace Parking
         /// <summary>
         /// Get the vector along the length of the parking spots.
         /// </summary>
-        /// <returns></returns>
+        /// <returns name="lengthVector">vector along the length of the parking bay.</returns>
         public Vector GetParkingDirection() 
         {
             // get the parking bay rectangle.
@@ -266,7 +266,7 @@ namespace Parking
         /// <summary>
         /// Gets the rotation angle of the bays from the y axis.
         /// </summary>
-        /// <returns></returns>
+        /// <returns name="rotationAngle"></returns>
         public float GetRotationAngle() 
         {
             // compute the rotation angle of the parking bay.
@@ -279,7 +279,7 @@ namespace Parking
         /// <summary>
         /// Gets the center points of the placed parking bays.
         /// </summary>
-        /// <returns></returns>
+        /// <returns name="parkingCenter">the center point of the parking bay.</returns>
         public Point GetCenterPoint()
         {
             // get the parking bay rectangle.

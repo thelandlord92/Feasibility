@@ -87,6 +87,50 @@ namespace Parking
             PatternRotation = patternRotation;  
         }
 
+
+        /// <summary>
+        /// Calculates the number of parking bays to copy along the location line.
+        /// </summary>
+        /// <returns></returns>
+        public int ParkingCopyNumber() 
+        {
+            // calculate the actual bay width against the pattern location line.
+            float actualWidth = (float)BayWidth / (float)DSCore.Math.Cos((float)BayAngle);
+
+            // calculate the number of bays to copy along the location line.
+            int copyNumber = (int)DSCore.Math.Ceiling(LocationLine.Length / actualWidth);
+
+            return copyNumber;
+        }
+
+
+        /// <summary>
+        /// Creates half of the parking pattern points.
+        /// </summary>
+        /// <param name="patternOffset"></param>
+        /// <returns></returns>
+        public List<Point> HalfPoints(float patternOffset = 1) 
+        {
+            // get the location line start coordinate system.
+            CoordinateSystem lineCoord = LocationLine.CoordinateSystemAtParameter(0);
+
+            // get the x vector of the coordinate system.
+            Vector coordVector = lineCoord.XAxis.Reverse();
+
+            // move the location line to offset the bays in relation to the location line.
+            Line movedLine = LocationLine.Translate(coordVector, patternOffset) as Line;
+
+            // add the parking bay location points to the moved line.
+            List<Point> locationPoints = new List<Point>();
+            foreach (float number in Common.Math.Range(0, 1, ParkingCopyNumber() + 1)) 
+            {
+                Point point = movedLine.PointAtParameter(number);
+                locationPoints.Add(point);
+            }
+
+            return locationPoints;
+        }
+
         /// <summary>
         /// Creates half of the parking pattern.
         /// </summary>

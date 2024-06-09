@@ -94,7 +94,7 @@
             <summary>
             Creates the parking rectangle geometry.
             </summary>
-            <returns></returns>
+            <returns name="parkingRectangles">The parking rectangle geometry.</returns>
         </member>
         <member name="M:Parking.ParkingBay.CreateStripe(System.Single,System.Single)">
             <summary>
@@ -102,39 +102,87 @@
             </summary>
             <param name="stripeThickness">The thickness of the parking stripe.</param>
             <param name="stripeOpeningWidth">The opening width of the parking stripe.</param>
-            <returns></returns>
+            <returns name="parkingStripe">The parking stripe curve.</returns>
         </member>
         <member name="M:Parking.ParkingBay.GetParkingDirection">
             <summary>
             Get the vector along the length of the parking spots.
             </summary>
-            <returns></returns>
+            <returns name="lengthVector">vector along the length of the parking bay.</returns>
         </member>
         <member name="M:Parking.ParkingBay.GetRotationAngle">
             <summary>
             Gets the rotation angle of the bays from the y axis.
             </summary>
-            <returns></returns>
+            <returns name="rotationAngle"></returns>
         </member>
         <member name="M:Parking.ParkingBay.GetCenterPoint">
             <summary>
             Gets the center points of the placed parking bays.
             </summary>
-            <returns></returns>
+            <returns name="parkingCenter">the center point of the parking bay.</returns>
         </member>
         <member name="T:Parking.Patterns">
             <summary>
             Wrapper class for the parking patterns.
             </summary>
         </member>
-        <member name="M:Parking.Patterns.CreatePoint(System.Int32,System.Int32)">
+        <member name="P:Parking.Patterns.LocationLine">
             <summary>
-            Creates a point.
+            The input line indicating the location of the pattern.
             </summary>
-            <param name="x">the x coordinate value</param>
-            <param name="y">the y coordinate value</param>
-            <returns name="Point">the output point</returns>
-            <returns name="Number">the output numbers</returns>
+        </member>
+        <member name="P:Parking.Patterns.PatternType">
+            <summary>
+            Set the parking pattern type.
+            1 for the non interlocking pattern.
+            2 for the interlocing pattern.
+            3 for the herringbone pattern.
+            </summary>
+        </member>
+        <member name="P:Parking.Patterns.BayWidth">
+            <summary>
+            The width of the parking bays.
+            </summary>
+        </member>
+        <member name="P:Parking.Patterns.BayLength">
+            <summary>
+            The length of the parking bays.
+            </summary>
+        </member>
+        <member name="P:Parking.Patterns.BayAngle">
+            <summary>
+            The angle of the parking bays.
+            </summary>
+        </member>
+        <member name="P:Parking.Patterns.PatternRotation">
+            <summary>
+            The rotation angle of the pattern.
+            </summary>
+        </member>
+        <member name="M:Parking.Patterns.#ctor(Autodesk.DesignScript.Geometry.Line,System.Int32,System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Creates instances of the parking pattern class.
+            </summary>
+            <param name="locationLine">The input line indicating the location of the pattern.</param>
+            <param name="patternType">Set the parking pattern type.</param>
+            <param name="bayWidth">the width of the parking bays.</param>
+            <param name="bayLength">the length of the parking bays.</param>
+            <param name="bayAngle">the angle of the parking bays.</param>
+            <param name="patternRotation">The rotation angle of the pattern.</param>
+        </member>
+        <member name="M:Parking.Patterns.ParkingCopyNumber">
+            <summary>
+            Calculates the number of parking bays to copy along the location line.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Parking.Patterns.HalfPoints(System.Single)">
+            <summary>
+            Creates half of the parking pattern points.
+            </summary>
+            <param name="patternOffset"></param>
+            <returns></returns>
         </member>
         <member name="M:Parking.Patterns.HalfPattern(System.Single,System.Single,System.Single,System.Single,System.Single)">
             <summary>
