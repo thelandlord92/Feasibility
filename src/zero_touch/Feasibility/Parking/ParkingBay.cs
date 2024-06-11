@@ -340,5 +340,16 @@ namespace Parking
 
             return parkingCenter;
         }
+
+
+        /// <summary>
+        /// Adds a signage instance to the parking bay.
+        /// </summary>
+        /// <param name="centerOffset"></param>
+        /// <returns name="signage">The signage instance.</returns>
+        public PolyCurve AddSignage(float centerOffset = 1) 
+        {
+            return CreateStripeOutline();
+        }
     }
 }
