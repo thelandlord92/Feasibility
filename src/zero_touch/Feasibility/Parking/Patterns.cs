@@ -459,6 +459,7 @@ namespace Parking
                 firstParkingBays.Add(bay);
             }
 
+
             // add the parking bay instances to the second half target points.
             List<ParkingBay> secondParkingBays = new List<ParkingBay>();
             foreach (Point point in movedPoints)

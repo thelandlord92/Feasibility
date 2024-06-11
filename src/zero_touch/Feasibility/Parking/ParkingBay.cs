@@ -94,23 +94,22 @@ namespace Parking
             FlipVertical = flipVertical;
         }
 
-        /// <summary>
-        /// Creates the parking rectangle geometry.
-        /// </summary>
-        /// <returns name="parkingRectangles">The parking rectangle geometry.</returns>
-        public Rectangle CreateRectangle() 
-        {
-            // create the base rectangle.
-            Rectangle baseRectangle = Rectangle.ByWidthLength(BayLength, BayWidth);
 
+        /// <summary>
+        /// To add the required rotation and mirror transformations to the parking bay.
+        /// </summary>
+        /// <param name="bayRectangle">The parking bay rectangle.</param>
+        /// <returns name="transformedRectangle">The transformed parking bay rectangle.</returns>
+        private Rectangle ParkingBayTransformations(Rectangle bayRectangle) 
+        {
             // get the start point of the base rectangle.
-            Point startPoint = baseRectangle.StartPoint as Point;
+            Point startPoint = bayRectangle.StartPoint as Point;
 
             // create plane at rectangle start point for rotation.
             Plane rotatePlane = Plane.ByOriginNormal(startPoint, Vector.ZAxis());
 
             // rotate the rectangle. 
-            Rectangle rotatedRectangle = baseRectangle.Rotate(rotatePlane, BayAngle) as Rectangle;
+            Rectangle rotatedRectangle = bayRectangle.Rotate(rotatePlane, BayAngle) as Rectangle;
 
             // get the coordinate system of the rotation plane.
             CoordinateSystem planeCS = CoordinateSystem.ByPlane(rotatePlane);
@@ -130,7 +129,7 @@ namespace Parking
             {
                 bayHorizontalMirror = rotatedRectangle.Mirror(horizotalMirrorPlane) as Rectangle;
             }
-            else 
+            else
             {
                 bayHorizontalMirror = rotatedRectangle;
             }
@@ -138,13 +137,13 @@ namespace Parking
             // mirror the parking bay vertically.
             Rectangle bayVerticalMirror;
 
-            if (FlipVertical == true) 
+            if (FlipVertical == true)
             {
                 bayVerticalMirror = bayHorizontalMirror.Mirror(verticalMirroPlane) as Rectangle;
             }
             else
             {
-                bayVerticalMirror= bayHorizontalMirror;
+                bayVerticalMirror = bayHorizontalMirror;
             }
 
             // create a plane at the target position.
@@ -163,6 +162,33 @@ namespace Parking
             Rectangle patternRotate = transRectangle.Rotate(patternCenterPlane, PatternRotation) as Rectangle;
 
             return patternRotate;
+        }
+
+
+        /// <summary>
+        /// Creates the parking rectangle geometry.
+        /// </summary>
+        /// <returns name="parkingRectangle">The parking rectangle geometry.</returns>
+        public Rectangle CreateRectangle() 
+        {
+            // create the base rectangle.
+            Rectangle baseRectangle = Rectangle.ByWidthLength(BayLength, BayWidth);
+
+            // add the transformations to the base rectangle.
+            Rectangle transformedRectangle = ParkingBayTransformations(baseRectangle);
+
+            return transformedRectangle;
+        }
+
+
+        public Rectangle CreateElongatedRectangle() 
+        {
+            // create the parking rectangle.
+            Rectangle parkingRectangle = CreateRectangle();
+
+            parkingRectangle.Length = 0;
+
+            return parkingRectangle;
         }
 
         /// <summary>
