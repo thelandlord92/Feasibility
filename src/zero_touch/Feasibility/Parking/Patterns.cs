@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Common;
 using Parking;
+using ProtoCore.AST.ImperativeAST;
 
 namespace Parking
 {
@@ -207,7 +208,7 @@ namespace Parking
         /// Creates the non interlocking parking pattern.
         /// </summary>
         /// <returns name="parkingBays">The parking bay instances.</returns>
-        public List<List<ParkingBay>> NonInterlockingPattern() 
+        private List<List<ParkingBay>> NonInterlockingPattern() 
         {
             // create the first half of the parking bay target points.
             List<Point> locationPoints = HalfPoints(IslandWidth / 2);
@@ -268,75 +269,10 @@ namespace Parking
 
 
         /// <summary>
-        /// Creates the extended non interlocking bay rectangles for cutting the island surface.
-        /// </summary>
-        /// <returns name="extendedRectangles">The extended parking bay rectangles.</returns>
-        public List<Rectangle> ElongatedNonInterlockingRectangles() 
-        {
-            // add the parking bays to a list.
-            List<List<ParkingBay>> parkingBays = NonInterlockingPattern();
-
-            // calculate the additional length to extend the parking bay.
-            float additionalLength = (float)(BayWidth * DSCore.Math.Tan(BayAngle));
-
-            // extend the parking bays.
-            List<Rectangle> extendedRectangles =  new List<Rectangle>();
-            foreach (List<ParkingBay> bayList in parkingBays) 
-            {
-                foreach (ParkingBay bay in bayList) 
-                { 
-                    bay.BayLength = additionalLength + BayLength;
-                    extendedRectangles.Add(bay.CreateRectangle());
-                }
-            }
-
-            return extendedRectangles;
-        }
-
-
-        /// <summary>
-        /// Calculates the width of the non interlocking pattern.
-        /// </summary>
-        /// <returns name="patternWidth">The width of the non interlocking pattern.</returns>
-        private float NonInterlockingPatternWidth
-        {
-            get
-            {
-                // calculate the overall pattern width.
-                float width1 = (float)(BayWidth * DSCore.Math.Sin(BayAngle)); // closest triangle width to the center island.
-                float width2 = (float)(DSCore.Math.Cos(BayAngle) * BayLength); // furthermost trinagle wifth from the center island.
-                float patternWidth = (float)((width1 + width2) * 2 + IslandWidth);
-
-                return patternWidth;
-            }
-        }
-
-
-        /// <summary>
-        /// Creates a rectangle covering the width of the pattern and length of the location line.
-        /// </summary>
-        /// <returns name="patternSurface">The pattern surface.</returns>
-        public Surface NonInterlockingPatternSurface() 
-        {
-            // create the surface rectangle.
-            Plane centerPlane = Plane.ByOriginNormal(LocationLine.PointAtParameter(0.5), Vector.ZAxis());
-            Rectangle surfaceRectangle = Rectangle.ByWidthLength(centerPlane, NonInterlockingPatternWidth, LocationLine.Length);
-
-            // rotate the rectangle.
-            Rectangle rotatedRectangle = surfaceRectangle.Rotate(centerPlane, PatternRotation) as Rectangle;
-
-            // create the surface.
-            Surface patternSurface = Surface.ByPatch(rotatedRectangle);
-
-            return patternSurface;
-        }
-
-
-        /// <summary>
         /// Creates the interlocking pattern.
         /// </summary>
         /// <returns name="parkingBays">The parking bay instances.</returns>
-        public List<List<ParkingBay>> InterlockingPattern() 
+        private List<List<ParkingBay>> InterlockingPattern() 
         {
             // create the first half of the parking bay target points.
             List<Point> locationPoints = HalfPoints(-(float)(BayWidth * DSCore.Math.Sin(BayAngle)) / 2);
@@ -412,7 +348,7 @@ namespace Parking
         /// Creates the herringbone pattern.
         /// </summary>
         /// <returns name="parkingBays">The parking bay instances.</returns>
-        public List<List<ParkingBay>> HerringbonePattern() 
+        private List<List<ParkingBay>> HerringbonePattern() 
         {
             // create the first half of the parking bay target points.
             List<Point> locationPoints = HalfPoints(-(float)(BayWidth * DSCore.Math.Sin(45)) / 2);
@@ -482,6 +418,92 @@ namespace Parking
             parkingBays.Add(secondParkingBays);
 
             return parkingBays;
+        }
+
+
+        /// <summary>
+        /// Creates the parking bay instances in a pattern.
+        /// </summary>
+        /// <returns name="parkingBays">The parking bay instances.</returns>
+        public List<List<ParkingBay>> CreateParkingBays()
+        {
+            // add logic to switch between the parking patterns as required.
+            List<List<ParkingBay>> parkingBays;
+            if (PatternType == 1)
+            {
+                parkingBays = NonInterlockingPattern();
+            }
+            else if (PatternType == 2)
+            {
+                parkingBays = InterlockingPattern();
+            }
+            else 
+            {
+                parkingBays = HerringbonePattern();
+            }
+
+            return parkingBays;
+        }
+
+
+        /// <summary>
+        /// Creates the extended parking bay rectangles for cutting the island surface.
+        /// </summary>
+        /// <returns name="extendedRectangles">The extended parking bay rectangles.</returns>
+        public List<Rectangle> ExtendedRectangles()
+        {
+            // add the parking bays to a list.
+            List<List<ParkingBay>> parkingBays = CreateParkingBays();
+
+            // extend the parking bays.
+            List<Rectangle> extendedRectangles = new List<Rectangle>();
+            foreach (List<ParkingBay> bayList in parkingBays)
+            {
+                foreach (ParkingBay bay in bayList)
+                {
+                    extendedRectangles.Add(bay.CreateElongatedRectangle());
+                }
+            }
+
+            return extendedRectangles;
+        }
+
+
+        /// <summary>
+        /// Calculates the width of the non interlocking pattern.
+        /// </summary>
+        /// <returns name="patternWidth">The width of the non interlocking pattern.</returns>
+        private float NonInterlockingPatternWidth
+        {
+            get
+            {
+                // calculate the overall pattern width.
+                float width1 = (float)(BayWidth * DSCore.Math.Sin(BayAngle)); // closest triangle width to the center island.
+                float width2 = (float)(DSCore.Math.Cos(BayAngle) * BayLength); // furthermost trinagle wifth from the center island.
+                float patternWidth = (float)((width1 + width2) * 2 + IslandWidth);
+
+                return patternWidth;
+            }
+        }
+
+
+        /// <summary>
+        /// Creates a rectangle covering the width of the pattern and length of the location line.
+        /// </summary>
+        /// <returns name="patternSurface">The pattern surface.</returns>
+        public Surface NonInterlockingPatternSurface()
+        {
+            // create the surface rectangle.
+            Plane centerPlane = Plane.ByOriginNormal(LocationLine.PointAtParameter(0.5), Vector.ZAxis());
+            Rectangle surfaceRectangle = Rectangle.ByWidthLength(centerPlane, NonInterlockingPatternWidth, LocationLine.Length);
+
+            // rotate the rectangle.
+            Rectangle rotatedRectangle = surfaceRectangle.Rotate(centerPlane, PatternRotation) as Rectangle;
+
+            // create the surface.
+            Surface patternSurface = Surface.ByPatch(rotatedRectangle);
+
+            return patternSurface;
         }
     }
 }

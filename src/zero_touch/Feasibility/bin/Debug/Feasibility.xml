@@ -231,9 +231,27 @@
             </summary>
             <returns name="parkingBays">The parking bay instances.</returns>
         </member>
-        <member name="M:Parking.Patterns.ElongatedNonInterlockingRectangles">
+        <member name="M:Parking.Patterns.InterlockingPattern">
             <summary>
-            Creates the extended non interlocking bay rectangles for cutting the island surface.
+            Creates the interlocking pattern.
+            </summary>
+            <returns name="parkingBays">The parking bay instances.</returns>
+        </member>
+        <member name="M:Parking.Patterns.HerringbonePattern">
+            <summary>
+            Creates the herringbone pattern.
+            </summary>
+            <returns name="parkingBays">The parking bay instances.</returns>
+        </member>
+        <member name="M:Parking.Patterns.CreateParkingBays">
+            <summary>
+            Creates the parking bay instances in a pattern.
+            </summary>
+            <returns name="parkingBays">The parking bay instances.</returns>
+        </member>
+        <member name="M:Parking.Patterns.ExtendedRectangles">
+            <summary>
+            Creates the extended parking bay rectangles for cutting the island surface.
             </summary>
             <returns name="extendedRectangles">The extended parking bay rectangles.</returns>
         </member>
@@ -248,18 +266,6 @@
             Creates a rectangle covering the width of the pattern and length of the location line.
             </summary>
             <returns name="patternSurface">The pattern surface.</returns>
-        </member>
-        <member name="M:Parking.Patterns.InterlockingPattern">
-            <summary>
-            Creates the interlocking pattern.
-            </summary>
-            <returns name="parkingBays">The parking bay instances.</returns>
-        </member>
-        <member name="M:Parking.Patterns.HerringbonePattern">
-            <summary>
-            Creates the herringbone pattern.
-            </summary>
-            <returns name="parkingBays">The parking bay instances.</returns>
         </member>
     </members>
 </doc>
