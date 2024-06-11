@@ -109,13 +109,21 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Parking.ParkingBay.CreateStripe(System.Single,System.Single)">
+        <member name="M:Parking.ParkingBay.CreateStripeSurface(System.Single,System.Single)">
             <summary>
-            Creates the parking stripe geometry.
+            Creates the parking stripe surface geometry.
             </summary>
             <param name="stripeThickness">The thickness of the parking stripe.</param>
             <param name="stripeOpeningWidth">The opening width of the parking stripe.</param>
-            <returns name="parkingStripe">The parking stripe curve.</returns>
+            <returns name="parkingStripeSurface">The parking stripe surface.</returns>
+        </member>
+        <member name="M:Parking.ParkingBay.CreateStripeOutline(System.Single,System.Single)">
+            <summary>
+            Creates the parking stripe outline curve geometry.
+            </summary>
+            <param name="stripeThickness">The thickness of the parking stripe.</param>
+            <param name="stripeOpeningWidth">The opening width of the parking stripe.</param>
+            <returns name="parkingStripeOutline">The parking stripe outline.</returns>
         </member>
         <member name="M:Parking.ParkingBay.GetParkingDirection">
             <summary>

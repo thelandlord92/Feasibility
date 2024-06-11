@@ -201,12 +201,12 @@ namespace Parking
 
 
         /// <summary>
-        /// Creates the parking stripe geometry.
+        /// Creates the parking stripe surface geometry.
         /// </summary>
         /// <param name="stripeThickness">The thickness of the parking stripe.</param>
         /// <param name="stripeOpeningWidth">The opening width of the parking stripe.</param>
-        /// <returns name="parkingStripe">The parking stripe curve.</returns>
-        public PolyCurve CreateStripe(float stripeThickness=(float)0.1, float stripeOpeningWidth = (float)1.8) 
+        /// <returns name="parkingStripeSurface">The parking stripe surface.</returns>
+        public Surface CreateStripeSurface(float stripeThickness=(float)0.1, float stripeOpeningWidth = (float)1.8) 
         {
             // create the parking rectangle. 
             Rectangle parkingRectangle = CreateRectangle();
@@ -268,6 +268,21 @@ namespace Parking
 
             // subtract the entry rectangle from the subtracted surface.
             Surface stripeSurface = subtractedSurface.Difference(entrySurface);
+
+            return stripeSurface;
+        }
+
+
+        /// <summary>
+        /// Creates the parking stripe outline curve geometry.
+        /// </summary>
+        /// <param name="stripeThickness">The thickness of the parking stripe.</param>
+        /// <param name="stripeOpeningWidth">The opening width of the parking stripe.</param>
+        /// <returns name="parkingStripeOutline">The parking stripe outline.</returns>
+        public PolyCurve CreateStripeOutline(float stripeThickness = (float)0.1, float stripeOpeningWidth = (float)1.8) 
+        {
+            // create the parking stripe surface.
+            Surface stripeSurface = CreateStripeSurface(stripeThickness, stripeOpeningWidth);
 
             // get the perimeter curve of the stripe surface.
             PolyCurve stripeCurve = PolyCurve.ByJoinedCurves(stripeSurface.PerimeterCurves(), 0.001, false, 0);
