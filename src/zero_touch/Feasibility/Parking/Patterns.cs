@@ -470,20 +470,34 @@ namespace Parking
 
 
         /// <summary>
-        /// Calculates the width of the non interlocking pattern.
+        /// Calculates the width of the patterns.
         /// </summary>
         /// <returns name="patternWidth">The width of the non interlocking pattern.</returns>
-        private float NonInterlockingPatternWidth
+        private float PatternWidth() 
         {
-            get
+            // calculate the overall pattern widths.
+            float patternWidth;
+            if (PatternType == 1) 
             {
-                // calculate the overall pattern width.
                 float width1 = (float)(BayWidth * DSCore.Math.Sin(BayAngle)); // closest triangle width to the center island.
                 float width2 = (float)(DSCore.Math.Cos(BayAngle) * BayLength); // furthermost trinagle wifth from the center island.
-                float patternWidth = (float)((width1 + width2) * 2 + IslandWidth);
-
-                return patternWidth;
+                patternWidth = (float)((width1 + width2) * 2 + IslandWidth);
             }
+
+            else if (PatternType == 2) 
+            {
+                float width1  = (float)(BayLength * DSCore.Math.Cos(BayAngle)); // width of the pattern from the center overlap zone.
+                float width2 = (float)(BayWidth * DSCore.Math.Sin(BayAngle) / 2);
+                patternWidth = (width1 + width2) * 2;
+            }
+            else 
+            {
+                float width1 = (float)(BayLength * DSCore.Math.Cos(45)); // width of the pattern from the center overlap zone.
+                float width2 = (float)(BayWidth * DSCore.Math.Sin(45) / 2);
+                patternWidth = (width1 + width2) * 2;
+            }
+
+            return patternWidth;
         }
 
 
@@ -491,7 +505,7 @@ namespace Parking
         /// Creates a rectangle covering the width of the pattern and length of the location line.
         /// </summary>
         /// <returns name="patternSurface">The pattern surface.</returns>
-        public Surface NonInterlockingPatternSurface()
+        public Surface PatternIslandSurface()
         {
             // create the surface rectangle.
             Plane centerPlane = Plane.ByOriginNormal(LocationLine.PointAtParameter(0.5), Vector.ZAxis());
