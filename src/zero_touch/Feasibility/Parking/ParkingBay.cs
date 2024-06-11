@@ -191,7 +191,7 @@ namespace Parking
             float additionalLength = (float)(BayWidth * DSCore.Math.Tan(BayAngle));
 
             // create the parking rectangle.
-            Rectangle baseRectangle = Rectangle.ByWidthLength(BayLength = additionalLength, BayWidth);
+            Rectangle baseRectangle = Rectangle.ByWidthLength(BayLength + additionalLength, BayWidth);
 
             // add the transformations to the rectangle.
             Rectangle transformedRectangle = ParkingBayTransformations(baseRectangle);
