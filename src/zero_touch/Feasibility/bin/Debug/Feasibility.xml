@@ -255,13 +255,13 @@
             </summary>
             <returns name="extendedRectangles">The extended parking bay rectangles.</returns>
         </member>
-        <member name="P:Parking.Patterns.NonInterlockingPatternWidth">
+        <member name="P:Parking.Patterns.PatternWidth">
             <summary>
-            Calculates the width of the non interlocking pattern.
+            Calculates the width of the patterns.
             </summary>
             <returns name="patternWidth">The width of the non interlocking pattern.</returns>
         </member>
-        <member name="M:Parking.Patterns.NonInterlockingPatternSurface">
+        <member name="M:Parking.Patterns.PatternIslandSurface">
             <summary>
             Creates a rectangle covering the width of the pattern and length of the location line.
             </summary>

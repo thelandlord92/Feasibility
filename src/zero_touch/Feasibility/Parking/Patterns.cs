@@ -473,31 +473,34 @@ namespace Parking
         /// Calculates the width of the patterns.
         /// </summary>
         /// <returns name="patternWidth">The width of the non interlocking pattern.</returns>
-        private float PatternWidth() 
+        private float PatternWidth
         {
-            // calculate the overall pattern widths.
-            float patternWidth;
-            if (PatternType == 1) 
+            get
             {
-                float width1 = (float)(BayWidth * DSCore.Math.Sin(BayAngle)); // closest triangle width to the center island.
-                float width2 = (float)(DSCore.Math.Cos(BayAngle) * BayLength); // furthermost trinagle wifth from the center island.
-                patternWidth = (float)((width1 + width2) * 2 + IslandWidth);
-            }
+                // calculate the overall pattern widths.
+                float patternWidth;
+                if (PatternType == 1)
+                {
+                    float width1 = (float)(BayWidth * DSCore.Math.Sin(BayAngle)); // closest triangle width to the center island.
+                    float width2 = (float)(DSCore.Math.Cos(BayAngle) * BayLength); // furthermost trinagle wifth from the center island.
+                    patternWidth = (float)((width1 + width2) * 2 + IslandWidth);
+                }
 
-            else if (PatternType == 2) 
-            {
-                float width1  = (float)(BayLength * DSCore.Math.Cos(BayAngle)); // width of the pattern from the center overlap zone.
-                float width2 = (float)(BayWidth * DSCore.Math.Sin(BayAngle) / 2);
-                patternWidth = (width1 + width2) * 2;
-            }
-            else 
-            {
-                float width1 = (float)(BayLength * DSCore.Math.Cos(45)); // width of the pattern from the center overlap zone.
-                float width2 = (float)(BayWidth * DSCore.Math.Sin(45) / 2);
-                patternWidth = (width1 + width2) * 2;
-            }
+                else if (PatternType == 2)
+                {
+                    float width1 = (float)(BayLength * DSCore.Math.Cos(BayAngle)); // width of the pattern from the center overlap zone.
+                    float width2 = (float)(BayWidth * DSCore.Math.Sin(BayAngle) / 2);
+                    patternWidth = (width1 + width2) * 2;
+                }
+                else
+                {
+                    float width1 = (float)(BayLength * DSCore.Math.Cos(45)); // width of the pattern from the center overlap zone.
+                    float width2 = (float)(BayWidth * DSCore.Math.Sin(45) / 2);
+                    patternWidth = (width1 + width2) * 2;
+                }
 
-            return patternWidth;
+                return patternWidth;
+            }
         }
 
 
@@ -509,7 +512,7 @@ namespace Parking
         {
             // create the surface rectangle.
             Plane centerPlane = Plane.ByOriginNormal(LocationLine.PointAtParameter(0.5), Vector.ZAxis());
-            Rectangle surfaceRectangle = Rectangle.ByWidthLength(centerPlane, NonInterlockingPatternWidth, LocationLine.Length);
+            Rectangle surfaceRectangle = Rectangle.ByWidthLength(centerPlane, PatternWidth, LocationLine.Length);
 
             // rotate the rectangle.
             Rectangle rotatedRectangle = surfaceRectangle.Rotate(centerPlane, PatternRotation) as Rectangle;
