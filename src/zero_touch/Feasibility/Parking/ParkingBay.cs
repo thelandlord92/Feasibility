@@ -181,15 +181,24 @@ namespace Parking
         }
 
 
-        public Rectangle CreateElongatedRectangle() 
+        /// <summary>
+        /// Creates the elongated parking rectangle for cutting the island surface.
+        /// </summary>
+        /// <returns></returns>
+        public Rectangle CreateElongatedRectangle()
         {
+            // calculate the additional length to extend the parking bay.
+            float additionalLength = (float)(BayWidth * DSCore.Math.Tan(BayAngle));
+
             // create the parking rectangle.
-            Rectangle parkingRectangle = CreateRectangle();
+            Rectangle baseRectangle = Rectangle.ByWidthLength(BayLength = additionalLength, BayWidth);
 
-            parkingRectangle.Length = 0;
+            // add the transformations to the rectangle.
+            Rectangle transformedRectangle = ParkingBayTransformations(baseRectangle);
 
-            return parkingRectangle;
+            return transformedRectangle;
         }
+
 
         /// <summary>
         /// Creates the parking stripe geometry.

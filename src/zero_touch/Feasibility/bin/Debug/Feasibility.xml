@@ -90,11 +90,24 @@
             <param name="flipHorizontal">flip the parking bay horizontally.</param>
             <param name="flipVertical">flip the parking bay vertically</param>
         </member>
+        <member name="M:Parking.ParkingBay.ParkingBayTransformations(Autodesk.DesignScript.Geometry.Rectangle)">
+            <summary>
+            To add the required rotation and mirror transformations to the parking bay.
+            </summary>
+            <param name="bayRectangle">The parking bay rectangle.</param>
+            <returns name="transformedRectangle">The transformed parking bay rectangle.</returns>
+        </member>
         <member name="M:Parking.ParkingBay.CreateRectangle">
             <summary>
             Creates the parking rectangle geometry.
             </summary>
-            <returns name="parkingRectangles">The parking rectangle geometry.</returns>
+            <returns name="parkingRectangle">The parking rectangle geometry.</returns>
+        </member>
+        <member name="M:Parking.ParkingBay.CreateElongatedRectangle">
+            <summary>
+            Creates the elongated parking rectangle for cutting the island surface.
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:Parking.ParkingBay.CreateStripe(System.Single,System.Single)">
             <summary>
@@ -212,7 +225,7 @@
         </member>
         <member name="M:Parking.Patterns.ElongatedNonInterlockingRectangles">
             <summary>
-            Creates the extended non interlocing bay rectangles for cutting the island surface.
+            Creates the extended non interlocking bay rectangles for cutting the island surface.
             </summary>
             <returns name="extendedRectangles">The extended parking bay rectangles.</returns>
         </member>

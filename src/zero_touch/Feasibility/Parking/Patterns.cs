@@ -268,7 +268,7 @@ namespace Parking
 
 
         /// <summary>
-        /// Creates the extended non interlocing bay rectangles for cutting the island surface.
+        /// Creates the extended non interlocking bay rectangles for cutting the island surface.
         /// </summary>
         /// <returns name="extendedRectangles">The extended parking bay rectangles.</returns>
         public List<Rectangle> ElongatedNonInterlockingRectangles() 
