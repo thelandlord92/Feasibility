@@ -426,7 +426,7 @@ namespace Parking
             {
                 Point mirrorPoint = point.Mirror(mirrorPlane) as Point;
                 secondLocationPoints.Add(mirrorPoint);
-            }
+            } 
 
             // get the direction of the location line.
             Vector locationLineDir = LocationLine.Direction;
