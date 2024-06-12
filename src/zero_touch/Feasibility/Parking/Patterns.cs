@@ -49,6 +49,11 @@ namespace Parking
         public float BayWidth { private get; set; }
 
         /// <summary>
+        /// Determines if the bay width is as per the input width or adjusted to fit the location line.
+        /// </summary>
+        public bool AdjustBayWidth { private get; set; }
+
+        /// <summary>
         /// The length of the parking bays.
         /// </summary>
         public float BayLength { private get; set; }
@@ -77,6 +82,7 @@ namespace Parking
         /// <param name="locationLine">The input line indicating the location of the pattern.</param>
         /// <param name="patternType">Set the parking pattern type.</param>
         /// <param name="bayWidth">the width of the parking bays.</param>
+        /// <param name="adjustBayWidth">Adjust the parking bay width to fit the location line?</param>
         /// <param name="bayLength">the length of the parking bays.</param>
         /// <param name="bayAngle">the angle of the parking bays.</param>
         /// <param name="patternRotation">The rotation angle of the pattern.</param>
@@ -86,6 +92,7 @@ namespace Parking
             Line locationLine,
             int patternType = 1,
             float bayWidth = (float)2.5,
+            bool adjustBayWidth = true,
             float bayLength = 5,
             float bayAngle = 30,
             float patternRotation = 0,
@@ -94,10 +101,49 @@ namespace Parking
             LocationLine = locationLine;
             PatternType = patternType;
             BayWidth = bayWidth;
+            AdjustBayWidth = adjustBayWidth;
             BayLength = bayLength;
             BayAngle = bayAngle;
             PatternRotation = patternRotation;
             IslandWidth = islandWidth;
+        }
+
+
+        /// <summary>
+        /// Get the required bay angle based on the selected parking pattern.
+        /// Since the herringbone pattern must always be 45 degrees.
+        /// </summary>
+        /// <returns name="requiredAngle"></returns>
+        private float RequiredBayAngle()
+        {
+            // make the bay angle 45 degrees if the pattern type is herringbone.
+            float bayAngle;
+            if (PatternType == 3)
+            {
+                bayAngle = 45;
+            }
+            else
+            {
+                bayAngle = BayAngle;
+            }
+
+            return bayAngle;
+        }
+
+
+        /// <summary>
+        /// The width of the parking bay against the location line.
+        /// </summary>
+        /// <returns name="actualWidth">The parking bay width against the location line.</returns>
+        private float BayLocationLineWidth() 
+        {
+            // get the parking bay angle..
+            float bayAngle = RequiredBayAngle();
+            
+            // calculate the actual bay width against the pattern location line.
+            float actualWidth = (float)BayWidth / (float)DSCore.Math.Cos((float)bayAngle);
+
+            return actualWidth;
         }
 
 
@@ -107,24 +153,42 @@ namespace Parking
         /// <returns></returns>
         private int ParkingCopyNumber() 
         {
-            // make the bay angle 45 degrees if the pattern type is herringbone.
-            float bayAngle;
-            if (PatternType == 3)
-            {
-                bayAngle = 45;
-            }
-            else
-            { 
-                bayAngle = BayAngle;
-            }
-    
-            // calculate the actual bay width against the pattern location line.
-            float actualWidth = (float)BayWidth / (float)DSCore.Math.Cos((float)bayAngle);
-
             // calculate the number of bays to copy along the location line.
-            int copyNumber = (int)DSCore.Math.Ceiling(LocationLine.Length / actualWidth);
-
+            int copyNumber;
+            if (AdjustBayWidth == true) 
+            {
+                copyNumber = (int)DSCore.Math.Floor(LocationLine.Length / BayLocationLineWidth());
+            }
+            else 
+            {
+                copyNumber = (int)DSCore.Math.Ceiling(LocationLine.Length / BayLocationLineWidth());
+            }
+            
             return copyNumber;
+        }
+
+
+        /// <summary>
+        /// Calculate the actual required parking width based on the length of the location line. 
+        /// </summary>
+        /// <returns name="actualBayWidth">The actual width of the parking bays.</returns>
+        private float ActualBayWidth()
+        {
+            float actualBayWidth;
+            if (AdjustBayWidth == true) 
+            {
+                // divide the location line by the copy number.
+                float actualLocationLineWidth = (float)LocationLine.Length / ParkingCopyNumber();
+
+                actualBayWidth = (float)DSCore.Math.Cos(RequiredBayAngle()) * actualLocationLineWidth;
+            }
+            else 
+            {
+                actualBayWidth = (float)DSCore.Math.Cos(RequiredBayAngle()) * BayLocationLineWidth();
+            }
+            
+
+            return actualBayWidth;    
         }
 
 
@@ -136,15 +200,7 @@ namespace Parking
         private List<Point> HalfPoints(float patternOffset = 1) 
         {
             // make the bay angle 45 degrees if the pattern type is herringbone.
-            float bayAngle;
-            if (PatternType == 3)
-            {
-                bayAngle = 45;
-            }
-            else
-            {
-                bayAngle = BayAngle;
-            }
+            float bayAngle = RequiredBayAngle();
 
             // get the location line start coordinate system.
             CoordinateSystem lineCoord = LocationLine.CoordinateSystemAtParameter(0);
@@ -153,10 +209,18 @@ namespace Parking
             Vector coordVector = lineCoord.XAxis.Reverse();
 
             // extend the location line if required to ensure the bays fit accurately.
-            float newLineLength = ((float)BayWidth / (float)DSCore.Math.Cos((float)bayAngle)) * ParkingCopyNumber();
-            float extensionLength = (float)newLineLength - (float)LocationLine.Length;
-            Line extendedLine = LocationLine.ExtendEnd(extensionLength) as Line;
-
+            Line extendedLine;
+            if (AdjustBayWidth == true) 
+            {
+                extendedLine = LocationLine;
+            }
+            else 
+            {
+                float newLineLength = ((float)BayWidth / (float)DSCore.Math.Cos((float)bayAngle)) * ParkingCopyNumber();
+                float extensionLength = (float)newLineLength - (float)LocationLine.Length;
+                extendedLine = LocationLine.ExtendEnd(extensionLength) as Line;
+            }
+            
             // move the location line to offset the bays in relation to the location line.
             Line movedLine = extendedLine.Translate(coordVector, patternOffset) as Line;
 
@@ -233,8 +297,8 @@ namespace Parking
             {
                 ParkingBay bay = new ParkingBay(
                     point, 
-                    locationCenter, 
-                    BayWidth, 
+                    locationCenter,
+                    ActualBayWidth(), 
                     BayLength, 
                     BayAngle + GetLineRotationAngle(), 
                     PatternRotation,
@@ -250,7 +314,7 @@ namespace Parking
                 ParkingBay bay = new ParkingBay(
                     point,
                     locationCenter,
-                    BayWidth,
+                    ActualBayWidth(),
                     BayLength,
                     BayAngle + GetLineRotationAngle(),
                     PatternRotation,
@@ -275,7 +339,7 @@ namespace Parking
         private List<List<ParkingBay>> InterlockingPattern() 
         {
             // create the first half of the parking bay target points.
-            List<Point> locationPoints = HalfPoints(-(float)(BayWidth * DSCore.Math.Sin(BayAngle)) / 2);
+            List<Point> locationPoints = HalfPoints(-(float)(ActualBayWidth() * DSCore.Math.Sin(BayAngle)) / 2);
 
             // create the mirror plane to mirror the target points along the location line.
             Plane mirrorPlane = LocationLineMirrorPlane();
@@ -310,7 +374,7 @@ namespace Parking
                 ParkingBay bay = new ParkingBay(
                     point,
                     locationCenter,
-                    BayWidth,
+                    ActualBayWidth(),
                     BayLength,
                     BayAngle + GetLineRotationAngle(),
                     PatternRotation,
@@ -326,7 +390,7 @@ namespace Parking
                 ParkingBay bay = new ParkingBay(
                     point,
                     locationCenter,
-                    BayWidth,
+                    ActualBayWidth(),
                     BayLength,
                     BayAngle + GetLineRotationAngle(),
                     PatternRotation,
@@ -351,7 +415,7 @@ namespace Parking
         private List<List<ParkingBay>> HerringbonePattern() 
         {
             // create the first half of the parking bay target points.
-            List<Point> locationPoints = HalfPoints(-(float)(BayWidth * DSCore.Math.Sin(45)) / 2);
+            List<Point> locationPoints = HalfPoints(-(float)(ActualBayWidth() * DSCore.Math.Sin(45)) / 2);
 
             // create the mirror plane to mirror the target points along the location line.
             Plane mirrorPlane = LocationLineMirrorPlane();
@@ -386,7 +450,7 @@ namespace Parking
                 ParkingBay bay = new ParkingBay(
                     point,
                     locationCenter,
-                    BayWidth,
+                    ActualBayWidth(),
                     BayLength,
                     45 + GetLineRotationAngle(),
                     PatternRotation,
@@ -403,7 +467,7 @@ namespace Parking
                 ParkingBay bay = new ParkingBay(
                     point,
                     locationCenter,
-                    BayWidth,
+                    ActualBayWidth(),
                     BayLength,
                     45 + GetLineRotationAngle(),
                     PatternRotation,
@@ -481,7 +545,7 @@ namespace Parking
                 float patternWidth;
                 if (PatternType == 1)
                 {
-                    float width1 = (float)(BayWidth * DSCore.Math.Sin(BayAngle)); // closest triangle width to the center island.
+                    float width1 = (float)(ActualBayWidth() * DSCore.Math.Sin(BayAngle)); // closest triangle width to the center island.
                     float width2 = (float)(DSCore.Math.Cos(BayAngle) * BayLength); // furthermost trinagle wifth from the center island.
                     patternWidth = (float)((width1 + width2) * 2 + IslandWidth);
                 }
@@ -489,13 +553,13 @@ namespace Parking
                 else if (PatternType == 2)
                 {
                     float width1 = (float)(BayLength * DSCore.Math.Cos(BayAngle)); // width of the pattern from the center overlap zone.
-                    float width2 = (float)(BayWidth * DSCore.Math.Sin(BayAngle) / 2);
+                    float width2 = (float)(ActualBayWidth() * DSCore.Math.Sin(BayAngle) / 2);
                     patternWidth = (width1 + width2) * 2;
                 }
                 else
                 {
                     float width1 = (float)(BayLength * DSCore.Math.Cos(45)); // width of the pattern from the center overlap zone.
-                    float width2 = (float)(BayWidth * DSCore.Math.Sin(45) / 2);
+                    float width2 = (float)(ActualBayWidth() * DSCore.Math.Sin(45) / 2);
                     patternWidth = (width1 + width2) * 2;
                 }
 

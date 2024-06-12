@@ -143,6 +143,13 @@
             </summary>
             <returns name="parkingCenter">the center point of the parking bay.</returns>
         </member>
+        <member name="M:Parking.ParkingBay.AddSignage(System.Single)">
+            <summary>
+            Adds a signage instance to the parking bay.
+            </summary>
+            <param name="centerOffset"></param>
+            <returns name="signage">The signage instance.</returns>
+        </member>
         <member name="T:Parking.Patterns">
             <summary>
             Wrapper class for the parking patterns.
@@ -164,6 +171,11 @@
         <member name="P:Parking.Patterns.BayWidth">
             <summary>
             The width of the parking bays.
+            </summary>
+        </member>
+        <member name="P:Parking.Patterns.AdjustBayWidth">
+            <summary>
+            Determines if the bay width is as per the input width or adjusted to fit the location line.
             </summary>
         </member>
         <member name="P:Parking.Patterns.BayLength">
@@ -188,23 +200,43 @@
             The width of the non interlocking pattern island.
             </summary>
         </member>
-        <member name="M:Parking.Patterns.#ctor(Autodesk.DesignScript.Geometry.Line,System.Int32,System.Single,System.Single,System.Single,System.Single,System.Single)">
+        <member name="M:Parking.Patterns.#ctor(Autodesk.DesignScript.Geometry.Line,System.Int32,System.Single,System.Boolean,System.Single,System.Single,System.Single,System.Single)">
             <summary>
             Creates instances of the parking pattern class.
             </summary>
             <param name="locationLine">The input line indicating the location of the pattern.</param>
             <param name="patternType">Set the parking pattern type.</param>
             <param name="bayWidth">the width of the parking bays.</param>
+            <param name="adjustBayWidth">Adjust the parking bay width to fit the location line?</param>
             <param name="bayLength">the length of the parking bays.</param>
             <param name="bayAngle">the angle of the parking bays.</param>
             <param name="patternRotation">The rotation angle of the pattern.</param>
             <param name="islandWidth">The width of the non interlocking pattern island.</param>
+        </member>
+        <member name="M:Parking.Patterns.RequiredBayAngle">
+            <summary>
+            Get the required bay angle based on the selected parking pattern.
+            Since the herringbone pattern must always be 45 degrees.
+            </summary>
+            <returns name="requiredAngle"></returns>
+        </member>
+        <member name="M:Parking.Patterns.BayLocationLineWidth">
+            <summary>
+            The width of the parking bay against the location line.
+            </summary>
+            <returns name="actualWidth">The parking bay width against the location line.</returns>
         </member>
         <member name="M:Parking.Patterns.ParkingCopyNumber">
             <summary>
             Calculates the number of parking bays to copy along the location line.
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:Parking.Patterns.ActualBayWidth">
+            <summary>
+            Calculate the actual required parking width based on the length of the location line. 
+            </summary>
+            <returns name="actualBayWidth">The actual width of the parking bays.</returns>
         </member>
         <member name="M:Parking.Patterns.HalfPoints(System.Single)">
             <summary>
