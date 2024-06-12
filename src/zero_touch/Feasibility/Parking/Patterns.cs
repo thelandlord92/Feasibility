@@ -356,7 +356,7 @@ namespace Parking
             Vector locationLineDir = LocationLine.Direction;
 
             // move the mirrored points along the pattern location line.
-            float moveDistance = (float)(-(DSCore.Math.Sin(90 - BayAngle) * BayWidth));
+            float moveDistance = (float)(-(DSCore.Math.Sin(90 - BayAngle) * ActualBayWidth()));
             List<Point> movedPoints = new List<Point>();
             foreach (Point point in secondLocationPoints) 
             { 
@@ -432,7 +432,7 @@ namespace Parking
             Vector locationLineDir = LocationLine.Direction;
 
             // move the mirrored points along the pattern location line.
-            float moveDistance = (float)(-(DSCore.Math.Sin(45) * BayWidth));
+            float moveDistance = (float)(-(DSCore.Math.Sin(45) * ActualBayWidth()));
             List<Point> movedPoints = new List<Point>();
             foreach (Point point in secondLocationPoints)
             {
