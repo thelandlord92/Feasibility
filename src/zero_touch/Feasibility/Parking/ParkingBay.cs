@@ -347,11 +347,11 @@ namespace Parking
 
 
         /// <summary>
-        /// Adds a signage instance to the parking bay.
+        /// Adds a signage location point to the parking bay.
         /// </summary>
         /// <param name="centerOffsetPercentage">The offset distance percentage in proportion to half the parking bay length.</param>
         /// <returns name="signage">The signage instance.</returns>
-        public Point AddSignage(float centerOffsetPercentage = 50) 
+        public Point AddSignageLocation(float centerOffsetPercentage = 50) 
         {
             // add the parking bay center point.
             Point parkingCenter = GetCenterPoint();

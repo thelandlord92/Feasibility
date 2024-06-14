@@ -148,9 +148,9 @@
             </summary>
             <returns name="parkingCenter">the center point of the parking bay.</returns>
         </member>
-        <member name="M:Parking.ParkingBay.AddSignage(System.Single)">
+        <member name="M:Parking.ParkingBay.AddSignageLocation(System.Single)">
             <summary>
-            Adds a signage instance to the parking bay.
+            Adds a signage location point to the parking bay.
             </summary>
             <param name="centerOffsetPercentage">The offset distance percentage in proportion to half the parking bay length.</param>
             <returns name="signage">The signage instance.</returns>
@@ -353,12 +353,23 @@
             <summary>
             To get the signage outline.
             </summary>
-            <param name="locationPlane"></param>
-            <param name="signageRotation"></param>
-            <param name="initialSignageOffset"></param>
-            <param name="initialBayWidth"></param>
-            <param name="userbayWidth"></param>
-            <param name="resourcePath"></param>
+            <param name="locationPlane">The target plane of the signage.</param>
+            <param name="signageRotation">The rotation value of the signage.</param>
+            <param name="initialSignageOffset">The offset of the signage from the base plane.</param>
+            <param name="initialBayWidth">The initial bay width at which the signage was drawn.</param>
+            <param name="userbayWidth">The final bay width to scale the signage.</param>
+            <param name="resourcePath">The path of the symbol resource file.</param>
+            <returns name="signageOutline">The signage outline curves.</returns>
+        </member>
+        <member name="M:Parking.Signage.StandardParkingSymbol2D(Autodesk.DesignScript.Geometry.Plane,System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Get the 2d standard parking signage curves.
+            </summary>
+            <param name="locationPlane">The target plane of the signage.</param>
+            <param name="signageRotation">The rotation value of the signage.</param>
+            <param name="initialSignageOffset">The offset of the signage from the base plane.</param>
+            <param name="initialBayWidth">The initial bay width at which the signage was drawn.</param>
+            <param name="userbayWidth">The final bay width to scale the signage.</param>
             <returns name="signageOutline">The signage outline curves.</returns>
         </member>
     </members>
