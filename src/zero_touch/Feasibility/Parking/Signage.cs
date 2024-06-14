@@ -1,4 +1,5 @@
 ﻿using Autodesk.DesignScript.Geometry;
+using DSCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,23 +22,40 @@ namespace Parking
         /// <summary>
         /// Method to load embedded resource files. 
         /// </summary>
-        /// <param name="resourceName">The resource file name.</param>
+        /// <param name="resourcePath">The resource file path.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public static string GetEmbeddedResourceContent(string resourceName) 
+        public static string GetEmbeddedResourceContent(string resourcePath) 
         {
             var assembly = Assembly.GetExecutingAssembly();
-            using (Stream stream = assembly.GetManifestResourceStream(resourceName)) 
+            using (Stream stream = assembly.GetManifestResourceStream(resourcePath)) 
             {
                 if (stream == null) 
                 { 
-                    throw new ArgumentException("Resource not found: " +  resourceName);
+                    throw new ArgumentException("Resource not found: " + resourcePath);
                 }
                 using (StreamReader reader = new StreamReader(stream)) 
                 { 
                     return reader.ReadToEnd();
                 }
             }
+        }
+
+
+        /// <summary>
+        /// Helper method to list all embedded resources (for debugging)
+        /// </summary>
+        /// <returns name="resourcePath">The resource file paths.</returns>
+        public static List<string> ListAllEmbeddedResources()
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            List<string> result = new List<string>();
+            foreach (string resourcePath in assembly.GetManifestResourceNames())
+            {
+                result.Add(resourcePath);
+            }
+
+            return result;
         }
 
 
@@ -52,6 +70,12 @@ namespace Parking
             return Geometry.ImportFromSAT(satContent, 100);
         }
 
+
+        /// <summary>
+        /// To load the geometry contents of the embedded JSON file.
+        /// </summary>
+        /// <param name="resourcePath">The path of the resource file.</param>
+        /// <returns name="geometry[]">The geometry content of the json file.</returns>
         public static Geometry[] LoadEmbeddedJSON(string resourcePath)
         {
             string jsonContent = GetEmbeddedResourceContent(resourcePath);
@@ -59,32 +83,33 @@ namespace Parking
         }
 
 
-        public static Geometry[] TestSymbol() 
-        {
-            return LoadEmbeddedJSON("Feasibility.Parking.Symbols.StandardParkingSymbol.json");
-            
-        }
-
-
-        // Helper method to list all embedded resources (for debugging)
-        public static List<string> ListAllEmbeddedResources()
-        {
-            var assembly = Assembly.GetExecutingAssembly();
-            List<string> result = new List<string>();
-            foreach (string resourceName in assembly.GetManifestResourceNames())
-            {
-                result.Add(resourceName);
-            }
-
-            return result;
-        }
-
-        public static Point SignageTransformations() 
+        /// <summary>
+        /// To add all the required transformations to the signage.
+        /// </summary>
+        /// <returns></returns>
+        public static Point SignageTransformations(
+            string resoursePath, 
+            Plane locationPlane,
+            float signageRotation,
+            float bayWidth = (float)2.5) 
         {
             // create the center point of the signage.
             Point signageCenter = Point.ByCoordinates(0, 0);
 
+            // add a plane at the center point.
+            Plane plane = Plane.ByOriginNormal(signageCenter, Vector.ZAxis());
+
+            // load the signage geometry.
+            Geometry[] geometries = LoadEmbeddedJSON(resoursePath);
+
             return Point.ByCoordinates(0, 0);
+        }
+
+
+        public static Geometry[] TestSymbol()
+        {
+            return LoadEmbeddedJSON("Feasibility.Parking.Symbols.StandardParkingSymbol.json");
+
         }
 
 
