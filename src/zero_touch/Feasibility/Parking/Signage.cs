@@ -29,7 +29,7 @@ namespace Parking
             var assembly = Assembly.GetExecutingAssembly();
             using (Stream stream = assembly.GetManifestResourceStream(resourceName)) 
             {
-                if (stream != null) 
+                if (stream == null) 
                 { 
                     throw new ArgumentException("Resource not found: " +  resourceName);
                 }
@@ -41,6 +41,44 @@ namespace Parking
         }
 
 
+        /// <summary>
+        /// To the load the contents of the embedded SAT file.
+        /// </summary>
+        /// <param name="resourcePath">The path of the resource file.</param>
+        /// <returns></returns>
+        public static Geometry[] LoadEmbeddedSAT(string resourcePath) 
+        { 
+            string satContent = GetEmbeddedResourceContent(resourcePath);
+            return Geometry.ImportFromSAT(satContent, 100);
+        }
+
+        public static Geometry[] LoadEmbeddedJSON(string resourcePath)
+        {
+            string jsonContent = GetEmbeddedResourceContent(resourcePath);
+            return Geometry.FromSolidDef(jsonContent);
+        }
+
+
+        public static Geometry[] TestSymbol() 
+        {
+            return LoadEmbeddedJSON("Feasibility.Parking.Symbols.StandardParkingSymbol.json");
+            
+        }
+
+
+        // Helper method to list all embedded resources (for debugging)
+        public static List<string> ListAllEmbeddedResources()
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            List<string> result = new List<string>();
+            foreach (string resourceName in assembly.GetManifestResourceNames())
+            {
+                result.Add(resourceName);
+            }
+
+            return result;
+        }
+
         public static Point SignageTransformations() 
         {
             // create the center point of the signage.
@@ -48,5 +86,7 @@ namespace Parking
 
             return Point.ByCoordinates(0, 0);
         }
+
+
     }
 }

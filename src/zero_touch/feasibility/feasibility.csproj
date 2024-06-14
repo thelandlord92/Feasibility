@@ -154,6 +154,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
     <EmbeddedResource Include="Parking\Symbols\StandardParkingSymbol.sat" />
+    <EmbeddedResource Include="Parking\Symbols\StandardParkingSymbol.json" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

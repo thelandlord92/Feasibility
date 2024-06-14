@@ -304,5 +304,25 @@
             </summary>
             <returns name="patternSurface">The pattern surface.</returns>
         </member>
+        <member name="T:Parking.Signage">
+            <summary>
+            Wrapper class for the parking signage.
+            </summary>
+        </member>
+        <member name="M:Parking.Signage.GetEmbeddedResourceContent(System.String)">
+            <summary>
+            Method to load embedded resource files. 
+            </summary>
+            <param name="resourceName">The resource file name.</param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Parking.Signage.LoadEmbeddedSAT(System.String)">
+            <summary>
+            To the load the contents of the embedded SAT file.
+            </summary>
+            <param name="resourcePath">The path of the resource file.</param>
+            <returns></returns>
+        </member>
     </members>
 </doc>
