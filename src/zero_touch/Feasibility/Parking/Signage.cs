@@ -139,7 +139,14 @@ namespace Parking
                 movedGeometry.Add(geom.Translate(plane.Normal, offsetDistance));
             }
 
-            return scaledGeometry;
+            // transform the signage geometry to the target location plane.
+            List<Geometry> transGeometry = new List<Geometry>();
+            foreach (Geometry geom in movedGeometry) 
+            { 
+                transGeometry.Add(geom.Transform(CoordinateSystem.ByPlane(plane), CoordinateSystem.ByPlane(locationPlane)));
+            }
+
+            return transGeometry;
         }
 
 
@@ -148,7 +155,5 @@ namespace Parking
             return LoadEmbeddedJSON("Feasibility.Parking.Symbols.StandardParkingSymbol.json");
 
         }
-
-
     }
 }
