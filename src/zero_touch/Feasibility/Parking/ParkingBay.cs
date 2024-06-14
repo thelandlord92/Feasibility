@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Parking;
 
 namespace Parking
 {
@@ -350,8 +351,8 @@ namespace Parking
         /// Adds a signage location point to the parking bay.
         /// </summary>
         /// <param name="centerOffsetPercentage">The offset distance percentage in proportion to half the parking bay length.</param>
-        /// <returns name="signage">The signage instance.</returns>
-        public Point AddSignageLocation(float centerOffsetPercentage = 50) 
+        /// <returns name="signageOutline">The signage outline curves.</returns>
+        public List<Curve[]> AddSignageOutline(float centerOffsetPercentage = 50) 
         {
             // add the parking bay center point.
             Point parkingCenter = GetCenterPoint();
@@ -366,9 +367,14 @@ namespace Parking
             Plane plane = Plane.ByOriginNormal(movedPoint, Vector.ZAxis());
 
             // add the signage required signage type to the plane. 
+            List<Curve[]> signageOutline = Parking.Signage.StandardParkingSymbol2D(
+                plane,
+                GetRotationAngle(),
+                (float)0.01,
+                (float)2.5,
+                BayWidth);
 
-
-            return movedPoint;
+            return signageOutline;
         }
     }
 }
