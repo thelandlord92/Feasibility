@@ -92,18 +92,18 @@ namespace Parking
         /// <param name="initialSignageOffset">The offset of the signage from the base plane.</param>
         /// <param name="initialBayWidth">The initial bay width at which the signage was drawn.</param>
         /// <param name="userbayWidth">The final bay width to scale the signage.</param>
-        /// <param name="resoursePath">The path of the symbol resource file.</param>
-        /// <returns></returns>
-        public static List<Geometry> SignageTransformations( 
+        /// <param name="resourcePath">The path of the symbol resource file.</param>
+        /// <returns name="signageGeometry">Returns the transformed signage geometry.</returns>
+        public static List<Geometry> TransformSignage( 
             Plane locationPlane,
             float signageRotation,
             float initialSignageOffset = (float)0.01,
             float initialBayWidth = (float)2.5,
             float userbayWidth = (float)2.5,
-            string resoursePath = "Feasibility.Parking.Symbols.StandardParkingSymbol.json") 
+            string resourcePath = "Feasibility.Parking.Symbols.StandardParkingSymbol.json") 
         {
             // load the signage geometry.
-            Geometry[] geometries = LoadEmbeddedJSON(resoursePath);
+            Geometry[] geometries = LoadEmbeddedJSON(resourcePath);
 
             // create the center point of the signage.
             Point signageCenter = Point.ByCoordinates(0, 0);
@@ -150,7 +150,53 @@ namespace Parking
         }
 
 
-        public static Geometry[] TestSymbol()
+        /// <summary>
+        /// To get the signage outline.
+        /// </summary>
+        /// <param name="locationPlane"></param>
+        /// <param name="signageRotation"></param>
+        /// <param name="initialSignageOffset"></param>
+        /// <param name="initialBayWidth"></param>
+        /// <param name="userbayWidth"></param>
+        /// <param name="resourcePath"></param>
+        /// <returns name="signageOutline">The signage outline curves.</returns>
+        public static List<Curve[]> GetSignageOutline(
+            Plane locationPlane,
+            float signageRotation,
+            float initialSignageOffset = (float)0.01,
+            float initialBayWidth = (float)2.5,
+            float userbayWidth = (float)2.5,
+            string resourcePath = "Feasibility.Parking.Symbols.StandardParkingSymbol.json")
+        {
+            // create the signage geometry.
+            List<Geometry> geometry = TransformSignage(
+                locationPlane,
+                signageRotation,
+                initialSignageOffset,
+                initialBayWidth,
+                userbayWidth,
+                resourcePath);
+
+            // get the signage outline.
+            List<Curve[]> curves = new List<Curve[]>();
+            foreach (Geometry geom in geometry)
+            {
+                try
+                {
+                    Surface surface = geom as Surface;
+                    curves.Add(surface.PerimeterCurves());
+                }
+                catch
+                {
+                    curves.Add(null);
+                }
+            }
+
+            return curves;
+        }
+
+
+        public static Geometry[] StandardParkingSymbol2D()
         {
             return LoadEmbeddedJSON("Feasibility.Parking.Symbols.StandardParkingSymbol.json");
 

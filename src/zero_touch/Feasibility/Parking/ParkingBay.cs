@@ -365,7 +365,7 @@ namespace Parking
             // add a plane at the moved point.
             Plane plane = Plane.ByOriginNormal(movedPoint, Vector.ZAxis());
 
-            // add the signage required signage type to the point. 
+            // add the signage required signage type to the plane. 
 
 
             return movedPoint;

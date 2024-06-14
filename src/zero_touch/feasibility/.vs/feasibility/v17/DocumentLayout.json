@@ -32,7 +32,7 @@
               "RelativeDocumentMoniker": "Parking\\Signage.cs",
               "ToolTip": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\Parking\\Signage.cs",
               "RelativeToolTip": "Parking\\Signage.cs",
-              "ViewState": "AQIAAIAAAAAAAAAAAAAswJQAAAAhAAAA",
+              "ViewState": "AQIAAJsAAAAAAAAAAAAswKIAAAA2AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-06-14T10:19:40.737Z",
               "EditorCaption": ""
@@ -45,9 +45,10 @@
               "RelativeDocumentMoniker": "Parking\\ParkingBay.cs",
               "ToolTip": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\Parking\\ParkingBay.cs",
               "RelativeToolTip": "Parking\\ParkingBay.cs",
-              "ViewState": "AQIAAFsBAAAAAAAAAAAAAG0BAAAMAAAA",
+              "ViewState": "AQIAAFgBAAAAAAAAAAAAAG8BAABDAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-03T10:26:10.024Z"
+              "WhenOpened": "2024-06-03T10:26:10.024Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -57,9 +58,10 @@
               "RelativeDocumentMoniker": "Parking\\Patterns.cs",
               "ToolTip": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\Parking\\Patterns.cs",
               "RelativeToolTip": "Parking\\Patterns.cs",
-              "ViewState": "AQIAAGkAAAAAAAAAAAAIwGAAAAAgAAAA",
+              "ViewState": "AQIAAHQAAAAAAAAAAAA0wGAAAAAgAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-01T14:27:32.977Z"
+              "WhenOpened": "2024-06-01T14:27:32.977Z",
+              "EditorCaption": ""
             }
           ]
         }

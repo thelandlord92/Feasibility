@@ -337,7 +337,7 @@
             <param name="resourcePath">The path of the resource file.</param>
             <returns name="geometry[]">The geometry content of the json file.</returns>
         </member>
-        <member name="M:Parking.Signage.SignageTransformations(Autodesk.DesignScript.Geometry.Plane,System.Single,System.Single,System.Single,System.Single,System.String)">
+        <member name="M:Parking.Signage.TransformSignage(Autodesk.DesignScript.Geometry.Plane,System.Single,System.Single,System.Single,System.Single,System.String)">
             <summary>
             To add all the required transformations to the signage.
             </summary>
@@ -346,8 +346,20 @@
             <param name="initialSignageOffset">The offset of the signage from the base plane.</param>
             <param name="initialBayWidth">The initial bay width at which the signage was drawn.</param>
             <param name="userbayWidth">The final bay width to scale the signage.</param>
-            <param name="resoursePath">The path of the symbol resource file.</param>
-            <returns></returns>
+            <param name="resourcePath">The path of the symbol resource file.</param>
+            <returns name="signageGeometry">Returns the transformed signage geometry.</returns>
+        </member>
+        <member name="M:Parking.Signage.GetSignageOutline(Autodesk.DesignScript.Geometry.Plane,System.Single,System.Single,System.Single,System.Single,System.String)">
+            <summary>
+            To get the signage outline.
+            </summary>
+            <param name="locationPlane"></param>
+            <param name="signageRotation"></param>
+            <param name="initialSignageOffset"></param>
+            <param name="initialBayWidth"></param>
+            <param name="userbayWidth"></param>
+            <param name="resourcePath"></param>
+            <returns name="signageOutline">The signage outline curves.</returns>
         </member>
     </members>
 </doc>
