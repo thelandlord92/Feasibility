@@ -1,5 +1,6 @@
 ﻿using Autodesk.DesignScript.Geometry;
 using DSCore;
+using ProtoCore.AST.ImperativeAST;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -87,22 +88,34 @@ namespace Parking
         /// To add all the required transformations to the signage.
         /// </summary>
         /// <returns></returns>
-        public static Point SignageTransformations(
+        public static Geometry[] SignageTransformations(
             string resoursePath, 
             Plane locationPlane,
             float signageRotation,
             float bayWidth = (float)2.5) 
         {
+            // load the signage geometry.
+            Geometry[] geometries = LoadEmbeddedJSON(resoursePath);
+
             // create the center point of the signage.
             Point signageCenter = Point.ByCoordinates(0, 0);
 
             // add a plane at the center point.
             Plane plane = Plane.ByOriginNormal(signageCenter, Vector.ZAxis());
 
-            // load the signage geometry.
-            Geometry[] geometries = LoadEmbeddedJSON(resoursePath);
+            // rotate the signage geometries.
+            List<Geometry> rotatedGeometry= new List<Geometry>();
+            foreach (Geometry geom in geometries) 
+            { 
+                if (geom == null) continue;
 
-            return Point.ByCoordinates(0, 0);
+                else if (geom.GetType() == typeof(Geometry)) 
+                { 
+                    rotatedGeometry.Add(geom.Rotate(plane, signageRotation));
+                }
+            }
+            
+            return rotatedGeometry.ToArray();
         }
 
 

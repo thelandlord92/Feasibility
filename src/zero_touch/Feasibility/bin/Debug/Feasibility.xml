@@ -313,15 +313,34 @@
             <summary>
             Method to load embedded resource files. 
             </summary>
-            <param name="resourceName">The resource file name.</param>
+            <param name="resourcePath">The resource file path.</param>
             <returns></returns>
             <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Parking.Signage.ListAllEmbeddedResources">
+            <summary>
+            Helper method to list all embedded resources (for debugging)
+            </summary>
+            <returns name="resourcePath">The resource file paths.</returns>
         </member>
         <member name="M:Parking.Signage.LoadEmbeddedSAT(System.String)">
             <summary>
             To the load the contents of the embedded SAT file.
             </summary>
             <param name="resourcePath">The path of the resource file.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Parking.Signage.LoadEmbeddedJSON(System.String)">
+            <summary>
+            To load the geometry contents of the embedded JSON file.
+            </summary>
+            <param name="resourcePath">The path of the resource file.</param>
+            <returns name="geometry[]">The geometry content of the json file.</returns>
+        </member>
+        <member name="M:Parking.Signage.SignageTransformations(System.String,Autodesk.DesignScript.Geometry.Plane,System.Single,System.Single)">
+            <summary>
+            To add all the required transformations to the signage.
+            </summary>
             <returns></returns>
         </member>
     </members>
