@@ -77,6 +77,11 @@
             Flip the parking bay vertically.
             </summary>
         </member>
+        <member name="P:Parking.ParkingBay.SignageType">
+            <summary>
+            To set the parking signage type.
+            </summary>
+        </member>
         <member name="M:Parking.ParkingBay.#ctor(Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point,System.Single,System.Single,System.Single,System.Single,System.Boolean,System.Boolean)">
             <summary>
             Creates a parking bay instance.
@@ -147,7 +152,7 @@
             <summary>
             Adds a signage instance to the parking bay.
             </summary>
-            <param name="centerOffset"></param>
+            <param name="centerOffsetPercentage">The offset distance percentage in proportion to half the parking bay length.</param>
             <returns name="signage">The signage instance.</returns>
         </member>
         <member name="T:Parking.Patterns">

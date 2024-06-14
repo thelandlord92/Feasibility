@@ -59,8 +59,12 @@ namespace Parking
         /// </summary>
         public Boolean FlipVertical { private get; set; }
 
-        // hides the overall class as a node.
-        // private ParkingBay() { }
+
+        /// <summary>
+        /// To set the parking signage type.
+        /// </summary>
+        public string SignageType { private get; set; }
+
 
         /// <summary>
         /// Creates a parking bay instance.
@@ -345,11 +349,21 @@ namespace Parking
         /// <summary>
         /// Adds a signage instance to the parking bay.
         /// </summary>
-        /// <param name="centerOffset"></param>
+        /// <param name="centerOffsetPercentage">The offset distance percentage in proportion to half the parking bay length.</param>
         /// <returns name="signage">The signage instance.</returns>
-        public PolyCurve AddSignage(float centerOffset = 1) 
+        public Point AddSignage(float centerOffsetPercentage = 50) 
         {
-            return CreateStripeOutline();
+            // add the parking bay center point.
+            Point parkingCenter = GetCenterPoint();
+
+            // calculate the signage center offset distance. 
+            float centerOffset = ((BayLength/2) / 100) * centerOffsetPercentage;
+
+            // move the point to locate the signage.
+            Point movedPoint = parkingCenter.Translate(GetParkingDirection(), centerOffset) as Point;
+
+
+            return movedPoint;
         }
     }
 }
