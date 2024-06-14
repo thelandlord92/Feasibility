@@ -361,7 +361,7 @@
             <param name="resourcePath">The path of the symbol resource file.</param>
             <returns name="signageOutline">The signage outline curves.</returns>
         </member>
-        <member name="M:Parking.Signage.StandardParkingSymbol2D(Autodesk.DesignScript.Geometry.Plane,System.Single,System.Single,System.Single,System.Single)">
+        <member name="M:Parking.Signage.ParkingSymbol2D(Autodesk.DesignScript.Geometry.Plane,System.Single,System.Single,System.Single,System.Single,System.String)">
             <summary>
             Get the 2d standard parking signage curves.
             </summary>
@@ -370,6 +370,7 @@
             <param name="initialSignageOffset">The offset of the signage from the base plane.</param>
             <param name="initialHostWidth">The initial host width at which the signage was drawn.</param>
             <param name="userHostWidth">The final host width to scale the signage.</param>
+            <param name="resourcePath">The path of the symbol resource file.</param>
             <returns name="signageOutline">The signage outline curves.</returns>
         </member>
     </members>

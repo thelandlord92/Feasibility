@@ -204,13 +204,15 @@ namespace Parking
         /// <param name="initialSignageOffset">The offset of the signage from the base plane.</param>
         /// <param name="initialHostWidth">The initial host width at which the signage was drawn.</param>
         /// <param name="userHostWidth">The final host width to scale the signage.</param>
+        /// <param name="resourcePath">The path of the symbol resource file.</param>
         /// <returns name="signageOutline">The signage outline curves.</returns>
-        public static List<Curve[]> StandardParkingSymbol2D(
+        public static List<Curve[]> ParkingSymbol2D(
             Plane locationPlane,
             float signageRotation,
             float initialSignageOffset = (float)0.01,
             float initialHostWidth = (float)2.5,
-            float userHostWidth = (float)2.5)
+            float userHostWidth = (float)2.5,
+            string resourcePath = "Feasibility.Parking.Symbols.carParkingSymbol.json")
         {
             // add the symbol outlines.
             List<Curve[]> curves = GetSignageOutline(
@@ -218,7 +220,8 @@ namespace Parking
                 signageRotation,
                 initialSignageOffset,
                 initialHostWidth,
-                userHostWidth);
+                userHostWidth,
+                resourcePath);
 
             return curves;
         }

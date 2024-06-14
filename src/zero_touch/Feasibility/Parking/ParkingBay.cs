@@ -367,12 +367,13 @@ namespace Parking
             Plane plane = Plane.ByOriginNormal(movedPoint, Vector.ZAxis());
 
             // add the signage required signage type to the plane. 
-            List<Curve[]> signageOutline = Parking.Signage.StandardParkingSymbol2D(
+            List<Curve[]> signageOutline = Parking.Signage.ParkingSymbol2D(
                 plane,
                 -GetRotationAngle() - 180,
                 (float)0.01,
                 (float)2.5,
-                BayWidth);
+                BayWidth,
+                "Feasibility.Parking.Symbols.evParkingSymbol.json");
 
             return signageOutline;
         }
