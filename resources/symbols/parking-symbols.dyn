@@ -1,0 +1,355 @@
+{
+  "Uuid": "eb7e405f-802d-4212-b72f-f355fade95e0",
+  "IsCustomNode": false,
+  "Description": "",
+  "Name": "parking-symbols",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "23da66261e734d62b78c83074a8d9e63",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "0ff6dc79d3174662a0c4ea2fb02f41e7",
+          "Name": "geometry",
+          "Description": "Autodesk.DesignScript.Geometry.Geometry",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "84f2011ed3cd4d45a7ee19e494d1c243",
+          "Name": "string",
+          "Description": "Json formatted string",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Geometry.ToSolidDef",
+      "Replication": "Auto",
+      "Description": "Convert geometry to Solid Def json\n\nGeometry.ToSolidDef ( ): string"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.DSFaceSelection, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [
+        "ab9fc1eb-b1e5-4f32-9402-b0d3198d37be-0005496d:0:SURFACE"
+      ],
+      "Id": "4d4d170e7cbe4b759fb5a5364575759e",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "f528c9290a5f421080e5ec59d7ce78f0",
+          "Name": "Surface",
+          "Description": "The selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Select a face."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "0326cadae7d247a09e6bdb37dc9d4ccd",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "fd3d336b250040f7aac3b1dd8f9fce4f",
+          "Name": "filePath",
+          "Description": "Path to write to\n\nstring",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "fdb4bcb8f6e344f99e16cab3dcc38941",
+          "Name": "text",
+          "Description": "Text content\n\nstring",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "028ab28a73084b9dbd4820b945f4220c",
+          "Name": "void",
+          "Description": "No output",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DSCore.IO.FileSystem.WriteText@string,string",
+      "Replication": "Longest",
+      "Description": "Write the text content to a file specified by the path\n\nFileSystem.WriteText (filePath: string, text: string): void"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.Filename, CoreNodeModels",
+      "Id": "a9479823977a47fa8837e803f8c907c6",
+      "NodeType": "ExtensionNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "b13c799781a642b99fd12ffac55599a3",
+          "Name": "",
+          "Description": "File Path",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows you to select a file on the system and returns its file path",
+      "HintPath": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\resources\\symbols\\noParkingSymbol.json",
+      "InputValue": ".\\noParkingSymbol.json"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "fa13cbc022674aac988b89c2bff1fccc",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "63dc6fb71239468981ed3fe6cedded18",
+          "Name": "values",
+          "Description": "A List of values\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "3607f21a5280485c819a1709d0eb9a83",
+          "Name": "json",
+          "Description": "A JSON string where primitive types (e.g. double, int, boolean), Lists, and Dictionary's will be turned into the associated JSON type.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DSCore.Data.StringifyJSON@var[]..[]",
+      "Replication": "CrossProduct",
+      "Description": "Stringify converts an arbitrary value or a list of arbitrary values to JSON. Replication can be used to apply the operation over a list, producing a list of JSON strings.\n\nData.StringifyJSON (values: var[]..[]): string"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.SelectFaces, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [
+        "c19d5614-9d8f-4b34-b7a2-c4a58b08a624-0005527b:0:SURFACE",
+        "c19d5614-9d8f-4b34-b7a2-c4a58b08a624-000554e0:0:SURFACE"
+      ],
+      "Id": "fc56ac100be44770a477ed1794c77783",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "df20580093524a5ba3b395a8888ca291",
+          "Name": "Surfaces",
+          "Description": "The selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Select multiple faces from the Revit document."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "84f2011ed3cd4d45a7ee19e494d1c243",
+      "End": "63dc6fb71239468981ed3fe6cedded18",
+      "Id": "71d62724fee24488b6d8b04bc232c757",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "b13c799781a642b99fd12ffac55599a3",
+      "End": "fd3d336b250040f7aac3b1dd8f9fce4f",
+      "Id": "f99addff0e1a44e08a87c7b31749e107",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "3607f21a5280485c819a1709d0eb9a83",
+      "End": "fdb4bcb8f6e344f99e16cab3dcc38941",
+      "Id": "eb8cde2afe194ce9a70d828fbc24b0d6",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "df20580093524a5ba3b395a8888ca291",
+      "End": "0ff6dc79d3174662a0c4ea2fb02f41e7",
+      "Id": "5ab992bdbbc043268917488d97476fe9",
+      "IsHidden": "False"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [
+    {
+      "Name": "bicycleParkingSymbol.json",
+      "ReferenceType": "External",
+      "Nodes": [
+        "a9479823977a47fa8837e803f8c907c6"
+      ]
+    }
+  ],
+  "Thumbnail": "",
+  "GraphDocumentationURL": null,
+  "ExtensionWorkspaceData": [
+    {
+      "ExtensionGuid": "28992e1d-abb9-417f-8b1b-05e053bee670",
+      "Name": "Properties",
+      "Version": "2.18",
+      "Data": {}
+    },
+    {
+      "ExtensionGuid": "DFBD9CC0-DB40-457A-939E-8C8555555A9D",
+      "Name": "Generative Design",
+      "Version": "6.0",
+      "Data": {}
+    }
+  ],
+  "Author": "",
+  "Linting": {
+    "activeLinter": "None",
+    "activeLinterId": "7b75fb44-43fd-4631-a878-29f4d5d8399a",
+    "warningCount": 0,
+    "errorCount": 0
+  },
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.18.1.5096",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "_Background Preview",
+      "EyeX": -0.32753197848796844,
+      "EyeY": 0.54806205630302429,
+      "EyeZ": 0.45564112067222595,
+      "LookX": 0.3091185986995697,
+      "LookY": -0.60533231496810913,
+      "LookZ": -0.40010645985603333,
+      "UpX": 0.374298095703125,
+      "UpY": 0.79068863391876221,
+      "UpZ": -0.48447126150131226
+    },
+    "ConnectorPins": [],
+    "NodeViews": [
+      {
+        "Id": "23da66261e734d62b78c83074a8d9e63",
+        "Name": "Geometry.ToSolidDef",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1142.5990567850854,
+        "Y": 1675.2672761519962
+      },
+      {
+        "Id": "4d4d170e7cbe4b759fb5a5364575759e",
+        "Name": "Select Face",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 658.7564739848209,
+        "Y": 1675.83669332388
+      },
+      {
+        "Id": "0326cadae7d247a09e6bdb37dc9d4ccd",
+        "Name": "FileSystem.WriteText",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1674.1811793136917,
+        "Y": 1486.1631737903724
+      },
+      {
+        "Id": "a9479823977a47fa8837e803f8c907c6",
+        "Name": "File Path",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1132.1028240424059,
+        "Y": 1486.8893925074572
+      },
+      {
+        "Id": "fa13cbc022674aac988b89c2bff1fccc",
+        "Name": "Data.StringifyJSON",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1549.71057818117,
+        "Y": 1781.44064705744
+      },
+      {
+        "Id": "fc56ac100be44770a477ed1794c77783",
+        "Name": "Select Faces",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 682.68005273147253,
+        "Y": 1834.0818390515351
+      }
+    ],
+    "Annotations": [
+      {
+        "Id": "24e8c027004b4a67837aa1130dd51e7b",
+        "Title": "Export JSON File",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "a9479823977a47fa8837e803f8c907c6",
+          "0326cadae7d247a09e6bdb37dc9d4ccd",
+          "23da66261e734d62b78c83074a8d9e63",
+          "4d4d170e7cbe4b759fb5a5364575759e",
+          "fa13cbc022674aac988b89c2bff1fccc",
+          "fc56ac100be44770a477ed1794c77783"
+        ],
+        "HasNestedGroups": false,
+        "Left": 648.7564739848209,
+        "Top": 1413.1631737903724,
+        "Width": 1264.9247053288709,
+        "Height": 571.91866526116269,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 1486.1631737903724,
+        "InitialHeight": 441.93622372374193,
+        "TextblockHeight": 63.0,
+        "Background": "#FFC1D676"
+      }
+    ],
+    "X": -341.49929538306822,
+    "Y": -788.29117755930554,
+    "Zoom": 0.64810299157633067
+  }
+}

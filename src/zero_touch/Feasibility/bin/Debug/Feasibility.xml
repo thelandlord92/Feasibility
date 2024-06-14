@@ -344,8 +344,8 @@
             <param name="locationPlane">The target plane of the signage.</param>
             <param name="signageRotation">The rotation value of the signage.</param>
             <param name="initialSignageOffset">The offset of the signage from the base plane.</param>
-            <param name="initialBayWidth">The initial bay width at which the signage was drawn.</param>
-            <param name="userbayWidth">The final bay width to scale the signage.</param>
+            <param name="initialHostWidth">The initial host width at which the signage was drawn.</param>
+            <param name="userHostWidth">The final host width to scale the signage.</param>
             <param name="resourcePath">The path of the symbol resource file.</param>
             <returns name="signageGeometry">Returns the transformed signage geometry.</returns>
         </member>
@@ -356,8 +356,8 @@
             <param name="locationPlane">The target plane of the signage.</param>
             <param name="signageRotation">The rotation value of the signage.</param>
             <param name="initialSignageOffset">The offset of the signage from the base plane.</param>
-            <param name="initialBayWidth">The initial bay width at which the signage was drawn.</param>
-            <param name="userbayWidth">The final bay width to scale the signage.</param>
+            <param name="initialHostWidth">The initial host width at which the signage was drawn.</param>
+            <param name="userHostWidth">The final host width to scale the signage.</param>
             <param name="resourcePath">The path of the symbol resource file.</param>
             <returns name="signageOutline">The signage outline curves.</returns>
         </member>
@@ -368,8 +368,8 @@
             <param name="locationPlane">The target plane of the signage.</param>
             <param name="signageRotation">The rotation value of the signage.</param>
             <param name="initialSignageOffset">The offset of the signage from the base plane.</param>
-            <param name="initialBayWidth">The initial bay width at which the signage was drawn.</param>
-            <param name="userbayWidth">The final bay width to scale the signage.</param>
+            <param name="initialHostWidth">The initial host width at which the signage was drawn.</param>
+            <param name="userHostWidth">The final host width to scale the signage.</param>
             <returns name="signageOutline">The signage outline curves.</returns>
         </member>
     </members>

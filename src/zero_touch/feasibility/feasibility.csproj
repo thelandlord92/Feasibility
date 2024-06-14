@@ -153,6 +153,12 @@
     <None Include="packages.config" />
     <EmbeddedResource Include="Parking\Symbols\StandardParkingSymbol.sat" />
     <EmbeddedResource Include="Parking\Symbols\StandardParkingSymbol.json" />
+    <EmbeddedResource Include="Parking\Symbols\bicycleParkingSymbol.json" />
+    <EmbeddedResource Include="Parking\Symbols\carParkingSymbol.json" />
+    <EmbeddedResource Include="Parking\Symbols\evParkingSymbol.json" />
+    <EmbeddedResource Include="Parking\Symbols\motorbikeParkingSymbol.json" />
+    <EmbeddedResource Include="Parking\Symbols\pwdParkingSymbol.json" />
+    <EmbeddedResource Include="Parking\Symbols\noParkingSymbol.json" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
