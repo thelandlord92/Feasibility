@@ -90,16 +90,16 @@ namespace Parking
         /// <param name="locationPlane">The target plane of the signage.</param>
         /// <param name="signageRotation">The rotation value of the signage.</param>
         /// <param name="initialSignageOffset">The offset of the signage from the base plane.</param>
-        /// <param name="initialBayWidth">The initial bay width at which the signage was drawn.</param>
-        /// <param name="userbayWidth">The final bay width to scale the signage.</param>
+        /// <param name="initialHostWidth">The initial host width at which the signage was drawn.</param>
+        /// <param name="userHostWidth">The final host width to scale the signage.</param>
         /// <param name="resourcePath">The path of the symbol resource file.</param>
         /// <returns name="signageGeometry">Returns the transformed signage geometry.</returns>
         public static List<Geometry> TransformSignage( 
             Plane locationPlane,
             float signageRotation,
             float initialSignageOffset = (float)0.01,
-            float initialBayWidth = (float)2.5,
-            float userbayWidth = (float)2.5,
+            float initialHostWidth = (float)2.5,
+            float userHostWidth = (float)2.5,
             string resourcePath = "Feasibility.Parking.Symbols.StandardParkingSymbol.json") 
         {
             // load the signage geometry.
@@ -122,7 +122,7 @@ namespace Parking
             }
 
             // scale the signage based on the width of the parking bay.
-            float scaleFactor = userbayWidth / initialBayWidth;
+            float scaleFactor = userHostWidth / initialHostWidth;
 
             List<Geometry> scaledGeometry = new List<Geometry>();
             foreach (Geometry geom in rotatedGeometry) 
@@ -156,16 +156,16 @@ namespace Parking
         /// <param name="locationPlane">The target plane of the signage.</param>
         /// <param name="signageRotation">The rotation value of the signage.</param>
         /// <param name="initialSignageOffset">The offset of the signage from the base plane.</param>
-        /// <param name="initialBayWidth">The initial bay width at which the signage was drawn.</param>
-        /// <param name="userbayWidth">The final bay width to scale the signage.</param>
+        /// <param name="initialHostWidth">The initial host width at which the signage was drawn.</param>
+        /// <param name="userHostWidth">The final host width to scale the signage.</param>
         /// <param name="resourcePath">The path of the symbol resource file.</param>
         /// <returns name="signageOutline">The signage outline curves.</returns>
         public static List<Curve[]> GetSignageOutline(
             Plane locationPlane,
             float signageRotation,
             float initialSignageOffset = (float)0.01,
-            float initialBayWidth = (float)2.5,
-            float userbayWidth = (float)2.5,
+            float initialHostWidth = (float)2.5,
+            float userHostWidth = (float)2.5,
             string resourcePath = "Feasibility.Parking.Symbols.StandardParkingSymbol.json")
         {
             // create the signage geometry.
@@ -173,8 +173,8 @@ namespace Parking
                 locationPlane,
                 signageRotation,
                 initialSignageOffset,
-                initialBayWidth,
-                userbayWidth,
+                initialHostWidth,
+                userHostWidth,
                 resourcePath);
 
             // get the signage outline.
@@ -202,23 +202,23 @@ namespace Parking
         /// <param name="locationPlane">The target plane of the signage.</param>
         /// <param name="signageRotation">The rotation value of the signage.</param>
         /// <param name="initialSignageOffset">The offset of the signage from the base plane.</param>
-        /// <param name="initialBayWidth">The initial bay width at which the signage was drawn.</param>
-        /// <param name="userbayWidth">The final bay width to scale the signage.</param>
+        /// <param name="initialHostWidth">The initial host width at which the signage was drawn.</param>
+        /// <param name="userHostWidth">The final host width to scale the signage.</param>
         /// <returns name="signageOutline">The signage outline curves.</returns>
         public static List<Curve[]> StandardParkingSymbol2D(
             Plane locationPlane,
             float signageRotation,
             float initialSignageOffset = (float)0.01,
-            float initialBayWidth = (float)2.5,
-            float userbayWidth = (float)2.5)
+            float initialHostWidth = (float)2.5,
+            float userHostWidth = (float)2.5)
         {
             // add the symbol outlines.
             List<Curve[]> curves = GetSignageOutline(
                 locationPlane,
                 signageRotation,
                 initialSignageOffset,
-                initialBayWidth,
-                userbayWidth);
+                initialHostWidth,
+                userHostWidth);
 
             return curves;
         }

@@ -369,7 +369,7 @@ namespace Parking
             // add the signage required signage type to the plane. 
             List<Curve[]> signageOutline = Parking.Signage.StandardParkingSymbol2D(
                 plane,
-                GetRotationAngle(),
+                -GetRotationAngle() - 180,
                 (float)0.01,
                 (float)2.5,
                 BayWidth);
