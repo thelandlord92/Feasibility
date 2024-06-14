@@ -337,10 +337,15 @@
             <param name="resourcePath">The path of the resource file.</param>
             <returns name="geometry[]">The geometry content of the json file.</returns>
         </member>
-        <member name="M:Parking.Signage.SignageTransformations(System.String,Autodesk.DesignScript.Geometry.Plane,System.Single,System.Single)">
+        <member name="M:Parking.Signage.SignageTransformations(Autodesk.DesignScript.Geometry.Plane,System.Single,System.Single,System.Single,System.String)">
             <summary>
             To add all the required transformations to the signage.
             </summary>
+            <param name="locationPlane">The target plane of the signage.</param>
+            <param name="signageRotation">The rotation value of the signage.</param>
+            <param name="initialBayWidth">The initial bay width at which the signage was drawn.</param>
+            <param name="userbayWidth">The final bay width to scale the signage.</param>
+            <param name="resoursePath">The path of the symbol resource file.</param>
             <returns></returns>
         </member>
     </members>

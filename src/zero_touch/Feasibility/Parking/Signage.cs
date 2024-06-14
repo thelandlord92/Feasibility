@@ -87,12 +87,18 @@ namespace Parking
         /// <summary>
         /// To add all the required transformations to the signage.
         /// </summary>
+        /// <param name="locationPlane">The target plane of the signage.</param>
+        /// <param name="signageRotation">The rotation value of the signage.</param>
+        /// <param name="initialBayWidth">The initial bay width at which the signage was drawn.</param>
+        /// <param name="userbayWidth">The final bay width to scale the signage.</param>
+        /// <param name="resoursePath">The path of the symbol resource file.</param>
         /// <returns></returns>
-        public static Geometry[] SignageTransformations(
-            string resoursePath, 
+        public static List<Geometry> SignageTransformations( 
             Plane locationPlane,
             float signageRotation,
-            float bayWidth = (float)2.5) 
+            float initialBayWidth = (float)2.5,
+            float userbayWidth = (float)2.5,
+            string resoursePath = "Feasibility.Parking.Symbols.StandardParkingSymbol.json") 
         {
             // load the signage geometry.
             Geometry[] geometries = LoadEmbeddedJSON(resoursePath);
@@ -107,15 +113,22 @@ namespace Parking
             List<Geometry> rotatedGeometry= new List<Geometry>();
             foreach (Geometry geom in geometries) 
             { 
-                if (geom == null) continue;
-
-                else if (geom.GetType() == typeof(Geometry)) 
-                { 
+                if (geom != null)
+                {
                     rotatedGeometry.Add(geom.Rotate(plane, signageRotation));
                 }
             }
-            
-            return rotatedGeometry.ToArray();
+
+            // scale the signage based on the width of the parking bay.
+            float scaleFactor = userbayWidth / initialBayWidth;
+
+            List<Geometry> scaledGeometry = new List<Geometry>();
+            foreach (Geometry geom in rotatedGeometry) 
+            { 
+                scaledGeometry.Add(geom.Scale(plane, scaleFactor, scaleFactor));
+            }
+
+            return scaledGeometry;
         }
 
 
