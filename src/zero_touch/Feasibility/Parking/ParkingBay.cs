@@ -362,6 +362,8 @@ namespace Parking
             // move the point to locate the signage.
             Point movedPoint = parkingCenter.Translate(GetParkingDirection(), centerOffset) as Point;
 
+            // add the signage required signage type to the point. 
+
 
             return movedPoint;
         }

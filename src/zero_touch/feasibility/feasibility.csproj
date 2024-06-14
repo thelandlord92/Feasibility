@@ -134,7 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Buildings\Buildings.cs" />
-    <Compile Include="Common\Common.cs" />
+    <Compile Include="Common\Math.cs" />
     <Compile Include="Erven\Erven.cs" />
     <Compile Include="Parking\BoundingRectangle.cs" />
     <Compile Include="Parking\ExclusionBays.cs" />
@@ -153,6 +153,8 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <EmbeddedResource Include="Parking\Symbols\StandardParkingSymbol.sat" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
