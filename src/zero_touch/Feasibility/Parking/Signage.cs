@@ -89,6 +89,7 @@ namespace Parking
         /// </summary>
         /// <param name="locationPlane">The target plane of the signage.</param>
         /// <param name="signageRotation">The rotation value of the signage.</param>
+        /// <param name="initialSignageOffset">The offset of the signage from the base plane.</param>
         /// <param name="initialBayWidth">The initial bay width at which the signage was drawn.</param>
         /// <param name="userbayWidth">The final bay width to scale the signage.</param>
         /// <param name="resoursePath">The path of the symbol resource file.</param>
@@ -96,6 +97,7 @@ namespace Parking
         public static List<Geometry> SignageTransformations( 
             Plane locationPlane,
             float signageRotation,
+            float initialSignageOffset = (float)0.01,
             float initialBayWidth = (float)2.5,
             float userbayWidth = (float)2.5,
             string resoursePath = "Feasibility.Parking.Symbols.StandardParkingSymbol.json") 
@@ -126,6 +128,15 @@ namespace Parking
             foreach (Geometry geom in rotatedGeometry) 
             { 
                 scaledGeometry.Add(geom.Scale(plane, scaleFactor, scaleFactor));
+            }
+
+            // move the signage along the plane normal.
+            float offsetDistance = initialSignageOffset  * scaleFactor;
+
+            List<Geometry> movedGeometry = new List<Geometry>();
+            foreach (Geometry geom in scaledGeometry) 
+            { 
+                movedGeometry.Add(geom.Translate(plane.Normal, offsetDistance));
             }
 
             return scaledGeometry;
