@@ -9,6 +9,13 @@
             Wrapper class for the about information.
             </summary>
         </member>
+        <member name="M:About.About.CapitalizeFirstLetter(System.String)">
+            <summary>
+            Capitalizes the first letter of a string.
+            </summary>
+            <param name="input">The input string.</param>
+            <returns></returns>
+        </member>
         <member name="M:About.About.AboutFeasibility">
             <summary>
             Provides information about the Feasibility plugin for Dynamo.
