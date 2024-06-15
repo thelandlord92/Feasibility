@@ -43,7 +43,7 @@
       "ConcreteType": "Dynamo.Nodes.DSFaceSelection, DSRevitNodesUI",
       "NodeType": "ExtensionNode",
       "InstanceId": [
-        "ab9fc1eb-b1e5-4f32-9402-b0d3198d37be-0005496d:0:SURFACE"
+        "c19d5614-9d8f-4b34-b7a2-c4a58b08a624-0005527b:0:SURFACE"
       ],
       "Id": "4d4d170e7cbe4b759fb5a5364575759e",
       "Inputs": [],
@@ -155,8 +155,7 @@
       "ConcreteType": "Dynamo.Nodes.SelectFaces, DSRevitNodesUI",
       "NodeType": "ExtensionNode",
       "InstanceId": [
-        "c19d5614-9d8f-4b34-b7a2-c4a58b08a624-0005527b:0:SURFACE",
-        "c19d5614-9d8f-4b34-b7a2-c4a58b08a624-000554e0:0:SURFACE"
+        "c19d5614-9d8f-4b34-b7a2-c4a58b08a624-0005527b:0:SURFACE"
       ],
       "Id": "fc56ac100be44770a477ed1794c77783",
       "Inputs": [],
@@ -183,6 +182,12 @@
       "IsHidden": "False"
     },
     {
+      "Start": "f528c9290a5f421080e5ec59d7ce78f0",
+      "End": "0ff6dc79d3174662a0c4ea2fb02f41e7",
+      "Id": "2ac3584fd82742d38d1bd80217e36d6a",
+      "IsHidden": "False"
+    },
+    {
       "Start": "b13c799781a642b99fd12ffac55599a3",
       "End": "fd3d336b250040f7aac3b1dd8f9fce4f",
       "Id": "f99addff0e1a44e08a87c7b31749e107",
@@ -193,18 +198,12 @@
       "End": "fdb4bcb8f6e344f99e16cab3dcc38941",
       "Id": "eb8cde2afe194ce9a70d828fbc24b0d6",
       "IsHidden": "False"
-    },
-    {
-      "Start": "df20580093524a5ba3b395a8888ca291",
-      "End": "0ff6dc79d3174662a0c4ea2fb02f41e7",
-      "Id": "5ab992bdbbc043268917488d97476fe9",
-      "IsHidden": "False"
     }
   ],
   "Dependencies": [],
   "NodeLibraryDependencies": [
     {
-      "Name": "bicycleParkingSymbol.json",
+      "Name": "noParkingSymbol.json",
       "ReferenceType": "External",
       "Nodes": [
         "a9479823977a47fa8837e803f8c907c6"
@@ -246,15 +245,15 @@
     },
     "Camera": {
       "Name": "_Background Preview",
-      "EyeX": -0.32753197848796844,
-      "EyeY": 0.54806205630302429,
-      "EyeZ": 0.45564112067222595,
-      "LookX": 0.3091185986995697,
-      "LookY": -0.60533231496810913,
-      "LookZ": -0.40010645985603333,
-      "UpX": 0.374298095703125,
-      "UpY": 0.79068863391876221,
-      "UpZ": -0.48447126150131226
+      "EyeX": -0.18546736985445023,
+      "EyeY": 0.87067466974258423,
+      "EyeZ": 0.94264876842498779,
+      "LookX": 0.1400044858455658,
+      "LookY": -0.91680830717086792,
+      "LookZ": -1.0038883686065674,
+      "UpX": 0.068540573120117188,
+      "UpY": 0.86819690465927124,
+      "UpZ": -0.49146336317062378
     },
     "ConnectorPins": [],
     "NodeViews": [
@@ -343,13 +342,13 @@
         "FontSize": 36.0,
         "GroupStyleId": "00000000-0000-0000-0000-000000000000",
         "InitialTop": 1486.1631737903724,
-        "InitialHeight": 441.93622372374193,
+        "InitialHeight": 492.91866526116269,
         "TextblockHeight": 63.0,
         "Background": "#FFC1D676"
       }
     ],
-    "X": -341.49929538306822,
-    "Y": -788.29117755930554,
-    "Zoom": 0.64810299157633067
+    "X": -251.92779565223361,
+    "Y": -756.7026548103745,
+    "Zoom": 0.61729127007388551
   }
 }
