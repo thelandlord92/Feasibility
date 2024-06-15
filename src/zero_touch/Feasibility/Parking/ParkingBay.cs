@@ -183,7 +183,7 @@ namespace Parking
             Rectangle baseRectangle = Rectangle.ByWidthLength(BayLength, BayWidth);
 
             // add the transformations to the base rectangle.
-            Rectangle transformedRectangle = ParkingBayTransformations(baseRectangle);
+            Rectangle transformedRectangle = ParkingBayTransformations(baseRectangle);;
 
             return transformedRectangle;
         }

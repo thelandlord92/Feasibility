@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Schema;
 
 namespace Parking
 {
@@ -36,7 +37,6 @@ namespace Parking
 
         private Surface _exclusionArea;
 
-
         /// <summary>
         /// Horizontal planar surfaces representing the exlusion zones.
         /// </summary>
@@ -53,6 +53,29 @@ namespace Parking
                     throw new ArgumentOutOfRangeException(nameof(_exclusionArea), "The exclusion area surface must be horizontal and planar.");
                 }
                 _exclusionArea = value;
+            }
+        }
+
+
+        private Curve _axialRoute;
+
+        /// <summary>
+        /// Axial route curves to mark primary access routes around the parking layout.
+        /// </summary>
+        public Curve AxialRoute 
+        {
+            private get { return _axialRoute;  }
+            set 
+            {
+                if (value.IsPlanar == false)
+                {
+                    throw new ArgumentException(nameof(_axialRoute), "The axial route curve must be planar.");
+                }
+                else if (value.EndPoint.Z > value.StartPoint.Z) 
+                {
+                    throw new ArgumentException(nameof(_axialRoute), "The axial route curve must be horizontal.");
+                }
+                _axialRoute = value;
             }
         }
 
@@ -97,5 +120,56 @@ namespace Parking
                 }
             }
         }
+
+
+        /// <summary>
+        /// The width of the aisle around the exclusion zone.
+        /// </summary>
+        public float ExclusionZoneAisleWidth { private set; get; }
+
+
+        /// <summary>
+        /// The width of the walkway around the exclusion zone.
+        /// </summary>
+        public float ExclusionZoneWalkwayWidth { private set; get; }
+
+
+        /// <summary>
+        /// The vehicular turning radius at the convex corners of the perimeter aisle.
+        /// </summary>
+        public float ExternalTurningRadius { private set; get; }
+
+
+        /// <summary>
+        /// The vehicular turning radius at the concave corners of the perimeter aisle.
+        /// </summary>
+        public float InternalTurningRadius { private set; get; }
+
+
+        /// <summary>
+        /// The radius at the corners of the internal parking islands.
+        /// </summary>
+        public float IslandCornerRadius { private set; get; }
+
+
+        /// <summary>
+        /// the height of the parking islands above the layout level.
+        /// </summary>
+        public float IslandHeight { private set; get; }
+
+
+        /// <summary>
+        /// The rotation of the internal parking layout.
+        /// </summary>
+        public float LayoutRotation { private set; get; }   
+
+
+        /// <summary>
+        /// The width of the perimeter aisle.
+        /// </summary>
+        public float PerimeterAisleWidth { private set; get; }
+
+        
+        
     }
 }
