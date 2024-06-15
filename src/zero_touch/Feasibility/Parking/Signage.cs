@@ -50,6 +50,11 @@ namespace Parking
         /// No parking signage.
         /// </summary>
         NoParking,
+
+        /// <summary>
+        /// No signage requirement for the parking bay.
+        /// </summary>
+        NoSignage,
     }
 
 

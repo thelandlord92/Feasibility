@@ -64,7 +64,7 @@ namespace Parking
         /// <summary>
         /// To set the parking signage type.
         /// </summary>
-        public string SignageType { private get; set; }
+        public SignageType Signage { private get; set; }
 
 
         /// <summary>
@@ -72,6 +72,7 @@ namespace Parking
         /// </summary>
         /// <param name="targetPosition">the target transform position of the parking bay.</param>
         /// <param name="patternCenter">the center of the pattern.</param>
+        /// <param name="signage">The signage type to be placed on the parking bay.</param>
         /// <param name="bayWidth">the width of the parking bay.</param>
         /// <param name="bayLength">the length of the parking bay.</param>
         /// <param name="bayAngle">the angle of the parking bay.</param>
@@ -86,7 +87,8 @@ namespace Parking
             float bayAngle = 30,
             float patternRotation = 0,
             bool flipHorizontal = false,
-            bool flipVertical = false)
+            bool flipVertical = false,
+            SignageType signage = SignageType.EV)
         { 
             TargetPosition = targetPosition;
             PatternCenter = patternCenter;
@@ -97,6 +99,7 @@ namespace Parking
             Geometry = CreateRectangle();
             FlipHorizontal = flipHorizontal;
             FlipVertical = flipVertical;
+            Signage = signage;
         }
 
 

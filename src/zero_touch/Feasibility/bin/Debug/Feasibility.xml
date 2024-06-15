@@ -95,17 +95,18 @@
             Flip the parking bay vertically.
             </summary>
         </member>
-        <member name="P:Parking.ParkingBay.SignageType">
+        <member name="P:Parking.ParkingBay.Signage">
             <summary>
             To set the parking signage type.
             </summary>
         </member>
-        <member name="M:Parking.ParkingBay.#ctor(Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point,System.Single,System.Single,System.Single,System.Single,System.Boolean,System.Boolean)">
+        <member name="M:Parking.ParkingBay.#ctor(Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point,System.Single,System.Single,System.Single,System.Single,System.Boolean,System.Boolean,Parking.SignageType)">
             <summary>
             Creates a parking bay instance.
             </summary>
             <param name="targetPosition">the target transform position of the parking bay.</param>
             <param name="patternCenter">the center of the pattern.</param>
+            <param name="signage">The signage type to be placed on the parking bay.</param>
             <param name="bayWidth">the width of the parking bay.</param>
             <param name="bayLength">the length of the parking bay.</param>
             <param name="bayAngle">the angle of the parking bay.</param>
@@ -321,6 +322,51 @@
             Creates a rectangle covering the width of the pattern and length of the location line.
             </summary>
             <returns name="patternSurface">The pattern surface.</returns>
+        </member>
+        <member name="T:Parking.SignageType">
+            <summary>
+            Defines enums for the types of parking signage.
+            </summary>
+        </member>
+        <member name="F:Parking.SignageType.EV">
+            <summary>
+            Electric vehicle parking.
+            </summary>
+        </member>
+        <member name="F:Parking.SignageType.PWD">
+            <summary>
+            Parking for Persons With Disabilities.
+            </summary>
+        </member>
+        <member name="F:Parking.SignageType.Standard">
+            <summary>
+            Generic parking P signage.
+            </summary>
+        </member>
+        <member name="F:Parking.SignageType.Car">
+            <summary>
+            Car parking.
+            </summary>
+        </member>
+        <member name="F:Parking.SignageType.Bicycle">
+            <summary>
+            Bicycle parking.
+            </summary>
+        </member>
+        <member name="F:Parking.SignageType.Motorbike">
+            <summary>
+            Motorbike parking.
+            </summary>
+        </member>
+        <member name="F:Parking.SignageType.NoParking">
+            <summary>
+            No parking signage.
+            </summary>
+        </member>
+        <member name="F:Parking.SignageType.NoSignage">
+            <summary>
+            No signage requirement for the parking bay.
+            </summary>
         </member>
         <member name="T:Parking.Signage">
             <summary>
