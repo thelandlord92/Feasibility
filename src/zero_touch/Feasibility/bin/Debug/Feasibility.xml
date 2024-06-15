@@ -45,6 +45,19 @@
             <returns name="numbers">the range of numbers</returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
+        <member name="T:Parking.BoundingRectangle">
+            <summary>
+            Wrapper class for bounding rectangle.
+            </summary>
+        </member>
+        <member name="M:Parking.BoundingRectangle.CreateBoundingRectangle(Autodesk.DesignScript.Geometry.PolyCurve,System.Single)">
+            <summary>
+            Creates a bounding rectangle around a polycurve. Thanks to Jacob Small for the logic.
+            </summary>
+            <param name="curve">The polycurve to create the bounding rectangle around.</param>
+            <param name="rotation">The rotation value of the created bounding rectangle.</param>
+            <returns name="boundingRectangle">The bounding rectangle.</returns>
+        </member>
         <member name="T:Parking.ParkingBay">
             <summary>
             Wrapper class for the parking bay.
