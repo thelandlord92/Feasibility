@@ -75,6 +75,11 @@ namespace Parking
         /// </summary>
         public float IslandWidth { private get; set; }
 
+        /// <summary>
+        /// To set the parking signage type.
+        /// </summary>
+        public SignageType Signage { private get; set; }
+
 
         /// <summary>
         /// Creates instances of the parking pattern class.
@@ -87,6 +92,7 @@ namespace Parking
         /// <param name="bayAngle">the angle of the parking bays.</param>
         /// <param name="patternRotation">The rotation angle of the pattern.</param>
         /// <param name="islandWidth">The width of the non interlocking pattern island.</param>
+        /// <param name="signage">The signage type to be placed on the parking bay.</param>
         [IsVisibleInDynamoLibrary(true)]
         public Patterns(
             Line locationLine,
@@ -96,7 +102,8 @@ namespace Parking
             float bayLength = 5,
             float bayAngle = 30,
             float patternRotation = 0,
-            float islandWidth = 1) 
+            float islandWidth = 1,
+            SignageType signage = SignageType.EV) 
         { 
             LocationLine = locationLine;
             PatternType = patternType;
@@ -106,6 +113,7 @@ namespace Parking
             BayAngle = bayAngle;
             PatternRotation = patternRotation;
             IslandWidth = islandWidth;
+            Signage = signage;
         }
 
 
@@ -303,7 +311,8 @@ namespace Parking
                     BayAngle + GetLineRotationAngle(), 
                     PatternRotation,
                     false,
-                    true);
+                    true,
+                    Signage);
                 firstParkingBays.Add(bay);
             }
 
@@ -319,7 +328,8 @@ namespace Parking
                     BayAngle + GetLineRotationAngle(),
                     PatternRotation,
                     true,
-                    true);
+                    true,
+                    Signage);
                 secondParkingBays.Add(bay);
             }
 
@@ -379,7 +389,8 @@ namespace Parking
                     BayAngle + GetLineRotationAngle(),
                     PatternRotation,
                     false,
-                    true);
+                    true,
+                    Signage);
                 firstParkingBays.Add(bay);
             }
 
@@ -395,7 +406,8 @@ namespace Parking
                     BayAngle + GetLineRotationAngle(),
                     PatternRotation,
                     true,
-                    false);
+                    false,
+                    Signage);
                 secondParkingBays.Add(bay);
             }
 
@@ -455,7 +467,8 @@ namespace Parking
                     45 + GetLineRotationAngle(),
                     PatternRotation,
                     false,
-                    true);
+                    true,
+                    Signage);
                 firstParkingBays.Add(bay);
             }
 
@@ -472,7 +485,8 @@ namespace Parking
                     45 + GetLineRotationAngle(),
                     PatternRotation,
                     true,
-                    true);
+                    true,
+                    Signage);
                 secondParkingBays.Add(bay);
             }
 

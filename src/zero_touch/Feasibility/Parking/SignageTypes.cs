@@ -7,7 +7,7 @@ namespace Parking
     public enum SignageType
     {
         /// <summary>
-        /// Electric vehicle parking.
+        /// Electric vehicle parking signage.
         /// </summary>
         EV,
 
@@ -22,17 +22,17 @@ namespace Parking
         Standard,
 
         /// <summary>
-        /// Car parking.
+        /// Car parking signage.
         /// </summary>
         Car,
 
         /// <summary>
-        /// Bicycle parking.
+        /// Bicycle parking signage.
         /// </summary>
         Bicycle,
 
         /// <summary>
-        /// Motorbike parking.
+        /// Motorbike parking signage.
         /// </summary>
         Motorbike,
 

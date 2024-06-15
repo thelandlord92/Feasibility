@@ -72,13 +72,13 @@ namespace Parking
         /// </summary>
         /// <param name="targetPosition">the target transform position of the parking bay.</param>
         /// <param name="patternCenter">the center of the pattern.</param>
-        /// <param name="signage">The signage type to be placed on the parking bay.</param>
         /// <param name="bayWidth">the width of the parking bay.</param>
         /// <param name="bayLength">the length of the parking bay.</param>
         /// <param name="bayAngle">the angle of the parking bay.</param>
         /// <param name="patternRotation">the rotation angle of the parking bay around the pattern center point.</param>
         /// <param name="flipHorizontal">flip the parking bay horizontally.</param>
         /// <param name="flipVertical">flip the parking bay vertically</param>
+        /// <param name="signage">The signage type to be placed on the parking bay.</param>
         public ParkingBay(
             Point targetPosition,
             Point patternCenter,

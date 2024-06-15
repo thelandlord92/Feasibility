@@ -43,7 +43,7 @@
       "ConcreteType": "Dynamo.Nodes.DSFaceSelection, DSRevitNodesUI",
       "NodeType": "ExtensionNode",
       "InstanceId": [
-        "c19d5614-9d8f-4b34-b7a2-c4a58b08a624-0005527b:0:SURFACE"
+        "fbb7ea9a-4eec-407c-9741-5ba03ee72f1f-00056110:0:SURFACE"
       ],
       "Id": "4d4d170e7cbe4b759fb5a5364575759e",
       "Inputs": [],
@@ -118,8 +118,8 @@
       ],
       "Replication": "Disabled",
       "Description": "Allows you to select a file on the system and returns its file path",
-      "HintPath": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\resources\\symbols\\noParkingSymbol.json",
-      "InputValue": ".\\noParkingSymbol.json"
+      "HintPath": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\resources\\layouts\\curvedLayout.json",
+      "InputValue": "..\\layouts\\curvedLayout.json"
     },
     {
       "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
@@ -203,7 +203,7 @@
   "Dependencies": [],
   "NodeLibraryDependencies": [
     {
-      "Name": "noParkingSymbol.json",
+      "Name": "curvedLayout.json",
       "ReferenceType": "External",
       "Nodes": [
         "a9479823977a47fa8837e803f8c907c6"
@@ -245,15 +245,15 @@
     },
     "Camera": {
       "Name": "_Background Preview",
-      "EyeX": -0.18546736985445023,
-      "EyeY": 0.87067466974258423,
-      "EyeZ": 0.94264876842498779,
-      "LookX": 0.1400044858455658,
-      "LookY": -0.91680830717086792,
-      "LookZ": -1.0038883686065674,
-      "UpX": 0.068540573120117188,
-      "UpY": 0.86819690465927124,
-      "UpZ": -0.49146336317062378
+      "EyeX": 71.499832153320313,
+      "EyeY": 230.54472351074219,
+      "EyeZ": 201.1600341796875,
+      "LookX": 96.794639587402344,
+      "LookY": -209.07341003417969,
+      "LookZ": -190.4677734375,
+      "UpX": 0.24008053541183472,
+      "UpY": 0.84804576635360718,
+      "UpZ": -0.47241896390914917
     },
     "ConnectorPins": [],
     "NodeViews": [
@@ -264,8 +264,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 1142.5990567850854,
-        "Y": 1675.2672761519962
+        "X": 1162.2886436685828,
+        "Y": 1674.5099843487847
       },
       {
         "Id": "4d4d170e7cbe4b759fb5a5364575759e",
@@ -273,9 +273,9 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "ShowGeometry": false,
-        "X": 658.7564739848209,
-        "Y": 1675.83669332388
+        "ShowGeometry": true,
+        "X": 716.30122274643327,
+        "Y": 1673.5931027616164
       },
       {
         "Id": "0326cadae7d247a09e6bdb37dc9d4ccd",
@@ -284,8 +284,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 1674.1811793136917,
-        "Y": 1486.1631737903724
+        "X": 1934.8002887165526,
+        "Y": 1482.8870597242719
       },
       {
         "Id": "a9479823977a47fa8837e803f8c907c6",
@@ -304,8 +304,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 1549.71057818117,
-        "Y": 1781.44064705744
+        "X": 1593.1767967219196,
+        "Y": 1673.9071209271385
       },
       {
         "Id": "fc56ac100be44770a477ed1794c77783",
@@ -314,8 +314,8 @@
         "IsSetAsOutput": false,
         "Excluded": false,
         "ShowGeometry": true,
-        "X": 682.68005273147253,
-        "Y": 1834.0818390515351
+        "X": 774.92822848641276,
+        "Y": 1865.583360541141
       }
     ],
     "Annotations": [
@@ -335,20 +335,20 @@
           "fc56ac100be44770a477ed1794c77783"
         ],
         "HasNestedGroups": false,
-        "Left": 648.7564739848209,
-        "Top": 1413.1631737903724,
-        "Width": 1264.9247053288709,
-        "Height": 571.91866526116269,
+        "Left": 706.30122274643327,
+        "Top": 1409.8870597242719,
+        "Width": 1467.9990659701193,
+        "Height": 606.6963008168691,
         "FontSize": 36.0,
         "GroupStyleId": "00000000-0000-0000-0000-000000000000",
-        "InitialTop": 1486.1631737903724,
+        "InitialTop": 1482.8870597242719,
         "InitialHeight": 492.91866526116269,
         "TextblockHeight": 63.0,
         "Background": "#FFC1D676"
       }
     ],
-    "X": -251.92779565223361,
-    "Y": -756.7026548103745,
-    "Zoom": 0.61729127007388551
+    "X": -251.79143364495519,
+    "Y": -524.65620830676153,
+    "Zoom": 0.54620501071013594
   }
 }

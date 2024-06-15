@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace Parking
 {
-    internal class BoundingRectangle
+    /// <summary>
+    /// Wrapper class for bounding rectangle.
+    /// </summary>
+    public class BoundingRectangle
     {
+        // this hides the overall class as a node.
+        private BoundingRectangle() { }
     }
 }

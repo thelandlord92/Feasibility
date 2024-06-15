@@ -17,7 +17,8 @@ namespace Parking
             { SignageType.Standard, "Feasibility.Parking.Symbols.standardParkingSymbol.json" },
             { SignageType.Car, "Feasibility.Parking.Symbols.carParkingSymbol.json" },
             { SignageType.Bicycle, "Feasibility.Parking.Symbols.bicycleParkingSymbol.json" },
-            { SignageType.Motorbike, "Feasibility.Parking.Symbols.motorbikeParkingSymbol.json" }
+            { SignageType.Motorbike, "Feasibility.Parking.Symbols.motorbikeParkingSymbol.json" },
+            { SignageType.NoParking, "Feasibility.Parking.Symbols.noParkingSymbol.json" }
         };
     }
 }
