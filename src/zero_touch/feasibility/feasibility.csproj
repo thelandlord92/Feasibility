@@ -145,6 +145,7 @@
     <Compile Include="Parking\PerimeterBays.cs" />
     <Compile Include="Parking\Signage.cs" />
     <Compile Include="Parking\SignageResources.cs" />
+    <Compile Include="Parking\SignageTypes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
