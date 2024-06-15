@@ -366,7 +366,7 @@ namespace Parking
             // add a plane at the moved point.
             Plane plane = Plane.ByOriginNormal(movedPoint, Vector.ZAxis());
 
-            // add the signage required signage type to the plane. 
+            // add the signage required signage type to the plane.  
             List<Curve[]> signageOutline = Parking.Signage.ParkingSymbol2D(
                 plane,
                 -GetRotationAngle() - 180,

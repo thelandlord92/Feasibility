@@ -4,6 +4,17 @@
         <name>Feasibility</name>
     </assembly>
     <members>
+        <member name="T:About.About">
+            <summary>
+            Wrapper class for the about information.
+            </summary>
+        </member>
+        <member name="M:About.About.AboutFeasibility">
+            <summary>
+            Provides information about the Feasibility plugin for Dynamo.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Common.Math">
             <summary>
             A class containing methods for common math operations.
