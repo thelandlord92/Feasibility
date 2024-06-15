@@ -27,7 +27,7 @@ namespace Parking
         /// <summary>
         /// Set the parking pattern type.
         /// 1 for the non interlocking pattern.
-        /// 2 for the interlocing pattern.
+        /// 2 for the interlocking pattern.
         /// 3 for the herringbone pattern.
         /// </summary>
         public int PatternType
