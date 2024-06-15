@@ -123,6 +123,12 @@ namespace Parking
 
 
         /// <summary>
+        /// The width of the axial routes.
+        /// </summary>
+        public float AxialRouteWidth { private set; get; }
+
+
+        /// <summary>
         /// The width of the aisle around the exclusion zone.
         /// </summary>
         public float ExclusionZoneAisleWidth { private set; get; }
@@ -169,7 +175,75 @@ namespace Parking
         /// </summary>
         public float PerimeterAisleWidth { private set; get; }
 
-        
-        
+
+        /// <summary>
+        /// Creates internal parking layout instances.
+        /// </summary>
+        /// <param name="layoutArea"></param>
+        /// <param name="exclusionArea"></param>
+        /// <param name="axialRoute"></param>
+        /// <param name="patternType"></param>
+        /// <param name="aisleType"></param>
+        /// <param name="axialRouteWidth"></param>
+        /// <param name="exclusionZoneAisleWidth"></param>
+        /// <param name="exclusionZoneWalkwayWidth"></param>
+        /// <param name="externalTurningRadius"></param>
+        /// <param name="internalTurningRadius"></param>
+        /// <param name="islandCornerRadius"></param>
+        /// <param name="islandHeight"></param>
+        /// <param name="layoutRotation"></param>
+        /// <param name="perimeterAisleWidth"></param>
+        public InternalBays(
+            Surface layoutArea,
+            Surface exclusionArea,
+            Curve axialRoute,
+            int patternType = 1,
+            int aisleType = 1,
+            float axialRouteWidth = 7,
+            float exclusionZoneAisleWidth = 7,
+            float exclusionZoneWalkwayWidth = 1.5f,
+            float externalTurningRadius = 5,
+            float internalTurningRadius = 3.5f,
+            float islandCornerRadius = 1,
+            float islandHeight = 1,
+            float layoutRotation = 45,
+            float perimeterAisleWidth = 7)
+        { 
+            LayoutArea = layoutArea;
+            ExclusionArea = exclusionArea;
+            AxialRoute = axialRoute;
+            PatternType = patternType;
+            AisleType = aisleType;
+            AxialRouteWidth = axialRouteWidth;
+            ExclusionZoneAisleWidth = exclusionZoneAisleWidth;
+            ExternalTurningRadius = externalTurningRadius;
+            InternalTurningRadius = internalTurningRadius;
+            IslandCornerRadius = islandCornerRadius;
+            IslandHeight = islandHeight;
+            LayoutRotation = layoutRotation;
+            PerimeterAisleWidth = perimeterAisleWidth;
+        }
+
+
+        /// <summary>
+        /// To project curves onto the layout area if necessary.
+        /// </summary>
+        /// <param name="curve"></param>
+        /// <returns></returns>
+        public Curve ProjectCurves(Curve curve) 
+        {
+            // get the perimeter curve of the layout surface.
+            Curve[] perimeterCurves = LayoutArea.PerimeterCurves();
+            PolyCurve perimeterCurve = PolyCurve.ByJoinedCurves(perimeterCurves, 0.001, false, 0);
+
+            // get the plane of the perimeter curve.
+            Plane curvePlane = perimeterCurve.BasePlane();
+
+            // pull the curve onto the plane.
+            Curve pulledCurve = curve.PullOntoPlane(curvePlane);
+
+            return pulledCurve;
+        }
+
     }
 }

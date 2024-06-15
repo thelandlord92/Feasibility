@@ -58,6 +58,112 @@
             <param name="rotation">The rotation value of the created bounding rectangle.</param>
             <returns name="boundingRectangle">The bounding rectangle.</returns>
         </member>
+        <member name="T:Parking.InternalBays">
+            <summary>
+            Wrapper class for the internal parking bays.
+            </summary>
+        </member>
+        <member name="P:Parking.InternalBays.LayoutArea">
+            <summary>
+            A horizontal planar surface representing the parking area.
+            </summary>
+        </member>
+        <member name="P:Parking.InternalBays.ExclusionArea">
+            <summary>
+            Horizontal planar surfaces representing the exlusion zones.
+            </summary>
+        </member>
+        <member name="P:Parking.InternalBays.AxialRoute">
+            <summary>
+            Axial route curves to mark primary access routes around the parking layout.
+            </summary>
+        </member>
+        <member name="P:Parking.InternalBays.PatternType">
+            <summary>
+            Set the parking pattern type.
+            1 for the non interlocking pattern.
+            2 for the interlocking pattern.
+            3 for the herringbone pattern.
+            </summary>
+        </member>
+        <member name="P:Parking.InternalBays.AisleType">
+            <summary>
+            Set the internal parking aisle type.
+            1 for one way traffic.
+            2 for two way traffic.
+            </summary>
+        </member>
+        <member name="P:Parking.InternalBays.AxialRouteWidth">
+            <summary>
+            The width of the axial routes.
+            </summary>
+        </member>
+        <member name="P:Parking.InternalBays.ExclusionZoneAisleWidth">
+            <summary>
+            The width of the aisle around the exclusion zone.
+            </summary>
+        </member>
+        <member name="P:Parking.InternalBays.ExclusionZoneWalkwayWidth">
+            <summary>
+            The width of the walkway around the exclusion zone.
+            </summary>
+        </member>
+        <member name="P:Parking.InternalBays.ExternalTurningRadius">
+            <summary>
+            The vehicular turning radius at the convex corners of the perimeter aisle.
+            </summary>
+        </member>
+        <member name="P:Parking.InternalBays.InternalTurningRadius">
+            <summary>
+            The vehicular turning radius at the concave corners of the perimeter aisle.
+            </summary>
+        </member>
+        <member name="P:Parking.InternalBays.IslandCornerRadius">
+            <summary>
+            The radius at the corners of the internal parking islands.
+            </summary>
+        </member>
+        <member name="P:Parking.InternalBays.IslandHeight">
+            <summary>
+            the height of the parking islands above the layout level.
+            </summary>
+        </member>
+        <member name="P:Parking.InternalBays.LayoutRotation">
+            <summary>
+            The rotation of the internal parking layout.
+            </summary>
+        </member>
+        <member name="P:Parking.InternalBays.PerimeterAisleWidth">
+            <summary>
+            The width of the perimeter aisle.
+            </summary>
+        </member>
+        <member name="M:Parking.InternalBays.#ctor(Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Curve,System.Int32,System.Int32,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Creates internal parking layout instances.
+            </summary>
+            <param name="layoutArea"></param>
+            <param name="exclusionArea"></param>
+            <param name="axialRoute"></param>
+            <param name="patternType"></param>
+            <param name="aisleType"></param>
+            <param name="axialRouteWidth"></param>
+            <param name="exclusionZoneAisleWidth"></param>
+            <param name="exclusionZoneWalkwayWidth"></param>
+            <param name="externalTurningRadius"></param>
+            <param name="internalTurningRadius"></param>
+            <param name="islandCornerRadius"></param>
+            <param name="islandHeight"></param>
+            <param name="layoutRotation"></param>
+            <param name="perimeterAisleWidth"></param>
+        </member>
+        <member name="M:Parking.InternalBays.ProjectCurves(Autodesk.DesignScript.Geometry.Curve)">
+            <summary>
+            To project curves onto the layout area if necessary.
+            </summary>
+            <param name="curve"></param>
+            <returns></returns>
+        </member>
         <member name="T:Parking.ParkingBay">
             <summary>
             Wrapper class for the parking bay.
@@ -201,7 +307,7 @@
             <summary>
             Set the parking pattern type.
             1 for the non interlocking pattern.
-            2 for the interlocing pattern.
+            2 for the interlocking pattern.
             3 for the herringbone pattern.
             </summary>
         </member>
