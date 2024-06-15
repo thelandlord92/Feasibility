@@ -369,6 +369,9 @@ namespace Parking
             // add a plane at the moved point.
             Plane plane = Plane.ByOriginNormal(movedPoint, Vector.ZAxis());
 
+            // get the signage resource name.
+            string resourcename = SignageResources.ResourceMap[Signage];
+
             // add the signage required signage type to the plane.  
             List<Curve[]> signageOutline = Parking.Signage.ParkingSymbol2D(
                 plane,
@@ -376,7 +379,7 @@ namespace Parking
                 (float)0.01,
                 (float)2.5,
                 BayWidth,
-                "Feasibility.Parking.Symbols.evParkingSymbol.json");
+                resourcename);
 
             return signageOutline;
         }

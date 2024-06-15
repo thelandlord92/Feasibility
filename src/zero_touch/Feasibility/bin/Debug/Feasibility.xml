@@ -437,5 +437,15 @@
             <param name="resourcePath">The path of the symbol resource file.</param>
             <returns name="signageOutline">The signage outline curves.</returns>
         </member>
+        <member name="T:Parking.SignageResources">
+            <summary>
+            Class to define a dictionary of the signage resources.
+            </summary>
+        </member>
+        <member name="F:Parking.SignageResources.ResourceMap">
+            <summary>
+            The signage resources dictionary.
+            </summary>
+        </member>
     </members>
 </doc>

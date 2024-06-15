@@ -144,6 +144,7 @@
     <Compile Include="Parking\Patterns.cs" />
     <Compile Include="Parking\PerimeterBays.cs" />
     <Compile Include="Parking\Signage.cs" />
+    <Compile Include="Parking\SignageResources.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
