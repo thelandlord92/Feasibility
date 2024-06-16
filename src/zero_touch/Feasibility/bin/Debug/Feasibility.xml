@@ -72,12 +72,14 @@
             <returns>The offset surface.</returns>
             <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="M:Common.Geometry.PerimeterSurface(Autodesk.DesignScript.Geometry.Surface,System.Single)">
+        <member name="M:Common.Geometry.PerimeterSurface(Autodesk.DesignScript.Geometry.Surface,System.Single,System.Single,System.Single)">
             <summary>
             To create a surface along the perimeter of a surface.
             </summary>
-            <param name="surface"></param>
-            <param name="surfaceWidth"></param>
+            <param name="surface">The input surface.</param>
+            <param name="surfaceWidth">The width of the perimeter surface.</param>
+            <param name="internalConcaveFillet">The fillet radius at the internal concave corners.</param>
+            <param name="internalConvexFillet">The fillet radius at the internal convex corners.</param>
             <returns></returns>
             <exception cref="T:System.Exception"></exception>
         </member>

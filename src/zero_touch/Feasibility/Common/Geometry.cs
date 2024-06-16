@@ -124,14 +124,21 @@ namespace Common
             {
                 Curve[] offsetCurves = perimeterCurve.OffsetMany(offsetDistance, SurfacePlane(_surface).Normal);
                 offsetCurve = PolyCurve.ByJoinedCurves(offsetCurves, 0.001, false, 0);
+
+                // ensure the area of the offset curve is not great than the area of the surface.
+                if (Surface.ByPatch(offsetCurve).Area > surface.Area)
+                {
+                    Curve[] offsetCurvesAlt = perimeterCurve.OffsetMany(-offsetDistance, SurfacePlane(_surface).Normal);
+                    offsetCurve = PolyCurve.ByJoinedCurves(offsetCurvesAlt, 0.001, false, 0);
+                }
             }
             catch 
             {
                 throw new Exception("The surface cannot be offset. Reduce the offset distance.");
             };
 
-            // round the concave edges of the offset curve.
-            PolyCurve concaveRoundedCurve;
+            // round the concave corners of the offset curve.
+            PolyCurve concaveRoundedCurve = offsetCurve;
             if (concaveFillet <= 0) 
             {
                 concaveRoundedCurve = offsetCurve;
@@ -147,9 +154,27 @@ namespace Common
                     concaveRoundedCurve = offsetCurve;
                 }
             }
+
+            // round the convex corners of the concave rounded curve.
+            PolyCurve convexRoundedCurve = concaveRoundedCurve;
+            if (convexFillet <= 0) 
+            {
+                convexRoundedCurve = concaveRoundedCurve;
+            }
+            else if (convexFillet > 0)
+            {
+                try 
+                {
+                    convexRoundedCurve = concaveRoundedCurve.Fillet(convexFillet, true);
+                }
+                catch 
+                {
+                    convexRoundedCurve = concaveRoundedCurve;
+                }
+            }
             
             // create the offset surface.
-            Surface offsetSurface = Surface.ByPatch(offsetCurve);  
+            Surface offsetSurface = Surface.ByPatch(convexRoundedCurve);  
 
             return offsetSurface;
         }
@@ -158,17 +183,23 @@ namespace Common
         /// <summary>
         /// To create a surface along the perimeter of a surface.
         /// </summary>
-        /// <param name="surface"></param>
-        /// <param name="surfaceWidth"></param>
+        /// <param name="surface">The input surface.</param>
+        /// <param name="surfaceWidth">The width of the perimeter surface.</param>
+        /// <param name="internalConcaveFillet">The fillet radius at the internal concave corners.</param>
+        /// <param name="internalConvexFillet">The fillet radius at the internal convex corners.</param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public static Surface PerimeterSurface(Surface surface, float surfaceWidth)
+        public static Surface PerimeterSurface(
+            Surface surface, 
+            float surfaceWidth, 
+            float internalConcaveFillet = 0,
+            float internalConvexFillet = 0)
         {
             // create the internal surface for subtraction.
             List<Surface> internalSurfaces = new List<Surface>();
             try
             {
-                internalSurfaces.Add(OffsetSurface(surface, surfaceWidth));
+                internalSurfaces.Add(OffsetSurface(surface, surfaceWidth, internalConcaveFillet, internalConvexFillet));
             }
             catch
             {
