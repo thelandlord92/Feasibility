@@ -98,13 +98,19 @@ namespace Common
 
 
         /// <summary>
-        /// Offset a planar surface.
+        /// Offset a planar surface and round the edges if required.
         /// </summary>
         /// <param name="surface">The surface input.</param>
         /// <param name="offsetDistance">The perimeter offset distance.</param>
+        /// <param name="concaveFillet">The fillet radius at the concave corner.</param>
+        /// <param name="convexFillet">The fillet radius at the convex corner.</param>
         /// <returns>The offset surface.</returns>
         /// <exception cref="Exception"></exception>
-        public static Surface OffsetSurface(Surface surface, float offsetDistance) 
+        public static Surface OffsetSurface(
+            Surface surface, 
+            float offsetDistance, 
+            float concaveFillet = 0, 
+            float convexFillet = 0) 
         {
             // check if the surface is planar and horizontal.
             Surface _surface = CheckSurfacePlanarity(surface);
@@ -123,6 +129,24 @@ namespace Common
             {
                 throw new Exception("The surface cannot be offset. Reduce the offset distance.");
             };
+
+            // round the concave edges of the offset curve.
+            PolyCurve concaveRoundedCurve;
+            if (concaveFillet <= 0) 
+            {
+                concaveRoundedCurve = offsetCurve;
+            }
+            else if (concaveFillet > 0)
+            {
+                try
+                {
+                    concaveRoundedCurve = offsetCurve.Fillet(concaveFillet, false);
+                }
+                catch 
+                {
+                    concaveRoundedCurve = offsetCurve;
+                }
+            }
             
             // create the offset surface.
             Surface offsetSurface = Surface.ByPatch(offsetCurve);  

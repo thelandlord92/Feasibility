@@ -61,12 +61,14 @@
             <returns></returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="M:Common.Geometry.OffsetSurface(Autodesk.DesignScript.Geometry.Surface,System.Single)">
+        <member name="M:Common.Geometry.OffsetSurface(Autodesk.DesignScript.Geometry.Surface,System.Single,System.Single,System.Single)">
             <summary>
-            Offset a planar surface.
+            Offset a planar surface and round the edges if required.
             </summary>
             <param name="surface">The surface input.</param>
             <param name="offsetDistance">The perimeter offset distance.</param>
+            <param name="concaveFillet">The fillet radius at the concave corner.</param>
+            <param name="convexFillet">The fillet radius at the convex corner.</param>
             <returns>The offset surface.</returns>
             <exception cref="T:System.Exception"></exception>
         </member>
