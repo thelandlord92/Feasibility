@@ -112,9 +112,17 @@ namespace Common
             PolyCurve perimeterCurve = SurfacePerimeter(_surface);
 
             // offset the perimeter curve.
-            Curve[] offsetCurves = perimeterCurve.OffsetMany(-offsetDistance, SurfacePlane(_surface).Normal);
-            PolyCurve offsetCurve = PolyCurve.ByJoinedCurves(offsetCurves, 0.001, false, 0);
-
+            PolyCurve offsetCurve;
+            try
+            {
+                Curve[] offsetCurves = perimeterCurve.OffsetMany(offsetDistance, SurfacePlane(_surface).Normal);
+                offsetCurve = PolyCurve.ByJoinedCurves(offsetCurves, 0.001, false, 0);
+            }
+            catch 
+            {
+                throw new Exception("The surface cannot be offset. Reduce the offset distance.");
+            };
+            
             // create the offset surface.
             Surface offsetSurface = Surface.ByPatch(offsetCurve);  
 
