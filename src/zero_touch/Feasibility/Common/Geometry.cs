@@ -100,15 +100,15 @@ namespace Common
 
 
         /// <summary>
-        /// Offset a planar surface and round the edges if required.
+        /// Create planar offset polycurve edges from a surface and fillet the corners if required.
         /// </summary>
         /// <param name="surface">The surface input.</param>
         /// <param name="offsetDistance">The perimeter offset distance.</param>
         /// <param name="concaveFillet">The fillet radius at the concave corner.</param>
         /// <param name="convexFillet">The fillet radius at the convex corner.</param>
-        /// <returns>The offset surface.</returns>
+        /// <returns>The offset surface polycurves.</returns>
         /// <exception cref="Exception"></exception>
-        public static Surface OffsetSurface(
+        public static List<PolyCurve> CreateOffsetSurfaceEdges(
             Surface surface, 
             float offsetDistance, 
             float concaveFillet = 0, 
@@ -190,17 +190,38 @@ namespace Common
                 }
             }
 
-            // Create surfaces from the curve loops.
+            return convexRoundedCurves;
+        }
+
+
+        /// <summary>
+        /// Create an offset surface from the surface's offset edges..
+        /// </summary>
+        /// <param name="surface">The surface input.</param>
+        /// <param name="offsetDistance">The perimeter offset distance.</param>
+        /// <param name="concaveFillet">The fillet radius at the concave corner.</param>
+        /// <param name="convexFillet">The fillet radius at the convex corner.</param>
+        /// <returns>The offset surface.</returns>
+        /// <exception cref="Exception"></exception>
+        public static Surface OffsetSurface(
+            Surface surface,
+            float offsetDistance,
+            float concaveFillet = 0,
+            float convexFillet = 0)
+        {
+            // create the offset edges.
+            List<PolyCurve> offsetEdges = CreateOffsetSurfaceEdges(surface, offsetDistance, concaveFillet, convexFillet);
+
+            // create surfaces from the curve loops.
             List<Surface> offsetSurfaces = new List<Surface>();
-            foreach (PolyCurve curve in convexRoundedCurves)
+            foreach (PolyCurve curve in offsetEdges)
             {
                 offsetSurfaces.Add(Surface.ByPatch(curve));
             }
 
-            // Join thes surfaces into a single surface.
+            // join thes surfaces into a single surface.
             Surface finalSurface = Surface.ByUnion(offsetSurfaces);
 
-            
             return finalSurface;
         }
 

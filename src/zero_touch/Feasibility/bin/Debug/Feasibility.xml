@@ -61,9 +61,20 @@
             <returns></returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
+        <member name="M:Common.Geometry.CreateOffsetSurfaceEdges(Autodesk.DesignScript.Geometry.Surface,System.Single,System.Single,System.Single)">
+            <summary>
+            Create planar offset polycurve edges from a surface and fillet the corners if required.
+            </summary>
+            <param name="surface">The surface input.</param>
+            <param name="offsetDistance">The perimeter offset distance.</param>
+            <param name="concaveFillet">The fillet radius at the concave corner.</param>
+            <param name="convexFillet">The fillet radius at the convex corner.</param>
+            <returns>The offset surface polycurves.</returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
         <member name="M:Common.Geometry.OffsetSurface(Autodesk.DesignScript.Geometry.Surface,System.Single,System.Single,System.Single)">
             <summary>
-            Offset a planar surface and round the edges if required.
+            Create an offset surface from the surface's offset edges..
             </summary>
             <param name="surface">The surface input.</param>
             <param name="offsetDistance">The perimeter offset distance.</param>
