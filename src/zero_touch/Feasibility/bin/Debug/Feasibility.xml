@@ -138,18 +138,18 @@
             The width of the perimeter aisle.
             </summary>
         </member>
-        <member name="M:Parking.InternalBays.#ctor(Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Curve,System.Int32,System.Int32,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)">
+        <member name="P:Parking.InternalBays.PerimeterBayDepth">
+            <summary>
+            The depth of the perimeter parking if required.
+            </summary>
+        </member>
+        <member name="M:Parking.InternalBays.#ctor(Autodesk.DesignScript.Geometry.Surface,System.Int32,System.Int32,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)">
             <summary>
             Creates internal parking layout instances.
             </summary>
             <param name="layoutArea"></param>
-            <param name="exclusionArea"></param>
-            <param name="axialRoute"></param>
             <param name="patternType"></param>
             <param name="aisleType"></param>
-            <param name="axialRouteWidth"></param>
-            <param name="exclusionZoneAisleWidth"></param>
-            <param name="exclusionZoneWalkwayWidth"></param>
             <param name="externalTurningRadius"></param>
             <param name="internalTurningRadius"></param>
             <param name="islandCornerRadius"></param>
@@ -157,11 +157,26 @@
             <param name="layoutRotation"></param>
             <param name="perimeterAisleWidth"></param>
         </member>
-        <member name="M:Parking.InternalBays.ProjectCurves(Autodesk.DesignScript.Geometry.Curve)">
+        <member name="M:Parking.InternalBays.SurfacePerimeter(Autodesk.DesignScript.Geometry.Surface)">
             <summary>
-            To project curves onto the layout area if necessary.
+            Get the perimter polycurve of a surface.
             </summary>
-            <param name="curve"></param>
+            <param name="surface">The surface input.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Parking.InternalBays.SurfacePlane(Autodesk.DesignScript.Geometry.Surface)">
+            <summary>
+            Get the plane of a surface.
+            </summary>
+            <param name="surface">The surface input.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Parking.InternalBays.ProjectCurves(Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Curve)">
+            <summary>
+            To project curves onto a surface.
+            </summary>
+            <param name="surface">The input surface.</param>
+            <param name="curve">The input curve.</param>
             <returns></returns>
         </member>
         <member name="T:Parking.ParkingBay">

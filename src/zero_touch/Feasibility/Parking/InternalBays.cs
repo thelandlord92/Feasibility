@@ -1,4 +1,5 @@
 ﻿using Autodesk.DesignScript.Geometry;
+using Autodesk.DesignScript.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -125,68 +126,69 @@ namespace Parking
         /// <summary>
         /// The width of the axial routes.
         /// </summary>
-        public float AxialRouteWidth { private set; get; }
+        public float AxialRouteWidth { private get; set; }
 
 
         /// <summary>
         /// The width of the aisle around the exclusion zone.
         /// </summary>
-        public float ExclusionZoneAisleWidth { private set; get; }
+        public float ExclusionZoneAisleWidth { private get; set; }
 
 
         /// <summary>
         /// The width of the walkway around the exclusion zone.
         /// </summary>
-        public float ExclusionZoneWalkwayWidth { private set; get; }
+        public float ExclusionZoneWalkwayWidth { private get; set; }
 
 
         /// <summary>
         /// The vehicular turning radius at the convex corners of the perimeter aisle.
         /// </summary>
-        public float ExternalTurningRadius { private set; get; }
+        public float ExternalTurningRadius { private get; set; }
 
 
         /// <summary>
         /// The vehicular turning radius at the concave corners of the perimeter aisle.
         /// </summary>
-        public float InternalTurningRadius { private set; get; }
+        public float InternalTurningRadius { private get; set; }
 
 
         /// <summary>
         /// The radius at the corners of the internal parking islands.
         /// </summary>
-        public float IslandCornerRadius { private set; get; }
+        public float IslandCornerRadius { private get; set; }
 
 
         /// <summary>
         /// the height of the parking islands above the layout level.
         /// </summary>
-        public float IslandHeight { private set; get; }
+        public float IslandHeight { private get; set; }
 
 
         /// <summary>
         /// The rotation of the internal parking layout.
         /// </summary>
-        public float LayoutRotation { private set; get; }   
+        public float LayoutRotation { private get; set; }   
 
 
         /// <summary>
         /// The width of the perimeter aisle.
         /// </summary>
-        public float PerimeterAisleWidth { private set; get; }
+        public float PerimeterAisleWidth { private get; set; }
+
+
+        /// <summary>
+        /// The depth of the perimeter parking if required.
+        /// </summary>
+        public float PerimeterBayDepth { private get; set; }
 
 
         /// <summary>
         /// Creates internal parking layout instances.
         /// </summary>
         /// <param name="layoutArea"></param>
-        /// <param name="exclusionArea"></param>
-        /// <param name="axialRoute"></param>
         /// <param name="patternType"></param>
         /// <param name="aisleType"></param>
-        /// <param name="axialRouteWidth"></param>
-        /// <param name="exclusionZoneAisleWidth"></param>
-        /// <param name="exclusionZoneWalkwayWidth"></param>
         /// <param name="externalTurningRadius"></param>
         /// <param name="internalTurningRadius"></param>
         /// <param name="islandCornerRadius"></param>
@@ -195,13 +197,13 @@ namespace Parking
         /// <param name="perimeterAisleWidth"></param>
         public InternalBays(
             Surface layoutArea,
-            Surface exclusionArea,
-            Curve axialRoute,
+            // Surface exclusionArea,
+            // Curve axialRoute,
             int patternType = 1,
             int aisleType = 1,
-            float axialRouteWidth = 7,
-            float exclusionZoneAisleWidth = 7,
-            float exclusionZoneWalkwayWidth = 1.5f,
+            // float axialRouteWidth = 7,
+            // float exclusionZoneAisleWidth = 7,
+            // float exclusionZoneWalkwayWidth = 1.5f,
             float externalTurningRadius = 5,
             float internalTurningRadius = 3.5f,
             float islandCornerRadius = 1,
@@ -210,12 +212,13 @@ namespace Parking
             float perimeterAisleWidth = 7)
         { 
             LayoutArea = layoutArea;
-            ExclusionArea = exclusionArea;
-            AxialRoute = axialRoute;
+            // ExclusionArea = exclusionArea;
+            // AxialRoute = axialRoute;
             PatternType = patternType;
             AisleType = aisleType;
-            AxialRouteWidth = axialRouteWidth;
-            ExclusionZoneAisleWidth = exclusionZoneAisleWidth;
+            // AxialRouteWidth = axialRouteWidth;
+            // ExclusionZoneAisleWidth = exclusionZoneAisleWidth;
+            // ExclusionZoneWalkwayWidth = exclusionZoneWalkwayWidth;
             ExternalTurningRadius = externalTurningRadius;
             InternalTurningRadius = internalTurningRadius;
             IslandCornerRadius = islandCornerRadius;
@@ -226,18 +229,58 @@ namespace Parking
 
 
         /// <summary>
-        /// To project curves onto the layout area if necessary.
+        /// Get the perimter polycurve of a surface.
         /// </summary>
-        /// <param name="curve"></param>
+        /// <param name="surface">The surface input.</param>
         /// <returns></returns>
-        public Curve ProjectCurves(Curve curve) 
+        private static PolyCurve SurfacePerimeter(Surface surface) 
         {
             // get the perimeter curve of the layout surface.
-            Curve[] perimeterCurves = LayoutArea.PerimeterCurves();
+            Curve[] perimeterCurves = surface.PerimeterCurves();
             PolyCurve perimeterCurve = PolyCurve.ByJoinedCurves(perimeterCurves, 0.001, false, 0);
+
+            return perimeterCurve;
+        }
+
+        /// <summary>
+        /// Get the plane of a surface.
+        /// </summary>
+        /// <param name="surface">The surface input.</param>
+        /// <returns></returns>
+        public static Plane SurfacePlane(Surface surface)
+        {
+            // get the max and min point of the surface bounding box.
+            Point minPoint = surface.BoundingBox.MinPoint;
+            Point maxPoint = surface.BoundingBox.MaxPoint;
+
+            // check if the surface is planar and horizontal.
+            Surface _surface = null;
+            if (maxPoint.Z > minPoint.Z)
+            {
+                throw new ArgumentOutOfRangeException(nameof(_exclusionArea), "The surface must be horizontal and planar.");
+            }
+            _surface = surface;
+
+            // get the perimeter curve of the layout surface.
+            PolyCurve perimeterCurve = SurfacePerimeter(_surface);
 
             // get the plane of the perimeter curve.
             Plane curvePlane = perimeterCurve.BasePlane();
+
+            return curvePlane;
+        }
+
+        
+        /// <summary>
+        /// To project curves onto a surface.
+        /// </summary>
+        /// <param name="surface">The input surface.</param>
+        /// <param name="curve">The input curve.</param>
+        /// <returns></returns>
+        private static Curve ProjectCurves(Surface surface, Curve curve) 
+        {
+            // get the plane of the perimeter curve.
+            Plane curvePlane = SurfacePlane(surface);
 
             // pull the curve onto the plane.
             Curve pulledCurve = curve.PullOntoPlane(curvePlane);
