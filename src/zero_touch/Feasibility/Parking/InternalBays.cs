@@ -257,7 +257,7 @@ namespace Parking
             Surface _surface = null;
             if (maxPoint.Z > minPoint.Z)
             {
-                throw new ArgumentOutOfRangeException(nameof(_exclusionArea), "The surface must be horizontal and planar.");
+                throw new ArgumentOutOfRangeException(nameof(surface), "The surface must be horizontal and planar.");
             }
             _surface = surface;
 
