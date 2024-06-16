@@ -33,11 +33,12 @@ namespace Common
 
 
         /// <summary>
-        /// Get the plane of a surface.
+        /// Check the planarity of an input surface.
         /// </summary>
-        /// <param name="surface">The surface input.</param>
-        /// <returns></returns>
-        private static Plane SurfacePlane(Surface surface)
+        /// <param name="surface">The input surface.</param>
+        /// <returns name="planarSurface">The planar surface.</returns>
+        /// <exception cref="ArgumentException"></exception>
+        private static Surface CheckSurfacePlanarity(Surface surface) 
         {
             // get the max and min point of the surface bounding box.
             Point minPoint = surface.BoundingBox.MinPoint;
@@ -47,11 +48,27 @@ namespace Common
             Surface _surface = null;
             if (maxPoint.Z > minPoint.Z)
             {
-                throw new ArgumentOutOfRangeException(nameof(surface), "The surface must be horizontal and planar.");
+                throw new ArgumentException(nameof(surface), "The surface must be horizontal and planar.");
             }
             _surface = surface;
 
-            // get the perimeter curve of the layout surface.
+            return _surface;
+        }
+
+
+        /// <summary>
+        /// Get the plane of a horizontal planar surface.
+        /// Returns an error if the surface is not planar and horizontal.
+        /// </summary>
+        /// <param name="surface">The surface input.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        private static Plane SurfacePlane(Surface surface)
+        {
+            // check if the surface is planar and horizontal.
+            Surface _surface = CheckSurfacePlanarity(surface);
+
+            // get the perimeter curve of the surface.
             PolyCurve perimeterCurve = SurfacePerimeter(_surface);
 
             // get the plane of the perimeter curve.
@@ -62,11 +79,12 @@ namespace Common
 
 
         /// <summary>
-        /// To project curves onto a surface.
+        /// To project curves onto a planar and horizontal surface.
         /// </summary>
         /// <param name="surface">The input surface.</param>
         /// <param name="curve">The input curve.</param>
         /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         private static Curve ProjectCurves(Surface surface, Curve curve)
         {
             // get the plane of the perimeter curve.
@@ -76,6 +94,31 @@ namespace Common
             Curve pulledCurve = curve.PullOntoPlane(curvePlane);
 
             return pulledCurve;
+        }
+
+
+        /// <summary>
+        /// Offset a planar surface.
+        /// </summary>
+        /// <param name="surface">The surface input.</param>
+        /// <param name="offsetDistance">The perimeter offset distance.</param>
+        /// <returns>The offset surface.</returns>
+        public static Surface OffsetSurface(Surface surface, float offsetDistance) 
+        {
+            // check if the surface is planar and horizontal.
+            Surface _surface = CheckSurfacePlanarity(surface);
+
+            // get the surface perimeter curves.
+            PolyCurve perimeterCurve = SurfacePerimeter(_surface);
+
+            // offset the perimeter curve.
+            Curve[] offsetCurves = perimeterCurve.OffsetMany(-offsetDistance, SurfacePlane(_surface).Normal);
+            PolyCurve offsetCurve = PolyCurve.ByJoinedCurves(offsetCurves, 0.001, false, 0);
+
+            // create the offset surface.
+            Surface offsetSurface = Surface.ByPatch(offsetCurve);  
+
+            return offsetSurface;
         }
     }
 }

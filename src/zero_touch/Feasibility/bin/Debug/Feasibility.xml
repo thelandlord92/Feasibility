@@ -22,6 +22,53 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:Common.Geometry">
+            <summary>
+            Wrapper class for geometry.
+            Contains common geometrical operations.
+            </summary>
+        </member>
+        <member name="M:Common.Geometry.SurfacePerimeter(Autodesk.DesignScript.Geometry.Surface)">
+            <summary>
+            Get the perimter polycurve of a surface.
+            </summary>
+            <param name="surface">The surface input.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.Geometry.CheckSurfacePlanarity(Autodesk.DesignScript.Geometry.Surface)">
+            <summary>
+            Check the planarity of an input surface.
+            </summary>
+            <param name="surface">The input surface.</param>
+            <returns name="planarSurface">The planar surface.</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Common.Geometry.SurfacePlane(Autodesk.DesignScript.Geometry.Surface)">
+            <summary>
+            Get the plane of a horizontal planar surface.
+            Returns an error if the surface is not planar and horizontal.
+            </summary>
+            <param name="surface">The surface input.</param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Common.Geometry.ProjectCurves(Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Curve)">
+            <summary>
+            To project curves onto a planar and horizontal surface.
+            </summary>
+            <param name="surface">The input surface.</param>
+            <param name="curve">The input curve.</param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Common.Geometry.OffsetSurface(Autodesk.DesignScript.Geometry.Surface,System.Single)">
+            <summary>
+            Offset a planar surface.
+            </summary>
+            <param name="surface">The surface input.</param>
+            <param name="offsetDistance">The perimeter offset distance.</param>
+            <returns>The offset surface.</returns>
+        </member>
         <member name="T:Common.Math">
             <summary>
             A class containing methods for common math operations.
@@ -156,28 +203,6 @@
             <param name="islandHeight"></param>
             <param name="layoutRotation"></param>
             <param name="perimeterAisleWidth"></param>
-        </member>
-        <member name="M:Parking.InternalBays.SurfacePerimeter(Autodesk.DesignScript.Geometry.Surface)">
-            <summary>
-            Get the perimter polycurve of a surface.
-            </summary>
-            <param name="surface">The surface input.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Parking.InternalBays.SurfacePlane(Autodesk.DesignScript.Geometry.Surface)">
-            <summary>
-            Get the plane of a surface.
-            </summary>
-            <param name="surface">The surface input.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Parking.InternalBays.ProjectCurves(Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Curve)">
-            <summary>
-            To project curves onto a surface.
-            </summary>
-            <param name="surface">The input surface.</param>
-            <param name="curve">The input curve.</param>
-            <returns></returns>
         </member>
         <member name="T:Parking.ParkingBay">
             <summary>
