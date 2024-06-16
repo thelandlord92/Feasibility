@@ -103,6 +103,7 @@ namespace Common
         /// <param name="surface">The surface input.</param>
         /// <param name="offsetDistance">The perimeter offset distance.</param>
         /// <returns>The offset surface.</returns>
+        /// <exception cref="Exception"></exception>
         public static Surface OffsetSurface(Surface surface, float offsetDistance) 
         {
             // check if the surface is planar and horizontal.
@@ -127,6 +128,33 @@ namespace Common
             Surface offsetSurface = Surface.ByPatch(offsetCurve);  
 
             return offsetSurface;
+        }
+
+
+        /// <summary>
+        /// To create a surface along the perimeter of a surface.
+        /// </summary>
+        /// <param name="surface"></param>
+        /// <param name="surfaceWidth"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public static Surface PerimeterSurface(Surface surface, float surfaceWidth)
+        {
+            // create the internal surface for subtraction.
+            List<Surface> internalSurfaces = new List<Surface>();
+            try
+            {
+                internalSurfaces.Add(OffsetSurface(surface, surfaceWidth));
+            }
+            catch
+            {
+                throw new Exception("The surface cannot be created. Reduce the surface width.");
+            };
+
+            // subtract the internal surface from the primary surface.
+            Surface perimeterSurface = surface.Difference(internalSurfaces);
+
+            return perimeterSurface;
         }
     }
 }

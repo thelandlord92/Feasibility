@@ -68,6 +68,16 @@
             <param name="surface">The surface input.</param>
             <param name="offsetDistance">The perimeter offset distance.</param>
             <returns>The offset surface.</returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:Common.Geometry.PerimeterSurface(Autodesk.DesignScript.Geometry.Surface,System.Single)">
+            <summary>
+            To create a surface along the perimeter of a surface.
+            </summary>
+            <param name="surface"></param>
+            <param name="surfaceWidth"></param>
+            <returns></returns>
+            <exception cref="T:System.Exception"></exception>
         </member>
         <member name="T:Common.Math">
             <summary>
