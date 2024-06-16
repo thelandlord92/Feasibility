@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common;
+using CoreNodeModels;
 
 namespace Common
 {
@@ -21,7 +23,7 @@ namespace Common
         /// Get the perimter polycurve of a surface.
         /// </summary>
         /// <param name="surface">The surface input.</param>
-        /// <returns></returns>
+        /// <returns name="polyCurve">The closed perimeter polycurve.</returns>
         private static PolyCurve SurfacePerimeter(Surface surface)
         {
             // get the perimeter curve of the layout surface.
@@ -110,73 +112,96 @@ namespace Common
             Surface surface, 
             float offsetDistance, 
             float concaveFillet = 0, 
-            float convexFillet = 0) 
+            float convexFillet = 0)
         {
-            // check if the surface is planar and horizontal.
+            // Check if the surface is planar and horizontal.
             Surface _surface = CheckSurfacePlanarity(surface);
 
-            // get the surface perimeter curves.
+            // Get the surface perimeter curve.
             PolyCurve perimeterCurve = SurfacePerimeter(_surface);
 
             // offset the perimeter curve.
-            PolyCurve offsetCurve;
+            Curve[] offsetCurves = perimeterCurve.OffsetMany(offsetDistance, SurfacePlane(_surface).Normal);
+
+            // Offset the perimeter curve.
+            List<PolyCurve> joinedCurves = new List<PolyCurve>();
             try
             {
-                Curve[] offsetCurves = perimeterCurve.OffsetMany(offsetDistance, SurfacePlane(_surface).Normal);
-                offsetCurve = PolyCurve.ByJoinedCurves(offsetCurves, 0.001, false, 0);
-
-                // ensure the area of the offset curve is not great than the area of the surface.
-                if (Surface.ByPatch(offsetCurve).Area > surface.Area)
+                // Check if the area of the offset curve is greater than that of the original surface.
+                foreach (Curve curve in offsetCurves)
                 {
-                    Curve[] offsetCurvesAlt = perimeterCurve.OffsetMany(-offsetDistance, SurfacePlane(_surface).Normal);
-                    offsetCurve = PolyCurve.ByJoinedCurves(offsetCurvesAlt, 0.001, false, 0);
+                    if (Surface.ByPatch(curve).Area > _surface.Area)
+                    {
+                        Curve[] offsetCurvesAlt = perimeterCurve.OffsetMany(-offsetDistance, SurfacePlane(surface).Normal);
+                        foreach (Curve curveAlt in offsetCurvesAlt)
+                        {
+                            joinedCurves.Add(curveAlt as PolyCurve);
+                        }
+                    }
+                    else
+                    {
+                        joinedCurves.Add(curve as PolyCurve);
+                    }
                 }
             }
             catch 
             {
                 throw new Exception("The surface cannot be offset. Reduce the offset distance.");
-            };
+            }
+            // Round the concave corners of the offset curves.
+            List<PolyCurve> concaveRoundedCurves = new List<PolyCurve>();
+            foreach (PolyCurve curve in joinedCurves)
+            {
+                if (concaveFillet > 0)
+                {
+                    try
+                    {
+                        concaveRoundedCurves.Add(curve.Fillet(concaveFillet, false));
+                    }
+                    catch
+                    {
+                        concaveRoundedCurves.Add(curve);
+                    }
+                }
+                else
+                {
+                    concaveRoundedCurves.Add(curve);
+                }
+            }
 
-            // round the concave corners of the offset curve.
-            PolyCurve concaveRoundedCurve = offsetCurve;
-            if (concaveFillet <= 0) 
+            // Round the convex corners of the concave rounded curves.
+            List<PolyCurve> convexRoundedCurves = new List<PolyCurve>();
+            foreach (PolyCurve curve in concaveRoundedCurves)
             {
-                concaveRoundedCurve = offsetCurve;
-            }
-            else if (concaveFillet > 0)
-            {
-                try
+                if (convexFillet > 0)
                 {
-                    concaveRoundedCurve = offsetCurve.Fillet(concaveFillet, false);
+                    try
+                    {
+                        convexRoundedCurves.Add(curve.Fillet(convexFillet, true));
+                    }
+                    catch
+                    {
+                        convexRoundedCurves.Add(curve);
+                    }
                 }
-                catch 
+                else
                 {
-                    concaveRoundedCurve = offsetCurve;
+                    convexRoundedCurves.Add(curve);
                 }
             }
 
-            // round the convex corners of the concave rounded curve.
-            PolyCurve convexRoundedCurve = concaveRoundedCurve;
-            if (convexFillet <= 0) 
+            // Create surfaces from the curve loops.
+            List<Surface> offsetSurfaces = new List<Surface>();
+            foreach (PolyCurve curve in convexRoundedCurves)
             {
-                convexRoundedCurve = concaveRoundedCurve;
+                offsetSurfaces.Add(Surface.ByPatch(curve));
             }
-            else if (convexFillet > 0)
-            {
-                try 
-                {
-                    convexRoundedCurve = concaveRoundedCurve.Fillet(convexFillet, true);
-                }
-                catch 
-                {
-                    convexRoundedCurve = concaveRoundedCurve;
-                }
-            }
+
+            // Join thes surfaces into a single surface.
+            Surface finalSurface = Surface.ByUnion(offsetSurfaces);
+
             
-            // create the offset surface.
-            Surface offsetSurface = Surface.ByPatch(convexRoundedCurve);  
-
-            return offsetSurface;
+            return finalSurface;
         }
 
 
