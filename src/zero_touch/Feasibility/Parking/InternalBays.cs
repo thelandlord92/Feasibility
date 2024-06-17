@@ -20,15 +20,15 @@ namespace Parking
         /// <summary>
         /// A horizontal planar surface representing the parking area.
         /// </summary>
-        public Surface LayoutArea 
+        public Surface LayoutArea
         {
             private get { return _layoutArea; }
-            set 
+            set
             {
                 Point minPoint = value.BoundingBox.MinPoint;
                 Point maxPoint = value.BoundingBox.MaxPoint;
 
-                if (maxPoint.Z > minPoint.Z) 
+                if (maxPoint.Z > minPoint.Z)
                 {
                     throw new ArgumentOutOfRangeException(nameof(_layoutArea), "The layout surface must be horizontal and planar.");
                 }
@@ -42,10 +42,10 @@ namespace Parking
         /// <summary>
         /// Horizontal planar surfaces representing the exlusion zones.
         /// </summary>
-        public Surface ExclusionArea 
+        public Surface ExclusionArea
         {
             private get { return _exclusionArea; }
-            set 
+            set
             {
                 Point minPoint = value.BoundingBox.MinPoint;
                 Point maxPoint = value.BoundingBox.MaxPoint;
@@ -64,16 +64,16 @@ namespace Parking
         /// <summary>
         /// Axial route curves to mark primary access routes around the parking layout.
         /// </summary>
-        public Curve AxialRoute 
+        public Curve AxialRoute
         {
-            private get { return _axialRoute;  }
-            set 
+            private get { return _axialRoute; }
+            set
             {
                 if (value.IsPlanar == false)
                 {
                     throw new ArgumentException(nameof(_axialRoute), "The axial route curve must be planar.");
                 }
-                else if (value.EndPoint.Z > value.StartPoint.Z) 
+                else if (value.EndPoint.Z > value.StartPoint.Z)
                 {
                     throw new ArgumentException(nameof(_axialRoute), "The axial route curve must be horizontal.");
                 }
@@ -111,13 +111,13 @@ namespace Parking
         /// 1 for one way traffic.
         /// 2 for two way traffic.
         /// </summary>
-        public int AisleType 
+        public int AisleType
         {
             private get { return _aisleType; }
-            set 
+            set
             {
-                if (value < 1 || value > 2) 
-                { 
+                if (value < 1 || value > 2)
+                {
                     throw new ArgumentOutOfRangeException(nameof(AisleType), "AisleType must be 1 or 2.");
                 }
             }
@@ -169,7 +169,7 @@ namespace Parking
         /// <summary>
         /// The rotation of the internal parking layout.
         /// </summary>
-        public float LayoutRotation { private get; set; }   
+        public float LayoutRotation { private get; set; }
 
 
         /// <summary>
@@ -221,7 +221,7 @@ namespace Parking
             float perimeterAisleWidth = 7,
             float perimeterBayDepth = 5,
             float perimeterWalkwayWidth = 1)
-        { 
+        {
             LayoutArea = layoutArea;
             // ExclusionArea = exclusionArea;
             // AxialRoute = axialRoute;
@@ -238,7 +238,7 @@ namespace Parking
             PerimeterAisleWidth = perimeterAisleWidth;
             PerimeterBayDepth = perimeterBayDepth;
             PerimeterWalkWayWidth = perimeterWalkwayWidth;
-        } 
+        }
 
 
         /// <summary>
@@ -246,7 +246,7 @@ namespace Parking
         /// </summary>
         /// <param name="layoutPlane">The plane to project the parking surface onto.</param>
         /// <returns name="layoutSurface">The parking layout surface.</returns>
-        public Surface CreateLayoutSurface([DefaultArgument("Plane.XY()")] Plane layoutPlane) 
+        public Surface CreateLayoutSurface([DefaultArgument("Plane.XY()")] Plane layoutPlane)
         {
             // check the planarity of the input surface.
             Surface surface = Common.Geometry.CheckSurfacePlanarity(LayoutArea);
@@ -264,24 +264,69 @@ namespace Parking
         /// <param name="layoutPlane">The plane to project the parking surface onto.</param>
         /// <param name="concaveFillet">The fillet radius at the concave corners.</param>
         /// <param name="convexFillet">The fillet radius at the convex corners.</param>
-        /// <returns></returns>
+        /// <returns name="internalSurface">The offset internal surface.</returns>
         public Surface CreateInternalSurface(
-            [DefaultArgument("Plane.XY()")] Plane layoutPlane, 
-            float concaveFillet = 0, 
-            float convexFillet = 0) 
+            [DefaultArgument("Plane.XY()")] Plane layoutPlane,
+            float concaveFillet = 0,
+            float convexFillet = 0)
         {
             // create the layout surface.
             Surface layoutSurface = CreateLayoutSurface(layoutPlane);
 
-            // create the internal parking surface.
-            Surface internalSurface = Common.Geometry.OffsetSurface(
-                LayoutArea,
-                (PerimeterAisleWidth + PerimeterBayDepth + PerimeterWalkWayWidth),
-                concaveFillet,
-                convexFillet
-            );
+            Surface internalSurface;
+            try
+            {
+                // create the internal parking surface.
+                internalSurface = Common.Geometry.OffsetSurface(
+                    layoutSurface,
+                    (PerimeterAisleWidth + PerimeterBayDepth + PerimeterWalkWayWidth),
+                    concaveFillet,
+                    convexFillet
+                );
+            }
+            catch
+            {
+                // assign null value to the internal surface if not created.
+                internalSurface = null;
+            }
 
-            return layoutSurface;
+            return internalSurface;
+        }
+
+
+        /// <summary>
+        /// Creates the perimter road surface.
+        /// </summary>
+        /// <param name="layoutPlane">The plane to project the parking surface onto.</param>
+        /// <param name="concaveFillet">The fillet radius at the concave corners.</param>
+        /// <param name="convexFillet">The fillet radius at the convex corners.</param>
+        /// <returns></returns>
+        public Surface CreatePerimeterRoadSurface(
+            [DefaultArgument("Plane.XY()")] Plane layoutPlane,
+            float concaveFillet = 0,
+            float convexFillet = 0)
+        {
+            // create the layout surface.
+            Surface layoutSurface = CreateLayoutSurface(layoutPlane);
+
+            Surface roadWaySurface;
+            try 
+            {
+                // create the perimter roadway surface.
+                roadWaySurface = Common.Geometry.PerimeterSurface(
+                    layoutSurface,
+                    (PerimeterAisleWidth + PerimeterBayDepth + PerimeterWalkWayWidth),
+                    concaveFillet,
+                    convexFillet
+                );
+            }
+            catch
+            {
+                // assign null value to the roadway surface if not created.
+                roadWaySurface = null;
+            }
+
+            return roadWaySurface;
         }
     }
 }

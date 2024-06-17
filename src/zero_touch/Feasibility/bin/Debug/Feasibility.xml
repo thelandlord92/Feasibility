@@ -258,6 +258,15 @@
             <param name="layoutPlane">The plane to project the parking surface onto.</param>
             <param name="concaveFillet">The fillet radius at the concave corners.</param>
             <param name="convexFillet">The fillet radius at the convex corners.</param>
+            <returns name="internalSurface">The offset internal surface.</returns>
+        </member>
+        <member name="M:Parking.InternalBays.CreatePerimeterRoadSurface(Autodesk.DesignScript.Geometry.Plane,System.Single,System.Single)">
+            <summary>
+            Creates the perimter road surface.
+            </summary>
+            <param name="layoutPlane">The plane to project the parking surface onto.</param>
+            <param name="concaveFillet">The fillet radius at the concave corners.</param>
+            <param name="convexFillet">The fillet radius at the convex corners.</param>
             <returns></returns>
         </member>
         <member name="T:Parking.ParkingBay">
