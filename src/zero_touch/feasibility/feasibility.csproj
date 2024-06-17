@@ -141,6 +141,7 @@
     <Compile Include="Parking\BoundingRectangle.cs" />
     <Compile Include="Parking\ExclusionBays.cs" />
     <Compile Include="Parking\InternalBays.cs" />
+    <Compile Include="Parking\Layouts.cs" />
     <Compile Include="Parking\ParkingBay.cs" />
     <Compile Include="Parking\Patterns.cs" />
     <Compile Include="Parking\PerimeterBays.cs" />

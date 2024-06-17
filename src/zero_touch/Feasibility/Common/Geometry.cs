@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Common;
 using CoreNodeModels;
+using Autodesk.DesignScript.Runtime;
 
 namespace Common
 {
@@ -55,6 +56,36 @@ namespace Common
             _surface = surface;
 
             return _surface;
+        }
+
+
+        /// <summary>
+        /// Pull a surface onto a plane, in the plane's normal direction.
+        /// </summary>
+        /// <param name="surface">The input surface.</param>
+        /// <param name="plane">The target plane.</param>
+        /// <returns name="pulledSurface">The new surface pulled onto the plane.</returns>
+        public static Surface PullSurfaceToPlane(Surface surface, [DefaultArgument("Plane.XY()")]Plane plane)
+        {
+            Surface newSurface;
+            try 
+            {
+                // get the perimeter polycurve of the surface.
+                PolyCurve curve = SurfacePerimeter(surface);
+
+                // pull the polycurve onto the plane.
+                PolyCurve pulledCurve = curve.PullOntoPlane(plane) as PolyCurve;
+
+                // create the new surface.
+                newSurface = Surface.ByPatch(pulledCurve);
+            }
+            catch 
+            {
+                throw new Exception("The surface cannot be projected likely because its projected edges overlap.");
+            }
+            
+
+            return newSurface;
         }
 
 

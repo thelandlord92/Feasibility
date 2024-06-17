@@ -43,6 +43,14 @@
             <returns name="planarSurface">The planar surface.</returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
+        <member name="M:Common.Geometry.PullSurfaceToPlane(Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Plane)">
+            <summary>
+            Pull a surface onto a plane, in the plane's normal direction.
+            </summary>
+            <param name="surface">The input surface.</param>
+            <param name="plane">The target plane.</param>
+            <returns name="pulledSurface">The new surface pulled onto the plane.</returns>
+        </member>
         <member name="M:Common.Geometry.SurfacePlane(Autodesk.DesignScript.Geometry.Surface)">
             <summary>
             Get the plane of a horizontal planar surface.
@@ -215,7 +223,12 @@
             The depth of the perimeter parking if required.
             </summary>
         </member>
-        <member name="M:Parking.InternalBays.#ctor(Autodesk.DesignScript.Geometry.Surface,System.Int32,System.Int32,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)">
+        <member name="P:Parking.InternalBays.PerimeterWalkWayWidth">
+            <summary>
+            The width of the perimeter walkway.
+            </summary>
+        </member>
+        <member name="M:Parking.InternalBays.#ctor(Autodesk.DesignScript.Geometry.Surface,System.Int32,System.Int32,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)">
             <summary>
             Creates internal parking layout instances.
             </summary>
@@ -228,6 +241,8 @@
             <param name="islandHeight"></param>
             <param name="layoutRotation"></param>
             <param name="perimeterAisleWidth"></param>
+            <param name="perimeterBayDepth"></param>
+            <param name="perimeterWalkwayWidth"></param>
         </member>
         <member name="T:Parking.ParkingBay">
             <summary>

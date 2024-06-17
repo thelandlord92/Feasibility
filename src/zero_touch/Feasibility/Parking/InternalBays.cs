@@ -184,6 +184,12 @@ namespace Parking
 
 
         /// <summary>
+        /// The width of the perimeter walkway.
+        /// </summary>
+        public float PerimeterWalkWayWidth { private get; set; }
+
+
+        /// <summary>
         /// Creates internal parking layout instances.
         /// </summary>
         /// <param name="layoutArea"></param>
@@ -195,6 +201,8 @@ namespace Parking
         /// <param name="islandHeight"></param>
         /// <param name="layoutRotation"></param>
         /// <param name="perimeterAisleWidth"></param>
+        /// <param name="perimeterBayDepth"></param>
+        /// <param name="perimeterWalkwayWidth"></param>
         public InternalBays(
             Surface layoutArea,
             // Surface exclusionArea,
@@ -209,7 +217,9 @@ namespace Parking
             float islandCornerRadius = 1,
             float islandHeight = 1,
             float layoutRotation = 45,
-            float perimeterAisleWidth = 7)
+            float perimeterAisleWidth = 7,
+            float perimeterBayDepth = 5,
+            float perimeterWalkwayWidth = 1)
         { 
             LayoutArea = layoutArea;
             // ExclusionArea = exclusionArea;
@@ -225,10 +235,8 @@ namespace Parking
             IslandHeight = islandHeight;
             LayoutRotation = layoutRotation;
             PerimeterAisleWidth = perimeterAisleWidth;
-        }
-
-
-        
-
+            PerimeterBayDepth = perimeterBayDepth;
+            PerimeterWalkWayWidth = perimeterWalkwayWidth;
+        } 
     }
 }
