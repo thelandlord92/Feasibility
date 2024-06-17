@@ -256,5 +256,32 @@ namespace Parking
 
             return layoutSurface;
         }
+
+
+        /// <summary>
+        /// Creates the internal parking area surface.
+        /// </summary>
+        /// <param name="layoutPlane">The plane to project the parking surface onto.</param>
+        /// <param name="concaveFillet">The fillet radius at the concave corners.</param>
+        /// <param name="convexFillet">The fillet radius at the convex corners.</param>
+        /// <returns></returns>
+        public Surface CreateInternalSurface(
+            [DefaultArgument("Plane.XY()")] Plane layoutPlane, 
+            float concaveFillet = 0, 
+            float convexFillet = 0) 
+        {
+            // create the layout surface.
+            Surface layoutSurface = CreateLayoutSurface(layoutPlane);
+
+            // create the internal parking surface.
+            Surface internalSurface = Common.Geometry.OffsetSurface(
+                LayoutArea,
+                (PerimeterAisleWidth + PerimeterBayDepth + PerimeterWalkWayWidth),
+                concaveFillet,
+                convexFillet
+            );
+
+            return layoutSurface;
+        }
     }
 }

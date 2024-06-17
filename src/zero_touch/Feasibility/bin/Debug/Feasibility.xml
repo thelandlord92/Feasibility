@@ -244,6 +244,22 @@
             <param name="perimeterBayDepth"></param>
             <param name="perimeterWalkwayWidth"></param>
         </member>
+        <member name="M:Parking.InternalBays.CreateLayoutSurface(Autodesk.DesignScript.Geometry.Plane)">
+            <summary>
+            Creates the parking layout surface.
+            </summary>
+            <param name="layoutPlane">The plane to project the parking surface onto.</param>
+            <returns name="layoutSurface">The parking layout surface.</returns>
+        </member>
+        <member name="M:Parking.InternalBays.CreateInternalSurface(Autodesk.DesignScript.Geometry.Plane,System.Single,System.Single)">
+            <summary>
+            Creates the internal parking area surface.
+            </summary>
+            <param name="layoutPlane">The plane to project the parking surface onto.</param>
+            <param name="concaveFillet">The fillet radius at the concave corners.</param>
+            <param name="convexFillet">The fillet radius at the convex corners.</param>
+            <returns></returns>
+        </member>
         <member name="T:Parking.ParkingBay">
             <summary>
             Wrapper class for the parking bay.
