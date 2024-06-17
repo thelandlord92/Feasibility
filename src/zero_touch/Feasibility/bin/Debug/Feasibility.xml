@@ -148,6 +148,11 @@
             A horizontal planar surface representing the parking area.
             </summary>
         </member>
+        <member name="P:Parking.InternalBays.LayoutPlane">
+            <summary>
+            The host plane of the parking layout.
+            </summary>
+        </member>
         <member name="P:Parking.InternalBays.ExclusionArea">
             <summary>
             Horizontal planar surfaces representing the exlusion zones.
@@ -228,11 +233,12 @@
             The width of the perimeter walkway.
             </summary>
         </member>
-        <member name="M:Parking.InternalBays.#ctor(Autodesk.DesignScript.Geometry.Surface,System.Int32,System.Int32,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)">
+        <member name="M:Parking.InternalBays.#ctor(Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Plane,System.Int32,System.Int32,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)">
             <summary>
             Creates internal parking layout instances.
             </summary>
             <param name="layoutArea"></param>
+            <param name="layoutPlane">The host plane of the parking layout.</param>
             <param name="patternType"></param>
             <param name="aisleType"></param>
             <param name="externalTurningRadius"></param>
@@ -244,30 +250,35 @@
             <param name="perimeterBayDepth"></param>
             <param name="perimeterWalkwayWidth"></param>
         </member>
-        <member name="M:Parking.InternalBays.CreateLayoutSurface(Autodesk.DesignScript.Geometry.Plane)">
+        <member name="M:Parking.InternalBays.CreateLayoutSurface">
             <summary>
             Creates the parking layout surface.
             </summary>
-            <param name="layoutPlane">The plane to project the parking surface onto.</param>
             <returns name="layoutSurface">The parking layout surface.</returns>
         </member>
-        <member name="M:Parking.InternalBays.CreateInternalSurface(Autodesk.DesignScript.Geometry.Plane,System.Single,System.Single)">
+        <member name="M:Parking.InternalBays.CreateInternalSurface(System.Single,System.Single)">
             <summary>
             Creates the internal parking area surface.
             </summary>
-            <param name="layoutPlane">The plane to project the parking surface onto.</param>
             <param name="concaveFillet">The fillet radius at the concave corners.</param>
             <param name="convexFillet">The fillet radius at the convex corners.</param>
             <returns name="internalSurface">The offset internal surface.</returns>
         </member>
-        <member name="M:Parking.InternalBays.CreatePerimeterRoadSurface(Autodesk.DesignScript.Geometry.Plane,System.Single,System.Single)">
+        <member name="M:Parking.InternalBays.CreatePerimeterRoadSurface(System.Single,System.Single)">
             <summary>
             Creates the perimter road surface.
             </summary>
-            <param name="layoutPlane">The plane to project the parking surface onto.</param>
             <param name="concaveFillet">The fillet radius at the concave corners.</param>
             <param name="convexFillet">The fillet radius at the convex corners.</param>
             <returns></returns>
+        </member>
+        <member name="M:Parking.InternalBays.CreateBoundingRectangles(System.Single,System.Single)">
+            <summary>
+            Creates the bounding rectangles for the internal parking surfaces.
+            </summary>
+            <param name="concaveFillet"></param>
+            <param name="convexFillet"></param>
+            <returns name="boundingRectangle">The bounding rectangles.</returns>
         </member>
         <member name="T:Parking.ParkingBay">
             <summary>

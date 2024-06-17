@@ -37,6 +37,12 @@ namespace Parking
         }
 
 
+        /// <summary>
+        /// The host plane of the parking layout.
+        /// </summary>
+        public Plane LayoutPlane { private get; set; }
+
+
         private Surface _exclusionArea;
 
         /// <summary>
@@ -194,6 +200,7 @@ namespace Parking
         /// Creates internal parking layout instances.
         /// </summary>
         /// <param name="layoutArea"></param>
+        /// <param name="layoutPlane">The host plane of the parking layout.</param>
         /// <param name="patternType"></param>
         /// <param name="aisleType"></param>
         /// <param name="externalTurningRadius"></param>
@@ -208,6 +215,7 @@ namespace Parking
             Surface layoutArea,
             // Surface exclusionArea,
             // Curve axialRoute,
+            Plane layoutPlane,
             int patternType = 1,
             int aisleType = 1,
             // float axialRouteWidth = 7,
@@ -223,6 +231,7 @@ namespace Parking
             float perimeterWalkwayWidth = 1)
         {
             LayoutArea = layoutArea;
+            LayoutPlane = layoutPlane;
             // ExclusionArea = exclusionArea;
             // AxialRoute = axialRoute;
             PatternType = patternType;
@@ -244,15 +253,14 @@ namespace Parking
         /// <summary>
         /// Creates the parking layout surface.
         /// </summary>
-        /// <param name="layoutPlane">The plane to project the parking surface onto.</param>
         /// <returns name="layoutSurface">The parking layout surface.</returns>
-        public Surface CreateLayoutSurface([DefaultArgument("Plane.XY()")] Plane layoutPlane)
+        public Surface CreateLayoutSurface()
         {
             // check the planarity of the input surface.
             Surface surface = Common.Geometry.CheckSurfacePlanarity(LayoutArea);
 
             // pull the surface onto the input plane.
-            Surface layoutSurface = Common.Geometry.PullSurfaceToPlane(surface, layoutPlane);
+            Surface layoutSurface = Common.Geometry.PullSurfaceToPlane(surface, LayoutPlane);
 
             return layoutSurface;
         }
@@ -261,17 +269,15 @@ namespace Parking
         /// <summary>
         /// Creates the internal parking area surface.
         /// </summary>
-        /// <param name="layoutPlane">The plane to project the parking surface onto.</param>
         /// <param name="concaveFillet">The fillet radius at the concave corners.</param>
         /// <param name="convexFillet">The fillet radius at the convex corners.</param>
         /// <returns name="internalSurface">The offset internal surface.</returns>
         public Surface CreateInternalSurface(
-            [DefaultArgument("Plane.XY()")] Plane layoutPlane,
             float concaveFillet = 0,
             float convexFillet = 0)
         {
             // create the layout surface.
-            Surface layoutSurface = CreateLayoutSurface(layoutPlane);
+            Surface layoutSurface = CreateLayoutSurface();
 
             Surface internalSurface;
             try
@@ -297,17 +303,15 @@ namespace Parking
         /// <summary>
         /// Creates the perimter road surface.
         /// </summary>
-        /// <param name="layoutPlane">The plane to project the parking surface onto.</param>
         /// <param name="concaveFillet">The fillet radius at the concave corners.</param>
         /// <param name="convexFillet">The fillet radius at the convex corners.</param>
         /// <returns></returns>
         public Surface CreatePerimeterRoadSurface(
-            [DefaultArgument("Plane.XY()")] Plane layoutPlane,
             float concaveFillet = 0,
             float convexFillet = 0)
         {
             // create the layout surface.
-            Surface layoutSurface = CreateLayoutSurface(layoutPlane);
+            Surface layoutSurface = CreateLayoutSurface();
 
             Surface roadWaySurface;
             try 
@@ -327,6 +331,44 @@ namespace Parking
             }
 
             return roadWaySurface;
+        }
+
+
+        /// <summary>
+        /// Creates the bounding rectangles for the internal parking surfaces.
+        /// </summary>
+        /// <param name="concaveFillet"></param>
+        /// <param name="convexFillet"></param>
+        /// <returns name="boundingRectangle">The bounding rectangles.</returns>
+        public List<Rectangle> CreateBoundingRectangles(
+            float concaveFillet = 0,
+            float convexFillet = 0) 
+        {
+            // get the surfaces of the internal surface.
+            Surface internalSurface = CreateInternalSurface(concaveFillet, convexFillet);
+            Face[] faces = internalSurface.Faces;
+
+            List<Surface> surfaces = new List<Surface>();
+            foreach (Face face in faces) 
+            {
+                surfaces.Add(face.SurfaceGeometry());
+            }
+
+            // get the perimeter curve of the surfaces.
+            List<PolyCurve> curves = new List<PolyCurve>();
+            foreach (Surface surface in surfaces) 
+            { 
+                curves.Add(Common.Geometry.SurfacePerimeter(surface));
+            }
+
+            // create the bounding rectangle for each of the surfaces.
+            List<Rectangle> rectangles = new List<Rectangle>();
+            foreach (PolyCurve curve in curves) 
+            { 
+                rectangles.Add(Parking.BoundingRectangle.CreateBoundingRectangle(curve, LayoutRotation));
+            }
+
+            return rectangles;       
         }
     }
 }

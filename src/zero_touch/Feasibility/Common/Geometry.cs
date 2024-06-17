@@ -25,7 +25,7 @@ namespace Common
         /// </summary>
         /// <param name="surface">The surface input.</param>
         /// <returns name="polyCurve">The closed perimeter polycurve.</returns>
-        private static PolyCurve SurfacePerimeter(Surface surface)
+        public static PolyCurve SurfacePerimeter(Surface surface)
         {
             // get the perimeter curve of the surface.
             Curve[] perimeterCurves = surface.PerimeterCurves();
