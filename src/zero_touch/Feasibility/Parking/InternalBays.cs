@@ -408,11 +408,27 @@ namespace Parking
             // create the bounding rectangles.
             List<Rectangle> boundingRectangles = CreateBoundingRectangles();
 
+            // add the aisle width to a parameter.
+            float aisleWidth = 0;
+            if (AisleType == (int)1)
+            {
+                aisleWidth = InternalOneWayAisleWidth;
+            }
+            else if (AisleType == (int)2)
+            {
+                aisleWidth = InternalTwoWayAisleWidth;
+            }
+
             // get the first curve of each bounding rectangle.
             List<Curve> curves = new List<Curve>();
             foreach (Rectangle rect in boundingRectangles) 
             {
-                curves.Add(rect.Curves()[0]);
+                // extend the curve to ensure the pattern fully covers the layout.
+                Curve initialCurve = rect.Curves()[0];
+                int patternRowNum = (int)DSCore.Math.Ceiling(((initialCurve.Length - patternWidth / 2) / (patternWidth + aisleWidth)));
+                float newCurveLength = (patternWidth / 2) + ((patternWidth + aisleWidth) * patternRowNum);
+                float extensionLength = newCurveLength - (float)initialCurve.Length;
+                curves.Add(initialCurve.ExtendEnd(extensionLength));
             }
 
             // add the first setout point of the pattern to the curves.
@@ -422,16 +438,6 @@ namespace Parking
                 points.Add(curve.PointAtChordLength(patternWidth / 2));
             }
 
-            // add the aisle width to a parameter.
-            float aisleWidth = 0;
-            if (AisleType == (int)1)
-            {
-                aisleWidth = InternalOneWayAisleWidth;
-            }
-            else if (AisleType == (int)2) 
-            {
-                aisleWidth = InternalTwoWayAisleWidth;
-            }
 
             // add the pattern location points to the curves.
             List<Point[]> locationPoints = new List<Point[]>();
@@ -441,11 +447,17 @@ namespace Parking
                 locationPoints.Add(curves[i].PointsAtChordLengthFromPoint(points[i], patternWidth + aisleWidth) as Point[]);
             }
 
+
             // get the third curve of each bounding rectangle.
             List<Curve> oppositeCurves = new List<Curve>();
             foreach (Rectangle rect in boundingRectangles)
             {
-                oppositeCurves.Add(rect.Curves()[2]);
+                // extend the curve to ensure the pattern fully covers the layout.
+                Curve initialCurve = rect.Curves()[2];
+                int patternRowNum = (int)DSCore.Math.Ceiling(((initialCurve.Length - patternWidth / 2) / (patternWidth + aisleWidth)));
+                float newCurveLength = (patternWidth / 2) + ((patternWidth + aisleWidth) * patternRowNum);
+                float extensionLength = newCurveLength - (float)initialCurve.Length;
+                oppositeCurves.Add(initialCurve.ExtendStart(extensionLength));
             }
 
             // add the setout points to the opposite setout curve.
