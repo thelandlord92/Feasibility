@@ -163,15 +163,22 @@ namespace Parking
         {
             // calculate the number of bays to copy along the location line.
             int copyNumber;
-            if (AdjustBayWidth == true) 
+            if (LocationLine.Length <= BayLocationLineWidth()) 
             {
-                copyNumber = (int)DSCore.Math.Floor(LocationLine.Length / BayLocationLineWidth());
+                copyNumber = 1;
             }
             else 
             {
-                copyNumber = (int)DSCore.Math.Ceiling(LocationLine.Length / BayLocationLineWidth());
+                if (AdjustBayWidth == true)
+                {
+                    copyNumber = (int)DSCore.Math.Floor(LocationLine.Length / BayLocationLineWidth());
+                }
+                else
+                {
+                    copyNumber = (int)DSCore.Math.Ceiling(LocationLine.Length / BayLocationLineWidth());
+                }
             }
-            
+             
             return copyNumber;
         }
 
@@ -183,19 +190,25 @@ namespace Parking
         private float ActualBayWidth()
         {
             float actualBayWidth;
-            if (AdjustBayWidth == true) 
+            if (LocationLine.Length <= BayLocationLineWidth()) 
             {
-                // divide the location line by the copy number.
-                float actualLocationLineWidth = (float)LocationLine.Length / ParkingCopyNumber();
-
-                actualBayWidth = (float)DSCore.Math.Cos(RequiredBayAngle()) * actualLocationLineWidth;
+                actualBayWidth = (float)LocationLine.Length;
             }
             else 
             {
-                actualBayWidth = (float)DSCore.Math.Cos(RequiredBayAngle()) * BayLocationLineWidth();
+                if (AdjustBayWidth == true)
+                {
+                    // divide the location line by the copy number.
+                    float actualLocationLineWidth = (float)LocationLine.Length / ParkingCopyNumber();
+
+                    actualBayWidth = (float)DSCore.Math.Cos(RequiredBayAngle()) * actualLocationLineWidth;
+                }
+                else
+                {
+                    actualBayWidth = (float)DSCore.Math.Cos(RequiredBayAngle()) * BayLocationLineWidth();
+                }
             }
             
-
             return actualBayWidth;    
         }
 
@@ -234,12 +247,20 @@ namespace Parking
 
             // add the parking bay location points to the moved line.
             List<Point> locationPoints = new List<Point>();
-            foreach (float number in Common.Math.Range(0, 1, ParkingCopyNumber() + 1)) 
-            {
-                Point point = movedLine.PointAtParameter(number);
+            if (LocationLine.Length <= BayLocationLineWidth()) 
+            { 
+                Point point = movedLine.PointAtParameter(1);
                 locationPoints.Add(point);
             }
-
+            else 
+            {
+                foreach (float number in Common.Math.Range(0, 1, ParkingCopyNumber() + 1))
+                {
+                    Point point = movedLine.PointAtParameter(number);
+                    locationPoints.Add(point);
+                }
+            }
+                
             return locationPoints;
         }
 

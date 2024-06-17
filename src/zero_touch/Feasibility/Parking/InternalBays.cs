@@ -403,7 +403,7 @@ namespace Parking
         /// </summary>
         /// <param name="patternWidth">The width of the parking pattern.</param>
         /// <returns></returns>
-        public List<Point[]> CreatePatternSetOutLines(float patternWidth = 5) 
+        public List<List<Line>> CreatePatternSetOutLines(float patternWidth = 5) 
         { 
             // create the bounding rectangles.
             List<Rectangle> boundingRectangles = CreateBoundingRectangles();
@@ -445,7 +445,7 @@ namespace Parking
             List<Curve> oppositeCurves = new List<Curve>();
             foreach (Rectangle rect in boundingRectangles)
             {
-                curves.Add(rect.Curves()[2]);
+                oppositeCurves.Add(rect.Curves()[2]);
             }
 
             // add the setout points to the opposite setout curve.
@@ -460,8 +460,22 @@ namespace Parking
                 }
                 projectedPoints.Add(pointList.ToArray());  
             }
-                
-            return projectedPoints;
+
+            // create a line between the points.
+            List<List<Line>> setoutLines = new List<List<Line>>();
+            for (int i = 0; i < curveNumber; i++) 
+            {
+                List<Line> lineList = new List<Line>();
+                int pointNumber = locationPoints[i].Length;
+                for (int j = 0; j < pointNumber; j++) 
+                {
+                    lineList.Add(Line.ByStartPointEndPoint(locationPoints[i][j], projectedPoints[i][j]));
+                }
+                setoutLines.Add(lineList);
+                    
+            }
+
+                return setoutLines;
         }
     }
 }
