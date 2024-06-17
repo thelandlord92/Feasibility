@@ -27,7 +27,7 @@ namespace Common
         /// <returns name="polyCurve">The closed perimeter polycurve.</returns>
         private static PolyCurve SurfacePerimeter(Surface surface)
         {
-            // get the perimeter curve of the layout surface.
+            // get the perimeter curve of the surface.
             Curve[] perimeterCurves = surface.PerimeterCurves();
             PolyCurve perimeterCurve = PolyCurve.ByJoinedCurves(perimeterCurves, 0.001, false, 0);
 
@@ -41,7 +41,7 @@ namespace Common
         /// <param name="surface">The input surface.</param>
         /// <returns name="planarSurface">The planar surface.</returns>
         /// <exception cref="ArgumentException"></exception>
-        private static Surface CheckSurfacePlanarity(Surface surface) 
+        public static Surface CheckSurfacePlanarity(Surface surface) 
         {
             // get the max and min point of the surface bounding box.
             Point minPoint = surface.BoundingBox.MinPoint;
@@ -81,7 +81,8 @@ namespace Common
             }
             catch 
             {
-                throw new Exception("The surface cannot be projected likely because its projected edges overlap.");
+                throw new Exception("The surface cannot be projected likely because its projected edges " +
+                    "overlap or are perpendicular to the input plane.");
             }
             
 

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Schema;
+using Common;
 
 namespace Parking
 {
@@ -238,5 +239,22 @@ namespace Parking
             PerimeterBayDepth = perimeterBayDepth;
             PerimeterWalkWayWidth = perimeterWalkwayWidth;
         } 
+
+
+        /// <summary>
+        /// Creates the parking layout surface.
+        /// </summary>
+        /// <param name="layoutPlane">The plane to project the parking surface onto.</param>
+        /// <returns name="layoutSurface">The parking layout surface.</returns>
+        public Surface CreateLayoutSurface([DefaultArgument("Plane.XY()")] Plane layoutPlane) 
+        {
+            // check the planarity of the input surface.
+            Surface surface = Common.Geometry.CheckSurfacePlanarity(LayoutArea);
+
+            // pull the surface onto the input plane.
+            Surface layoutSurface = Common.Geometry.PullSurfaceToPlane(surface, layoutPlane);
+
+            return layoutSurface;
+        }
     }
 }
