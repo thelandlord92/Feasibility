@@ -203,6 +203,16 @@
             The vehicular turning radius at the concave corners of the perimeter aisle.
             </summary>
         </member>
+        <member name="P:Parking.InternalBays.InternalOneWayAisleWidth">
+            <summary>
+            The width of the internal one way driving aisle.
+            </summary>
+        </member>
+        <member name="P:Parking.InternalBays.InternalTwoWayAisleWidth">
+            <summary>
+            The width of the internal two way driving aisle.
+            </summary>
+        </member>
         <member name="P:Parking.InternalBays.IslandCornerRadius">
             <summary>
             The radius at the corners of the internal parking islands.
@@ -233,7 +243,7 @@
             The width of the perimeter walkway.
             </summary>
         </member>
-        <member name="M:Parking.InternalBays.#ctor(Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Plane,System.Int32,System.Int32,System.Single,System.Single,System.Single,System.Single,System.Collections.Generic.List{System.Single},System.Single,System.Single,System.Single)">
+        <member name="M:Parking.InternalBays.#ctor(Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Plane,System.Int32,System.Int32,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Collections.Generic.List{System.Single},System.Single,System.Single,System.Single)">
             <summary>
             Creates internal parking layout instances.
             </summary>
@@ -244,6 +254,8 @@
             <param name="externalTurningRadius"></param>
             <param name="internalTurningRadius"></param>
             <param name="islandCornerRadius"></param>
+            <param name="internalOneWayAisleWidth"></param>
+            <param name="internalTwoWayAisleWidth"></param>
             <param name="islandHeight"></param>
             <param name="layoutRotation">The rotation value(s) of the internal layout.</param>
             <param name="perimeterAisleWidth"></param>
@@ -262,7 +274,7 @@
             </summary>
             <returns name="internalSurface">The offset internal surface.</returns>
         </member>
-        <member name="M:Parking.InternalBays.CreatePerimeterRoadSurface(System.Single,System.Single)">
+        <member name="M:Parking.InternalBays.CreatePerimeterRoadSurface">
             <summary>
             Creates the perimter road surface.
             </summary>
@@ -273,6 +285,13 @@
             Creates the bounding rectangles for the internal parking surfaces.
             </summary>
             <returns name="boundingRectangle">The bounding rectangles.</returns>
+        </member>
+        <member name="M:Parking.InternalBays.CreatePatternSetOutLines(System.Single)">
+            <summary>
+            Creates the setout curves for the internal parking layout.
+            </summary>
+            <param name="patternWidth">The width of the parking pattern.</param>
+            <returns></returns>
         </member>
         <member name="T:Parking.ParkingBay">
             <summary>

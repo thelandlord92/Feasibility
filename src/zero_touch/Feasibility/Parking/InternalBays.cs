@@ -126,6 +126,7 @@ namespace Parking
                 {
                     throw new ArgumentOutOfRangeException(nameof(AisleType), "AisleType must be 1 or 2.");
                 }
+                _aisleType = value;
             }
         }
 
@@ -158,6 +159,18 @@ namespace Parking
         /// The vehicular turning radius at the concave corners of the perimeter aisle.
         /// </summary>
         public float InternalTurningRadius { private get; set; }
+
+
+        /// <summary>
+        /// The width of the internal one way driving aisle.
+        /// </summary>
+        public float InternalOneWayAisleWidth { private get; set; }
+
+
+        /// <summary>
+        /// The width of the internal two way driving aisle.
+        /// </summary>
+        public float InternalTwoWayAisleWidth { private get; set; }
 
 
         /// <summary>
@@ -205,6 +218,8 @@ namespace Parking
         /// <param name="externalTurningRadius"></param>
         /// <param name="internalTurningRadius"></param>
         /// <param name="islandCornerRadius"></param>
+        /// <param name="internalOneWayAisleWidth"></param>
+        /// <param name="internalTwoWayAisleWidth"></param>
         /// <param name="islandHeight"></param>
         /// <param name="layoutRotation">The rotation value(s) of the internal layout.</param>
         /// <param name="perimeterAisleWidth"></param>
@@ -222,6 +237,8 @@ namespace Parking
             // float exclusionZoneWalkwayWidth = 1.5f,
             float externalTurningRadius = 5,
             float internalTurningRadius = 3.5f,
+            float internalOneWayAisleWidth = 4.5f,
+            float internalTwoWayAisleWidth = 5.5f,
             float islandCornerRadius = 1,
             float islandHeight = 1,
             List<float> layoutRotation = null,
@@ -241,6 +258,8 @@ namespace Parking
             ExternalTurningRadius = externalTurningRadius;
             InternalTurningRadius = internalTurningRadius;
             IslandCornerRadius = islandCornerRadius;
+            InternalOneWayAisleWidth = internalOneWayAisleWidth;
+            InternalTwoWayAisleWidth = internalTwoWayAisleWidth;
             IslandHeight = islandHeight;
             LayoutRotation = layoutRotation;
             PerimeterAisleWidth = perimeterAisleWidth;
@@ -358,7 +377,7 @@ namespace Parking
                 int itemsToAdd = curves.Count - rotationValues.Count;
                 for (int i = 0; i < itemsToAdd; i++) 
                 {
-                    rotationValues.Add(0);
+                    rotationValues.Add(LayoutRotation[0]);
                 }
             }
             // check if the number of items in the rotation list is greater than the number of curves.
@@ -372,10 +391,77 @@ namespace Parking
             List<Rectangle> rectangles = new List<Rectangle>();
             for (int i = 0; i < curves.Count; i++)
             {
-                rectangles.Add(Parking.BoundingRectangle.CreateBoundingRectangle(curves[i], rotationValues[i]));
+                rectangles.Add(Parking.BoundingRectangle.CreateBoundingRectangle(curves[i], -rotationValues[i]));
             }
 
             return rectangles;       
+        }
+
+
+        /// <summary>
+        /// Creates the setout curves for the internal parking layout.
+        /// </summary>
+        /// <param name="patternWidth">The width of the parking pattern.</param>
+        /// <returns></returns>
+        public List<Point[]> CreatePatternSetOutLines(float patternWidth = 5) 
+        { 
+            // create the bounding rectangles.
+            List<Rectangle> boundingRectangles = CreateBoundingRectangles();
+
+            // get the first curve of each bounding rectangle.
+            List<Curve> curves = new List<Curve>();
+            foreach (Rectangle rect in boundingRectangles) 
+            {
+                curves.Add(rect.Curves()[0]);
+            }
+
+            // add the first setout point of the pattern to the curves.
+            List<Point> points = new List<Point>();
+            foreach (Curve curve in curves) 
+            {
+                points.Add(curve.PointAtChordLength(patternWidth / 2));
+            }
+
+            // add the aisle width to a parameter.
+            float aisleWidth = 0;
+            if (AisleType == (int)1)
+            {
+                aisleWidth = InternalOneWayAisleWidth;
+            }
+            else if (AisleType == (int)2) 
+            {
+                aisleWidth = InternalTwoWayAisleWidth;
+            }
+
+            // add the pattern location points to the curves.
+            List<Point[]> locationPoints = new List<Point[]>();
+            int curveNumber = curves.Count;
+            for (int i = 0; i < curveNumber; i++) 
+            {
+                locationPoints.Add(curves[i].PointsAtChordLengthFromPoint(points[i], patternWidth + aisleWidth) as Point[]);
+            }
+
+            // get the third curve of each bounding rectangle.
+            List<Curve> oppositeCurves = new List<Curve>();
+            foreach (Rectangle rect in boundingRectangles)
+            {
+                curves.Add(rect.Curves()[2]);
+            }
+
+            // add the setout points to the opposite setout curve.
+            List<Point[]> projectedPoints = new List<Point[]>();
+            for (int i = 0; i < curveNumber; i++) // indices to loop over the curve and location points lists.
+            {
+                List<Point> pointList = new List<Point>();
+                int pointNumber = locationPoints[i].Length; 
+                for (int j = 0; j < pointNumber; j++) // indices to select points within the location points sublists.
+                {
+                    pointList.Add(oppositeCurves[i].ClosestPointTo(locationPoints[i][j]) as Point);
+                }
+                projectedPoints.Add(pointList.ToArray());  
+            }
+                
+            return projectedPoints;
         }
     }
 }
