@@ -173,10 +173,9 @@ namespace Parking
 
 
         /// <summary>
-        /// The rotation of the internal parking layout.
+        /// The rotation values of the internal layouts.
         /// </summary>
-        public float LayoutRotation { private get; set; }
-
+        public List<float> LayoutRotation { private get; set; }
 
         /// <summary>
         /// The width of the perimeter aisle.
@@ -207,7 +206,7 @@ namespace Parking
         /// <param name="internalTurningRadius"></param>
         /// <param name="islandCornerRadius"></param>
         /// <param name="islandHeight"></param>
-        /// <param name="layoutRotation"></param>
+        /// <param name="layoutRotation">The rotation value(s) of the internal layout.</param>
         /// <param name="perimeterAisleWidth"></param>
         /// <param name="perimeterBayDepth"></param>
         /// <param name="perimeterWalkwayWidth"></param>
@@ -225,7 +224,7 @@ namespace Parking
             float internalTurningRadius = 3.5f,
             float islandCornerRadius = 1,
             float islandHeight = 1,
-            float layoutRotation = 45,
+            List<float> layoutRotation = null,
             float perimeterAisleWidth = 7,
             float perimeterBayDepth = 5,
             float perimeterWalkwayWidth = 1)
@@ -269,12 +268,8 @@ namespace Parking
         /// <summary>
         /// Creates the internal parking area surface.
         /// </summary>
-        /// <param name="concaveFillet">The fillet radius at the concave corners.</param>
-        /// <param name="convexFillet">The fillet radius at the convex corners.</param>
         /// <returns name="internalSurface">The offset internal surface.</returns>
-        public Surface CreateInternalSurface(
-            float concaveFillet = 0,
-            float convexFillet = 0)
+        public Surface CreateInternalSurface()
         {
             // create the layout surface.
             Surface layoutSurface = CreateLayoutSurface();
@@ -286,8 +281,8 @@ namespace Parking
                 internalSurface = Common.Geometry.OffsetSurface(
                     layoutSurface,
                     (PerimeterAisleWidth + PerimeterBayDepth + PerimeterWalkWayWidth),
-                    concaveFillet,
-                    convexFillet
+                    InternalTurningRadius,
+                    ExternalTurningRadius
                 );
             }
             catch
@@ -303,12 +298,8 @@ namespace Parking
         /// <summary>
         /// Creates the perimter road surface.
         /// </summary>
-        /// <param name="concaveFillet">The fillet radius at the concave corners.</param>
-        /// <param name="convexFillet">The fillet radius at the convex corners.</param>
         /// <returns></returns>
-        public Surface CreatePerimeterRoadSurface(
-            float concaveFillet = 0,
-            float convexFillet = 0)
+        public Surface CreatePerimeterRoadSurface()
         {
             // create the layout surface.
             Surface layoutSurface = CreateLayoutSurface();
@@ -320,8 +311,8 @@ namespace Parking
                 roadWaySurface = Common.Geometry.PerimeterSurface(
                     layoutSurface,
                     (PerimeterAisleWidth + PerimeterBayDepth + PerimeterWalkWayWidth),
-                    concaveFillet,
-                    convexFillet
+                    InternalTurningRadius,
+                    ExternalTurningRadius
                 );
             }
             catch
@@ -337,15 +328,11 @@ namespace Parking
         /// <summary>
         /// Creates the bounding rectangles for the internal parking surfaces.
         /// </summary>
-        /// <param name="concaveFillet"></param>
-        /// <param name="convexFillet"></param>
         /// <returns name="boundingRectangle">The bounding rectangles.</returns>
-        public List<Rectangle> CreateBoundingRectangles(
-            float concaveFillet = 0,
-            float convexFillet = 0) 
+        public List<Rectangle> CreateBoundingRectangles() 
         {
             // get the surfaces of the internal surface.
-            Surface internalSurface = CreateInternalSurface(concaveFillet, convexFillet);
+            Surface internalSurface = CreateInternalSurface();
             Face[] faces = internalSurface.Faces;
 
             List<Surface> surfaces = new List<Surface>();
@@ -361,11 +348,31 @@ namespace Parking
                 curves.Add(Common.Geometry.SurfacePerimeter(surface));
             }
 
+            // create a list to hold the rotation values.
+            List<float> rotationValues = new List<float>(LayoutRotation);
+
+            // ensure the number of rotation values is equal to the number of curves.
+            // check if the number of items in the rotation list is less than the number of curves.
+            if (rotationValues.Count < curves.Count)  
+            {
+                int itemsToAdd = curves.Count - rotationValues.Count;
+                for (int i = 0; i < itemsToAdd; i++) 
+                {
+                    rotationValues.Add(0);
+                }
+            }
+            // check if the number of items in the rotation list is greater than the number of curves.
+            else if (rotationValues.Count > curves.Count) 
+            { 
+                int removeNum = LayoutRotation.Count - curves.Count;
+                rotationValues.RemoveRange(rotationValues.Count - removeNum, removeNum);
+            }
+
             // create the bounding rectangle for each of the surfaces.
             List<Rectangle> rectangles = new List<Rectangle>();
-            foreach (PolyCurve curve in curves) 
-            { 
-                rectangles.Add(Parking.BoundingRectangle.CreateBoundingRectangle(curve, LayoutRotation));
+            for (int i = 0; i < curves.Count; i++)
+            {
+                rectangles.Add(Parking.BoundingRectangle.CreateBoundingRectangle(curves[i], rotationValues[i]));
             }
 
             return rectangles;       
