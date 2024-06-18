@@ -243,7 +243,24 @@
             The width of the perimeter walkway.
             </summary>
         </member>
-        <member name="M:Parking.InternalBays.#ctor(Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Plane,System.Int32,System.Int32,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Collections.Generic.List{System.Single},System.Single,System.Single,System.Single)">
+        <member name="P:Parking.InternalBays.PatternPrimary">
+            <summary>
+            The first pattern to be arranged over the internal layout.
+            This pattern determines the spacing of the internal rows.
+            Add the pattern with the longest parking bay in this input.
+            </summary>
+        </member>
+        <member name="P:Parking.InternalBays.PatternSecondary">
+            <summary>
+            The second pattern to be arranged over the internal layout.
+            </summary>
+        </member>
+        <member name="P:Parking.InternalBays.PatternTertiary">
+            <summary>
+            The third pattern to be arranged over the internal layout.
+            </summary>
+        </member>
+        <member name="M:Parking.InternalBays.#ctor(Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Plane,System.Int32,System.Int32,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Collections.Generic.List{System.Single},System.Single,System.Single,System.Single,Parking.Patterns,Parking.Patterns,Parking.Patterns)">
             <summary>
             Creates internal parking layout instances.
             </summary>
@@ -261,6 +278,9 @@
             <param name="perimeterAisleWidth"></param>
             <param name="perimeterBayDepth"></param>
             <param name="perimeterWalkwayWidth"></param>
+            <param name="patternPrimary"></param>
+            <param name="patternSecondary"></param>
+            <param name="patternTertiary"></param>
         </member>
         <member name="M:Parking.InternalBays.CreateLayoutSurface">
             <summary>
@@ -286,11 +306,22 @@
             </summary>
             <returns name="boundingRectangle">The bounding rectangles.</returns>
         </member>
-        <member name="M:Parking.InternalBays.CreatePatternSetOutLines(System.Single)">
+        <member name="M:Parking.InternalBays.ConfigurePatternInputs">
+            <summary>
+            Order and add the correct configuration to the input patterns.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Parking.InternalBays.CreatePatternSetOutLines">
             <summary>
             Creates the setout curves for the internal parking layout.
             </summary>
-            <param name="patternWidth">The width of the parking pattern.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Parking.InternalBays.CreateInternalBays">
+            <summary>
+            Create the internal parking bays.
+            </summary>
             <returns></returns>
         </member>
         <member name="T:Parking.ParkingBay">
@@ -465,6 +496,7 @@
         <member name="P:Parking.Patterns.PatternRotation">
             <summary>
             The rotation angle of the pattern.
+            This will be overridden by the internal layout's rotation value(s).
             </summary>
         </member>
         <member name="P:Parking.Patterns.IslandWidth">

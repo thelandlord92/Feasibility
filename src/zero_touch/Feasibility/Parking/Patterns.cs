@@ -32,7 +32,7 @@ namespace Parking
         /// </summary>
         public int PatternType
         {
-            private get { return _patternType; }
+            get { return _patternType; }
             set
             {
                 if (value < 1 || value > 3)
@@ -63,10 +63,11 @@ namespace Parking
         /// Note that the angle is not applied to the herringbone pattern.
         /// The herringbone pattern is always 45 degrees.
         /// </summary>
-        public float BayAngle { private get; set; }
+        public float BayAngle { get; set; }
 
         /// <summary>
         /// The rotation angle of the pattern.
+        /// This will be overridden by the internal layout's rotation value(s).
         /// </summary>
         public float PatternRotation { private get; set; }
 
@@ -572,7 +573,7 @@ namespace Parking
         /// Calculates the width of the patterns.
         /// </summary>
         /// <returns name="patternWidth">The width of the non interlocking pattern.</returns>
-        private float PatternWidth
+        public float PatternWidth
         {
             get
             {
