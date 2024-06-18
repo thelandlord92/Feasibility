@@ -261,7 +261,13 @@ namespace Parking
                     locationPoints.Add(point);
                 }
             }
-                
+
+            // remove the last items from the location points list.
+            if (locationPoints.Count > 0) 
+            {
+                locationPoints.RemoveAt(0);
+            }
+            
             return locationPoints;
         }
 
