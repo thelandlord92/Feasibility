@@ -98,8 +98,8 @@ namespace Parking
         /// </summary>
         public int PatternType
         {
-            private get { return _patternType; }
-            set
+            get { return _patternType; }
+            private set
             {
                 if (value < 1 || value > 3)
                 {
@@ -208,23 +208,11 @@ namespace Parking
 
 
         /// <summary>
-        /// The first pattern to be arranged over the internal layout.
-        /// This pattern determines the spacing of the internal rows.
-        /// Add the pattern with the longest parking bay in this input.
+        /// The parking patterns.
+        /// Add a list of parking patterns into this input.
+        /// The first pattern is treated as the primary pattern.
         /// </summary>
-        public Patterns PatternPrimary { private get; set; }
-
-
-        /// <summary>
-        /// The second pattern to be arranged over the internal layout.
-        /// </summary>
-        public Patterns PatternSecondary { private get; set; }
-
-
-        /// <summary>
-        /// The third pattern to be arranged over the internal layout.
-        /// </summary>
-        public Patterns PatternTertiary { private get; set; }
+        public List<Patterns> Patterns { private get; set; }
 
 
         /// <summary>
@@ -244,9 +232,7 @@ namespace Parking
         /// <param name="perimeterAisleWidth"></param>
         /// <param name="perimeterBayDepth"></param>
         /// <param name="perimeterWalkwayWidth"></param>
-        /// <param name="patternPrimary"></param>
-        /// <param name="patternSecondary"></param>
-        /// <param name="patternTertiary"></param>
+        /// <param name="patterns"></param>
         public InternalBays(
             Surface layoutArea,
             // Surface exclusionArea,
@@ -267,9 +253,7 @@ namespace Parking
             float perimeterAisleWidth = 7,
             float perimeterBayDepth = 5,
             float perimeterWalkwayWidth = 1,
-            Patterns patternPrimary = null,
-            Patterns patternSecondary = null,
-            Patterns patternTertiary = null)
+            List<Patterns> patterns = null)
         {
             LayoutArea = layoutArea;
             LayoutPlane = layoutPlane;
@@ -290,9 +274,7 @@ namespace Parking
             PerimeterAisleWidth = perimeterAisleWidth;
             PerimeterBayDepth = perimeterBayDepth;
             PerimeterWalkWayWidth = perimeterWalkwayWidth;
-            PatternPrimary = patternPrimary;
-            PatternSecondary = patternSecondary;
-            PatternTertiary = patternTertiary;
+            Patterns = patterns;
         }
 
 
@@ -432,32 +414,31 @@ namespace Parking
         /// <returns></returns>
         public List<Patterns> ConfigurePatternInputs() 
         {
+            // create a new list to hold the input parking patterns.
+            List<Patterns> inputPatterns = new List<Patterns>(Patterns);
+
             // assign the same location line to the pattern inputs.
-            Line tempLocationLine = Line.ByStartPointEndPoint(Point.ByCoordinates(0, 0), Point.ByCoordinates(0, 50));
-            PatternPrimary.LocationLine = tempLocationLine;
-            PatternSecondary.LocationLine = tempLocationLine;
-            PatternTertiary.LocationLine = tempLocationLine;
+            //Line tempLocationLine = Line.ByStartPointEndPoint(Point.ByCoordinates(0, 0), Point.ByCoordinates(0, 50));
+            //PatternPrimary.LocationLine = tempLocationLine;
+            //PatternSecondary.LocationLine = tempLocationLine;
+            //PatternTertiary.LocationLine = tempLocationLine;
 
             // assign the same pattern type to the pattern inputs.
-            PatternSecondary.PatternType = PatternPrimary.PatternType;
-            PatternTertiary.PatternType = PatternPrimary.PatternType;
+            foreach (Patterns pattern in inputPatterns) 
+            { 
+                pattern.PatternType = Patterns[0].PatternType;
+            }
 
             // assign the same bay angle to the pattern inputs.
-            PatternSecondary.BayAngle = PatternPrimary.BayAngle;
-            PatternTertiary.BayAngle = PatternPrimary.BayAngle;
-
-            // Add the user provided patterns to a list.
-            List<Patterns> patterns = new List<Patterns>
-            {
-                PatternPrimary,
-                PatternSecondary,
-                PatternTertiary,
-            };
+            foreach (Patterns pattern in inputPatterns) 
+            { 
+                pattern.BayAngle = Patterns[0].BayAngle;
+            }
 
             // sort the patterns by their pattern width.
-            List<Patterns> sortedPatterns = patterns.OrderBy(p => p.PatternWidth).ToList();
+            List<Patterns> sortedPatterns = inputPatterns.OrderBy(p => p.PatternWidth).ToList();
 
-            return sortedPatterns;
+            return inputPatterns;
         }
 
 
@@ -565,45 +546,40 @@ namespace Parking
         /// Create the internal parking bays.
         /// </summary>
         /// <returns></returns>
-        public List<List<Line>> CreateInternalBays() 
+        public List<List<Patterns>> CreateInternalBays() 
         {
             // Add the user provided patterns to a list.
             List<Patterns> patterns = ConfigurePatternInputs();
-             
-            // sort the patterns by their pattern width.
-            List<Patterns> sortedPatterns = patterns.OrderBy(p => p.PatternWidth).ToList();
 
-            // create the setoutLines.
+            // create the setout lines.
             List<List<Line>> setoutLines = CreatePatternSetOutLines();
 
-            // create vertical line equal in length to the location lines to be added at the center of the location lines.
-            List<Line> verticalLine = new List<Line>();
-            foreach (List<Line> lineList in setoutLines) 
-            {
-                Point point1 = Point.ByCoordinates(0, 0);
-                Point point2 = Point.ByCoordinates(0, lineList[0].Length);
-                verticalLine.Add(Line.ByStartPointEndPoint(point1, point2));
-            }
-
-            // add vertical line to the setout lines.
-            List<List<Line>> vertlLines = new List<List<Line>>();
+            // count the number of list is the setout lines input.
             float listNumber = setoutLines.Count;
+
+            // add the patterns to the setout lines.
+            List<List<Patterns>> layoutPatterns = new List<List<Patterns>>();
             for (int i = 0; i < listNumber; i++) // indices to loop through the setout line lists.
-            { 
+            {
+                List<Patterns> patternList = new List<Patterns>();
                 int lineNumber = setoutLines[i].Count;
-                Point vertCenter = verticalLine[i].PointAtParameter(0.5);
-                List<Line> lineList = new List<Line>();
                 for (int j = 0; j < lineNumber; j++) // indices to loop through each setout line in the lists.
                 {
-                    Vector vector = Vector.ByTwoPoints(vertCenter, setoutLines[i][j].PointAtParameter(0.5));
-                    lineList.Add(verticalLine[i].Translate(vector) as Line);
-                }   
-                vertlLines.Add(lineList);
-            }
+                    patternList.Add(new Parking.Patterns(
+                        setoutLines[i][j],
+                        patterns[0].PatternType,
+                        patterns[0].BayWidth,
+                        true,
+                        patterns[0].BayLength,
+                        patterns[0].BayAngle,
+                        0,
+                        patterns[0].IslandWidth)
+                    );
+                }
+                layoutPatterns.Add( patternList );
+            }   
 
-            // add the patking bays to the vertical line.
-
-            return vertlLines;
+            return layoutPatterns;
         }
     }
 }

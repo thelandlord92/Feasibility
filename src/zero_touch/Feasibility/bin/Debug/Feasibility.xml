@@ -243,24 +243,14 @@
             The width of the perimeter walkway.
             </summary>
         </member>
-        <member name="P:Parking.InternalBays.PatternPrimary">
+        <member name="P:Parking.InternalBays.Patterns">
             <summary>
-            The first pattern to be arranged over the internal layout.
-            This pattern determines the spacing of the internal rows.
-            Add the pattern with the longest parking bay in this input.
+            The parking patterns.
+            Add a list of parking patterns into this input.
+            The first pattern is treated as the primary pattern.
             </summary>
         </member>
-        <member name="P:Parking.InternalBays.PatternSecondary">
-            <summary>
-            The second pattern to be arranged over the internal layout.
-            </summary>
-        </member>
-        <member name="P:Parking.InternalBays.PatternTertiary">
-            <summary>
-            The third pattern to be arranged over the internal layout.
-            </summary>
-        </member>
-        <member name="M:Parking.InternalBays.#ctor(Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Plane,System.Int32,System.Int32,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Collections.Generic.List{System.Single},System.Single,System.Single,System.Single,Parking.Patterns,Parking.Patterns,Parking.Patterns)">
+        <member name="M:Parking.InternalBays.#ctor(Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Plane,System.Int32,System.Int32,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Collections.Generic.List{System.Single},System.Single,System.Single,System.Single,System.Collections.Generic.List{Parking.Patterns})">
             <summary>
             Creates internal parking layout instances.
             </summary>
@@ -278,9 +268,7 @@
             <param name="perimeterAisleWidth"></param>
             <param name="perimeterBayDepth"></param>
             <param name="perimeterWalkwayWidth"></param>
-            <param name="patternPrimary"></param>
-            <param name="patternSecondary"></param>
-            <param name="patternTertiary"></param>
+            <param name="patterns"></param>
         </member>
         <member name="M:Parking.InternalBays.CreateLayoutSurface">
             <summary>

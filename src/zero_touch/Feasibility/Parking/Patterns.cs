@@ -46,7 +46,7 @@ namespace Parking
         /// <summary>
         /// The width of the parking bays.
         /// </summary>
-        public float BayWidth { private get; set; }
+        public float BayWidth { get; set; }
 
         /// <summary>
         /// Determines if the bay width is as per the input width or adjusted to fit the location line.
@@ -56,7 +56,7 @@ namespace Parking
         /// <summary>
         /// The length of the parking bays.
         /// </summary>
-        public float BayLength { private get; set; }
+        public float BayLength { get; set; }
 
         /// <summary>
         /// The angle of the parking bays.
@@ -69,12 +69,12 @@ namespace Parking
         /// The rotation angle of the pattern.
         /// This will be overridden by the internal layout's rotation value(s).
         /// </summary>
-        public float PatternRotation { private get; set; }
+        public float PatternRotation { get; private set; }
 
         /// <summary>
         /// The width of the non interlocking pattern island.
         /// </summary>
-        public float IslandWidth { private get; set; }
+        public float IslandWidth { get; set; }
 
         /// <summary>
         /// To set the parking signage type.
