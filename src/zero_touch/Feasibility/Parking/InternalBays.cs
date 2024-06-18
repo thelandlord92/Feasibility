@@ -220,7 +220,6 @@ namespace Parking
         /// </summary>
         /// <param name="layoutArea"></param>
         /// <param name="layoutPlane">The host plane of the parking layout.</param>
-        /// <param name="patternType"></param>
         /// <param name="aisleType"></param>
         /// <param name="externalTurningRadius"></param>
         /// <param name="internalTurningRadius"></param>
@@ -238,7 +237,7 @@ namespace Parking
             // Surface exclusionArea,
             // Curve axialRoute,
             Plane layoutPlane,
-            int patternType = 1,
+            //int patternType = 1,
             int aisleType = 1,
             // float axialRouteWidth = 7,
             // float exclusionZoneAisleWidth = 7,
@@ -259,7 +258,7 @@ namespace Parking
             LayoutPlane = layoutPlane;
             // ExclusionArea = exclusionArea;
             // AxialRoute = axialRoute;
-            PatternType = patternType;
+            //PatternType = patternType;
             AisleType = aisleType;
             // AxialRouteWidth = axialRouteWidth;
             // ExclusionZoneAisleWidth = exclusionZoneAisleWidth;
@@ -555,29 +554,74 @@ namespace Parking
             List<List<Line>> setoutLines = CreatePatternSetOutLines();
 
             // count the number of list is the setout lines input.
-            float listNumber = setoutLines.Count;
+            int listNumber = setoutLines.Count;
+
+            // reverse the direction of the setout lines if necessary to allow for one or two way traffic.
+            List<List<Line>> reversedLines = new List<List<Line>>();
+
+            // keep as is if aisle is one way and pattern type is non interlocking.
+            if (AisleType == 1 && PatternType == 1)
+            {
+                reversedLines = setoutLines;
+            }
+
+            // replace every second row as required depending on the aisle type (one or two way) selected.
+            else if (
+                (AisleType == 2 && patterns[0].PatternType == 1) || 
+                (AisleType == 1 && patterns[0].PatternType == 2) || 
+                (AisleType == 2 && patterns[0].PatternType == 3)
+            ) 
+            {
+                for (int i = 0; i < listNumber; i++) 
+                {
+                    List<Line> lineList = new List<Line> ();
+                    int lineNumber = setoutLines[i].Count;
+                    for (int j = 0; j < lineNumber; j++) 
+                    {
+                        if (j % 2 == 1) 
+                        {
+                            lineList.Add(setoutLines[i][j].Reverse() as Line);
+                        }
+                        else 
+                        { 
+                            lineList.Add (setoutLines[i][j]);
+                        }
+                    }
+                    reversedLines.Add(lineList);
+                }
+            }
+            else 
+            {
+                reversedLines = setoutLines;
+            }
 
             // add the patterns to the setout lines.
             List<List<Patterns>> layoutPatterns = new List<List<Patterns>>();
-            for (int i = 0; i < listNumber; i++) // indices to loop through the setout line lists.
+            for (int i = 0; i < listNumber; i++) // indices to loop through the reversed line lists.
             {
                 List<Patterns> patternList = new List<Patterns>();
-                int lineNumber = setoutLines[i].Count;
-                for (int j = 0; j < lineNumber; j++) // indices to loop through each setout line in the lists.
+                int lineNumber = reversedLines[i].Count;
+                for (int j = 0; j < lineNumber; j++) // indices to loop through each reversed line in the lists.
                 {
                     patternList.Add(new Parking.Patterns(
-                        setoutLines[i][j],
+                        reversedLines[i][j],
                         patterns[0].PatternType,
                         patterns[0].BayWidth,
                         true,
                         patterns[0].BayLength,
                         patterns[0].BayAngle,
-                        0,
-                        patterns[0].IslandWidth)
+                        patterns[0].IslandWidth,
+                        patterns[0].Signage)
                     );
                 }
                 layoutPatterns.Add( patternList );
-            }   
+            }
+
+            // create the internal layout surface(s).
+            Surface internalSurface = CreateInternalSurface();
+
+            // Get the parking bays that intersect with the internal layout surface.
+            List<List<List<ParkingBay>>> internalBays = new List<List<List<ParkingBay>>>(); // cannot return pattern objects since bays must be removed.
 
             return layoutPatterns;
         }

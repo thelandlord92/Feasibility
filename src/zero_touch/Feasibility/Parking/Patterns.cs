@@ -50,6 +50,7 @@ namespace Parking
 
         /// <summary>
         /// Determines if the bay width is as per the input width or adjusted to fit the location line.
+        /// This input is ignores when added to the internal bays node.
         /// </summary>
         public bool AdjustBayWidth { private get; set; }
 
@@ -69,7 +70,7 @@ namespace Parking
         /// The rotation angle of the pattern.
         /// This will be overridden by the internal layout's rotation value(s).
         /// </summary>
-        public float PatternRotation { get; private set; }
+        //public float PatternRotation { get; private set; }
 
         /// <summary>
         /// The width of the non interlocking pattern island.
@@ -79,7 +80,7 @@ namespace Parking
         /// <summary>
         /// To set the parking signage type.
         /// </summary>
-        public SignageType Signage { private get; set; }
+        public SignageType Signage { get; set; }
 
 
         /// <summary>
@@ -91,7 +92,6 @@ namespace Parking
         /// <param name="adjustBayWidth">Adjust the parking bay width to fit the location line?</param>
         /// <param name="bayLength">the length of the parking bays.</param>
         /// <param name="bayAngle">the angle of the parking bays.</param>
-        /// <param name="patternRotation">The rotation angle of the pattern.</param>
         /// <param name="islandWidth">The width of the non interlocking pattern island.</param>
         /// <param name="signage">The signage type to be placed on the parking bay.</param>
         [IsVisibleInDynamoLibrary(true)]
@@ -102,7 +102,7 @@ namespace Parking
             bool adjustBayWidth = true,
             float bayLength = 5,
             float bayAngle = 30,
-            float patternRotation = 0,
+            //float patternRotation = 0,
             float islandWidth = 1,
             SignageType signage = SignageType.EV) 
         { 
@@ -112,7 +112,7 @@ namespace Parking
             AdjustBayWidth = adjustBayWidth;
             BayLength = bayLength;
             BayAngle = bayAngle;
-            PatternRotation = patternRotation;
+            //PatternRotation = patternRotation;
             IslandWidth = islandWidth;
             Signage = signage;
         }
@@ -337,7 +337,7 @@ namespace Parking
                     ActualBayWidth(), 
                     BayLength, 
                     BayAngle + GetLineRotationAngle(), 
-                    PatternRotation,
+                    0,
                     false,
                     true,
                     Signage);
@@ -354,7 +354,7 @@ namespace Parking
                     ActualBayWidth(),
                     BayLength,
                     BayAngle - GetLineRotationAngle(),
-                    PatternRotation,
+                    0,
                     true,
                     true,
                     Signage);
@@ -415,7 +415,7 @@ namespace Parking
                     ActualBayWidth(),
                     BayLength,
                     BayAngle + GetLineRotationAngle(),
-                    PatternRotation,
+                    0,
                     false,
                     true,
                     Signage);
@@ -432,7 +432,7 @@ namespace Parking
                     ActualBayWidth(),
                     BayLength,
                     BayAngle + GetLineRotationAngle(),
-                    PatternRotation,
+                    0,
                     true,
                     false,
                     Signage);
@@ -493,7 +493,7 @@ namespace Parking
                     ActualBayWidth(),
                     BayLength,
                     45 + GetLineRotationAngle(),
-                    PatternRotation,
+                    0,
                     false,
                     true,
                     Signage);
@@ -511,7 +511,7 @@ namespace Parking
                     ActualBayWidth(),
                     BayLength,
                     45 - GetLineRotationAngle(),
-                    PatternRotation,
+                    0,
                     true,
                     true,
                     Signage);
@@ -621,7 +621,7 @@ namespace Parking
             Rectangle surfaceRectangle = Rectangle.ByWidthLength(centerPlane, PatternWidth, LocationLine.Length);
 
             // rotate the rectangle.
-            Rectangle rotatedRectangle = surfaceRectangle.Rotate(centerPlane, PatternRotation) as Rectangle;
+            Rectangle rotatedRectangle = surfaceRectangle.Rotate(centerPlane, GetLineRotationAngle()) as Rectangle;
 
             // create the surface.
             Surface patternSurface = Surface.ByPatch(rotatedRectangle);

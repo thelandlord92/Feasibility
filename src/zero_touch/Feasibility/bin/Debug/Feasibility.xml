@@ -250,13 +250,12 @@
             The first pattern is treated as the primary pattern.
             </summary>
         </member>
-        <member name="M:Parking.InternalBays.#ctor(Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Plane,System.Int32,System.Int32,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Collections.Generic.List{System.Single},System.Single,System.Single,System.Single,System.Collections.Generic.List{Parking.Patterns})">
+        <member name="M:Parking.InternalBays.#ctor(Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Plane,System.Int32,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Collections.Generic.List{System.Single},System.Single,System.Single,System.Single,System.Collections.Generic.List{Parking.Patterns})">
             <summary>
             Creates internal parking layout instances.
             </summary>
             <param name="layoutArea"></param>
             <param name="layoutPlane">The host plane of the parking layout.</param>
-            <param name="patternType"></param>
             <param name="aisleType"></param>
             <param name="externalTurningRadius"></param>
             <param name="internalTurningRadius"></param>
@@ -467,6 +466,7 @@
         <member name="P:Parking.Patterns.AdjustBayWidth">
             <summary>
             Determines if the bay width is as per the input width or adjusted to fit the location line.
+            This input is ignores when added to the internal bays node.
             </summary>
         </member>
         <member name="P:Parking.Patterns.BayLength">
@@ -481,12 +481,6 @@
             The herringbone pattern is always 45 degrees.
             </summary>
         </member>
-        <member name="P:Parking.Patterns.PatternRotation">
-            <summary>
-            The rotation angle of the pattern.
-            This will be overridden by the internal layout's rotation value(s).
-            </summary>
-        </member>
         <member name="P:Parking.Patterns.IslandWidth">
             <summary>
             The width of the non interlocking pattern island.
@@ -497,7 +491,7 @@
             To set the parking signage type.
             </summary>
         </member>
-        <member name="M:Parking.Patterns.#ctor(Autodesk.DesignScript.Geometry.Line,System.Int32,System.Single,System.Boolean,System.Single,System.Single,System.Single,System.Single,Parking.SignageType)">
+        <member name="M:Parking.Patterns.#ctor(Autodesk.DesignScript.Geometry.Line,System.Int32,System.Single,System.Boolean,System.Single,System.Single,System.Single,Parking.SignageType)">
             <summary>
             Creates instances of the parking pattern class.
             </summary>
@@ -507,7 +501,6 @@
             <param name="adjustBayWidth">Adjust the parking bay width to fit the location line?</param>
             <param name="bayLength">the length of the parking bays.</param>
             <param name="bayAngle">the angle of the parking bays.</param>
-            <param name="patternRotation">The rotation angle of the pattern.</param>
             <param name="islandWidth">The width of the non interlocking pattern island.</param>
             <param name="signage">The signage type to be placed on the parking bay.</param>
         </member>
