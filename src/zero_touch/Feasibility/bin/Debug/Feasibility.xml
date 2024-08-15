@@ -491,7 +491,7 @@
             To set the parking signage type.
             </summary>
         </member>
-        <member name="M:Parking.Patterns.#ctor(Autodesk.DesignScript.Geometry.Line,System.Int32,System.Single,System.Boolean,System.Single,System.Single,System.Single,Parking.SignageType)">
+        <member name="M:Parking.Patterns.#ctor(Autodesk.DesignScript.Geometry.Curve,System.Int32,System.Single,System.Boolean,System.Single,System.Single,System.Single,Parking.SignageType)">
             <summary>
             Creates instances of the parking pattern class.
             </summary>
@@ -566,9 +566,16 @@
             </summary>
             <returns name="parkingBays">The parking bay instances.</returns>
         </member>
+        <member name="M:Parking.Patterns.FlexibleParkingPattern(System.Boolean)">
+            <summary>
+            Create a parking pattern along any curve or polygon shape.
+            </summary>
+            <param name="baysBothSides">Place parking bays on both sides of the location line?</param>
+            <returns></returns>
+        </member>
         <member name="M:Parking.Patterns.CreateParkingBays">
             <summary>
-            Creates the parking bay instances in a pattern.
+            Creates the parking bay instances in a pattern along a straight line.
             </summary>
             <returns name="parkingBays">The parking bay instances.</returns>
         </member>

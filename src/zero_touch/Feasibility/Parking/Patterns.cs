@@ -20,7 +20,7 @@ namespace Parking
         /// <summary>
         /// The input line indicating the location of the pattern.
         /// </summary>
-        public Line LocationLine {  private get; set; }
+        public Curve LocationLine { private get; set; }
 
         private int _patternType;
 
@@ -96,7 +96,7 @@ namespace Parking
         /// <param name="signage">The signage type to be placed on the parking bay.</param>
         [IsVisibleInDynamoLibrary(true)]
         public Patterns(
-            Line locationLine,
+            Curve locationLine,
             int patternType = 1,
             float bayWidth = (float)2.5,
             bool adjustBayWidth = true,
@@ -231,7 +231,7 @@ namespace Parking
             Vector coordVector = lineCoord.XAxis.Reverse();
 
             // extend the location line if required to ensure the bays fit accurately.
-            Line extendedLine;
+            Curve extendedLine;
             if (AdjustBayWidth == true) 
             {
                 extendedLine = LocationLine;
@@ -278,12 +278,24 @@ namespace Parking
         /// <returns name="rotationAngle"></returns>
         private float GetLineRotationAngle()
         {
-            // get the direction of the location line.
-            Vector lineDirection = LocationLine.Direction;
+            // add a try/catch block to catch errors when location line is not a single straight line.
+            float rotationAngle;
+            try
+            {
+                // copy the location curve and attempt conversion to line.
+                Line copyLocationLine = LocationLine as Line;
 
-            // compute the rotation angle of the parking bay.
-            float rotationAngle = (float)lineDirection.AngleAboutAxis(Vector.YAxis(), Vector.ZAxis());
+                // get the direction of the location line.
+                Vector lineDirection = copyLocationLine.Direction;
 
+                // compute the rotation angle of the parking bay.
+                rotationAngle = (float)lineDirection.AngleAboutAxis(Vector.YAxis(), Vector.ZAxis());
+            }
+            catch
+            {
+                rotationAngle = 0;
+            }
+            
             return rotationAngle;
         }
 
@@ -390,59 +402,70 @@ namespace Parking
                 secondLocationPoints.Add(mirrorPoint);
             }
 
-            // get the direction of the location line.
-            Vector locationLineDir = LocationLine.Direction;
-
-            // move the mirrored points along the pattern location line.
-            float moveDistance = (float)(-(DSCore.Math.Sin(90 - BayAngle) * ActualBayWidth()));
-            List<Point> movedPoints = new List<Point>();
-            foreach (Point point in secondLocationPoints) 
-            { 
-                Point movedPoint = point.Translate(locationLineDir, moveDistance) as Point;
-                movedPoints.Add(movedPoint);
-            }
-
-            // get the center of the location line.
-            Point locationCenter = LocationLine.PointAtParameter(0.5);
-
-            // add the parking bay instances to the first half target points.
-            List<ParkingBay> firstParkingBays = new List<ParkingBay>();
-            foreach (Point point in locationPoints)
-            {
-                ParkingBay bay = new ParkingBay(
-                    point,
-                    locationCenter,
-                    ActualBayWidth(),
-                    BayLength,
-                    BayAngle + GetLineRotationAngle(),
-                    0,
-                    false,
-                    true,
-                    Signage);
-                firstParkingBays.Add(bay);
-            }
-
-            // add the parking bay instances to the second half target points.
-            List<ParkingBay> secondParkingBays = new List<ParkingBay>();
-            foreach (Point point in movedPoints)
-            {
-                ParkingBay bay = new ParkingBay(
-                    point,
-                    locationCenter,
-                    ActualBayWidth(),
-                    BayLength,
-                    BayAngle + GetLineRotationAngle(),
-                    0,
-                    true,
-                    false,
-                    Signage);
-                secondParkingBays.Add(bay);
-            }
-
-            // add the lists of parking bays to a single list.
+            // add a try/catch block to catch errors when location line is not a single straight line.
             List<List<ParkingBay>> parkingBays = new List<List<ParkingBay>>();
-            parkingBays.Add(firstParkingBays);
-            parkingBays.Add(secondParkingBays);
+            try
+            {
+                // copy the location curve and attempt conversion to line.
+                Line copyLocationLine = LocationLine as Line;
+
+                // get the direction of the location line.
+                Vector locationLineDir = copyLocationLine.Direction;
+
+                // move the mirrored points along the pattern location line.
+                float moveDistance = (float)(-(DSCore.Math.Sin(90 - BayAngle) * ActualBayWidth()));
+                List<Point> movedPoints = new List<Point>();
+                foreach (Point point in secondLocationPoints)
+                {
+                    Point movedPoint = point.Translate(locationLineDir, moveDistance) as Point;
+                    movedPoints.Add(movedPoint);
+                }
+
+                // get the center of the location line.
+                Point locationCenter = LocationLine.PointAtParameter(0.5);
+
+                // add the parking bay instances to the first half target points.
+                List<ParkingBay> firstParkingBays = new List<ParkingBay>();
+                foreach (Point point in locationPoints)
+                {
+                    ParkingBay bay = new ParkingBay(
+                        point,
+                        locationCenter,
+                        ActualBayWidth(),
+                        BayLength,
+                        BayAngle + GetLineRotationAngle(),
+                        0,
+                        false,
+                        true,
+                        Signage);
+                    firstParkingBays.Add(bay);
+                }
+
+                // add the parking bay instances to the second half target points.
+                List<ParkingBay> secondParkingBays = new List<ParkingBay>();
+                foreach (Point point in movedPoints)
+                {
+                    ParkingBay bay = new ParkingBay(
+                        point,
+                        locationCenter,
+                        ActualBayWidth(),
+                        BayLength,
+                        BayAngle + GetLineRotationAngle(),
+                        0,
+                        true,
+                        false,
+                        Signage);
+                    secondParkingBays.Add(bay);
+                }
+
+                // add the lists of parking bays to a single list.
+                parkingBays.Add(firstParkingBays);
+                parkingBays.Add(secondParkingBays);
+            }
+            catch 
+            {
+                throw new Exception("The location line is not straight use the FlexibleParkingPattern node");
+            }
 
             return parkingBays;
         }
@@ -468,67 +491,118 @@ namespace Parking
                 secondLocationPoints.Add(mirrorPoint);
             } 
 
-            // get the direction of the location line.
-            Vector locationLineDir = LocationLine.Direction;
-
-            // move the mirrored points along the pattern location line.
-            float moveDistance = (float)(-(DSCore.Math.Sin(45) * ActualBayWidth()));
-            List<Point> movedPoints = new List<Point>();
-            foreach (Point point in secondLocationPoints)
-            {
-                Point movedPoint = point.Translate(locationLineDir, moveDistance) as Point;
-                movedPoints.Add(movedPoint);
-            }
-
-            // get the center of the location line.
-            Point locationCenter = LocationLine.PointAtParameter(0.5);
-
-            // add the parking bay instances to the first half target points.
-            List<ParkingBay> firstParkingBays = new List<ParkingBay>();
-            foreach (Point point in locationPoints)
-            {
-                ParkingBay bay = new ParkingBay(
-                    point,
-                    locationCenter,
-                    ActualBayWidth(),
-                    BayLength,
-                    45 + GetLineRotationAngle(),
-                    0,
-                    false,
-                    true,
-                    Signage);
-                firstParkingBays.Add(bay);
-            }
-
-
-            // add the parking bay instances to the second half target points.
-            List<ParkingBay> secondParkingBays = new List<ParkingBay>();
-            foreach (Point point in movedPoints)
-            {
-                ParkingBay bay = new ParkingBay(
-                    point,
-                    locationCenter,
-                    ActualBayWidth(),
-                    BayLength,
-                    45 - GetLineRotationAngle(),
-                    0,
-                    true,
-                    true,
-                    Signage);
-                secondParkingBays.Add(bay);
-            }
-
-            // add the lists of parking bays to a single list.
+            // add a try/catch block to catch errors when location line is not a single straight line.
             List<List<ParkingBay>> parkingBays = new List<List<ParkingBay>>();
-            parkingBays.Add(firstParkingBays);
-            parkingBays.Add(secondParkingBays);
+            try
+            {
+                // copy the location curve and attempt conversion to line.
+                Line copyLocationLine = LocationLine as Line;
+
+                // get the direction of the location line.
+                Vector locationLineDir = copyLocationLine.Direction;
+
+                // move the mirrored points along the pattern location line.
+                float moveDistance = (float)(-(DSCore.Math.Sin(45) * ActualBayWidth()));
+                List<Point> movedPoints = new List<Point>();
+                foreach (Point point in secondLocationPoints)
+                {
+                    Point movedPoint = point.Translate(locationLineDir, moveDistance) as Point;
+                    movedPoints.Add(movedPoint);
+                }
+
+                // get the center of the location line.
+                Point locationCenter = LocationLine.PointAtParameter(0.5);
+
+                // add the parking bay instances to the first half target points.
+                List<ParkingBay> firstParkingBays = new List<ParkingBay>();
+                foreach (Point point in locationPoints)
+                {
+                    ParkingBay bay = new ParkingBay(
+                        point,
+                        locationCenter,
+                        ActualBayWidth(),
+                        BayLength,
+                        45 + GetLineRotationAngle(),
+                        0,
+                        false,
+                        true,
+                        Signage);
+                    firstParkingBays.Add(bay);
+                }
+
+
+                // add the parking bay instances to the second half target points.
+                List<ParkingBay> secondParkingBays = new List<ParkingBay>();
+                foreach (Point point in movedPoints)
+                {
+                    ParkingBay bay = new ParkingBay(
+                        point,
+                        locationCenter,
+                        ActualBayWidth(),
+                        BayLength,
+                        45 - GetLineRotationAngle(),
+                        0,
+                        true,
+                        true,
+                        Signage);
+                    secondParkingBays.Add(bay);
+                }
+
+                // add the lists of parking bays to a single list.
+                parkingBays.Add(firstParkingBays);
+                parkingBays.Add(secondParkingBays);
+            }
+            catch 
+            {
+                throw new Exception("The location line is not straight use the FlexibleParkingPattern node");
+            }
 
             return parkingBays;
         }
 
 
         /// <summary>
-        /// Creates the parking bay instances in a pattern.
+        /// Create a parking pattern along any curve or polygon shape.
+        /// </summary>
+        /// <param name="baysBothSides">Place parking bays on both sides of the location line?</param>
+        /// <returns></returns>
+        public List<List<ParkingBay>> FlexibleParkingPattern(bool baysBothSides = false) 
+        {
+            // Get the type of the input curve.
+            string curveType = LocationLine.GetType().Name;
+
+            List<List<ParkingBay>> parkingBays = new List<List<ParkingBay>>();
+
+            // return parking bays for a polycurve.
+            if (curveType == "PolyCurve") 
+            {
+                float x = 0; float y = 0;
+            }
+
+            // return parking bays in a straight pattern if the location line is straight.
+            else if (curveType == "Line") 
+            {
+                // add logic to switch between the straight parking patterns as required.
+                if (PatternType == 1)
+                {
+                    parkingBays = NonInterlockingPattern();
+                }
+                else if (PatternType == 2)
+                {
+                    parkingBays = InterlockingPattern();
+                }
+                else
+                {
+                    parkingBays = HerringbonePattern();
+                }
+            }
+
+            return parkingBays;
+        }
+
+
+        /// <summary>
+        /// Creates the parking bay instances in a pattern along a straight line.
         /// </summary>
         /// <returns name="parkingBays">The parking bay instances.</returns>
         public List<List<ParkingBay>> CreateParkingBays()
