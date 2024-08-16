@@ -105,9 +105,10 @@
         <member name="M:Common.GeometryTools.PolyCurveCornerAngles(Autodesk.DesignScript.Geometry.PolyCurve)">
             <summary>
             Calculates the corner angles for polycurves of any shape and edge conditions.
+            The calculation is done using the polycurve's end tangents.
             </summary>
-            <param name="curve">The input pol</param>
-            <returns></returns>
+            <param name="curve">The input polycurve.</param>
+            <returns>The polycurve's corner angles.</returns>
         </member>
         <member name="T:Common.Maths">
             <summary>

@@ -293,15 +293,54 @@ namespace Common
 
         /// <summary>
         /// Calculates the corner angles for polycurves of any shape and edge conditions.
+        /// The calculation is done using the polycurve's end tangents.
         /// </summary>
-        /// <param name="curve">The input pol</param>
-        /// <returns></returns>
-        public static Curve[] PolyCurveCornerAngles(PolyCurve curve) 
+        /// <param name="curve">The input polycurve.</param>
+        /// <returns>The polycurve's corner angles.</returns>
+        public static List<float> PolyCurveCornerAngles(PolyCurve curve) 
         {
             // explode the polycurve.
-            Curve[] explodedCurves = curve.Explode() as Curve[];
+            List<Curve> explodedCurves = curve.Curves().ToList();
 
-            return explodedCurves;
+            // shift the curve list elements to the right by 1.
+            List<Curve> shiftedCurves = new List<Curve>();
+            shiftedCurves.Add(explodedCurves[explodedCurves.Count - 1]); // add the last element to the beginning
+            shiftedCurves.AddRange(explodedCurves.GetRange(0, explodedCurves.Count - 1)); // add the rest
+
+            // reverse the direction of the shifted curves.
+            List<Curve> reversedCurves = new List<Curve>();
+            foreach (Curve c in shiftedCurves)
+            { 
+                reversedCurves.Add(c.Reverse());
+            }
+
+            // get the tangent vectors at the original curve start points.
+            List<Vector> origStartTangent = new List<Vector>();
+            foreach (Curve c in explodedCurves)
+            {
+                origStartTangent.Add(c.TangentAtParameter(0));
+            }
+
+            // get the tangent vectors at the reversed curve start points.
+            List<Vector> revStartTangent = new List<Vector>();
+            foreach (Curve c in reversedCurves) 
+            {
+                revStartTangent.Add(c.TangentAtParameter(0));
+            }
+
+            // combine the tangent vector into tuples. 
+            List<Tuple<Vector, Vector>> zippedTangents = origStartTangent
+                .Zip(revStartTangent, (first, second) => Tuple.Create(first, second)).ToList();
+
+            // calculate the angle between the tangent vectors.
+            List<float> cornerAngles = new List<float>();
+            foreach (Tuple<Vector, Vector> tup in zippedTangents) 
+            { 
+               float angle = (float)(tup.Item1.AngleAboutAxis(tup.Item2, Vector.ZAxis()));
+               cornerAngles.Add(angle);    
+            }
+
+            return cornerAngles;
         }
     }
 }
