@@ -22,28 +22,28 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="T:Common.Geometry">
+        <member name="T:Common.GeometryTools">
             <summary>
             Wrapper class for geometry.
             Contains common geometrical operations.
             </summary>
         </member>
-        <member name="M:Common.Geometry.SurfacePerimeter(Autodesk.DesignScript.Geometry.Surface)">
+        <member name="M:Common.GeometryTools.SurfacePerimeter(Autodesk.DesignScript.Geometry.Surface)">
             <summary>
             Get the perimter polycurve of a surface.
             </summary>
             <param name="surface">The surface input.</param>
             <returns name="polyCurve">The closed perimeter polycurve.</returns>
         </member>
-        <member name="M:Common.Geometry.CheckSurfacePlanarity(Autodesk.DesignScript.Geometry.Surface)">
+        <member name="M:Common.GeometryTools.CheckSurfacePlanarity(Autodesk.DesignScript.Geometry.Surface)">
             <summary>
-            Check the planarity of an input surface.
+            Check the planarity of an input surface. Returns an error if the surface is not planar.
             </summary>
             <param name="surface">The input surface.</param>
             <returns name="planarSurface">The planar surface.</returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="M:Common.Geometry.PullSurfaceToPlane(Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Plane)">
+        <member name="M:Common.GeometryTools.PullSurfaceToPlane(Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Plane)">
             <summary>
             Pull a surface onto a plane, in the plane's normal direction.
             </summary>
@@ -51,7 +51,7 @@
             <param name="plane">The target plane.</param>
             <returns name="pulledSurface">The new surface pulled onto the plane.</returns>
         </member>
-        <member name="M:Common.Geometry.SurfacePlane(Autodesk.DesignScript.Geometry.Surface)">
+        <member name="M:Common.GeometryTools.SurfacePlane(Autodesk.DesignScript.Geometry.Surface)">
             <summary>
             Get the plane of a horizontal planar surface.
             Returns an error if the surface is not planar and horizontal.
@@ -60,7 +60,7 @@
             <returns></returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="M:Common.Geometry.ProjectCurves(Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Curve)">
+        <member name="M:Common.GeometryTools.ProjectCurves(Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Curve)">
             <summary>
             To project curves onto a planar and horizontal surface.
             </summary>
@@ -69,7 +69,7 @@
             <returns></returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="M:Common.Geometry.CreateOffsetSurfaceEdges(Autodesk.DesignScript.Geometry.Surface,System.Single,System.Single,System.Single)">
+        <member name="M:Common.GeometryTools.CreateOffsetSurfaceEdges(Autodesk.DesignScript.Geometry.Surface,System.Single,System.Single,System.Single)">
             <summary>
             Create planar offset polycurve edges from a surface and fillet the corners if required.
             </summary>
@@ -80,7 +80,7 @@
             <returns>The offset surface polycurves.</returns>
             <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="M:Common.Geometry.OffsetSurface(Autodesk.DesignScript.Geometry.Surface,System.Single,System.Single,System.Single)">
+        <member name="M:Common.GeometryTools.OffsetSurface(Autodesk.DesignScript.Geometry.Surface,System.Single,System.Single,System.Single)">
             <summary>
             Create an offset surface from the surface's offset edges..
             </summary>
@@ -91,7 +91,7 @@
             <returns>The offset surface.</returns>
             <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="M:Common.Geometry.PerimeterSurface(Autodesk.DesignScript.Geometry.Surface,System.Single,System.Single,System.Single)">
+        <member name="M:Common.GeometryTools.PerimeterSurface(Autodesk.DesignScript.Geometry.Surface,System.Single,System.Single,System.Single)">
             <summary>
             To create a surface along the perimeter of a surface.
             </summary>
@@ -102,12 +102,19 @@
             <returns></returns>
             <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="T:Common.Math">
+        <member name="M:Common.GeometryTools.PolyCurveCornerAngles(Autodesk.DesignScript.Geometry.PolyCurve)">
+            <summary>
+            Calculates the corner angles for polycurves of any shape and edge conditions.
+            </summary>
+            <param name="curve">The input pol</param>
+            <returns></returns>
+        </member>
+        <member name="T:Common.Maths">
             <summary>
             A class containing methods for common math operations.
             </summary>
         </member>
-        <member name="M:Common.Math.IntAdd(System.Int32,System.Int32)">
+        <member name="M:Common.Maths.IntAdd(System.Int32,System.Int32)">
             <summary>
             Add two integer values.
             </summary>
@@ -115,7 +122,7 @@
             <param name="b">the second integer</param>
             <returns name="value">the added value</returns>
         </member>
-        <member name="M:Common.Math.Range(System.Double,System.Double,System.Int32)">
+        <member name="M:Common.Maths.Range(System.Double,System.Double,System.Int32)">
             <summary>
             Divides a range into a required number count.
             </summary>

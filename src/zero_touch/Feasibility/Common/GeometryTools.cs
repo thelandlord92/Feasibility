@@ -14,10 +14,10 @@ namespace Common
     /// Wrapper class for geometry.
     /// Contains common geometrical operations.
     /// </summary>
-    public class Geometry
+    public class GeometryTools
     {
         // this hides the overall class as a node.
-        private Geometry() { }
+        private GeometryTools() { }
 
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Common
 
 
         /// <summary>
-        /// Check the planarity of an input surface.
+        /// Check the planarity of an input surface. Returns an error if the surface is not planar.
         /// </summary>
         /// <param name="surface">The input surface.</param>
         /// <returns name="planarSurface">The planar surface.</returns>
@@ -288,6 +288,20 @@ namespace Common
             Surface perimeterSurface = surface.Difference(internalSurfaces);
 
             return perimeterSurface;
+        }
+
+
+        /// <summary>
+        /// Calculates the corner angles for polycurves of any shape and edge conditions.
+        /// </summary>
+        /// <param name="curve">The input pol</param>
+        /// <returns></returns>
+        public static Curve[] PolyCurveCornerAngles(PolyCurve curve) 
+        {
+            // explode the polycurve.
+            Curve[] explodedCurves = curve.Explode() as Curve[];
+
+            return explodedCurves;
         }
     }
 }

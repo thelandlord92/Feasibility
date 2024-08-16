@@ -284,10 +284,10 @@ namespace Parking
         public Surface CreateLayoutSurface()
         {
             // check the planarity of the input surface.
-            Surface surface = Common.Geometry.CheckSurfacePlanarity(LayoutArea);
+            Surface surface = Common.GeometryTools.CheckSurfacePlanarity(LayoutArea);
 
             // pull the surface onto the input plane.
-            Surface layoutSurface = Common.Geometry.PullSurfaceToPlane(surface, LayoutPlane);
+            Surface layoutSurface = Common.GeometryTools.PullSurfaceToPlane(surface, LayoutPlane);
 
             return layoutSurface;
         }
@@ -306,7 +306,7 @@ namespace Parking
             try
             {
                 // create the internal parking surface.
-                internalSurface = Common.Geometry.OffsetSurface(
+                internalSurface = Common.GeometryTools.OffsetSurface(
                     layoutSurface,
                     (PerimeterAisleWidth + PerimeterBayDepth + PerimeterWalkWayWidth),
                     InternalTurningRadius,
@@ -336,7 +336,7 @@ namespace Parking
             try 
             {
                 // create the perimter roadway surface.
-                roadWaySurface = Common.Geometry.PerimeterSurface(
+                roadWaySurface = Common.GeometryTools.PerimeterSurface(
                     layoutSurface,
                     (PerimeterAisleWidth + PerimeterBayDepth + PerimeterWalkWayWidth),
                     InternalTurningRadius,
@@ -373,7 +373,7 @@ namespace Parking
             List<PolyCurve> curves = new List<PolyCurve>();
             foreach (Surface surface in surfaces) 
             { 
-                curves.Add(Common.Geometry.SurfacePerimeter(surface));
+                curves.Add(Common.GeometryTools.SurfacePerimeter(surface));
             }
 
             // create a list to hold the rotation values.

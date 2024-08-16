@@ -255,7 +255,7 @@ namespace Parking
             }
             else 
             {
-                foreach (float number in Common.Math.Range(0, 1, ParkingCopyNumber() + 1))
+                foreach (float number in Common.Maths.Range(0, 1, ParkingCopyNumber() + 1))
                 {
                     Point point = movedLine.PointAtParameter(number);
                     locationPoints.Add(point);

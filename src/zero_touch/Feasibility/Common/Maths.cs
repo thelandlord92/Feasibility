@@ -9,10 +9,10 @@ namespace Common
     /// <summary>
     /// A class containing methods for common math operations.
     /// </summary>
-    public class Math
+    public class Maths
     {
         // hides the overall class as a node.
-        private Math() { }
+        private Maths() { }
 
         /// <summary>
         /// Add two integer values.

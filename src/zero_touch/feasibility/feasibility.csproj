@@ -138,8 +138,8 @@
   <ItemGroup>
     <Compile Include="About\About.cs" />
     <Compile Include="Buildings\Buildings.cs" />
-    <Compile Include="Common\Geometry.cs" />
-    <Compile Include="Common\Math.cs" />
+    <Compile Include="Common\GeometryTools.cs" />
+    <Compile Include="Common\Maths.cs" />
     <Compile Include="Erven\Erven.cs" />
     <Compile Include="Parking\BoundingRectangle.cs" />
     <Compile Include="Parking\ExclusionBays.cs" />
