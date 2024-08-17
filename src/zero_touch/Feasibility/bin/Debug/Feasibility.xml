@@ -102,6 +102,22 @@
             <returns></returns>
             <exception cref="T:System.Exception"></exception>
         </member>
+        <member name="M:Common.GeometryTools.PolyCurveCornerCurvePairs(Autodesk.DesignScript.Geometry.PolyCurve)">
+            <summary>
+            Creates curve pairs per corner of the input polycurve. 
+            Note that the curve pair directions have been reversed towards the corners.
+            </summary>
+            <param name="curve">The input polycurve.</param>
+            <returns>A list of the paired curves.</returns>
+        </member>
+        <member name="M:Common.GeometryTools.PolyCurveCornerVectorPairs(Autodesk.DesignScript.Geometry.PolyCurve)">
+            <summary>
+            Creates vector pairs per corner of the input polycurve. 
+            Note that the vector pair directions have been reversed towards the corners.
+            </summary>
+            <param name="curve">The input polycurve.</param>
+            <returns name="vectors">A list of the paired vectors.</returns>
+        </member>
         <member name="M:Common.GeometryTools.PolyCurveCornerAngles(Autodesk.DesignScript.Geometry.PolyCurve)">
             <summary>
             Calculates the corner angles for polycurves of any shape and edge conditions.
