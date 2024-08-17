@@ -95,7 +95,7 @@ namespace Common
         /// Returns an error if the surface is not planar and horizontal.
         /// </summary>
         /// <param name="surface">The surface input.</param>
-        /// <returns></returns>
+        /// <returns name="surfacePlane">The surface plane.</returns>
         /// <exception cref="ArgumentException"></exception>
         private static Plane SurfacePlane(Surface surface)
         {
@@ -233,7 +233,7 @@ namespace Common
         /// <param name="offsetDistance">The perimeter offset distance.</param>
         /// <param name="concaveFillet">The fillet radius at the concave corner.</param>
         /// <param name="convexFillet">The fillet radius at the convex corner.</param>
-        /// <returns>The offset surface.</returns>
+        /// <returns name="offsetSurface">The offset surface.</returns>
         /// <exception cref="Exception"></exception>
         public static Surface OffsetSurface(
             Surface surface,
@@ -265,7 +265,7 @@ namespace Common
         /// <param name="surfaceWidth">The width of the perimeter surface.</param>
         /// <param name="internalConcaveFillet">The fillet radius at the internal concave corners.</param>
         /// <param name="internalConvexFillet">The fillet radius at the internal convex corners.</param>
-        /// <returns></returns>
+        /// <returns name="perimeterSurface">The perimeter surface.</returns>
         /// <exception cref="Exception"></exception>
         public static Surface PerimeterSurface(
             Surface surface, 
@@ -296,7 +296,7 @@ namespace Common
         /// Note that the curve pair directions have been reversed towards the corners.
         /// </summary>
         /// <param name="curve">The input polycurve.</param>
-        /// <returns>A list of the paired curves.</returns>
+        /// <returns name="curvePairs">A list of the paired curves.</returns>
         public static List<List<Curve>> PolyCurveCornerCurvePairs(PolyCurve curve) 
         {
             // explode the polycurve.
@@ -353,7 +353,7 @@ namespace Common
         /// The calculation is done using the polycurve's end tangents.
         /// </summary>
         /// <param name="curve">The input polycurve.</param>
-        /// <returns>The polycurve's corner angles.</returns>
+        /// <returns name="cornerAngles">The polycurve's corner angles.</returns>
         public static List<float> PolyCurveCornerAngles(PolyCurve curve) 
         {
             // get the corner vector pairs.
@@ -368,6 +368,28 @@ namespace Common
             }
 
             return cornerAngles;
+        }
+
+
+        /// <summary>
+        /// Return a string list of the curve types that make up a polycurve.
+        /// </summary>
+        /// <param name="curve">The input polycurve.</param>
+        /// <returns name="curveTypes">The curve types.</returns>
+        public static List<string> PolyCurveEdgeTypes(PolyCurve curve) 
+        {
+            // explode the polycurve.
+            List<Curve> explodedCurves = curve.Curves().ToList();
+
+            // get the curve types.
+            List<string> curveTypes = new List<string>();
+            foreach (Curve c in explodedCurves)
+            {
+                string curveType = c.GetType().Name;
+                curveTypes.Add(curveType);
+            }
+
+            return curveTypes;
         }
     }
 }

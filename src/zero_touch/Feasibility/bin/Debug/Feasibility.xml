@@ -57,7 +57,7 @@
             Returns an error if the surface is not planar and horizontal.
             </summary>
             <param name="surface">The surface input.</param>
-            <returns></returns>
+            <returns name="surfacePlane">The surface plane.</returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="M:Common.GeometryTools.ProjectCurves(Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Curve)">
@@ -88,7 +88,7 @@
             <param name="offsetDistance">The perimeter offset distance.</param>
             <param name="concaveFillet">The fillet radius at the concave corner.</param>
             <param name="convexFillet">The fillet radius at the convex corner.</param>
-            <returns>The offset surface.</returns>
+            <returns name="offsetSurface">The offset surface.</returns>
             <exception cref="T:System.Exception"></exception>
         </member>
         <member name="M:Common.GeometryTools.PerimeterSurface(Autodesk.DesignScript.Geometry.Surface,System.Single,System.Single,System.Single)">
@@ -99,7 +99,7 @@
             <param name="surfaceWidth">The width of the perimeter surface.</param>
             <param name="internalConcaveFillet">The fillet radius at the internal concave corners.</param>
             <param name="internalConvexFillet">The fillet radius at the internal convex corners.</param>
-            <returns></returns>
+            <returns name="perimeterSurface">The perimeter surface.</returns>
             <exception cref="T:System.Exception"></exception>
         </member>
         <member name="M:Common.GeometryTools.PolyCurveCornerCurvePairs(Autodesk.DesignScript.Geometry.PolyCurve)">
@@ -108,7 +108,7 @@
             Note that the curve pair directions have been reversed towards the corners.
             </summary>
             <param name="curve">The input polycurve.</param>
-            <returns>A list of the paired curves.</returns>
+            <returns name="curvePairs">A list of the paired curves.</returns>
         </member>
         <member name="M:Common.GeometryTools.PolyCurveCornerVectorPairs(Autodesk.DesignScript.Geometry.PolyCurve)">
             <summary>
@@ -124,7 +124,14 @@
             The calculation is done using the polycurve's end tangents.
             </summary>
             <param name="curve">The input polycurve.</param>
-            <returns>The polycurve's corner angles.</returns>
+            <returns name="cornerAngles">The polycurve's corner angles.</returns>
+        </member>
+        <member name="M:Common.GeometryTools.PolyCurveEdgeTypes(Autodesk.DesignScript.Geometry.PolyCurve)">
+            <summary>
+            Return a string list of the curve types that make up a polycurve.
+            </summary>
+            <param name="curve">The input polycurve.</param>
+            <returns name="curveTypes">The curve types.</returns>
         </member>
         <member name="T:Common.Maths">
             <summary>
