@@ -345,11 +345,9 @@ namespace Parking
             {
                 ParkingBay bay = new ParkingBay(
                     point, 
-                    locationCenter,
                     ActualBayWidth(), 
                     BayLength, 
                     BayAngle + GetLineRotationAngle(), 
-                    0,
                     false,
                     true,
                     Signage);
@@ -362,11 +360,9 @@ namespace Parking
             {
                 ParkingBay bay = new ParkingBay(
                     point,
-                    locationCenter,
                     ActualBayWidth(),
                     BayLength,
                     BayAngle - GetLineRotationAngle(),
-                    0,
                     true,
                     true,
                     Signage);
@@ -430,11 +426,9 @@ namespace Parking
                 {
                     ParkingBay bay = new ParkingBay(
                         point,
-                        locationCenter,
                         ActualBayWidth(),
                         BayLength,
                         BayAngle + GetLineRotationAngle(),
-                        0,
                         false,
                         true,
                         Signage);
@@ -447,11 +441,9 @@ namespace Parking
                 {
                     ParkingBay bay = new ParkingBay(
                         point,
-                        locationCenter,
                         ActualBayWidth(),
                         BayLength,
                         BayAngle + GetLineRotationAngle(),
-                        0,
                         true,
                         false,
                         Signage);
@@ -519,11 +511,9 @@ namespace Parking
                 {
                     ParkingBay bay = new ParkingBay(
                         point,
-                        locationCenter,
                         ActualBayWidth(),
                         BayLength,
                         45 + GetLineRotationAngle(),
-                        0,
                         false,
                         true,
                         Signage);
@@ -537,11 +527,9 @@ namespace Parking
                 {
                     ParkingBay bay = new ParkingBay(
                         point,
-                        locationCenter,
                         ActualBayWidth(),
                         BayLength,
                         45 - GetLineRotationAngle(),
-                        0,
                         true,
                         true,
                         Signage);

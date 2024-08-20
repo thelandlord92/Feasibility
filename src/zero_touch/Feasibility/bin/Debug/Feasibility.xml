@@ -352,11 +352,6 @@
             The target position of the parking bay.
             </summary>
         </member>
-        <member name="P:Parking.ParkingBay.PatternCenter">
-            <summary>
-            The center of the pattern for rotation.
-            </summary>
-        </member>
         <member name="P:Parking.ParkingBay.BayWidth">
             <summary>
             The width of the parking bay.
@@ -370,11 +365,6 @@
         <member name="P:Parking.ParkingBay.BayAngle">
             <summary>
             The angle of the parking bay.
-            </summary>
-        </member>
-        <member name="P:Parking.ParkingBay.PatternRotation">
-            <summary>
-            The rotation angle of the pattern.
             </summary>
         </member>
         <member name="P:Parking.ParkingBay.Geometry">
@@ -397,16 +387,14 @@
             To set the parking signage type.
             </summary>
         </member>
-        <member name="M:Parking.ParkingBay.#ctor(Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point,System.Single,System.Single,System.Single,System.Single,System.Boolean,System.Boolean,Parking.SignageType)">
+        <member name="M:Parking.ParkingBay.#ctor(Autodesk.DesignScript.Geometry.Point,System.Single,System.Single,System.Single,System.Boolean,System.Boolean,Parking.SignageType)">
             <summary>
             Creates a parking bay instance.
             </summary>
             <param name="targetPosition">the target transform position of the parking bay.</param>
-            <param name="patternCenter">the center of the pattern.</param>
             <param name="bayWidth">the width of the parking bay.</param>
             <param name="bayLength">the length of the parking bay.</param>
             <param name="bayAngle">the angle of the parking bay.</param>
-            <param name="patternRotation">the rotation angle of the parking bay around the pattern center point.</param>
             <param name="flipHorizontal">flip the parking bay horizontally.</param>
             <param name="flipVertical">flip the parking bay vertically</param>
             <param name="signage">The signage type to be placed on the parking bay.</param>
