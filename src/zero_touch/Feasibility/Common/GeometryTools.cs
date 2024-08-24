@@ -302,16 +302,24 @@ namespace Common
             // explode the polycurve.
             List<Curve> explodedCurves = curve.Curves().ToList();
 
-            // shift the curve list elements to the right by 1.
-            List<Curve> shiftedCurves = new List<Curve>();
-            shiftedCurves.Add(explodedCurves[explodedCurves.Count - 1]); // add the last element to the beginning
-            shiftedCurves.AddRange(explodedCurves.GetRange(0, explodedCurves.Count - 1)); // add the rest
-
-            // reverse the direction of the shifted curves.
+            // create the reversed corner curve pairs.
             List<Curve> reversedCurves = new List<Curve>();
-            foreach (Curve c in shiftedCurves)
+            if (explodedCurves.Count > 1) 
             {
-                reversedCurves.Add(c.Reverse());
+                // shift the curve list elements to the right by 1.
+                List<Curve> shiftedCurves = new List<Curve>();
+                shiftedCurves.Add(explodedCurves[explodedCurves.Count - 1]); // add the last element to the beginning
+                shiftedCurves.AddRange(explodedCurves.GetRange(0, explodedCurves.Count - 1)); // add the rest
+
+                // reverse the direction of the shifted curves.
+                foreach (Curve c in shiftedCurves)
+                {
+                    reversedCurves.Add(c.Reverse());
+                }
+            }
+            else 
+            {
+                throw new ArgumentException("The polycurve must have more than one side.");
             }
 
             // pair the curves into lists. 
@@ -390,6 +398,38 @@ namespace Common
             }
 
             return curveTypes;
+        }
+
+
+        /// <summary>
+        /// Creates a dashed line pattern along a curve.
+        /// </summary>
+        /// <param name="curve">The input curve to create the dashes along.</param>
+        /// <param name="dashLength">The length of the dashes.</param>
+        /// <param name="dashGap">The length of the gap between the dashes.</param>
+        /// <param name="dashThickness">The thickness of the dashed line.</param>
+        /// <returns name="polyCurves">Polycurves representing the dashes.</returns>
+        public static Point[] DashedLine(
+            [DefaultArgument("Line.ByStartPointEndPoint(Point.ByCoordinates(0, 0), Point.ByCoordinates(0, 100))")] Curve curve,
+            float dashLength = 5,
+            float dashGap = 2,
+            float dashThickness = 2) 
+        {
+            // get the start and end points.
+            Point startPoint = curve.StartPoint;
+            Point endPoint = curve.EndPoint;
+
+            // create the first setout points. 
+            Point setoutStartPoint = curve.PointAtSegmentLength(dashLength);
+            Point[] firstSetoutPoints = curve.PointsAtChordLengthFromPoint(setoutStartPoint, (dashLength + dashGap));
+
+            // create the second setout points.
+            Point[] secondSetoutPoints = curve.PointsAtChordLengthFromPoint(startPoint, (dashLength + dashGap));
+
+            // combine the point lists and add the end points.
+
+
+            return firstSetoutPoints;
         }
     }
 }

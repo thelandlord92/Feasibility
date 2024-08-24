@@ -133,6 +133,16 @@
             <param name="curve">The input polycurve.</param>
             <returns name="curveTypes">The curve types.</returns>
         </member>
+        <member name="M:Common.GeometryTools.DashedLine(Autodesk.DesignScript.Geometry.Curve,System.Single,System.Single,System.Single)">
+            <summary>
+            Creates a dashed line pattern along a curve.
+            </summary>
+            <param name="curve">The input curve to create the dashes along.</param>
+            <param name="dashLength">The length of the dashes.</param>
+            <param name="dashGap">The length of the gap between the dashes.</param>
+            <param name="dashThickness">The thickness of the dashed line.</param>
+            <returns name="polyCurves">Polycurves representing the dashes.</returns>
+        </member>
         <member name="T:Common.Maths">
             <summary>
             A class containing methods for common math operations.
