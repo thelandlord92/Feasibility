@@ -41,8 +41,8 @@
             Creates setout curves using a rectangle as reference.
             </summary>
             <param name="rectangle"></param>
-            <param name="firstlineOffset"></param>
-            <param name="restLineOffset"></param>
+            <param name="firstlineOffset">The offset distance of the first line.</param>
+            <param name="restLineOffset">The offset distance of the remaining lines.</param>
             <returns name="setOutLines">The setout lines.</returns>
         </member>
         <member name="M:Common.GeometryTools.SurfacePerimeter(Autodesk.DesignScript.Geometry.Surface)">
@@ -55,9 +55,19 @@
         <member name="M:Common.GeometryTools.CheckSurfacePlanarity(Autodesk.DesignScript.Geometry.Surface)">
             <summary>
             Check the planarity of an input surface. Returns an error if the surface is not planar.
+            If planar it returns the surface.
             </summary>
             <param name="surface">The input surface.</param>
             <returns name="planarSurface">The planar surface.</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Common.GeometryTools.CheckCurvePlanarity(Autodesk.DesignScript.Geometry.Curve)">
+            <summary>
+            Check the planarity of an input curve. Returns an error if the curve.
+            If planar it returns the curve.
+            </summary>
+            <param name="curve">The input curve.</param>
+            <returns name="planarCurve">The planar curve.</returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="M:Common.GeometryTools.PullSurfaceToPlane(Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Plane)">
@@ -161,6 +171,19 @@
             <returns name="dashCenterCurves">Polycurves representing the center of the dashes.</returns>
             <returns name="dashOutlines">Polycurves representing the outline of the dashes.</returns>
             <returns name="dashSurfaces">The dash surfaces.</returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:Common.GeometryTools.DiagonalHatchPattern(Autodesk.DesignScript.Geometry.Curve,System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            To create a diagonal hatch pattern.
+            </summary>
+            <param name="curve">The curve within which to define the hatch pattern.</param>
+            <param name="borderThickness">The thickness of the pattern's border.</param>
+            <param name="hatchThickness">The thickness of the diagonal hatches.</param>
+            <param name="hatchSpacing">The spacing between the hatches.</param>
+            <param name="hatchRotation">The rotaton of the hatch pattern.</param>
+            <returns name="hatchSurface">The surface of the hatch.</returns>
+            <returns name="hatchOutlines">The perimeter curves of the hatch surface.</returns>
             <exception cref="T:System.Exception"></exception>
         </member>
         <member name="T:Common.Maths">
