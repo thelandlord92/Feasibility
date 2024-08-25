@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Common;
 using CoreNodeModels;
 using Autodesk.DesignScript.Runtime;
+using Parking;
 
 namespace Common
 {
@@ -18,6 +19,85 @@ namespace Common
     {
         // this hides the overall class as a node.
         private GeometryTools() { }
+
+
+        /// <summary>
+        /// Creates a bounding rectangle around a polycurve. Thanks to Jacob Small for the logic.
+        /// </summary>
+        /// <param name="curve">The polycurve to create the bounding rectangle around.</param>
+        /// <param name="rotation">The rotation value of the created bounding rectangle.</param>
+        /// <returns name="boundingRectangle">The bounding rectangle.</returns>
+        public static Rectangle CreateBoundingRectangle(PolyCurve curve, float rotation)
+        {
+            // rotate the polycurve.
+            PolyCurve rotatedCurve = curve.Rotate(Plane.XY(), -rotation) as PolyCurve;
+
+            // get the bounding box of the curve.
+            BoundingBox boundingBox = rotatedCurve.BoundingBox;
+
+            // create a diagonal vector using the min and max points of the bounding box.
+            Point minPoint = boundingBox.MinPoint;
+            Point maxPoint = boundingBox.MaxPoint;
+            Vector diagonalVector = Vector.ByTwoPoints(minPoint, maxPoint);
+
+            // get the center point along the vector.
+            Point centerPoint = minPoint.Translate(diagonalVector.Scale(0.5)) as Point;
+
+            // create a rectangle at the xy plane using the x and y components of the diagonal vector.
+            Rectangle rectangle = Rectangle.ByWidthLength(diagonalVector.X, diagonalVector.Y);
+
+            // Move the rectangle to the diagonal vector center point.
+            Rectangle movedRectangle = rectangle.Translate(centerPoint.AsVector()) as Rectangle;
+
+            // Rotate the rectangle back to the polycurve around the xy plane.
+            Rectangle rotatedRectangle = movedRectangle.Rotate(Plane.XY(), rotation) as Rectangle;
+
+            return rotatedRectangle;
+        }
+
+
+        /// <summary>
+        /// Creates setout curves using a rectangle as reference.
+        /// </summary>
+        /// <param name="rectangle"></param>
+        /// <param name="firstlineOffset">The offset distance of the first line.</param>
+        /// <param name="restLineOffset">The offset distance of the remaining lines.</param>
+        /// <returns name="setOutLines">The setout lines.</returns>
+        public static List<Line> SetOutLines(
+            [DefaultArgument("Rectangle.ByWidthLength(25, 50)")] Rectangle rectangle,
+            float firstlineOffset = 2,
+            float restLineOffset = 5)
+        {
+            // get the first curve of the rectangle.
+            Curve initialCurve = rectangle.Curves()[0];
+
+            // add the first setout point to the curve.
+            Point initialPoint = initialCurve.PointAtChordLength(firstlineOffset);
+
+            // add the line location points to the curve.
+            Point[] locationPoints = initialCurve.PointsAtChordLengthFromPoint(initialPoint, restLineOffset) as Point[];
+
+            // get the third curve of the rectangle.
+            Curve oppositeCurve = rectangle.Curves()[2];
+
+            // add the setout points to the opposite setout curve.
+            List<Point> projectedPoints = new List<Point>();
+            int pointNumber = locationPoints.Length;
+            for (int j = 0; j < pointNumber; j++) // indices to select points within the location points list.
+            {
+                projectedPoints.Add(oppositeCurve.ClosestPointTo(locationPoints[j]) as Point);
+            }
+
+            // create a line between the points.
+            List<Line> setoutLines = new List<Line>();
+            for (int k = 0; k < pointNumber; k++)
+            {
+                setoutLines.Add(Line.ByStartPointEndPoint(locationPoints[k], projectedPoints[k]));
+            }
+
+            return setoutLines;
+            
+        }
 
 
         /// <summary>

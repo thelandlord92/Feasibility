@@ -141,7 +141,6 @@
     <Compile Include="Common\GeometryTools.cs" />
     <Compile Include="Common\Maths.cs" />
     <Compile Include="Erven\Erven.cs" />
-    <Compile Include="Parking\BoundingRectangle.cs" />
     <Compile Include="Parking\ExclusionBays.cs" />
     <Compile Include="Parking\InternalBays.cs" />
     <Compile Include="Parking\Layouts.cs" />

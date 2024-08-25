@@ -28,6 +28,23 @@
             Contains common geometrical operations.
             </summary>
         </member>
+        <member name="M:Common.GeometryTools.CreateBoundingRectangle(Autodesk.DesignScript.Geometry.PolyCurve,System.Single)">
+            <summary>
+            Creates a bounding rectangle around a polycurve. Thanks to Jacob Small for the logic.
+            </summary>
+            <param name="curve">The polycurve to create the bounding rectangle around.</param>
+            <param name="rotation">The rotation value of the created bounding rectangle.</param>
+            <returns name="boundingRectangle">The bounding rectangle.</returns>
+        </member>
+        <member name="M:Common.GeometryTools.SetOutLines(Autodesk.DesignScript.Geometry.Rectangle,System.Single,System.Single)">
+            <summary>
+            Creates setout curves using a rectangle as reference.
+            </summary>
+            <param name="rectangle"></param>
+            <param name="firstlineOffset"></param>
+            <param name="restLineOffset"></param>
+            <returns name="setOutLines">The setout lines.</returns>
+        </member>
         <member name="M:Common.GeometryTools.SurfacePerimeter(Autodesk.DesignScript.Geometry.Surface)">
             <summary>
             Get the perimter polycurve of a surface.
@@ -168,19 +185,6 @@
             <param name="count"></param>
             <returns name="numbers">the range of numbers</returns>
             <exception cref="T:System.ArgumentException"></exception>
-        </member>
-        <member name="T:Parking.BoundingRectangle">
-            <summary>
-            Wrapper class for bounding rectangle.
-            </summary>
-        </member>
-        <member name="M:Parking.BoundingRectangle.CreateBoundingRectangle(Autodesk.DesignScript.Geometry.PolyCurve,System.Single)">
-            <summary>
-            Creates a bounding rectangle around a polycurve. Thanks to Jacob Small for the logic.
-            </summary>
-            <param name="curve">The polycurve to create the bounding rectangle around.</param>
-            <param name="rotation">The rotation value of the created bounding rectangle.</param>
-            <returns name="boundingRectangle">The bounding rectangle.</returns>
         </member>
         <member name="T:Parking.InternalBays">
             <summary>

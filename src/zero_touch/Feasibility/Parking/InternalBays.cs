@@ -400,7 +400,7 @@ namespace Parking
             List<Rectangle> rectangles = new List<Rectangle>();
             for (int i = 0; i < curves.Count; i++)
             {
-                rectangles.Add(Parking.BoundingRectangle.CreateBoundingRectangle(curves[i], -rotationValues[i]));
+                rectangles.Add(Common.GeometryTools.CreateBoundingRectangle(curves[i], -rotationValues[i]));
             }
 
             return rectangles;       
