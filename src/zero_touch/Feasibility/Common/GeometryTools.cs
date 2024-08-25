@@ -402,34 +402,100 @@ namespace Common
 
 
         /// <summary>
-        /// Creates a dashed line pattern along a curve.
+        /// Creates a dashed pattern along a curve.
         /// </summary>
         /// <param name="curve">The input curve to create the dashes along.</param>
         /// <param name="dashLength">The length of the dashes.</param>
         /// <param name="dashGap">The length of the gap between the dashes.</param>
         /// <param name="dashThickness">The thickness of the dashed line.</param>
-        /// <returns name="polyCurves">Polycurves representing the dashes.</returns>
-        public static Point[] DashedLine(
-            [DefaultArgument("Line.ByStartPointEndPoint(Point.ByCoordinates(0, 0), Point.ByCoordinates(0, 100))")] Curve curve,
+        /// <returns name="dashCenterCurves">Polycurves representing the center of the dashes.</returns>
+        /// <returns name="dashOutlines">Polycurves representing the outline of the dashes.</returns>
+        /// <returns name="dashSurfaces">The dash surfaces.</returns>
+        /// <exception cref="Exception"></exception>
+        [MultiReturn(new[] { "dashCenterCurves", "dashOutlines", "dashSurfaces"})]
+        public static Dictionary<string, object> DashedPattern(
+            [DefaultArgument("Line.ByStartPointEndPoint(Point.ByCoordinates(0, 100), Point.ByCoordinates(0, 0))")] Curve curve,
             float dashLength = 5,
             float dashGap = 2,
             float dashThickness = 2) 
         {
-            // get the start and end points.
+            // Throw excpetion if inputs less than 1.
+            if (dashLength < 0.001 || dashGap < 0.001 || dashThickness < 0.001) 
+            {
+                throw new ArgumentException("dash length, gap, and thickness cannot be less than 0.001");
+            }
+
+            // Get the start and end points.
             Point startPoint = curve.StartPoint;
             Point endPoint = curve.EndPoint;
 
-            // create the first setout points. 
+            // Create the first setout points.
             Point setoutStartPoint = curve.PointAtSegmentLength(dashLength);
-            Point[] firstSetoutPoints = curve.PointsAtChordLengthFromPoint(setoutStartPoint, (dashLength + dashGap));
+            List<Point> firstSetoutPoints = curve.PointsAtSegmentLengthFromPoint(setoutStartPoint, (dashLength + dashGap)).ToList();
 
-            // create the second setout points.
-            Point[] secondSetoutPoints = curve.PointsAtChordLengthFromPoint(startPoint, (dashLength + dashGap));
+            // Create the second setout points.
+            List<Point> secondSetoutPoints = curve.PointsAtSegmentLengthFromPoint(startPoint, (dashLength + dashGap)).ToList();
 
-            // combine the point lists and add the end points.
+            // Transpose the setout points to create point pairs.
+            List<List<Point>> zippedPoints = firstSetoutPoints
+                .Zip(secondSetoutPoints, (first, second) => new List<Point> { first, second })
+                .ToList();
 
+            // Combine all the points.
+            List<Point> combinedPoints = new List<Point>();
+            combinedPoints.Add(startPoint);
+            foreach (var pair in zippedPoints)
+            {
+                combinedPoints.AddRange(pair);
+            }
+            combinedPoints.Add(endPoint);
 
-            return firstSetoutPoints;
+            // Clean the combined points list to remove any null values.
+            combinedPoints = combinedPoints.Where(p => p != null).ToList();
+
+            // Remove any duplicate points from the cleaned point list.
+            combinedPoints = Point.PruneDuplicates(combinedPoints, 0.001).ToList();
+
+            // Chop the pruned point list into segments of 2.
+            List<List<Point>> choppedPoints = new List<List<Point>>();
+            for (int i = 0; i < combinedPoints.Count; i += 2)
+            {
+                if (i + 1 < combinedPoints.Count)
+                {
+                    choppedPoints.Add(new List<Point> { combinedPoints[i], combinedPoints[i + 1] });
+                }
+            }
+
+            // Remove points list containing only one point.
+            List<List<Point>> filteredPointList = choppedPoints.Where(p => p.Count != 1).ToList();
+
+            // Create polycurves from the point lists. 
+            List<PolyCurve> dashCenterCurves = new List<PolyCurve>();
+            foreach (List<Point> pointList in filteredPointList) 
+            {
+                dashCenterCurves.Add(PolyCurve.ByPoints(pointList));
+            }
+
+            // Create polycurves representing the outline of the dashes.
+            List<PolyCurve> dashOutlines = new List<PolyCurve>();
+            foreach (PolyCurve polyCurve in dashCenterCurves)
+            {
+                dashOutlines.Add(PolyCurve.ByThickeningCurveNormal(polyCurve, dashThickness, Vector.ZAxis()));
+            }
+
+            // Create surfaces representing the dashes.
+            List<Surface> dashSurfaces = new List<Surface>();
+            foreach (PolyCurve polyCurve1 in dashOutlines)
+            {
+                dashSurfaces.Add(Surface.ByPatch(polyCurve1));
+            }
+
+            return new Dictionary<string, object> 
+            {
+                { "dashCenterCurves", dashCenterCurves },
+                { "dashOutlines", dashOutlines },
+                { "dashSurfaces", dashSurfaces }
+            };
         }
     }
 }
