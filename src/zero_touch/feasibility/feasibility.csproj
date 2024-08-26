@@ -92,6 +92,8 @@
     <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <HintPath>packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="ProtoCore, Version=2.19.4.6671, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>packages\DynamoVisualProgramming.Core.2.19.4.6671\lib\net48\ProtoCore.dll</HintPath>
     </Reference>
@@ -134,6 +136,7 @@
     <Reference Include="Watch3DNodeModels, Version=2.19.4.6671, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>packages\DynamoVisualProgramming.DynamoCoreNodes.2.19.4.6671\lib\net48\Watch3DNodeModels.dll</HintPath>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="About\About.cs" />

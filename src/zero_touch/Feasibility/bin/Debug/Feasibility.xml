@@ -209,6 +209,21 @@
             <returns name="numbers">the range of numbers</returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
+        <member name="T:Common.Text">
+            <summary>
+            Wrapper class for text.
+            </summary>
+        </member>
+        <member name="M:Common.Text.OutlinesFromStringOriginAndScale(System.String,Autodesk.DesignScript.Geometry.Point,System.Double,System.String)">
+            <summary>
+            To create text in the Dynamo work space. 
+            </summary>
+            <param name="text">The text to be created.</param>
+            <param name="origin">The host point.</param>
+            <param name="scale">The scale of the text.</param>
+            <param name="fontType">The font type to write the text in.</param>
+            <returns></returns>
+        </member>
         <member name="T:Parking.InternalBays">
             <summary>
             Wrapper class for the internal parking bays.
