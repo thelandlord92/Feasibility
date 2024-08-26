@@ -140,6 +140,7 @@
     <Compile Include="Buildings\Buildings.cs" />
     <Compile Include="Common\GeometryTools.cs" />
     <Compile Include="Common\Maths.cs" />
+    <Compile Include="Common\Text.cs" />
     <Compile Include="Erven\Erven.cs" />
     <Compile Include="Parking\ExclusionBays.cs" />
     <Compile Include="Parking\InternalBays.cs" />
