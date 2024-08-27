@@ -22,6 +22,73 @@ namespace Common
 
 
         /// <summary>
+        /// To add transformations to input geometry.
+        /// </summary>
+        /// <param name="geometry">The geometry to be transformed.</param>
+        /// <param name="geometryPlaneNormal">The normal direction of the geometry's plane.</param>
+        /// <param name="geometryLocation">The point from which the geometry is to be transformed.</param>
+        /// <param name="hostPlane">The target host plane.</param>
+        /// <param name="rotation">The rotation of the geometry around the center of the host plane.</param>
+        /// <param name="planeOffset">The offset of the geometry along host plane's normal.</param>
+        /// <param name="scaleFactor">The scale of the geometry at the host plane.</param>
+        /// <returns></returns>
+        public static List<Geometry> AddTransformations(
+            List<Geometry> geometry,
+            Point geometryLocation,
+            Plane hostPlane,
+            [DefaultArgument("Vector.ZAxis()")] Vector geometryPlaneNormal,
+            float rotation = 0,
+            float planeOffset = 0,
+            float scaleFactor = 1)
+        {
+            // add a plane at the location point of the geometry.
+            Plane geometryPlane = Plane.ByOriginNormal(geometryLocation, geometryPlaneNormal);
+
+            // transform the geometry to the host plane.
+            List<Geometry> transGeometry = new List<Geometry>();
+            foreach (Geometry geom in geometry) 
+            { 
+                if (geom != null) 
+                {
+                    transGeometry.Add(geom.Transform(CoordinateSystem.ByPlane(geometryPlane), CoordinateSystem.ByPlane(hostPlane)));
+                }
+            }
+
+            // rotate the geometry at the host plane.
+            List<Geometry> rotatedGeometry = new List<Geometry>();  
+            foreach (Geometry geom in transGeometry) 
+            { 
+                if (geom != null) 
+                {
+                    rotatedGeometry.Add(geom.Rotate(hostPlane, rotation));
+                }
+            }
+
+            // scale the geometry at the host plane.
+            List<Geometry> scaledGeometry = new List<Geometry>();
+            foreach(Geometry geom in rotatedGeometry) 
+            {
+                if (geom != null) 
+                { 
+                    scaledGeometry.Add(geom.Scale(hostPlane, scaleFactor, scaleFactor, scaleFactor));
+                }
+            }
+
+            // move the geometry along the host plane normal.
+            List<Geometry> movedGeometry = new List<Geometry>();
+            foreach (Geometry geom in scaledGeometry) 
+            { 
+                if (geom != null) 
+                { 
+                    movedGeometry.Add(geom.Translate(hostPlane.Normal, planeOffset));
+                }
+            }
+
+            return movedGeometry;
+        }
+
+
+        /// <summary>
         /// Creates a bounding rectangle around a polycurve. Thanks to Jacob Small for the logic.
         /// </summary>
         /// <param name="curve">The polycurve to create the bounding rectangle around.</param>
