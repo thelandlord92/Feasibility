@@ -108,45 +108,23 @@ namespace Parking
             // create the center point of the signage.
             Point signageCenter = Point.ByCoordinates(0, 0);
 
-            // add a plane at the center point.
-            Plane plane = Plane.ByOriginNormal(signageCenter, Vector.ZAxis());
-
-            // rotate the signage geometries.
-            List<Geometry> rotatedGeometry= new List<Geometry>();
-            foreach (Geometry geom in geometries) 
-            { 
-                if (geom != null)
-                {
-                    rotatedGeometry.Add(geom.Rotate(plane, signageRotation));
-                }
-            }
-
             // scale the signage based on the width of the parking bay.
             float scaleFactor = userHostWidth / initialHostWidth;
-
-            List<Geometry> scaledGeometry = new List<Geometry>();
-            foreach (Geometry geom in rotatedGeometry) 
-            { 
-                scaledGeometry.Add(geom.Scale(plane, scaleFactor, scaleFactor));
-            }
 
             // move the signage along the plane normal.
             float offsetDistance = initialSignageOffset  * scaleFactor;
 
-            List<Geometry> movedGeometry = new List<Geometry>();
-            foreach (Geometry geom in scaledGeometry) 
-            { 
-                movedGeometry.Add(geom.Translate(plane.Normal, offsetDistance));
-            }
+            List<Geometry> signageGeometry = Common.GeometryTools.AddTransformations(
+                geometries.ToList(),
+                signageCenter,
+                locationPlane,
+                Vector.ZAxis(),
+                signageRotation,
+                offsetDistance,
+                scaleFactor
+            );
 
-            // transform the signage geometry to the target location plane.
-            List<Geometry> transGeometry = new List<Geometry>();
-            foreach (Geometry geom in movedGeometry) 
-            { 
-                transGeometry.Add(geom.Transform(CoordinateSystem.ByPlane(plane), CoordinateSystem.ByPlane(locationPlane)));
-            }
-
-            return transGeometry;
+            return signageGeometry;
         }
 
 

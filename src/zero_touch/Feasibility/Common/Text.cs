@@ -19,7 +19,7 @@ namespace Common
     public static class Text
     {
         /// <summary>
-        /// To create text in the Dynamo work space. 
+        /// To create horizontal text hosted at a point. 
         /// </summary>
         /// <param name="text">The text to be created.</param>
         /// <param name="thickness">The thickness of the extruded text solids.</param>
@@ -285,6 +285,117 @@ namespace Common
                 { "textPolyCurves", movedPolyCurves },
                 { "textSolids", solids }
             };
+        }
+
+
+        /// <summary>
+        /// To create text at a host plane. 
+        /// </summary>
+        /// <param name="text">The text to be created.</param>
+        /// <param name="thickness">The thickness of the extruded text solids.</param>
+        /// <param name="plane">The host plane.</param>
+        /// <param name="rotation">The rotation of the text around the host plane normal.</param>
+        /// <param name="planeOffset">The offset of the text from the host plane.</param>
+        /// <param name="scale">The scale of the text.</param>
+        /// <param name="fontType">The font type to write the text in. The node will revert to Arial if type non existent.</param>
+        /// <param name="fontStyle">The font style. Enter Normal, Italic, or Oblique.</param>
+        /// <param name="fontWeight">The weight of the font. Enter Thin, Normal, or Bold </param>
+        /// <returns name="textSurfaces">The surfaces of the text.</returns>
+        /// <returns name="textPolyCurves">The polycurves of the text.</returns>
+        /// <returns name="textSolids">The solids of the text.</returns>
+        [MultiReturn(new[] { "textSurfaces", "textPolyCurves", "textSolids" })]
+        public static Dictionary<string, object> ByStringPlaneAndScale(
+            string text,
+            float thickness,
+            [DefaultArgument("Plane.XY()")] Plane plane,
+            float rotation = 0,
+            float planeOffset = 0,
+            double scale = 5,
+            string fontType = "Arial",
+            string fontStyle = "Normal",
+            string fontWeight = "Normal")
+        {
+            // Create the text geometry.
+            Dictionary<string, object> textGeometry = ByStringOriginAndScale(
+                text,
+                thickness,
+                Point.ByCoordinates(0, 0),
+                scale,
+                fontType,
+                fontStyle,
+                fontWeight
+            );
+
+            // Get the text surfaces.
+            List<Surface> textSurfaces = textGeometry["textSurfaces"] as List<Surface>;
+
+            // Get the text polycurves.
+            List<PolyCurve> textPolyCurves = textGeometry["textPolyCurves"] as List <PolyCurve>;
+
+            // Get the text solids.
+            List<Solid> textSolids = textGeometry["textSolids"] as List<Solid>;
+
+            // Cast the text surfaces as geometry.
+            List<Autodesk.DesignScript.Geometry.Geometry> castTextSurfaces = new List<Autodesk.DesignScript.Geometry.Geometry>();
+            foreach ( var surface in textSurfaces ) 
+            {
+                castTextSurfaces.Add(surface as Autodesk.DesignScript.Geometry.Geometry);
+            }
+
+            // Cast the text polycurves as geometry.
+            List<Autodesk.DesignScript.Geometry.Geometry> castTextPolyCurves = new List<Autodesk.DesignScript.Geometry.Geometry>();
+            foreach (var polyCurve in textPolyCurves)
+            {
+                castTextPolyCurves.Add(polyCurve as Autodesk.DesignScript.Geometry.Geometry);
+            }
+
+            // Cast the text solids as geometry.
+            List<Autodesk.DesignScript.Geometry.Geometry> castTextSolids = new List<Autodesk.DesignScript.Geometry.Geometry>();
+            foreach (var solid in textSolids)
+            {
+                castTextSolids.Add(solid as Autodesk.DesignScript.Geometry.Geometry);
+            }
+
+            // Transform the text surfaces.
+            List<Autodesk.DesignScript.Geometry.Geometry> transTextSurfaces = Common.GeometryTools.AddTransformations(
+                castTextSurfaces,
+                Point.ByCoordinates(0, 0),
+                plane,
+                Autodesk.DesignScript.Geometry.Vector.ZAxis(),
+                rotation,
+                planeOffset,
+                1
+            );
+
+            // Transform the text polycurves.
+            List<Autodesk.DesignScript.Geometry.Geometry> transTextPolyCurves = Common.GeometryTools.AddTransformations(
+                castTextPolyCurves,
+                Point.ByCoordinates(0, 0),
+                plane,
+                Autodesk.DesignScript.Geometry.Vector.ZAxis(),
+                rotation,
+                planeOffset,
+                1
+            );
+
+            // Transform the text solids.
+            List<Autodesk.DesignScript.Geometry.Geometry> transTextSolids = Common.GeometryTools.AddTransformations(
+                castTextSolids,
+                Point.ByCoordinates(0, 0),
+                plane,
+                Autodesk.DesignScript.Geometry.Vector.ZAxis(),
+                rotation,
+                planeOffset,
+                1
+            );
+
+            return new Dictionary<string, object> 
+            {
+                { "textSurfaces", transTextSurfaces },
+                { "textPolyCurves", transTextPolyCurves },
+                { "textSolids", transTextSolids }
+            };
+
         }
 
 
