@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Parking;
+using Common;
 
 namespace Parking
 {
@@ -362,6 +363,53 @@ namespace Parking
                 resourcename);
 
             return signageOutline;
+        }
+
+
+        /// <summary>
+        /// Adds the parking numbering to the parking bay.
+        /// </summary>
+        /// <param name="numberPrefix"></param>
+        /// <param name="parkingNumber"></param>
+        /// <param name="numberingWidth"></param>
+        /// <param name="centerOffsetPercentage"></param>
+        /// <returns></returns>
+        public Dictionary<string, object> AddNumberingOutline(
+            string numberPrefix = "",
+            float parkingNumber = 10,
+            float numberingWidth = 300f, 
+            float centerOffsetPercentage = 50) 
+        {
+            // Get the center point of the parking bay.
+            Point parkingCenter = GetCenterPoint();
+
+            // Calculate the signage center offset distance. 
+            float centerOffset = ((BayLength / 2) / 100) * centerOffsetPercentage;
+
+            // Move the point to locate the numbering.
+            Point movedPoint = parkingCenter.Translate(GetParkingDirection().Reverse(), centerOffset) as Point;
+
+            // Add a plane at the moved point.
+            Plane plane = Plane.ByOriginNormal(movedPoint, Vector.ZAxis()) as Plane;
+
+            // Add the text at the plane.
+            Dictionary<string, object> text = Text.ByStringPlaneAndScale(
+                $"{numberPrefix}{parkingNumber}",
+                1,
+                plane,
+                -GetRotationAngle() - 180,
+                0,
+                1,
+                "Arial",
+                "Normal",
+                "Normal"
+            );
+
+            // Get the text surfaces.
+            List<Surface> textSurfaces = text["textSurfaces"] as List<Surface>;
+
+
+            return text;
         }
     }
 }
