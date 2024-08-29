@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Feasibility.Parking.Accessories
+namespace Feasibility.Parking
 {
-    internal class WheelStops
+    internal class ChargingStation
     {
     }
 }

@@ -259,6 +259,133 @@
             <returns name="textPolyCurves">The polycurves of the text.</returns>
             <returns name="textSolids">The solids of the text.</returns>
         </member>
+        <member name="T:Parking.Accessories.BicycleRack">
+            <summary>
+            Wrapper class for the bicycle racks.
+            </summary>
+        </member>
+        <member name="P:Parking.Accessories.BicycleRack.TargetPosition">
+            <summary>
+            The target position of the bicycle rack.
+            </summary>
+        </member>
+        <member name="P:Parking.Accessories.BicycleRack.RackDiameter">
+            <summary>
+            The diameter of the bicycle rack's tube.
+            </summary>
+        </member>
+        <member name="P:Parking.Accessories.BicycleRack.RackHeight">
+            <summary>
+            The height of the bicycle rack.
+            </summary>
+        </member>
+        <member name="P:Parking.Accessories.BicycleRack.RackLength">
+            <summary>
+            The length of the bicycle rack.
+            </summary>
+        </member>
+        <member name="P:Parking.Accessories.BicycleRack.RackAngle">
+            <summary>
+            The angle of the bicycle rack.
+            </summary>
+        </member>
+        <member name="P:Parking.Accessories.BicycleRack.RackOffset">
+            <summary>
+            The offset of the bicycle rack from the side of the parking bay.
+            </summary>
+        </member>
+        <member name="M:Parking.Accessories.BicycleRack.#ctor(System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Creates a bicycle rack instance.
+            </summary>
+            <param name="rackDiameter">The diameter of the bicycle rack's tube.</param>
+            <param name="rackHeight">The height of the bicycle rack.</param>
+            <param name="rackLength">The length of the bicycle rack.</param>
+            <param name="rackAngle">The angle of the bicycle rack.</param>
+            <param name="rackOffset"></param>
+        </member>
+        <member name="M:Parking.Accessories.BicycleRack.CreateInvertedURack(System.Single,System.Single,System.Single)">
+            <summary>
+            To create an inverted U bicycle rack.
+            </summary>
+            <param name="cornerRadius">The corner radius of the rack tube.</param>
+            <param name="basePlateDiameter">The diameter of the rack base plates.</param>
+            <param name="basePlateThickness">Thickness of the rack base plates.</param>
+            <returns name="rackSolid">The solid of the bicycle rack.</returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="T:Parking.Accessories.BicycleRackTypes">
+            <summary>
+            Defines enums for the bicycle rack types.
+            Types are based on visual appearance.
+            </summary>
+        </member>
+        <member name="F:Parking.Accessories.BicycleRackTypes.InvertedURack">
+            <summary>
+            Inverted U-Rack type.
+            </summary>
+        </member>
+        <member name="F:Parking.Accessories.BicycleRackTypes.WaveRack">
+            <summary>
+            Wave rack type.
+            </summary>
+        </member>
+        <member name="F:Parking.Accessories.BicycleRackTypes.PostandRingRack">
+            <summary>
+            Post and ring rack type.
+            </summary>
+        </member>
+        <member name="F:Parking.Accessories.BicycleRackTypes.NoRack">
+            <summary>
+            No rack required.
+            </summary>
+        </member>
+        <member name="T:Parking.Accessories.ChargingStationTypes">
+            <summary>
+            Defines enums for charging station types.
+            Types are based on visual appearance.
+            </summary>
+        </member>
+        <member name="F:Parking.Accessories.ChargingStationTypes.PoleMounted">
+            <summary>
+            Pole mounted charger type.
+            </summary>
+        </member>
+        <member name="F:Parking.Accessories.ChargingStationTypes.BoxShaped">
+            <summary>
+            Box shaped charger type.
+            </summary>
+        </member>
+        <member name="F:Parking.Accessories.ChargingStationTypes.WallMounted">
+            <summary>
+            Wall mounted charger type.
+            </summary>
+        </member>
+        <member name="F:Parking.Accessories.ChargingStationTypes.NoCharger">
+            <summary>
+            No charger required.
+            </summary>
+        </member>
+        <member name="T:Parking.Accessories.WheelStopTypes">
+            <summary>
+            Defines enums for the wheel stop types
+            </summary>
+        </member>
+        <member name="F:Parking.Accessories.WheelStopTypes.FullLengthWheelStop">
+            <summary>
+            Full length wheel stop type.
+            </summary>
+        </member>
+        <member name="F:Parking.Accessories.WheelStopTypes.SegmentedWheelStop">
+            <summary>
+            Segmented wheel stop type.
+            </summary>
+        </member>
+        <member name="F:Parking.Accessories.WheelStopTypes.NoWheelStop">
+            <summary>
+            No wheel stop required.
+            </summary>
+        </member>
         <member name="T:Parking.InternalBays">
             <summary>
             Wrapper class for the internal parking bays.

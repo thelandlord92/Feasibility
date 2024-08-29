@@ -146,11 +146,11 @@
     <Compile Include="Common\Text.cs" />
     <Compile Include="Erven\Erven.cs" />
     <Compile Include="Parking\Accessories\Accessories.cs" />
-    <Compile Include="Parking\Accessories\BicycleRacks.cs" />
+    <Compile Include="Parking\Accessories\BicycleRack.cs" />
     <Compile Include="Parking\Accessories\BicycleRackTypes.cs" />
-    <Compile Include="Parking\Accessories\ChargingStations.cs" />
+    <Compile Include="Parking\Accessories\ChargingStation.cs" />
     <Compile Include="Parking\Accessories\ChargingStationTypes.cs" />
-    <Compile Include="Parking\Accessories\WheelStops.cs" />
+    <Compile Include="Parking\Accessories\WheelStop.cs" />
     <Compile Include="Parking\Accessories\WheelStopTypes.cs" />
     <Compile Include="Parking\ExclusionBays.cs" />
     <Compile Include="Parking\InternalBays.cs" />
