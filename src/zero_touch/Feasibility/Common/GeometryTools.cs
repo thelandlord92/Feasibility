@@ -94,7 +94,7 @@ namespace Common
         /// <param name="curve">The polycurve to create the bounding rectangle around.</param>
         /// <param name="rotation">The rotation value of the created bounding rectangle.</param>
         /// <returns name="boundingRectangle">The bounding rectangle.</returns>
-        internal static Rectangle CreateBoundingRectangle(PolyCurve curve, float rotation)
+        public static Rectangle CreateBoundingRectangle(PolyCurve curve, float rotation)
         {
             // rotate the polycurve.
             PolyCurve rotatedCurve = curve.Rotate(Plane.XY(), -rotation) as PolyCurve;

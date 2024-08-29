@@ -434,8 +434,8 @@ namespace Parking
                 pattern.BayAngle = Patterns[0].BayAngle;
             }
 
-            // sort the patterns by their pattern width.
-            List<Patterns> sortedPatterns = inputPatterns.OrderBy(p => p.PatternWidth).ToList();
+            // sort the patterns by their pattern width.???? Keep user defined order?
+            //List<Patterns> sortedPatterns = inputPatterns.OrderBy(p => p.PatternWidth).ToList();
 
             return inputPatterns;
         }
@@ -453,8 +453,8 @@ namespace Parking
             // Add the pattern width to a variable.
             float patternWidth = patterns[0].PatternWidth;
 
-            // sort the patterns by their pattern width.
-            List<Patterns> sortedPatterns = patterns.OrderBy(p => p.PatternWidth).ToList();
+            // sort the patterns by their pattern width.???? Keep user defined order?
+            //List<Patterns> sortedPatterns = patterns.OrderBy(p => p.PatternWidth).ToList();
 
             // create the bounding rectangles.
             List<Rectangle> boundingRectangles = CreateBoundingRectangles();
@@ -611,7 +611,7 @@ namespace Parking
                         patterns[0].BayLength,
                         patterns[0].BayAngle,
                         patterns[0].IslandWidth,
-                        patterns[0].Signage)
+                        patterns[0].ParkingType)
                     );
                 }
                 layoutPatterns.Add( patternList );

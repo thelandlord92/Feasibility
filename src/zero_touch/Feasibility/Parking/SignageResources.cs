@@ -10,15 +10,15 @@ namespace Parking
         /// <summary>
         /// The signage resources dictionary.
         /// </summary>
-        public static readonly Dictionary<SignageType, string> ResourceMap = new Dictionary<SignageType, string>
+        public static readonly Dictionary<ParkingType, string> ResourceMap = new Dictionary<ParkingType, string>
         {
-            { SignageType.EV, "Feasibility.Parking.Symbols.evParkingSymbol.json" },
-            { SignageType.PWD, "Feasibility.Parking.Symbols.pwdParkingSymbol.json" },
-            { SignageType.Standard, "Feasibility.Parking.Symbols.standardParkingSymbol.json" },
-            { SignageType.Car, "Feasibility.Parking.Symbols.carParkingSymbol.json" },
-            { SignageType.Bicycle, "Feasibility.Parking.Symbols.bicycleParkingSymbol.json" },
-            { SignageType.Motorbike, "Feasibility.Parking.Symbols.motorbikeParkingSymbol.json" },
-            { SignageType.NoParking, "Feasibility.Parking.Symbols.noParkingSymbol.json" }
+            { ParkingType.EV, "Feasibility.Parking.Symbols.evParkingSymbol.json" },
+            { ParkingType.PWD, "Feasibility.Parking.Symbols.pwdParkingSymbol.json" },
+            { ParkingType.Standard, "Feasibility.Parking.Symbols.standardParkingSymbol.json" },
+            { ParkingType.Car, "Feasibility.Parking.Symbols.carParkingSymbol.json" },
+            { ParkingType.Bicycle, "Feasibility.Parking.Symbols.bicycleParkingSymbol.json" },
+            { ParkingType.Motorbike, "Feasibility.Parking.Symbols.motorbikeParkingSymbol.json" },
+            { ParkingType.NoParking, "Feasibility.Parking.Symbols.noParkingSymbol.json" }
         };
     }
 }

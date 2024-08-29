@@ -145,6 +145,7 @@
     <Compile Include="Common\Maths.cs" />
     <Compile Include="Common\Text.cs" />
     <Compile Include="Erven\Erven.cs" />
+    <Compile Include="Parking\Accessories.cs" />
     <Compile Include="Parking\ExclusionBays.cs" />
     <Compile Include="Parking\InternalBays.cs" />
     <Compile Include="Parking\Layouts.cs" />
@@ -153,7 +154,7 @@
     <Compile Include="Parking\PerimeterBays.cs" />
     <Compile Include="Parking\Signage.cs" />
     <Compile Include="Parking\SignageResources.cs" />
-    <Compile Include="Parking\SignageTypes.cs" />
+    <Compile Include="Parking\ParkingTypes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

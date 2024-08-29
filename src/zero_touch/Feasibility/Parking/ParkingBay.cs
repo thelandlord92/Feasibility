@@ -38,6 +38,11 @@ namespace Parking
         public float BayAngle { get; set; }
 
         /// <summary>
+        /// The number of the parking bay.
+        /// </summary>
+        public float BayNumber { get; set; }
+
+        /// <summary>
         /// The parking bay rectangle geometry.
         /// </summary>
         public Rectangle Geometry { get; private set; }
@@ -54,9 +59,9 @@ namespace Parking
 
 
         /// <summary>
-        /// To set the parking signage type.
+        /// To set the parking type.
         /// </summary>
-        public SignageType Signage { private get; set; }
+        public ParkingType ParkingType { private get; set; }
 
 
         /// <summary>
@@ -66,27 +71,30 @@ namespace Parking
         /// <param name="bayWidth">the width of the parking bay.</param>
         /// <param name="bayLength">the length of the parking bay.</param>
         /// <param name="bayAngle">the angle of the parking bay.</param>
+        /// <param name="bayNumber">the number of the parking bay.</param>
         /// <param name="flipHorizontal">flip the parking bay horizontally.</param>
         /// <param name="flipVertical">flip the parking bay vertically</param>
-        /// <param name="signage">The signage type to be placed on the parking bay.</param>
+        /// <param name="parkingType">The type of parking bay. Note that this parameter controls the displayed signage.</param>
         public ParkingBay(
             Point targetPosition,
             //Point patternCenter,
             float bayWidth = (float)2.5,
             float bayLength = 5,
             float bayAngle = 30,
+            float bayNumber = 10,
             bool flipHorizontal = false,
             bool flipVertical = false,
-            SignageType signage = SignageType.EV)
+            ParkingType parkingType = ParkingType.EV)
         { 
             TargetPosition = targetPosition;
             BayWidth = bayWidth;
             BayLength = bayLength;
             BayAngle = bayAngle;
+            BayNumber = bayNumber;
             Geometry = CreateRectangle();
             FlipHorizontal = flipHorizontal;
             FlipVertical = flipVertical;
-            Signage = signage;
+            ParkingType = parkingType;
         }
 
 
@@ -351,7 +359,7 @@ namespace Parking
             Plane plane = Plane.ByOriginNormal(movedPoint, Vector.ZAxis());
 
             // get the signage resource name.
-            string resourcename = SignageResources.ResourceMap[Signage];
+            string resourcename = SignageResources.ResourceMap[ParkingType];
 
             // add the signage required signage type to the plane.  
             List<Curve[]> signageOutline = Parking.Signage.ParkingSymbol2D(
@@ -370,14 +378,14 @@ namespace Parking
         /// Adds the parking numbering to the parking bay.
         /// </summary>
         /// <param name="numberPrefix"></param>
-        /// <param name="parkingNumber"></param>
-        /// <param name="numberingWidth"></param>
+        /// <param name="numberingDiameter"></param>
+        /// <param name="numberBorderOffset"></param>
         /// <param name="centerOffsetPercentage"></param>
-        /// <returns></returns>
-        public Dictionary<string, object> AddNumberingOutline(
+        /// <returns name="numberingCurves"></returns>
+        public List<Curve> AddNumberingOutline(
             string numberPrefix = "",
-            float parkingNumber = 10,
-            float numberingWidth = 300f, 
+            float numberingDiameter = 1f,
+            float numberBorderOffset = 0.1f,
             float centerOffsetPercentage = 50) 
         {
             // Get the center point of the parking bay.
@@ -394,22 +402,67 @@ namespace Parking
 
             // Add the text at the plane.
             Dictionary<string, object> text = Text.ByStringPlaneAndScale(
-                $"{numberPrefix}{parkingNumber}",
+                $"{numberPrefix}{BayNumber}",
                 1,
                 plane,
                 -GetRotationAngle() - 180,
                 0,
-                1,
+                0.6,
                 "Arial",
                 "Normal",
                 "Normal"
             );
 
             // Get the text surfaces.
-            List<Surface> textSurfaces = text["textSurfaces"] as List<Surface>;
+            List<Geometry> textSurfaces = text["textSurfaces"] as List<Geometry>;
 
+            // cast the text surface geometry to surfaces.
+            List<Surface> castSurfaces = new List<Surface>();  
+            foreach (var surface in textSurfaces) 
+            {
+                castSurfaces.Add(surface as Surface);
+            }
 
-            return text;
+            // Join the surfaces and get the bounding box.
+            PolySurface joinedSurfaces = PolySurface.ByJoinedSurfaces(castSurfaces);
+            BoundingBox boundingBox = joinedSurfaces.BoundingBox;
+
+            // Get the length of the bounding box diagonal line.
+            Curve diagonalCurve = Line.ByStartPointEndPoint(boundingBox.MinPoint, boundingBox.MaxPoint) as Curve;
+            float curveLength = (float)diagonalCurve.Length;
+
+            // Calculate text scale factor.
+            float textScaleFactor = (numberingDiameter - (numberBorderOffset * 2)) / curveLength;
+
+            // Get the text polycurves.
+            List<Geometry> textPolyCurves = text["textPolyCurves"] as List<Geometry>;
+
+            // Cast the text polycurves to curves.
+            List<Curve> castCurves = new List<Curve>();
+            foreach (Geometry curve in textPolyCurves)
+            {
+                castCurves.Add(curve as  Curve);
+            }
+
+            // Scale the polycurves using the scale factor.
+            List<Curve> scaledCurves = new List<Curve>();
+            foreach(Curve curve in castCurves) 
+            {
+                scaledCurves.Add(curve.Scale(plane, textScaleFactor, textScaleFactor, textScaleFactor) as Curve);
+            }
+
+            // Create the circular border of the numbering.
+            Curve border = Circle.ByCenterPointRadius(movedPoint, numberingDiameter / 2) as Curve;
+
+            // Add all the curves to a list.
+            List<Curve> numberingCurves = new List<Curve>();
+            numberingCurves.Add(border);
+            foreach (Curve curve in scaledCurves) 
+            { 
+                numberingCurves.Add(curve);
+            }
+
+            return numberingCurves;
         }
     }
 }

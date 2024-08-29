@@ -80,7 +80,7 @@ namespace Parking
         /// <summary>
         /// To set the parking signage type.
         /// </summary>
-        public SignageType Signage { get; set; }
+        public ParkingType ParkingType { get; set; }
 
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace Parking
         /// <param name="bayLength">the length of the parking bays.</param>
         /// <param name="bayAngle">the angle of the parking bays.</param>
         /// <param name="islandWidth">The width of the non interlocking pattern island.</param>
-        /// <param name="signage">The signage type to be placed on the parking bay.</param>
+        /// <param name="parkingType">The type of parking bay. Note that this parameter controls the displayed signage.</param>
         [IsVisibleInDynamoLibrary(true)]
         public Patterns(
             Curve locationLine,
@@ -104,7 +104,7 @@ namespace Parking
             float bayAngle = 30,
             //float patternRotation = 0,
             float islandWidth = 1,
-            SignageType signage = SignageType.EV) 
+            ParkingType parkingType = ParkingType.EV) 
         { 
             LocationLine = locationLine;
             PatternType = patternType;
@@ -114,7 +114,7 @@ namespace Parking
             BayAngle = bayAngle;
             //PatternRotation = patternRotation;
             IslandWidth = islandWidth;
-            Signage = signage;
+            ParkingType = parkingType;
         }
 
 
@@ -347,10 +347,11 @@ namespace Parking
                     point, 
                     ActualBayWidth(), 
                     BayLength, 
-                    BayAngle + GetLineRotationAngle(), 
+                    BayAngle + GetLineRotationAngle(),
+                    10,
                     false,
                     true,
-                    Signage);
+                    ParkingType);
                 firstParkingBays.Add(bay);
             }
 
@@ -363,9 +364,10 @@ namespace Parking
                     ActualBayWidth(),
                     BayLength,
                     BayAngle - GetLineRotationAngle(),
+                    10,
                     true,
                     true,
-                    Signage);
+                    ParkingType);
                 secondParkingBays.Add(bay);
             }
 
@@ -429,9 +431,10 @@ namespace Parking
                         ActualBayWidth(),
                         BayLength,
                         BayAngle + GetLineRotationAngle(),
+                        10,
                         false,
                         true,
-                        Signage);
+                        ParkingType);
                     firstParkingBays.Add(bay);
                 }
 
@@ -444,9 +447,10 @@ namespace Parking
                         ActualBayWidth(),
                         BayLength,
                         BayAngle + GetLineRotationAngle(),
+                        10,
                         true,
                         false,
-                        Signage);
+                        ParkingType);
                     secondParkingBays.Add(bay);
                 }
 
@@ -514,9 +518,10 @@ namespace Parking
                         ActualBayWidth(),
                         BayLength,
                         45 + GetLineRotationAngle(),
+                        10,
                         false,
                         true,
-                        Signage);
+                        ParkingType);
                     firstParkingBays.Add(bay);
                 }
 
@@ -530,9 +535,10 @@ namespace Parking
                         ActualBayWidth(),
                         BayLength,
                         45 - GetLineRotationAngle(),
+                        10,
                         true,
                         true,
-                        Signage);
+                        ParkingType);
                     secondParkingBays.Add(bay);
                 }
 
@@ -640,7 +646,7 @@ namespace Parking
         /// <summary>
         /// Calculates the width of the patterns.
         /// </summary>
-        /// <returns name="patternWidth">The width of the non interlocking pattern.</returns>
+        /// <returns name="patternWidth">The width of the parking pattern.</returns>
         public float PatternWidth
         {
             get

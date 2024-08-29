@@ -457,6 +457,11 @@
             The angle of the parking bay.
             </summary>
         </member>
+        <member name="P:Parking.ParkingBay.BayNumber">
+            <summary>
+            The number of the parking bay.
+            </summary>
+        </member>
         <member name="P:Parking.ParkingBay.Geometry">
             <summary>
             The parking bay rectangle geometry.
@@ -472,12 +477,12 @@
             Flip the parking bay vertically.
             </summary>
         </member>
-        <member name="P:Parking.ParkingBay.Signage">
+        <member name="P:Parking.ParkingBay.ParkingType">
             <summary>
-            To set the parking signage type.
+            To set the parking type.
             </summary>
         </member>
-        <member name="M:Parking.ParkingBay.#ctor(Autodesk.DesignScript.Geometry.Point,System.Single,System.Single,System.Single,System.Boolean,System.Boolean,Parking.SignageType)">
+        <member name="M:Parking.ParkingBay.#ctor(Autodesk.DesignScript.Geometry.Point,System.Single,System.Single,System.Single,System.Single,System.Boolean,System.Boolean,Parking.ParkingType)">
             <summary>
             Creates a parking bay instance.
             </summary>
@@ -485,9 +490,10 @@
             <param name="bayWidth">the width of the parking bay.</param>
             <param name="bayLength">the length of the parking bay.</param>
             <param name="bayAngle">the angle of the parking bay.</param>
+            <param name="bayNumber">the number of the parking bay.</param>
             <param name="flipHorizontal">flip the parking bay horizontally.</param>
             <param name="flipVertical">flip the parking bay vertically</param>
-            <param name="signage">The signage type to be placed on the parking bay.</param>
+            <param name="parkingType">The type of parking bay. Note that this parameter controls the displayed signage.</param>
         </member>
         <member name="M:Parking.ParkingBay.ParkingBayTransformations(Autodesk.DesignScript.Geometry.Rectangle)">
             <summary>
@@ -549,6 +555,16 @@
             <param name="centerOffsetPercentage">The offset distance percentage in proportion to half the parking bay length.</param>
             <returns name="signageOutline">The signage outline curves.</returns>
         </member>
+        <member name="M:Parking.ParkingBay.AddNumberingOutline(System.String,System.Single,System.Single,System.Single)">
+            <summary>
+            Adds the parking numbering to the parking bay.
+            </summary>
+            <param name="numberPrefix"></param>
+            <param name="numberingDiameter"></param>
+            <param name="numberBorderOffset"></param>
+            <param name="centerOffsetPercentage"></param>
+            <returns name="numberingCurves"></returns>
+        </member>
         <member name="T:Parking.Patterns">
             <summary>
             Wrapper class for the parking patterns.
@@ -595,12 +611,12 @@
             The width of the non interlocking pattern island.
             </summary>
         </member>
-        <member name="P:Parking.Patterns.Signage">
+        <member name="P:Parking.Patterns.ParkingType">
             <summary>
             To set the parking signage type.
             </summary>
         </member>
-        <member name="M:Parking.Patterns.#ctor(Autodesk.DesignScript.Geometry.Curve,System.Int32,System.Single,System.Boolean,System.Single,System.Single,System.Single,Parking.SignageType)">
+        <member name="M:Parking.Patterns.#ctor(Autodesk.DesignScript.Geometry.Curve,System.Int32,System.Single,System.Boolean,System.Single,System.Single,System.Single,Parking.ParkingType)">
             <summary>
             Creates instances of the parking pattern class.
             </summary>
@@ -611,7 +627,7 @@
             <param name="bayLength">the length of the parking bays.</param>
             <param name="bayAngle">the angle of the parking bays.</param>
             <param name="islandWidth">The width of the non interlocking pattern island.</param>
-            <param name="signage">The signage type to be placed on the parking bay.</param>
+            <param name="parkingType">The type of parking bay. Note that this parameter controls the displayed signage.</param>
         </member>
         <member name="M:Parking.Patterns.RequiredBayAngle">
             <summary>
@@ -785,47 +801,47 @@
             The signage resources dictionary.
             </summary>
         </member>
-        <member name="T:Parking.SignageType">
+        <member name="T:Parking.ParkingType">
             <summary>
             Defines enums for the types of parking signage.
             </summary>
         </member>
-        <member name="F:Parking.SignageType.EV">
+        <member name="F:Parking.ParkingType.EV">
             <summary>
-            Electric vehicle parking signage.
+            Electric vehicle parking.
             </summary>
         </member>
-        <member name="F:Parking.SignageType.PWD">
+        <member name="F:Parking.ParkingType.PWD">
             <summary>
             Parking for Persons With Disabilities.
             </summary>
         </member>
-        <member name="F:Parking.SignageType.Standard">
+        <member name="F:Parking.ParkingType.Standard">
             <summary>
-            Generic parking P signage.
+            Generic parking.
             </summary>
         </member>
-        <member name="F:Parking.SignageType.Car">
+        <member name="F:Parking.ParkingType.Car">
             <summary>
-            Car parking signage.
+            Motor car parking.
             </summary>
         </member>
-        <member name="F:Parking.SignageType.Bicycle">
+        <member name="F:Parking.ParkingType.Bicycle">
             <summary>
-            Bicycle parking signage.
+            Bicycle parking.
             </summary>
         </member>
-        <member name="F:Parking.SignageType.Motorbike">
+        <member name="F:Parking.ParkingType.Motorbike">
             <summary>
-            Motorbike parking signage.
+            Motorbike parking.
             </summary>
         </member>
-        <member name="F:Parking.SignageType.NoParking">
+        <member name="F:Parking.ParkingType.NoParking">
             <summary>
-            No parking signage.
+            No parking.
             </summary>
         </member>
-        <member name="F:Parking.SignageType.NoSignage">
+        <member name="F:Parking.ParkingType.NoSignage">
             <summary>
             No signage requirement for the parking bay.
             </summary>
