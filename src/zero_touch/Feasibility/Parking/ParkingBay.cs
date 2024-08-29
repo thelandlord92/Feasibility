@@ -19,8 +19,7 @@ namespace Parking
         /// <summary>
         /// The target position of the parking bay.
         /// </summary>
-        public Point TargetPosition {  private get; set; }
-
+        internal Point TargetPosition {  private get; set; }
 
         /// <summary>
         /// The width of the parking bay.
@@ -57,7 +56,6 @@ namespace Parking
         /// </summary>
         public Boolean FlipVertical { private get; set; }
 
-
         /// <summary>
         /// To set the parking type.
         /// </summary>
@@ -67,7 +65,6 @@ namespace Parking
         /// <summary>
         /// Creates a parking bay instance.
         /// </summary>
-        /// <param name="targetPosition">the target transform position of the parking bay.</param>
         /// <param name="bayWidth">the width of the parking bay.</param>
         /// <param name="bayLength">the length of the parking bay.</param>
         /// <param name="bayAngle">the angle of the parking bay.</param>
@@ -76,7 +73,7 @@ namespace Parking
         /// <param name="flipVertical">flip the parking bay vertically</param>
         /// <param name="parkingType">The type of parking bay. Note that this parameter controls the displayed signage.</param>
         public ParkingBay(
-            Point targetPosition,
+            //Point targetPosition,
             //Point patternCenter,
             float bayWidth = (float)2.5,
             float bayLength = 5,
@@ -86,7 +83,7 @@ namespace Parking
             bool flipVertical = false,
             ParkingType parkingType = ParkingType.EV)
         { 
-            TargetPosition = targetPosition;
+            //TargetPosition = targetPosition;
             BayWidth = bayWidth;
             BayLength = bayLength;
             BayAngle = bayAngle;
@@ -149,8 +146,19 @@ namespace Parking
                 bayVerticalMirror = bayHorizontalMirror;
             }
 
+            // set a temporary target position if the input is null.
+            Point _targetPosition = null;
+            if (TargetPosition == null)
+            {
+                _targetPosition = Point.ByCoordinates(0, 0);
+            }
+            else 
+            { 
+                _targetPosition = TargetPosition;
+            }
+
             // create a plane at the target position.
-            Plane targetPlane = Plane.ByOriginNormal(TargetPosition, Vector.ZAxis());
+            Plane targetPlane = Plane.ByOriginNormal(_targetPosition, Vector.ZAxis());
 
             // get the coordinate system of the target plane.
             CoordinateSystem targetCS = CoordinateSystem.ByPlane(targetPlane);

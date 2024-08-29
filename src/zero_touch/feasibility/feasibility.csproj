@@ -145,7 +145,13 @@
     <Compile Include="Common\Maths.cs" />
     <Compile Include="Common\Text.cs" />
     <Compile Include="Erven\Erven.cs" />
-    <Compile Include="Parking\Accessories.cs" />
+    <Compile Include="Parking\Accessories\Accessories.cs" />
+    <Compile Include="Parking\Accessories\BicycleRacks.cs" />
+    <Compile Include="Parking\Accessories\BicycleRackTypes.cs" />
+    <Compile Include="Parking\Accessories\ChargingStations.cs" />
+    <Compile Include="Parking\Accessories\ChargingStationTypes.cs" />
+    <Compile Include="Parking\Accessories\WheelStops.cs" />
+    <Compile Include="Parking\Accessories\WheelStopTypes.cs" />
     <Compile Include="Parking\ExclusionBays.cs" />
     <Compile Include="Parking\InternalBays.cs" />
     <Compile Include="Parking\Layouts.cs" />
@@ -164,7 +170,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
     <EmbeddedResource Include="Parking\Symbols\StandardParkingSymbol.sat" />
-    <EmbeddedResource Include="Parking\Symbols\StandardParkingSymbol.json" />
+    <EmbeddedResource Include="Parking\Symbols\standardParkingSymbol.json" />
     <EmbeddedResource Include="Parking\Symbols\bicycleParkingSymbol.json" />
     <EmbeddedResource Include="Parking\Symbols\carParkingSymbol.json" />
     <EmbeddedResource Include="Parking\Symbols\evParkingSymbol.json" />

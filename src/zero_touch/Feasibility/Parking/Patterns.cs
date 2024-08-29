@@ -343,8 +343,7 @@ namespace Parking
             List<ParkingBay> firstParkingBays = new List<ParkingBay>();  
             foreach (Point point in locationPoints) 
             {
-                ParkingBay bay = new ParkingBay(
-                    point, 
+                ParkingBay bay = new ParkingBay( 
                     ActualBayWidth(), 
                     BayLength, 
                     BayAngle + GetLineRotationAngle(),
@@ -353,6 +352,9 @@ namespace Parking
                     true,
                     ParkingType);
                 firstParkingBays.Add(bay);
+
+                // set the location point of the parking bay.
+                bay.TargetPosition = point;
             }
 
             // add the parking bay instances to the second half target points.
@@ -360,7 +362,6 @@ namespace Parking
             foreach (Point point in secondLocationPoints)
             {
                 ParkingBay bay = new ParkingBay(
-                    point,
                     ActualBayWidth(),
                     BayLength,
                     BayAngle - GetLineRotationAngle(),
@@ -369,6 +370,9 @@ namespace Parking
                     true,
                     ParkingType);
                 secondParkingBays.Add(bay);
+
+                // set the location point of the parking bay.
+                bay.TargetPosition = point;
             }
 
             // add the lists of parking bays to a single list.
@@ -427,7 +431,6 @@ namespace Parking
                 foreach (Point point in locationPoints)
                 {
                     ParkingBay bay = new ParkingBay(
-                        point,
                         ActualBayWidth(),
                         BayLength,
                         BayAngle + GetLineRotationAngle(),
@@ -436,6 +439,9 @@ namespace Parking
                         true,
                         ParkingType);
                     firstParkingBays.Add(bay);
+
+                    // set the location point of the parking bay.
+                    bay.TargetPosition = point;
                 }
 
                 // add the parking bay instances to the second half target points.
@@ -443,7 +449,6 @@ namespace Parking
                 foreach (Point point in movedPoints)
                 {
                     ParkingBay bay = new ParkingBay(
-                        point,
                         ActualBayWidth(),
                         BayLength,
                         BayAngle + GetLineRotationAngle(),
@@ -452,6 +457,9 @@ namespace Parking
                         false,
                         ParkingType);
                     secondParkingBays.Add(bay);
+
+                    // set the location point of the parking bay.
+                    bay.TargetPosition = point;
                 }
 
                 // add the lists of parking bays to a single list.
@@ -514,7 +522,6 @@ namespace Parking
                 foreach (Point point in locationPoints)
                 {
                     ParkingBay bay = new ParkingBay(
-                        point,
                         ActualBayWidth(),
                         BayLength,
                         45 + GetLineRotationAngle(),
@@ -523,6 +530,9 @@ namespace Parking
                         true,
                         ParkingType);
                     firstParkingBays.Add(bay);
+
+                    // set the location point of the parking bay.
+                    bay.TargetPosition = point;
                 }
 
 
@@ -531,7 +541,6 @@ namespace Parking
                 foreach (Point point in movedPoints)
                 {
                     ParkingBay bay = new ParkingBay(
-                        point,
                         ActualBayWidth(),
                         BayLength,
                         45 - GetLineRotationAngle(),
@@ -540,6 +549,9 @@ namespace Parking
                         true,
                         ParkingType);
                     secondParkingBays.Add(bay);
+
+                    // set the location point of the parking bay.
+                    bay.TargetPosition = point;
                 }
 
                 // add the lists of parking bays to a single list.
