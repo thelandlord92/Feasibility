@@ -264,9 +264,9 @@
             Wrapper class for the bicycle racks.
             </summary>
         </member>
-        <member name="P:Parking.Accessories.BicycleRack.TargetPosition">
+        <member name="P:Parking.Accessories.BicycleRack.TargetPlane">
             <summary>
-            The target position of the bicycle rack.
+            The target plane of the bicycle rack.
             </summary>
         </member>
         <member name="P:Parking.Accessories.BicycleRack.RackDiameter">
@@ -289,20 +289,15 @@
             The angle of the bicycle rack.
             </summary>
         </member>
-        <member name="P:Parking.Accessories.BicycleRack.RackOffset">
-            <summary>
-            The offset of the bicycle rack from the side of the parking bay.
-            </summary>
-        </member>
-        <member name="M:Parking.Accessories.BicycleRack.#ctor(System.Single,System.Single,System.Single,System.Single)">
+        <member name="M:Parking.Accessories.BicycleRack.#ctor(Autodesk.DesignScript.Geometry.Plane,System.Single,System.Single,System.Single,System.Single)">
             <summary>
             Creates a bicycle rack instance.
             </summary>
+            <param name="targetPlane">The target plane to transform the rack.</param>
             <param name="rackDiameter">The diameter of the bicycle rack's tube.</param>
             <param name="rackHeight">The height of the bicycle rack.</param>
             <param name="rackLength">The length of the bicycle rack.</param>
             <param name="rackAngle">The angle of the bicycle rack.</param>
-            <param name="rackOffset"></param>
         </member>
         <member name="M:Parking.Accessories.BicycleRack.CreateInvertedURack(System.Single,System.Single,System.Single)">
             <summary>
@@ -313,6 +308,17 @@
             <param name="basePlateThickness">Thickness of the rack base plates.</param>
             <returns name="rackSolid">The solid of the bicycle rack.</returns>
             <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:Parking.Accessories.BicycleRack.CreateWaveRack(System.Int32,System.Single,System.Single,System.Single)">
+            <summary>
+            Create a wave-shaped bicycle rack.
+            </summary>
+            <param name="numberOfWaves">The number of waves in the rack.</param>
+            <param name="waveOffsetFromBase">The vertical offset of the wave from the base level.</param>
+            <param name="plateDiameter">The diameter of the base plates.</param>
+            <param name="plateThickness">The thickness of the base plates.</param>
+            <returns>A list of curves representing the wave bicycle rack.</returns>
+            <exception cref="T:System.ArgumentException">Thrown when an invalid argument is provided.</exception>
         </member>
         <member name="T:Parking.Accessories.BicycleRackTypes">
             <summary>
