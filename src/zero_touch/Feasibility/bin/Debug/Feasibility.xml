@@ -199,6 +199,13 @@
             <returns name="hatchOutlines">The perimeter curves of the hatch surface.</returns>
             <exception cref="T:System.Exception"></exception>
         </member>
+        <member name="M:Common.GeometryTools.SortIntersectingGeometry(System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Geometry})">
+            <summary>
+            To group intersecting geometry.
+            </summary>
+            <param name="geometry">A list containg geometry to be sorted based on intersections.</param>
+            <returns name="geometryList">A list containing the grouped geometry.</returns>
+        </member>
         <member name="T:Common.Maths">
             <summary>
             A class containing methods for common math operations.

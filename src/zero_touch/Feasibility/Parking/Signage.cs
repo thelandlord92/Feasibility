@@ -100,7 +100,7 @@ namespace Parking
             float initialSignageOffset = (float)0.01,
             float initialHostWidth = (float)2.5,
             float userHostWidth = (float)2.5,
-            string resourcePath = "Feasibility.Parking.Symbols.StandardParkingSymbol.json") 
+            string resourcePath = "Feasibility.Parking.Symbols.standardParkingSymbol.json") 
         {
             // load the signage geometry.
             Geometry[] geometries = LoadEmbeddedJSON(resourcePath);
@@ -144,7 +144,7 @@ namespace Parking
             float initialSignageOffset = (float)0.01,
             float initialHostWidth = (float)2.5,
             float userHostWidth = (float)2.5,
-            string resourcePath = "Feasibility.Parking.Symbols.StandardParkingSymbol.json")
+            string resourcePath = "Feasibility.Parking.Symbols.standardParkingSymbol.json")
         {
             // create the signage geometry.
             List<Geometry> geometry = TransformSignage(

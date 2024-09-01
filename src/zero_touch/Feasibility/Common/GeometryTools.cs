@@ -570,6 +570,8 @@ namespace Common
                 curveTypes.Add(curveType);
             }
 
+     
+
             return curveTypes;
         }
 
@@ -763,6 +765,53 @@ namespace Common
                 { "hatchSurface", combinedSurfaces },
                 { "hatchOutlines", perimeterCurves }
             };
+        }
+
+
+
+
+
+        /// <summary>
+        /// To group intersecting geometry.
+        /// </summary>
+        /// <param name="geometry">A list containg geometry to be sorted based on intersections.</param>
+        /// <returns name="geometryList">A list containing the grouped geometry.</returns>
+        public static List<List<Geometry>> SortIntersectingGeometry(List<Geometry> geometry)
+        {
+            List<List<Geometry>> geoLists = new List<List<Geometry>>();
+
+            while (geometry.Any()) // Continue until all geometries are sorted.
+            {
+                // Start with the first geometry and create a new group.
+                Geometry currentGeometry = geometry[0];
+                geometry.RemoveAt(0);
+
+                List<Geometry> geometryGroup = new List<Geometry> { currentGeometry };
+                bool geometryAdded;
+
+                do
+                {
+                    geometryAdded = false;
+
+                    // Iterate over a copy of the remaining geometries.
+                    foreach (Geometry otherGeometry in geometry.ToList())
+                    {
+                        // If it intersects with any geometry in the group, add it to the group.
+                        if (geometryGroup.Any(g => g.DoesIntersect(otherGeometry)))
+                        {
+                            geometryGroup.Add(otherGeometry);
+                            geometry.Remove(otherGeometry);
+                            geometryAdded = true; // Mark that we added a geometry.
+                        }
+                    }
+                }
+                while (geometryAdded); // Continue checking until no more geometries are added to the group.
+
+                // Add the completed group to the list of grouped geometries.
+                geoLists.Add(geometryGroup);
+            }
+
+            return geoLists;
         }
     }
 }

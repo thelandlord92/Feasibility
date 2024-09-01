@@ -25,13 +25,24 @@ namespace Parking
             private get { return _layoutArea; }
             set
             {
+                // Check if the layout surface is horizontal and planar.
                 Point minPoint = value.BoundingBox.MinPoint;
                 Point maxPoint = value.BoundingBox.MaxPoint;
 
                 if (maxPoint.Z > minPoint.Z)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(_layoutArea), "The layout surface must be horizontal and planar.");
+                    throw new ArgumentException(nameof(_layoutArea), "The layout surface must be horizontal and planar.");
                 }
+
+                // Check if the perimeter curves of the surfaces contain unallowed curve types.
+                PolyCurve surfacePerimeter = Common.GeometryTools.SurfacePerimeter(value); // Get the perimeter of the surface.
+                List<string> edgeTypes = Common.GeometryTools.PolyCurveEdgeTypes(surfacePerimeter);
+
+                if (edgeTypes.Contains("Arc") || edgeTypes.Contains("NurbsCurve") || edgeTypes.Contains("Circle")) 
+                {
+                    throw new ArgumentException("The surface edge must contain only straight lines.");
+                }
+
                 _layoutArea = value;
             }
         }
