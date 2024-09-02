@@ -820,7 +820,7 @@ namespace Common
         /// <param name="points">The list of points.</param>
         /// <param name="splitWidth">The width of the split gap at the points.</param>
         /// <returns name="polyCurves">The new polycurves.</returns>
-        public static List<PolyCurve> SplitPolyCurveByPoints(
+        public static List<Line> SplitPolyCurveByPoints(
             PolyCurve polyCurve, 
             List<Point> points,
             float splitWidth = 1) 
@@ -1052,7 +1052,23 @@ namespace Common
                 polyCurves.Add(PolyCurve.ByJoinedCurves(curveList, 0.001, false));
             }
 
-            return polyCurves;
+            // Begin workflow to sort the polycurves in a clockwise direction.
+
+            // Get the bounding boxes of the polycurves.
+            List<BoundingBox> boundingBoxes = new List<BoundingBox>();
+            foreach (PolyCurve curve in polyCurves) 
+            { 
+                boundingBoxes.Add(curve.BoundingBox);
+            }
+
+            // Create new lines using the bounding box min and max points.
+            List<Line> lines = new List<Line>();
+            foreach (BoundingBox boundingBox in boundingBoxes) 
+            { 
+                lines.Add(Line.ByStartPointEndPoint(boundingBox.MinPoint, boundingBox.MaxPoint));
+            }
+
+            return lines;
         }
     }
 }

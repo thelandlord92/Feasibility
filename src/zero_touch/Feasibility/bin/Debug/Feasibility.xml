@@ -206,6 +206,15 @@
             <param name="geometry">A list containg geometry to be sorted based on intersections.</param>
             <returns name="geometryList">A list containing the grouped geometry.</returns>
         </member>
+        <member name="M:Common.GeometryTools.SplitPolyCurveByPoints(Autodesk.DesignScript.Geometry.PolyCurve,System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Point},System.Single)">
+            <summary>
+            Split a polycuve with a list of points and return new polycurves representing the splits.
+            </summary>
+            <param name="polyCurve">The input polycurve.</param>
+            <param name="points">The list of points.</param>
+            <param name="splitWidth">The width of the split gap at the points.</param>
+            <returns name="polyCurves">The new polycurves.</returns>
+        </member>
         <member name="T:Common.Maths">
             <summary>
             A class containing methods for common math operations.
