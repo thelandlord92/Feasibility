@@ -219,7 +219,7 @@
             <param name="b">the second integer</param>
             <returns name="value">the added value</returns>
         </member>
-        <member name="M:Common.Maths.Range(System.Double,System.Double,System.Int32)">
+        <member name="M:Common.Maths.Range(System.Single,System.Single,System.Int32)">
             <summary>
             Divides a range into a required number count.
             </summary>

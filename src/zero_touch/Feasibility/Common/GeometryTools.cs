@@ -8,6 +8,7 @@ using Common;
 using CoreNodeModels;
 using Autodesk.DesignScript.Runtime;
 using Parking;
+using System.Windows.Media;
 
 namespace Common
 {
@@ -32,8 +33,8 @@ namespace Common
         /// <param name="planeOffset">The offset of the geometry along host plane's normal.</param>
         /// <param name="scaleFactor">The scale of the geometry at the host plane.</param>
         /// <returns></returns>
-        public static List<Geometry> AddTransformations(
-            List<Geometry> geometry,
+        public static List<Autodesk.DesignScript.Geometry.Geometry> AddTransformations(
+            List<Autodesk.DesignScript.Geometry.Geometry> geometry,
             Point geometryLocation,
             Plane hostPlane,
             [DefaultArgument("Vector.ZAxis()")] Vector geometryPlaneNormal,
@@ -45,8 +46,8 @@ namespace Common
             Plane geometryPlane = Plane.ByOriginNormal(geometryLocation, geometryPlaneNormal);
 
             // transform the geometry to the host plane.
-            List<Geometry> transGeometry = new List<Geometry>();
-            foreach (Geometry geom in geometry) 
+            List<Autodesk.DesignScript.Geometry.Geometry> transGeometry = new List<Autodesk.DesignScript.Geometry.Geometry>();
+            foreach (Autodesk.DesignScript.Geometry.Geometry geom in geometry) 
             { 
                 if (geom != null) 
                 {
@@ -55,8 +56,8 @@ namespace Common
             }
 
             // rotate the geometry at the host plane.
-            List<Geometry> rotatedGeometry = new List<Geometry>();  
-            foreach (Geometry geom in transGeometry) 
+            List<Autodesk.DesignScript.Geometry.Geometry> rotatedGeometry = new List<Autodesk.DesignScript.Geometry.Geometry>();  
+            foreach (Autodesk.DesignScript.Geometry.Geometry geom in transGeometry) 
             { 
                 if (geom != null) 
                 {
@@ -65,8 +66,8 @@ namespace Common
             }
 
             // scale the geometry at the host plane.
-            List<Geometry> scaledGeometry = new List<Geometry>();
-            foreach(Geometry geom in rotatedGeometry) 
+            List<Autodesk.DesignScript.Geometry.Geometry> scaledGeometry = new List<Autodesk.DesignScript.Geometry.Geometry>();
+            foreach (Autodesk.DesignScript.Geometry.Geometry geom in rotatedGeometry) 
             {
                 if (geom != null) 
                 { 
@@ -75,8 +76,8 @@ namespace Common
             }
 
             // move the geometry along the host plane normal.
-            List<Geometry> movedGeometry = new List<Geometry>();
-            foreach (Geometry geom in scaledGeometry) 
+            List<Autodesk.DesignScript.Geometry.Geometry> movedGeometry = new List<Autodesk.DesignScript.Geometry.Geometry>();
+            foreach (Autodesk.DesignScript.Geometry.Geometry geom in scaledGeometry) 
             { 
                 if (geom != null) 
                 { 
@@ -739,13 +740,13 @@ namespace Common
             foreach (Surface hatchSurface in hatchSurfaces) 
             {
                 // Cast the overall and hatch surfaces as geometry.
-                Geometry castSurface = surface as Geometry;
-                Geometry castHatchSurface = hatchSurface as Geometry;
+                Autodesk.DesignScript.Geometry.Geometry castSurface = surface as Autodesk.DesignScript.Geometry.Geometry;
+                Autodesk.DesignScript.Geometry.Geometry castHatchSurface = hatchSurface as Autodesk.DesignScript.Geometry.Geometry;
 
                 // Intersect the overall and hatch surfaces.
-                Geometry[] surfaceList = castSurface.Intersect(castHatchSurface);
+                Autodesk.DesignScript.Geometry.Geometry[] surfaceList = castSurface.Intersect(castHatchSurface);
 
-                foreach (Geometry geometry in surfaceList) 
+                foreach (Autodesk.DesignScript.Geometry.Geometry geometry in surfaceList) 
                 { 
                     intersectedSurfaces.Add((Surface)geometry);
                 }
@@ -768,25 +769,22 @@ namespace Common
         }
 
 
-
-
-
         /// <summary>
         /// To group intersecting geometry.
         /// </summary>
         /// <param name="geometry">A list containg geometry to be sorted based on intersections.</param>
         /// <returns name="geometryList">A list containing the grouped geometry.</returns>
-        public static List<List<Geometry>> SortIntersectingGeometry(List<Geometry> geometry)
+        public static List<List<Autodesk.DesignScript.Geometry.Geometry>> SortIntersectingGeometry(List<Autodesk.DesignScript.Geometry.Geometry> geometry)
         {
-            List<List<Geometry>> geoLists = new List<List<Geometry>>();
+            List<List<Autodesk.DesignScript.Geometry.Geometry>> geoLists = new List<List<Autodesk.DesignScript.Geometry.Geometry>>();
 
             while (geometry.Any()) // Continue until all geometries are sorted.
             {
                 // Start with the first geometry and create a new group.
-                Geometry currentGeometry = geometry[0];
+                Autodesk.DesignScript.Geometry.Geometry currentGeometry = geometry[0];
                 geometry.RemoveAt(0);
 
-                List<Geometry> geometryGroup = new List<Geometry> { currentGeometry };
+                List<Autodesk.DesignScript.Geometry.Geometry> geometryGroup = new List<Autodesk.DesignScript.Geometry.Geometry> { currentGeometry };
                 bool geometryAdded;
 
                 do
@@ -794,7 +792,7 @@ namespace Common
                     geometryAdded = false;
 
                     // Iterate over a copy of the remaining geometries.
-                    foreach (Geometry otherGeometry in geometry.ToList())
+                    foreach (Autodesk.DesignScript.Geometry.Geometry otherGeometry in geometry.ToList())
                     {
                         // If it intersects with any geometry in the group, add it to the group.
                         if (geometryGroup.Any(g => g.DoesIntersect(otherGeometry)))
@@ -812,6 +810,249 @@ namespace Common
             }
 
             return geoLists;
+        }
+
+
+        /// <summary>
+        /// Split a polycuve with a list of points and return new polycurves representing the splits.
+        /// </summary>
+        /// <param name="polyCurve">The input polycurve.</param>
+        /// <param name="points">The list of points.</param>
+        /// <param name="splitWidth">The width of the split gap at the points.</param>
+        /// <returns name="polyCurves">The new polycurves.</returns>
+        public static List<PolyCurve> SplitPolyCurveByPoints(
+            PolyCurve polyCurve, 
+            List<Point> points,
+            float splitWidth = 1) 
+        {
+            // Get the curves of the polycurve.
+            List<Curve> curves = polyCurve.Curves().ToList();
+
+            // Get the distances of the points from the boundary curves.
+            List<List<float>> pointDistances = new List<List<float>>();
+            foreach (Point point in points) 
+            {
+                List<float> distanceList = new List<float>();
+                foreach (Curve curve in curves) 
+                { 
+                    distanceList.Add((float)point.DistanceTo(curve));
+                }
+
+                pointDistances.Add(distanceList);
+            }
+
+            // Get the minumum item in each distance list.
+            List<float> minimumDistances = new List<float>();
+            foreach (List<float> distanceList in pointDistances) 
+            { 
+                minimumDistances.Add(distanceList.Min());
+            }
+
+            // Group the minumum items and the distance lists. 
+            List<List<List<float>>> zippedDistances = minimumDistances
+                .Zip(pointDistances, (first, second) => new List<List<float>> { new List<float> { first }, second }).ToList();
+
+            // Get the index of the minimum items in the distance lists.
+            List<int> indices = new List<int>();
+            foreach (List<List<float>> groupedDistances in zippedDistances) 
+            {
+                indices.Add(groupedDistances[1].IndexOf(groupedDistances[0][0]));
+            }
+
+            // Get the curves at the indices from the curve list. The closest curves to the entrance points. 
+            List<Curve> closestCurves = new List<Curve>();
+            foreach (int i in indices) 
+            { 
+                closestCurves.Add(curves[i]);
+            }
+
+            // Get the center point strings of the curves closest to the entrance points.
+            List<string> curveCenterPointStrings = new List<string>();
+            foreach (Curve curve in closestCurves) 
+            {
+                Point centerPoint = curve.PointAtParameter(0.5);
+                string centerPointString = centerPoint.ToString();
+                curveCenterPointStrings.Add(centerPointString);
+            }
+
+            // Group the curves with the same center point string values.
+            List<List<Curve>> groupedCurves = new List<List<Curve>>();
+            Dictionary<string, List<Curve>> curveGroups = new Dictionary<string, List<Curve>> ();
+            
+            for (int i = 0; i < curveCenterPointStrings.Count; i++) 
+            {
+                string currentString = curveCenterPointStrings[i];
+                Curve currentCurve = closestCurves[i];
+
+                // If the group doesn't exist yet create it.
+                if (!curveGroups.ContainsKey(currentString)) 
+                { 
+                    curveGroups[currentString] = new List<Curve> ();
+                }
+
+                // Add the curve to the appropriate group.
+                curveGroups[currentString].Add(currentCurve);
+            }
+
+            // Convert the dictionary values to list of lists.
+            List<List<Curve>> tempCurves = curveGroups.Values.ToList();
+
+            // Remove duplicate curves from the curve lists.
+            foreach (List<Curve> curveList in tempCurves) 
+            {
+                // Get the first curve if the list count is greater than 1.
+                if (curveList.Count > 1) 
+                {
+                    groupedCurves.Add(new List<Curve> { curveList[0] });
+                }
+                else 
+                {
+                    groupedCurves.Add(curveList);
+                }
+            }
+
+            // Group the points by the curve center point string values.
+            List<List<Point>> groupedPoints = new List<List<Point>>();
+            Dictionary<string, List<Point>> pointGroups = new Dictionary<string, List<Point>>();
+
+            for (int i = 0; i < curveCenterPointStrings.Count; i++)
+            {
+                string currentString = curveCenterPointStrings[i];
+                Point currentPoint = points[i];
+
+                // If the group doesn't exist yet, create it.
+                if (!pointGroups.ContainsKey(currentString))
+                {
+                    pointGroups[currentString] = new List<Point>();
+                }
+
+                // Add the point to the appropriate group.
+                pointGroups[currentString].Add(currentPoint);
+            }
+
+            // Convert the dictionary values to a list of lists.
+            groupedPoints = pointGroups.Values.ToList();
+
+            // Project the points onto the curves.
+            List<List<Point>> projectedPoints = new List<List<Point>>();
+            for (int i = 0; i < groupedCurves.Count; i++) 
+            {
+                List<Point> pointList = new List<Point>();
+                for (int j = 0; j < groupedPoints[i].Count; j++) 
+                {
+                    pointList.Add(groupedCurves[i][0].ClosestPointTo(groupedPoints[i][j]));
+                }
+                projectedPoints.Add(pointList);
+            }
+
+            // Get the curve parameters at the location of the projected points.
+            List<List<float>> projectedPointParameters = new List<List<float>>();
+            for (int i = 0; i < groupedCurves.Count; i++) 
+            {
+                List<float> parameterList = new List<float>();
+                for (int j = 0;j < projectedPoints[i].Count; j++) 
+                {
+                    parameterList.Add((float)groupedCurves[i][0].ParameterAtPoint(projectedPoints[i][j]));
+                }
+                projectedPointParameters.Add(parameterList);
+            }
+
+            // Create a list of numbers to indicate half of the split width.
+            List<float> entranceHalfDistances = Maths.Range(splitWidth / 2, -splitWidth / 2, 2);
+
+            // Create points from the curve parameter with the split widths.
+            List<List<Point>> splitPoints = new List<List<Point>>();
+            for (int i = 0; i < groupedCurves.Count; i++) 
+            {
+                List<Point> pointList = new List<Point>();
+                for (int j = 0; j < projectedPointParameters[i].Count; j++) 
+                {
+                    foreach (float distance in entranceHalfDistances) 
+                    {
+                        pointList.Add(groupedCurves[i][0].PointAtChordLength(distance, projectedPointParameters[i][j], true));
+                    }
+                }
+                splitPoints.Add(pointList);
+            }
+
+            // Split the curves with the point lists.
+            List<List<Curve>> splitCurveLists = new List<List<Curve>>();
+            for (int i = 0; i < groupedCurves.Count; i++) 
+            { 
+                splitCurveLists.Add(groupedCurves[i][0].SplitByPoints(splitPoints[i]).ToList());
+            }
+
+            // Remove the split curves intersecting with the projected points.
+            List<List<Curve>> filteredCurveLists = new List<List<Curve>>();
+            for (int i = 0; i < projectedPoints.Count; i++)
+            {
+                List<Curve> curveList = new List<Curve>();
+
+                foreach (Curve curve in splitCurveLists[i])
+                {
+                    bool intersects = false;
+                    foreach (Point point in projectedPoints[i])
+                    {
+                        if (curve.DoesIntersect(point))
+                        {
+                            intersects = true;
+                            break; // Exit loop if intersection is found.
+                        }
+                    }
+                    if (!intersects)
+                    {
+                        curveList.Add(curve);
+                    }
+                }
+
+                filteredCurveLists.Add(curveList);
+            }
+
+            // Get the curves not close to the points.
+            List<Curve> otherCurves = curves.ToList();
+            List<int> sortedIndices = indices.ToList().Distinct().ToList();
+            sortedIndices.Sort((a, b) => b.CompareTo(a));
+            foreach (int i in sortedIndices)
+            {
+                otherCurves.RemoveAt(i);
+            }
+
+            // Flatten the filtered curve list.
+            List<Curve> flattenedFilteredCurves = filteredCurveLists.SelectMany(curveList => curveList).ToList();
+
+            // Combine the filtered curves and the other curves in a flat list.
+            List<Curve> combinedCurves = new List<List<Curve>> { flattenedFilteredCurves, otherCurves }.SelectMany(curveList => curveList).ToList();
+
+            // Cast the curves to geometry for grouping.
+            List<Autodesk.DesignScript.Geometry.Geometry> combinedGeometry = new List<Autodesk.DesignScript.Geometry.Geometry>();
+            foreach (Curve curve in combinedCurves) 
+            { 
+                combinedGeometry.Add(curve);
+            }
+
+            // Group the intersecting curves.
+            List<List<Autodesk.DesignScript.Geometry.Geometry>> intersectingCurves = SortIntersectingGeometry(combinedGeometry);
+
+            // Cast the intersecting curve groups. 
+            List<List<Curve>> castIntersectingCurves = new List<List<Curve>> ();
+            foreach (List<Autodesk.DesignScript.Geometry.Geometry> geometryList in intersectingCurves) 
+            { 
+                List<Curve> curveList = new List<Curve> ();
+                foreach (Autodesk.DesignScript.Geometry.Geometry geometry in geometryList) 
+                { 
+                    curveList.Add(geometry as  Curve);
+                }
+                castIntersectingCurves.Add(curveList);
+            }
+
+            // Create polycurves from the grouped intersecting curves. 
+            List<PolyCurve> polyCurves = new List<PolyCurve>(); 
+            foreach (List<Curve> curveList in castIntersectingCurves) 
+            {
+                polyCurves.Add(PolyCurve.ByJoinedCurves(curveList, 0.001, false));
+            }
+
+            return polyCurves;
         }
     }
 }
