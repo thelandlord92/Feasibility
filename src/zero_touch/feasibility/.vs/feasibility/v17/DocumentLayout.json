@@ -3,11 +3,15 @@
   "WorkspaceRootPath": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\common\\geometrytools.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|c:\\users\\omoba\\onedrive\\documents\\github\\feasibility\\src\\zero_touch\\feasibility\\common\\geometrytools.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|solutionrelative:common\\geometrytools.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|c:\\users\\omoba\\onedrive\\documents\\github\\feasibility\\src\\zero_touch\\feasibility\\parking\\accessories\\bicyclerack.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|c:\\users\\omoba\\onedrive\\documents\\github\\feasibility\\src\\zero_touch\\feasibility\\parking\\internalbays.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|solutionrelative:parking\\internalbays.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\parking\\accessories\\bicyclerack.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|solutionrelative:parking\\accessories\\bicyclerack.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -18,8 +22,21 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "InternalBays.cs",
+              "DocumentMoniker": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\Parking\\InternalBays.cs",
+              "RelativeDocumentMoniker": "Parking\\InternalBays.cs",
+              "ToolTip": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\Parking\\InternalBays.cs",
+              "RelativeToolTip": "Parking\\InternalBays.cs",
+              "ViewState": "AQIAAMIBAAAAAAAAAAAEwNMBAABdAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-03T09:26:26.808Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -28,20 +45,20 @@
               "RelativeDocumentMoniker": "Common\\GeometryTools.cs",
               "ToolTip": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\Common\\GeometryTools.cs",
               "RelativeToolTip": "Common\\GeometryTools.cs",
-              "ViewState": "AQIAABUEAAAAAAAAAAAiwDYDAAA4AAAA",
+              "ViewState": "AQIAABoDAAAAAAAAAAAAADcDAAAmAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-01T14:11:38.865Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "BicycleRack.cs",
               "DocumentMoniker": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\Parking\\Accessories\\BicycleRack.cs",
               "RelativeDocumentMoniker": "Parking\\Accessories\\BicycleRack.cs",
               "ToolTip": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\Parking\\Accessories\\BicycleRack.cs",
               "RelativeToolTip": "Parking\\Accessories\\BicycleRack.cs",
-              "ViewState": "AQIAAKcBAAAAAAAAAAAAAIEAAAANAAAA",
+              "ViewState": "AQIAAKQBAAAAAAAAAIBJwIEAAAANAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-08-29T16:13:19.065Z",
               "EditorCaption": ""

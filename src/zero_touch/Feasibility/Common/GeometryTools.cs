@@ -9,6 +9,7 @@ using CoreNodeModels;
 using Autodesk.DesignScript.Runtime;
 using Parking;
 using System.Windows.Media;
+using System.Windows;
 
 namespace Common
 {
@@ -35,9 +36,9 @@ namespace Common
         /// <returns></returns>
         public static List<Autodesk.DesignScript.Geometry.Geometry> AddTransformations(
             List<Autodesk.DesignScript.Geometry.Geometry> geometry,
-            Point geometryLocation,
+            Autodesk.DesignScript.Geometry.Point geometryLocation,
             Plane hostPlane,
-            [DefaultArgument("Vector.ZAxis()")] Vector geometryPlaneNormal,
+            [DefaultArgument("Vector.ZAxis()")] Autodesk.DesignScript.Geometry.Vector geometryPlaneNormal,
             float rotation = 0,
             float planeOffset = 0,
             float scaleFactor = 1)
@@ -104,18 +105,18 @@ namespace Common
             BoundingBox boundingBox = rotatedCurve.BoundingBox;
 
             // create a diagonal vector using the min and max points of the bounding box.
-            Point minPoint = boundingBox.MinPoint;
-            Point maxPoint = boundingBox.MaxPoint;
-            Vector diagonalVector = Vector.ByTwoPoints(minPoint, maxPoint);
+            Autodesk.DesignScript.Geometry.Point minPoint = boundingBox.MinPoint;
+            Autodesk.DesignScript.Geometry.Point maxPoint = boundingBox.MaxPoint;
+            Autodesk.DesignScript.Geometry.Vector diagonalVector = Autodesk.DesignScript.Geometry.Vector.ByTwoPoints(minPoint, maxPoint);
 
             // get the center point along the vector.
-            Point centerPoint = minPoint.Translate(diagonalVector.Scale(0.5)) as Point;
+            Autodesk.DesignScript.Geometry.Point centerPoint = minPoint.Translate(diagonalVector.Scale(0.5)) as Autodesk.DesignScript.Geometry.Point;
 
             // create a rectangle at the xy plane using the x and y components of the diagonal vector.
-            Rectangle rectangle = Rectangle.ByWidthLength(diagonalVector.X, diagonalVector.Y);
+            Autodesk.DesignScript.Geometry.Rectangle rectangle = Rectangle.ByWidthLength(diagonalVector.X, diagonalVector.Y);
 
             // Move the rectangle to the diagonal vector center point.
-            Rectangle movedRectangle = rectangle.Translate(centerPoint.AsVector()) as Rectangle;
+            Autodesk.DesignScript.Geometry.Rectangle movedRectangle = rectangle.Translate(centerPoint.AsVector()) as Rectangle;
 
             // Rotate the rectangle back to the polycurve around the xy plane.
             Rectangle rotatedRectangle = movedRectangle.Rotate(Plane.XY(), rotation) as Rectangle;
@@ -140,20 +141,20 @@ namespace Common
             Curve initialCurve = rectangle.Curves()[0];
 
             // add the first setout point to the curve.
-            Point initialPoint = initialCurve.PointAtChordLength(firstlineOffset);
+            Autodesk.DesignScript.Geometry.Point initialPoint = initialCurve.PointAtChordLength(firstlineOffset);
 
             // add the line location points to the curve.
-            Point[] locationPoints = initialCurve.PointsAtChordLengthFromPoint(initialPoint, restLineOffset) as Point[];
+            Autodesk.DesignScript.Geometry.Point[] locationPoints = initialCurve.PointsAtChordLengthFromPoint(initialPoint, restLineOffset) as Autodesk.DesignScript.Geometry.Point[];
 
             // get the third curve of the rectangle.
             Curve oppositeCurve = rectangle.Curves()[2];
 
             // add the setout points to the opposite setout curve.
-            List<Point> projectedPoints = new List<Point>();
+            List<Autodesk.DesignScript.Geometry.Point> projectedPoints = new List<Autodesk.DesignScript.Geometry.Point>();
             int pointNumber = locationPoints.Length;
             for (int j = 0; j < pointNumber; j++) // indices to select points within the location points list.
             {
-                projectedPoints.Add(oppositeCurve.ClosestPointTo(locationPoints[j]) as Point);
+                projectedPoints.Add(oppositeCurve.ClosestPointTo(locationPoints[j]) as Autodesk.DesignScript.Geometry.Point);
             }
 
             // create a line between the points.
@@ -193,8 +194,8 @@ namespace Common
         public static Surface CheckSurfacePlanarity(Surface surface) 
         {
             // get the max and min point of the surface bounding box.
-            Point minPoint = surface.BoundingBox.MinPoint;
-            Point maxPoint = surface.BoundingBox.MaxPoint;
+            Autodesk.DesignScript.Geometry.Point minPoint = surface.BoundingBox.MinPoint;
+            Autodesk.DesignScript.Geometry.Point maxPoint = surface.BoundingBox.MaxPoint;
 
             // check if the surface is planar and horizontal.
             Surface _surface = null;
@@ -218,8 +219,8 @@ namespace Common
         public static Curve CheckCurvePlanarity(Curve curve)
         {
             // get the max and min point of the curve bounding box.
-            Point minPoint = curve.BoundingBox.MinPoint;
-            Point maxPoint = curve.BoundingBox.MaxPoint;
+            Autodesk.DesignScript.Geometry.Point minPoint = curve.BoundingBox.MinPoint;
+            Autodesk.DesignScript.Geometry.Point maxPoint = curve.BoundingBox.MaxPoint;
 
             // check if the surface is planar and horizontal.
             Curve _curve = null;
@@ -510,16 +511,16 @@ namespace Common
         /// </summary>
         /// <param name="curve">The input polycurve.</param>
         /// <returns name="vectors">A list of the paired vectors.</returns>
-        public static List<List<Vector>> PolyCurveCornerVectorPairs(PolyCurve curve) 
+        public static List<List<Autodesk.DesignScript.Geometry.Vector>> PolyCurveCornerVectorPairs(PolyCurve curve) 
         {
             // get the corner curve pairs.
             List<List<Curve>> curvePairs = PolyCurveCornerCurvePairs(curve);
 
             // get the curve vectors.
-            List<List<Vector>> vectorPairs = new List<List<Vector>>();
+            List<List<Autodesk.DesignScript.Geometry.Vector>> vectorPairs = new List<List<Autodesk.DesignScript.Geometry.Vector>>();
             foreach (List<Curve> curvePair in curvePairs) 
             { 
-                List<Vector> vectorPair = new List<Vector>();
+                List<Autodesk.DesignScript.Geometry.Vector> vectorPair = new List<Autodesk.DesignScript.Geometry.Vector>();
                 vectorPair.Add(curvePair[0].TangentAtParameter(0));
                 vectorPair.Add(curvePair[1].TangentAtParameter(0));
 
@@ -539,13 +540,13 @@ namespace Common
         public static List<float> PolyCurveCornerAngles(PolyCurve curve) 
         {
             // get the corner vector pairs.
-            List<List<Vector>> vectorPairs = PolyCurveCornerVectorPairs (curve);
+            List<List<Autodesk.DesignScript.Geometry.Vector>> vectorPairs = PolyCurveCornerVectorPairs (curve);
 
             // calculate the angle between the tangent vectors.
             List<float> cornerAngles = new List<float>();
-            foreach (List<Vector> vectorPair in vectorPairs) 
+            foreach (List<Autodesk.DesignScript.Geometry.Vector> vectorPair in vectorPairs) 
             { 
-               float angle = (float)(vectorPair[0].AngleAboutAxis(vectorPair[1], Vector.ZAxis()));
+               float angle = (float)(vectorPair[0].AngleAboutAxis(vectorPair[1], Autodesk.DesignScript.Geometry.Vector.ZAxis()));
                cornerAngles.Add(angle);    
             }
 
@@ -602,23 +603,23 @@ namespace Common
             }
 
             // Get the start and end points.
-            Point startPoint = curve.StartPoint;
-            Point endPoint = curve.EndPoint;
+            Autodesk.DesignScript.Geometry.Point startPoint = curve.StartPoint;
+            Autodesk.DesignScript.Geometry.Point endPoint = curve.EndPoint;
 
             // Create the first setout points.
-            Point setoutStartPoint = curve.PointAtSegmentLength(dashLength);
-            List<Point> firstSetoutPoints = curve.PointsAtSegmentLengthFromPoint(setoutStartPoint, (dashLength + dashGap)).ToList();
+            Autodesk.DesignScript.Geometry.Point setoutStartPoint = curve.PointAtSegmentLength(dashLength);
+            List<Autodesk.DesignScript.Geometry.Point> firstSetoutPoints = curve.PointsAtSegmentLengthFromPoint(setoutStartPoint, (dashLength + dashGap)).ToList();
 
             // Create the second setout points.
-            List<Point> secondSetoutPoints = curve.PointsAtSegmentLengthFromPoint(startPoint, (dashLength + dashGap)).ToList();
+            List<Autodesk.DesignScript.Geometry.Point> secondSetoutPoints = curve.PointsAtSegmentLengthFromPoint(startPoint, (dashLength + dashGap)).ToList();
 
             // Transpose the setout points to create point pairs.
-            List<List<Point>> zippedPoints = firstSetoutPoints
-                .Zip(secondSetoutPoints, (first, second) => new List<Point> { first, second })
+            List<List<Autodesk.DesignScript.Geometry.Point>> zippedPoints = firstSetoutPoints
+                .Zip(secondSetoutPoints, (first, second) => new List<Autodesk.DesignScript.Geometry.Point> { first, second })
                 .ToList();
 
             // Combine all the points.
-            List<Point> combinedPoints = new List<Point>();
+            List<Autodesk.DesignScript.Geometry.Point> combinedPoints = new List<Autodesk.DesignScript.Geometry.Point>();
             combinedPoints.Add(startPoint);
             foreach (var pair in zippedPoints)
             {
@@ -630,24 +631,24 @@ namespace Common
             combinedPoints = combinedPoints.Where(p => p != null).ToList();
 
             // Remove any duplicate points from the cleaned point list.
-            combinedPoints = Point.PruneDuplicates(combinedPoints, 0.001).ToList();
+            combinedPoints = Autodesk.DesignScript.Geometry.Point.PruneDuplicates(combinedPoints, 0.001).ToList();
 
             // Chop the pruned point list into segments of 2.
-            List<List<Point>> choppedPoints = new List<List<Point>>();
+            List<List<Autodesk.DesignScript.Geometry.Point>> choppedPoints = new List<List<Autodesk.DesignScript.Geometry.Point>>();
             for (int i = 0; i < combinedPoints.Count; i += 2)
             {
                 if (i + 1 < combinedPoints.Count)
                 {
-                    choppedPoints.Add(new List<Point> { combinedPoints[i], combinedPoints[i + 1] });
+                    choppedPoints.Add(new List<Autodesk.DesignScript.Geometry.Point> { combinedPoints[i], combinedPoints[i + 1] });
                 }
             }
 
             // Remove points list containing only one point.
-            List<List<Point>> filteredPointList = choppedPoints.Where(p => p.Count != 1).ToList();
+            List<List<Autodesk.DesignScript.Geometry.Point>> filteredPointList = choppedPoints.Where(p => p.Count != 1).ToList();
 
             // Create polycurves from the point lists. 
             List<PolyCurve> dashCenterCurves = new List<PolyCurve>();
-            foreach (List<Point> pointList in filteredPointList) 
+            foreach (List<Autodesk.DesignScript.Geometry.Point> pointList in filteredPointList) 
             {
                 dashCenterCurves.Add(PolyCurve.ByPoints(pointList));
             }
@@ -656,7 +657,7 @@ namespace Common
             List<PolyCurve> dashOutlines = new List<PolyCurve>();
             foreach (PolyCurve polyCurve in dashCenterCurves)
             {
-                dashOutlines.Add(PolyCurve.ByThickeningCurveNormal(polyCurve, dashThickness, Vector.ZAxis()));
+                dashOutlines.Add(PolyCurve.ByThickeningCurveNormal(polyCurve, dashThickness, Autodesk.DesignScript.Geometry.Vector.ZAxis()));
             }
 
             // Create surfaces representing the dashes.
@@ -725,7 +726,7 @@ namespace Common
             List<PolyCurve> hatchOutlines = new List<PolyCurve>();
             foreach (Line line in lines)
             {
-                hatchOutlines.Add(PolyCurve.ByThickeningCurveNormal(line, hatchThickness, Vector.ZAxis()));
+                hatchOutlines.Add(PolyCurve.ByThickeningCurveNormal(line, hatchThickness, Autodesk.DesignScript.Geometry.Vector.ZAxis()));
             }
 
             // Create surfaces from the hatch outlines.
@@ -819,10 +820,10 @@ namespace Common
         /// <param name="polyCurve">The input polycurve.</param>
         /// <param name="points">The list of points.</param>
         /// <param name="splitWidth">The width of the split gap at the points.</param>
-        /// <returns name="polyCurves">The new polycurves.</returns>
-        public static List<Line> SplitPolyCurveByPoints(
+        /// <returns name="polyCurves">The new sorted polycurves.</returns>
+        public static List<PolyCurve> SplitPolyCurveByPoints(
             PolyCurve polyCurve, 
-            List<Point> points,
+            List<Autodesk.DesignScript.Geometry.Point> points,
             float splitWidth = 1) 
         {
             // Get the curves of the polycurve.
@@ -830,7 +831,7 @@ namespace Common
 
             // Get the distances of the points from the boundary curves.
             List<List<float>> pointDistances = new List<List<float>>();
-            foreach (Point point in points) 
+            foreach (Autodesk.DesignScript.Geometry.Point point in points) 
             {
                 List<float> distanceList = new List<float>();
                 foreach (Curve curve in curves) 
@@ -870,7 +871,7 @@ namespace Common
             List<string> curveCenterPointStrings = new List<string>();
             foreach (Curve curve in closestCurves) 
             {
-                Point centerPoint = curve.PointAtParameter(0.5);
+                Autodesk.DesignScript.Geometry.Point centerPoint = curve.PointAtParameter(0.5);
                 string centerPointString = centerPoint.ToString();
                 curveCenterPointStrings.Add(centerPointString);
             }
@@ -912,18 +913,18 @@ namespace Common
             }
 
             // Group the points by the curve center point string values.
-            List<List<Point>> groupedPoints = new List<List<Point>>();
-            Dictionary<string, List<Point>> pointGroups = new Dictionary<string, List<Point>>();
+            List<List<Autodesk.DesignScript.Geometry.Point>> groupedPoints = new List<List<Autodesk.DesignScript.Geometry.Point>>();
+            Dictionary<string, List<Autodesk.DesignScript.Geometry.Point>> pointGroups = new Dictionary<string, List<Autodesk.DesignScript.Geometry.Point>>();
 
             for (int i = 0; i < curveCenterPointStrings.Count; i++)
             {
                 string currentString = curveCenterPointStrings[i];
-                Point currentPoint = points[i];
+                Autodesk.DesignScript.Geometry.Point currentPoint = points[i];
 
                 // If the group doesn't exist yet, create it.
                 if (!pointGroups.ContainsKey(currentString))
                 {
-                    pointGroups[currentString] = new List<Point>();
+                    pointGroups[currentString] = new List<Autodesk.DesignScript.Geometry.Point>();
                 }
 
                 // Add the point to the appropriate group.
@@ -934,10 +935,10 @@ namespace Common
             groupedPoints = pointGroups.Values.ToList();
 
             // Project the points onto the curves.
-            List<List<Point>> projectedPoints = new List<List<Point>>();
+            List<List<Autodesk.DesignScript.Geometry.Point>> projectedPoints = new List<List<Autodesk.DesignScript.Geometry.Point>>();
             for (int i = 0; i < groupedCurves.Count; i++) 
             {
-                List<Point> pointList = new List<Point>();
+                List<Autodesk.DesignScript.Geometry.Point> pointList = new List<Autodesk.DesignScript.Geometry.Point>();
                 for (int j = 0; j < groupedPoints[i].Count; j++) 
                 {
                     pointList.Add(groupedCurves[i][0].ClosestPointTo(groupedPoints[i][j]));
@@ -961,10 +962,10 @@ namespace Common
             List<float> entranceHalfDistances = Maths.Range(splitWidth / 2, -splitWidth / 2, 2);
 
             // Create points from the curve parameter with the split widths.
-            List<List<Point>> splitPoints = new List<List<Point>>();
+            List<List<Autodesk.DesignScript.Geometry.Point>> splitPoints = new List<List<Autodesk.DesignScript.Geometry.Point>>();
             for (int i = 0; i < groupedCurves.Count; i++) 
             {
-                List<Point> pointList = new List<Point>();
+                List<Autodesk.DesignScript.Geometry.Point> pointList = new List<Autodesk.DesignScript.Geometry.Point>();
                 for (int j = 0; j < projectedPointParameters[i].Count; j++) 
                 {
                     foreach (float distance in entranceHalfDistances) 
@@ -991,7 +992,7 @@ namespace Common
                 foreach (Curve curve in splitCurveLists[i])
                 {
                     bool intersects = false;
-                    foreach (Point point in projectedPoints[i])
+                    foreach (Autodesk.DesignScript.Geometry.Point point in projectedPoints[i])
                     {
                         if (curve.DoesIntersect(point))
                         {
@@ -1052,23 +1053,48 @@ namespace Common
                 polyCurves.Add(PolyCurve.ByJoinedCurves(curveList, 0.001, false));
             }
 
-            // Begin workflow to sort the polycurves in a clockwise direction.
+            // Workflow to sort the polycurves in a clockwise direction.
 
-            // Get the bounding boxes of the polycurves.
-            List<BoundingBox> boundingBoxes = new List<BoundingBox>();
+            // Get the center point of the polycurve bounding boxes.
+            List<Autodesk.DesignScript.Geometry.Point> centerPoints = new List<Autodesk.DesignScript.Geometry.Point>();
             foreach (PolyCurve curve in polyCurves) 
             { 
-                boundingBoxes.Add(curve.BoundingBox);
+                // Get the bounding box.
+                BoundingBox boundingBox = curve.BoundingBox;
+
+                // Create the diagonal lines of the bounding boxes.
+                Line diagonalLine = Line.ByStartPointEndPoint(boundingBox.MinPoint, boundingBox.MaxPoint);
+
+                // Get the center point of the lines.
+                Autodesk.DesignScript.Geometry.Point centerPoint = diagonalLine.PointAtParameter(0.5);
+
+                centerPoints.Add(centerPoint);
             }
 
-            // Create new lines using the bounding box min and max points.
-            List<Line> lines = new List<Line>();
-            foreach (BoundingBox boundingBox in boundingBoxes) 
-            { 
-                lines.Add(Line.ByStartPointEndPoint(boundingBox.MinPoint, boundingBox.MaxPoint));
+            // Get the center point of the input polycurve's bounding box.
+            BoundingBox polyCurveBoundingBox = polyCurve.BoundingBox;
+            Line polyCurveDiagonalLine = Line.ByStartPointEndPoint(polyCurveBoundingBox.MinPoint, polyCurveBoundingBox.MaxPoint);
+            Autodesk.DesignScript.Geometry.Point polyCurveCenter = polyCurveDiagonalLine.PointAtParameter(0.5);
+
+            // Get the new polycurve angles from the Y axis.
+            List<float> anglesFromY = new List<float>();
+            foreach (Autodesk.DesignScript.Geometry.Point centerPoint in centerPoints) 
+            {
+                // Create vector from the input polycurve center to the new polycurve centers.
+                Autodesk.DesignScript.Geometry.Vector vector = Autodesk.DesignScript.Geometry.Vector.ByTwoPoints(polyCurveCenter, centerPoint);
+
+                // Calculate the angles between the vectors and the Y axis.
+                float angleFromY = (float)Autodesk.DesignScript.Geometry.Vector.YAxis().AngleAboutAxis(vector, Autodesk.DesignScript.Geometry.Vector.ZAxis());
+                anglesFromY.Add(angleFromY);
             }
 
-            return lines;
+            // Sort the new polycurves using the angle values.
+            List<PolyCurve> sortedPolyCurves = polyCurves.Zip(anglesFromY, (poly, angleFromY) => new { poly, angleFromY })
+                .OrderBy(x => x.angleFromY)
+                .Select(x => x.poly)
+                .ToList();
+
+            return sortedPolyCurves;
         }
     }
 }
