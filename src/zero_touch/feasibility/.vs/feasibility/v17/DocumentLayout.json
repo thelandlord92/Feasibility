@@ -34,7 +34,8 @@
               "RelativeToolTip": "Parking\\InternalBays.cs",
               "ViewState": "AQIAAMIBAAAAAAAAAAAEwNMBAABdAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-03T09:26:26.808Z"
+              "WhenOpened": "2024-09-03T09:26:26.808Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -44,7 +45,7 @@
               "RelativeDocumentMoniker": "Common\\GeometryTools.cs",
               "ToolTip": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\Common\\GeometryTools.cs",
               "RelativeToolTip": "Common\\GeometryTools.cs",
-              "ViewState": "AQIAAGUEAAAAAAAAAAAuwIYEAAA4AAAA",
+              "ViewState": "AQIAAHIEAAAAAAAAAAAQwIwEAAAiAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-01T14:11:38.865Z",
               "EditorCaption": ""
@@ -57,9 +58,10 @@
               "RelativeDocumentMoniker": "Parking\\Accessories\\BicycleRack.cs",
               "ToolTip": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\Parking\\Accessories\\BicycleRack.cs",
               "RelativeToolTip": "Parking\\Accessories\\BicycleRack.cs",
-              "ViewState": "AQIAAKQBAAAAAAAAAIBJwIEAAAANAAAA",
+              "ViewState": "AQIAAKEBAAAAAAAAAIBZwIEAAAANAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-29T16:13:19.065Z"
+              "WhenOpened": "2024-08-29T16:13:19.065Z",
+              "EditorCaption": ""
             }
           ]
         }

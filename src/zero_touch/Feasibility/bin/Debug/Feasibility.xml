@@ -215,6 +215,24 @@
             <param name="splitWidth">The width of the split gap at the points.</param>
             <returns name="polyCurves">The new sorted polycurves.</returns>
         </member>
+        <member name="M:Common.GeometryTools.ReorderCurvePositions(System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Curve},Autodesk.DesignScript.Geometry.Point)">
+            <summary>
+            Reorder a list of curves based on their angle from the Y axis.
+            Best for ordering disorganized curves generated from concave surface perimeters.
+            </summary>
+            <param name="curves">The input curves.</param>
+            <param name="sortingPoint">A point at the center of the input curves.</param>
+            <returns name="orderedPolyCurves">The ordered curves.</returns>
+        </member>
+        <member name="M:Common.GeometryTools.ReorderCurveDirections(System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Curve},Autodesk.DesignScript.Geometry.Point)">
+            <summary>
+            To reorder input curves in the same direction given a point at their center.
+            Best for ordering disorganized curves generated from concave surface perimeters.
+            </summary>
+            <param name="curves">The input curves.</param>
+            <param name="sortingPoint">A point at the center of the input curves.</param>
+            <returns name="orderedCurves">The ordered curves.</returns>
+        </member>
         <member name="T:Common.Maths">
             <summary>
             A class containing methods for common math operations.

@@ -822,7 +822,7 @@ namespace Common
         /// <param name="points">The list of points.</param>
         /// <param name="splitWidth">The width of the split gap at the points.</param>
         /// <returns name="polyCurves">The new sorted polycurves.</returns>
-        public static List<PolyCurve> SplitPolyCurveByPoints(
+        public static List<Curve> SplitPolyCurveByPoints(
             PolyCurve polyCurve, 
             List<Autodesk.DesignScript.Geometry.Point> points,
             float splitWidth = 1) 
@@ -1086,12 +1086,41 @@ namespace Common
                 polyCurves.Add(PolyCurve.ByJoinedCurves(curveList, 0.001, false));
             }
 
-            // Workflow to sort the polycurves in a clockwise direction.
+            // Get the center point of the input polycurve's bounding box.
+            BoundingBox polyCurveBoundingBox = polyCurve.BoundingBox;
+            Line polyCurveDiagonalLine = Line.ByStartPointEndPoint(polyCurveBoundingBox.MinPoint, polyCurveBoundingBox.MaxPoint);
+            Autodesk.DesignScript.Geometry.Point polyCurveCenter = polyCurveDiagonalLine.PointAtParameter(0.5);
 
-            // Get the center point of the polycurve bounding boxes.
+            // Cast the sorted polycurves to curves.
+            List<Curve> castSortedPolyCurves = new List<Curve>();
+            foreach (PolyCurve curve in polyCurves)
+            {
+                castSortedPolyCurves.Add(curve);
+            }
+
+            // Sort the polycurves using the angle values.
+            List<Curve> sortedPolyCurves = ReorderCurvePositions(castSortedPolyCurves, polyCurveCenter);
+
+            // Ensure the curves have the same direction.
+            List<Curve> orderedCurves = ReorderCurveDirections(sortedPolyCurves, polyCurveCenter);
+
+            return orderedCurves;
+        }
+
+
+        /// <summary>
+        /// Reorder a list of curves based on their angle from the Y axis.
+        /// Best for ordering disorganized curves generated from concave surface perimeters.
+        /// </summary>
+        /// <param name="curves">The input curves.</param>
+        /// <param name="sortingPoint">A point at the center of the input curves.</param>
+        /// <returns name="orderedPolyCurves">The ordered curves.</returns>
+        public static List<Curve> ReorderCurvePositions(List<Curve> curves, Autodesk.DesignScript.Geometry.Point sortingPoint) 
+        {
+            // Get the center point of the curve bounding boxes.
             List<Autodesk.DesignScript.Geometry.Point> centerPoints = new List<Autodesk.DesignScript.Geometry.Point>();
-            foreach (PolyCurve curve in polyCurves) 
-            { 
+            foreach (Curve curve in curves)
+            {
                 // Get the bounding box.
                 BoundingBox boundingBox = curve.BoundingBox;
 
@@ -1104,36 +1133,38 @@ namespace Common
                 centerPoints.Add(centerPoint);
             }
 
-            // Get the center point of the input polycurve's bounding box.
-            BoundingBox polyCurveBoundingBox = polyCurve.BoundingBox;
-            Line polyCurveDiagonalLine = Line.ByStartPointEndPoint(polyCurveBoundingBox.MinPoint, polyCurveBoundingBox.MaxPoint);
-            Autodesk.DesignScript.Geometry.Point polyCurveCenter = polyCurveDiagonalLine.PointAtParameter(0.5);
-
-            // Get the new polycurve angles from the Y axis.
+            // Get the curve angles from the Y axis.
             List<float> anglesFromY = new List<float>();
-            foreach (Autodesk.DesignScript.Geometry.Point centerPoint in centerPoints) 
+            foreach (Autodesk.DesignScript.Geometry.Point centerPoint in centerPoints)
             {
-                // Create vector from the input polycurve center to the new polycurve centers.
-                Autodesk.DesignScript.Geometry.Vector vector = Autodesk.DesignScript.Geometry.Vector.ByTwoPoints(polyCurveCenter, centerPoint);
+                // Create vector from the sorting point to the polycurve bounding box centers.
+                Autodesk.DesignScript.Geometry.Vector vector = Autodesk.DesignScript.Geometry.Vector.ByTwoPoints(sortingPoint, centerPoint);
 
                 // Calculate the angles between the vectors and the Y axis.
                 float angleFromY = (float)Autodesk.DesignScript.Geometry.Vector.YAxis().AngleAboutAxis(vector, Autodesk.DesignScript.Geometry.Vector.ZAxis());
                 anglesFromY.Add(angleFromY);
             }
 
-            // Sort the new polycurves using the angle values.
-            List<PolyCurve> sortedPolyCurves = polyCurves.Zip(anglesFromY, (poly, angleFromY) => new { poly, angleFromY })
+            // Sort the curves using the angle values.
+            List<Curve> sortedCurves = curves.Zip(anglesFromY, (poly, angleFromY) => new { poly, angleFromY })
                 .OrderBy(x => x.angleFromY)
                 .Select(x => x.poly)
                 .ToList();
 
-            return sortedPolyCurves;
+            return sortedCurves;
         }
 
 
-        public static List<float> ReorderCurveDirections(List<Curve> curves) 
+        /// <summary>
+        /// To reorder input curves in the same direction given a point at their center.
+        /// Best for ordering disorganized curves generated from concave surface perimeters.
+        /// </summary>
+        /// <param name="curves">The input curves.</param>
+        /// <param name="sortingPoint">A point at the center of the input curves.</param>
+        /// <returns name="orderedCurves">The ordered curves.</returns>
+        public static List<Curve> ReorderCurveDirections(List<Curve> curves, Autodesk.DesignScript.Geometry.Point sortingPoint) 
         { 
-            List<float> curveNames = new List<float>();
+            List<float> sortingAngles = new List<float>();
             foreach (Curve curve in curves) 
             { 
                 // Get the name of the polycurve type.
@@ -1151,16 +1182,37 @@ namespace Common
                     selectedCurve = curve;
                 }
 
+                // Create a vector between the sorting point and the start point of the selected curve.
+                Autodesk.DesignScript.Geometry.Vector sortingVector = Autodesk.DesignScript.Geometry.Vector
+                    .ByTwoPoints(sortingPoint, selectedCurve.StartPoint);
+
                 // Get the tangent at the start point of the selected curve.
                 Autodesk.DesignScript.Geometry.Vector startTangent = selectedCurve.TangentAtParameter(0);
 
-                // Get the angle of the tangent around the Y axis.
-                float tangentAngle = (float)Autodesk.DesignScript.Geometry.Vector.YAxis()
-                    .AngleAboutAxis(startTangent, Autodesk.DesignScript.Geometry.Vector.ZAxis());
-                curveNames.Add(tangentAngle);
+                // Get the angle of the tangent around the sorting vector.
+                float tangentAngle = (float)sortingVector.AngleAboutAxis(startTangent, Autodesk.DesignScript.Geometry.Vector.ZAxis());
+                sortingAngles.Add(tangentAngle);
             }
 
-            return curveNames;
+            // Combine the curve and sorting angle lists.
+            List<Tuple<Curve, float>> curveAnglePairs = curves.Zip(sortingAngles, (curve, angle) => Tuple.Create(curve, angle)).ToList();
+
+            // Reverse the curve directions if their tangent angle is greater than 180.
+            List<Curve> reversedCurves = new List<Curve>();
+            foreach (Tuple<Curve, float> tuple in curveAnglePairs) 
+            {
+                // Reverse the curve if the sorting angle is greater than 180.
+                if (tuple.Item2 > 180)
+                {
+                    reversedCurves.Add(tuple.Item1.Reverse());
+                }
+                else 
+                { 
+                    reversedCurves.Add(tuple.Item1);
+                }
+            }
+
+            return reversedCurves;
         }
     }
 }
