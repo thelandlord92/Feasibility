@@ -827,6 +827,12 @@ namespace Common
             List<Autodesk.DesignScript.Geometry.Point> points,
             float splitWidth = 1) 
         {
+            // Send an error if the split with is less than 0.001.
+            if (splitWidth < 0.001) 
+            {
+                throw new ArgumentException("The split width cannot be less than 0.001");
+            }
+
             // Get the curves of the polycurve.
             List<Curve> curves = polyCurve.Curves().ToList();
 
@@ -1010,6 +1016,32 @@ namespace Common
                 filteredCurveLists.Add(curveList);
             }
 
+            // Get the split curves intersecting with the projected points.#######
+            List<List<Curve>> splitGapCurveLists = new List<List<Curve>>();
+            for (int i = 0; i < projectedPoints.Count; i++)
+            {
+                List<Curve> curveList = new List<Curve>();
+
+                foreach (Curve curve in splitCurveLists[i])
+                {
+                    bool intersects = false;
+                    foreach (Autodesk.DesignScript.Geometry.Point point in projectedPoints[i])
+                    {
+                        if (curve.DoesIntersect(point))
+                        {
+                            intersects = true;
+                            break; // Exit loop if no intersection is found.
+                        }
+                    }
+                    if (intersects)
+                    {
+                        curveList.Add(curve);
+                    }
+                }
+
+                splitGapCurveLists.Add(curveList);
+            }
+
             // Get the curves not close to the points.
             List<Curve> otherCurves = curves.ToList();
             List<int> sortedIndices = indices.ToList().Distinct().ToList();
@@ -1099,10 +1131,9 @@ namespace Common
         }
 
 
-        public static List<Curve> ReorderCurveDirections(List<Curve> curves) 
+        public static List<float> ReorderCurveDirections(List<Curve> curves) 
         { 
-            // .
-            List<Curve> curveNames = new List<Curve>();
+            List<float> curveNames = new List<float>();
             foreach (Curve curve in curves) 
             { 
                 // Get the name of the polycurve type.
@@ -1121,6 +1152,12 @@ namespace Common
                 }
 
                 // Get the tangent at the start point of the selected curve.
+                Autodesk.DesignScript.Geometry.Vector startTangent = selectedCurve.TangentAtParameter(0);
+
+                // Get the angle of the tangent around the Y axis.
+                float tangentAngle = (float)Autodesk.DesignScript.Geometry.Vector.YAxis()
+                    .AngleAboutAxis(startTangent, Autodesk.DesignScript.Geometry.Vector.ZAxis());
+                curveNames.Add(tangentAngle);
             }
 
             return curveNames;
