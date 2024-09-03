@@ -816,32 +816,45 @@ namespace Common
 
 
         /// <summary>
-        /// Split a polycuve with a list of points and return new polycurves representing the splits.
+        /// Split a polycuve with a list of points and return new curves representing the splits.
         /// </summary>
-        /// <param name="polyCurve">The input polycurve.</param>
+        /// <param name="inputCurves">The input polycurve.</param>
         /// <param name="points">The list of points.</param>
         /// <param name="splitWidth">The width of the split gap at the points.</param>
-        /// <returns name="polyCurves">The new sorted polycurves.</returns>
-        public static List<Curve> SplitPolyCurveByPoints(
-            PolyCurve polyCurve, 
+        /// <returns name="gapCurves">The curves at the split gaps.</returns>
+        /// <returns name="splitCurves">The resulting curves from splitting the input curves.</returns>
+        [MultiReturn(new[] { "gapCurves", "splitCurves" })]
+        public static Dictionary<string, List<Curve>> SplitCurvesByPoints(
+            List<Curve> inputCurves, 
             List<Autodesk.DesignScript.Geometry.Point> points,
             float splitWidth = 1) 
         {
-            // Send an error if the split with is less than 0.001.
+            // Send an error if the split width is less than 0.001.
             if (splitWidth < 0.001) 
             {
                 throw new ArgumentException("The split width cannot be less than 0.001");
             }
 
-            // Get the curves of the polycurve.
-            List<Curve> curves = polyCurve.Curves().ToList();
-
+            // Get the curves of the input curves. Flatten any polycurves into their consistuent curves.
+            List<Curve> allCurves = new List<Curve>();
+            foreach (Curve curve in inputCurves) 
+            {
+                if (curve is PolyCurve polyCurve) 
+                {
+                    allCurves.AddRange(polyCurve.Curves());
+                }
+                else 
+                { 
+                    allCurves.Add(curve);
+                }
+            }
+            
             // Get the distances of the points from the boundary curves.
             List<List<float>> pointDistances = new List<List<float>>();
             foreach (Autodesk.DesignScript.Geometry.Point point in points) 
             {
                 List<float> distanceList = new List<float>();
-                foreach (Curve curve in curves) 
+                foreach (Curve curve in allCurves) 
                 { 
                     distanceList.Add((float)point.DistanceTo(curve));
                 }
@@ -871,7 +884,7 @@ namespace Common
             List<Curve> closestCurves = new List<Curve>();
             foreach (int i in indices) 
             { 
-                closestCurves.Add(curves[i]);
+                closestCurves.Add(allCurves[i]);
             }
 
             // Get the center point strings of the curves closest to the entrance points.
@@ -1016,7 +1029,7 @@ namespace Common
                 filteredCurveLists.Add(curveList);
             }
 
-            // Get the split curves intersecting with the projected points.#######
+            // Get the split curves intersecting with the projected points.
             List<List<Curve>> splitGapCurveLists = new List<List<Curve>>();
             for (int i = 0; i < projectedPoints.Count; i++)
             {
@@ -1043,7 +1056,7 @@ namespace Common
             }
 
             // Get the curves not close to the points.
-            List<Curve> otherCurves = curves.ToList();
+            List<Curve> otherCurves = allCurves.ToList();
             List<int> sortedIndices = indices.ToList().Distinct().ToList();
             sortedIndices.Sort((a, b) => b.CompareTo(a));
             foreach (int i in sortedIndices)
@@ -1086,10 +1099,16 @@ namespace Common
                 polyCurves.Add(PolyCurve.ByJoinedCurves(curveList, 0.001, false));
             }
 
-            // Get the center point of the input polycurve's bounding box.
-            BoundingBox polyCurveBoundingBox = polyCurve.BoundingBox;
-            Line polyCurveDiagonalLine = Line.ByStartPointEndPoint(polyCurveBoundingBox.MinPoint, polyCurveBoundingBox.MaxPoint);
-            Autodesk.DesignScript.Geometry.Point polyCurveCenter = polyCurveDiagonalLine.PointAtParameter(0.5);
+            // Get the average center point of the input curves.
+            List<Autodesk.DesignScript.Geometry.Point> allPoints = new List<Autodesk.DesignScript.Geometry.Point>();
+            foreach (Curve curve in allCurves) 
+            {
+                // Get the start, mid, and end points of all the input curves.
+                allPoints.Add(curve.StartPoint);
+                allPoints.Add(curve.PointAtParameter(0.5));
+                allPoints.Add(curve.EndPoint);
+            }
+            Autodesk.DesignScript.Geometry.Point averagePoint = Line.ByBestFitThroughPoints(allPoints).PointAtParameter(0.5);
 
             // Cast the sorted polycurves to curves.
             List<Curve> castSortedPolyCurves = new List<Curve>();
@@ -1098,13 +1117,29 @@ namespace Common
                 castSortedPolyCurves.Add(curve);
             }
 
-            // Sort the polycurves using the angle values.
-            List<Curve> sortedPolyCurves = ReorderCurvePositions(castSortedPolyCurves, polyCurveCenter);
+            // Sort the polycurves using their angle values around the Y axis.
+            List<Curve> sortedPolyCurves = ReorderCurvePositions(castSortedPolyCurves, averagePoint);
 
             // Ensure the curves have the same direction.
-            List<Curve> orderedCurves = ReorderCurveDirections(sortedPolyCurves, polyCurveCenter);
+            List<Curve> orderedCurves = ReorderCurveDirections(sortedPolyCurves, averagePoint);
 
-            return orderedCurves;
+            // Flatten the gap curve list.
+            List<Curve> flattenedGapCurves = splitGapCurveLists.SelectMany(curveList => curveList).ToList();
+
+            // Sort the gap curves using their angle values around the Y axis.
+            List<Curve> sortedGapCurves = ReorderCurvePositions(flattenedGapCurves, averagePoint);
+
+            // Ensure the gap curves have the same direction.
+            List<Curve> orderedGapCurves = ReorderCurveDirections(sortedGapCurves, averagePoint);
+
+            // Create a dictionary to provide both the curves at the split gaps and the created polycurves.
+            Dictionary<string, List<Curve>> curveDictionary = new Dictionary<string, List<Curve>>
+            {
+                { "gapCurves", orderedGapCurves },
+                { "splitCurves", orderedCurves }
+            };
+
+            return curveDictionary;
         }
 
 

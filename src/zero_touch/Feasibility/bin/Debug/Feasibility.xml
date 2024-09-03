@@ -206,14 +206,15 @@
             <param name="geometry">A list containg geometry to be sorted based on intersections.</param>
             <returns name="geometryList">A list containing the grouped geometry.</returns>
         </member>
-        <member name="M:Common.GeometryTools.SplitPolyCurveByPoints(Autodesk.DesignScript.Geometry.PolyCurve,System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Point},System.Single)">
+        <member name="M:Common.GeometryTools.SplitCurvesByPoints(System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Curve},System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Point},System.Single)">
             <summary>
-            Split a polycuve with a list of points and return new polycurves representing the splits.
+            Split a polycuve with a list of points and return new curves representing the splits.
             </summary>
-            <param name="polyCurve">The input polycurve.</param>
+            <param name="inputCurves">The input polycurve.</param>
             <param name="points">The list of points.</param>
             <param name="splitWidth">The width of the split gap at the points.</param>
-            <returns name="polyCurves">The new sorted polycurves.</returns>
+            <returns name="gapCurves">The curves at the split gaps.</returns>
+            <returns name="splitCurves">The resulting curves from splitting the input curves.</returns>
         </member>
         <member name="M:Common.GeometryTools.ReorderCurvePositions(System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Curve},Autodesk.DesignScript.Geometry.Point)">
             <summary>
