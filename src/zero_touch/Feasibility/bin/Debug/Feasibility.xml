@@ -60,7 +60,7 @@
         </member>
         <member name="M:Common.GeometryTools.SurfacePerimeter(Autodesk.DesignScript.Geometry.Surface)">
             <summary>
-            Get the perimter polycurve of a surface.
+            Get the perimeter polycurve of a surface.
             </summary>
             <param name="surface">The surface input.</param>
             <returns name="polyCurve">The closed perimeter polycurve.</returns>

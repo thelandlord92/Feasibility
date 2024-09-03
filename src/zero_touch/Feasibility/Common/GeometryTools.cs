@@ -10,6 +10,7 @@ using Autodesk.DesignScript.Runtime;
 using Parking;
 using System.Windows.Media;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace Common
 {
@@ -170,7 +171,7 @@ namespace Common
 
 
         /// <summary>
-        /// Get the perimter polycurve of a surface.
+        /// Get the perimeter polycurve of a surface.
         /// </summary>
         /// <param name="surface">The surface input.</param>
         /// <returns name="polyCurve">The closed perimeter polycurve.</returns>
@@ -1095,6 +1096,34 @@ namespace Common
                 .ToList();
 
             return sortedPolyCurves;
+        }
+
+
+        public static List<Curve> ReorderCurveDirections(List<Curve> curves) 
+        { 
+            // .
+            List<Curve> curveNames = new List<Curve>();
+            foreach (Curve curve in curves) 
+            { 
+                // Get the name of the polycurve type.
+                String curveName = curve.GetType().Name;
+
+                Curve selectedCurve;
+                // Check if the curve is a polycurve. If so add the first curve of the polycurve to a list.
+                if (curveName == "PolyCurve") 
+                {
+                    PolyCurve currentCurve = (PolyCurve)curve;
+                    selectedCurve = currentCurve.Curves().ToList()[0];
+                }
+                else 
+                { 
+                    selectedCurve = curve;
+                }
+
+                // Get the tangent at the start point of the selected curve.
+            }
+
+            return curveNames;
         }
     }
 }
