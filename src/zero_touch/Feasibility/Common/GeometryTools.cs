@@ -825,37 +825,37 @@ namespace Common
         /// <returns name="splitCurves">The resulting curves from splitting the input curves.</returns>
         [MultiReturn(new[] { "gapCurves", "splitCurves" })]
         public static Dictionary<string, List<Curve>> SplitCurvesByPoints(
-            List<Curve> inputCurves, 
+            List<Curve> inputCurves,
             List<Autodesk.DesignScript.Geometry.Point> points,
-            float splitWidth = 1) 
+            float splitWidth = 1)
         {
             // Send an error if the split width is less than 0.001.
-            if (splitWidth < 0.001) 
+            if (splitWidth < 0.001)
             {
                 throw new ArgumentException("The split width cannot be less than 0.001");
             }
 
             // Get the curves of the input curves. Flatten any polycurves into their consistuent curves.
             List<Curve> allCurves = new List<Curve>();
-            foreach (Curve curve in inputCurves) 
+            foreach (Curve curve in inputCurves)
             {
-                if (curve is PolyCurve polyCurve) 
+                if (curve is PolyCurve polyCurve)
                 {
                     allCurves.AddRange(polyCurve.Curves());
                 }
-                else 
-                { 
+                else
+                {
                     allCurves.Add(curve);
                 }
             }
-            
+
             // Get the distances of the points from the boundary curves.
             List<List<float>> pointDistances = new List<List<float>>();
-            foreach (Autodesk.DesignScript.Geometry.Point point in points) 
+            foreach (Autodesk.DesignScript.Geometry.Point point in points)
             {
                 List<float> distanceList = new List<float>();
-                foreach (Curve curve in allCurves) 
-                { 
+                foreach (Curve curve in allCurves)
+                {
                     distanceList.Add((float)point.DistanceTo(curve));
                 }
 
@@ -864,8 +864,8 @@ namespace Common
 
             // Get the minumum item in each distance list.
             List<float> minimumDistances = new List<float>();
-            foreach (List<float> distanceList in pointDistances) 
-            { 
+            foreach (List<float> distanceList in pointDistances)
+            {
                 minimumDistances.Add(distanceList.Min());
             }
 
@@ -875,21 +875,21 @@ namespace Common
 
             // Get the index of the minimum items in the distance lists.
             List<int> indices = new List<int>();
-            foreach (List<List<float>> groupedDistances in zippedDistances) 
+            foreach (List<List<float>> groupedDistances in zippedDistances)
             {
                 indices.Add(groupedDistances[1].IndexOf(groupedDistances[0][0]));
             }
 
             // Get the curves at the indices from the curve list. The closest curves to the entrance points. 
             List<Curve> closestCurves = new List<Curve>();
-            foreach (int i in indices) 
-            { 
+            foreach (int i in indices)
+            {
                 closestCurves.Add(allCurves[i]);
             }
 
             // Get the center point strings of the curves closest to the entrance points.
             List<string> curveCenterPointStrings = new List<string>();
-            foreach (Curve curve in closestCurves) 
+            foreach (Curve curve in closestCurves)
             {
                 Autodesk.DesignScript.Geometry.Point centerPoint = curve.PointAtParameter(0.5);
                 string centerPointString = centerPoint.ToString();
@@ -898,17 +898,17 @@ namespace Common
 
             // Group the curves with the same center point string values.
             List<List<Curve>> groupedCurves = new List<List<Curve>>();
-            Dictionary<string, List<Curve>> curveGroups = new Dictionary<string, List<Curve>> ();
-            
-            for (int i = 0; i < curveCenterPointStrings.Count; i++) 
+            Dictionary<string, List<Curve>> curveGroups = new Dictionary<string, List<Curve>>();
+
+            for (int i = 0; i < curveCenterPointStrings.Count; i++)
             {
                 string currentString = curveCenterPointStrings[i];
                 Curve currentCurve = closestCurves[i];
 
                 // If the group doesn't exist yet create it.
-                if (!curveGroups.ContainsKey(currentString)) 
-                { 
-                    curveGroups[currentString] = new List<Curve> ();
+                if (!curveGroups.ContainsKey(currentString))
+                {
+                    curveGroups[currentString] = new List<Curve>();
                 }
 
                 // Add the curve to the appropriate group.
@@ -919,14 +919,14 @@ namespace Common
             List<List<Curve>> tempCurves = curveGroups.Values.ToList();
 
             // Remove duplicate curves from the curve lists.
-            foreach (List<Curve> curveList in tempCurves) 
+            foreach (List<Curve> curveList in tempCurves)
             {
                 // Get the first curve if the list count is greater than 1.
-                if (curveList.Count > 1) 
+                if (curveList.Count > 1)
                 {
                     groupedCurves.Add(new List<Curve> { curveList[0] });
                 }
-                else 
+                else
                 {
                     groupedCurves.Add(curveList);
                 }
@@ -956,10 +956,10 @@ namespace Common
 
             // Project the points onto the curves.
             List<List<Autodesk.DesignScript.Geometry.Point>> projectedPoints = new List<List<Autodesk.DesignScript.Geometry.Point>>();
-            for (int i = 0; i < groupedCurves.Count; i++) 
+            for (int i = 0; i < groupedCurves.Count; i++)
             {
                 List<Autodesk.DesignScript.Geometry.Point> pointList = new List<Autodesk.DesignScript.Geometry.Point>();
-                for (int j = 0; j < groupedPoints[i].Count; j++) 
+                for (int j = 0; j < groupedPoints[i].Count; j++)
                 {
                     pointList.Add(groupedCurves[i][0].ClosestPointTo(groupedPoints[i][j]));
                 }
@@ -968,10 +968,10 @@ namespace Common
 
             // Get the curve parameters at the location of the projected points.
             List<List<float>> projectedPointParameters = new List<List<float>>();
-            for (int i = 0; i < groupedCurves.Count; i++) 
+            for (int i = 0; i < groupedCurves.Count; i++)
             {
                 List<float> parameterList = new List<float>();
-                for (int j = 0;j < projectedPoints[i].Count; j++) 
+                for (int j = 0; j < projectedPoints[i].Count; j++)
                 {
                     parameterList.Add((float)groupedCurves[i][0].ParameterAtPoint(projectedPoints[i][j]));
                 }
@@ -983,12 +983,12 @@ namespace Common
 
             // Create points from the curve parameter with the split widths.
             List<List<Autodesk.DesignScript.Geometry.Point>> splitPoints = new List<List<Autodesk.DesignScript.Geometry.Point>>();
-            for (int i = 0; i < groupedCurves.Count; i++) 
+            for (int i = 0; i < groupedCurves.Count; i++)
             {
                 List<Autodesk.DesignScript.Geometry.Point> pointList = new List<Autodesk.DesignScript.Geometry.Point>();
-                for (int j = 0; j < projectedPointParameters[i].Count; j++) 
+                for (int j = 0; j < projectedPointParameters[i].Count; j++)
                 {
-                    foreach (float distance in entranceHalfDistances) 
+                    foreach (float distance in entranceHalfDistances)
                     {
                         pointList.Add(groupedCurves[i][0].PointAtChordLength(distance, projectedPointParameters[i][j], true));
                     }
@@ -998,8 +998,8 @@ namespace Common
 
             // Split the curves with the point lists.
             List<List<Curve>> splitCurveLists = new List<List<Curve>>();
-            for (int i = 0; i < groupedCurves.Count; i++) 
-            { 
+            for (int i = 0; i < groupedCurves.Count; i++)
+            {
                 splitCurveLists.Add(groupedCurves[i][0].SplitByPoints(splitPoints[i]).ToList());
             }
 
@@ -1072,8 +1072,8 @@ namespace Common
 
             // Cast the curves to geometry for grouping.
             List<Autodesk.DesignScript.Geometry.Geometry> combinedGeometry = new List<Autodesk.DesignScript.Geometry.Geometry>();
-            foreach (Curve curve in combinedCurves) 
-            { 
+            foreach (Curve curve in combinedCurves)
+            {
                 combinedGeometry.Add(curve);
             }
 
@@ -1081,27 +1081,27 @@ namespace Common
             List<List<Autodesk.DesignScript.Geometry.Geometry>> intersectingCurves = SortIntersectingGeometry(combinedGeometry);
 
             // Cast the intersecting curve groups. 
-            List<List<Curve>> castIntersectingCurves = new List<List<Curve>> ();
-            foreach (List<Autodesk.DesignScript.Geometry.Geometry> geometryList in intersectingCurves) 
-            { 
-                List<Curve> curveList = new List<Curve> ();
-                foreach (Autodesk.DesignScript.Geometry.Geometry geometry in geometryList) 
-                { 
-                    curveList.Add(geometry as  Curve);
+            List<List<Curve>> castIntersectingCurves = new List<List<Curve>>();
+            foreach (List<Autodesk.DesignScript.Geometry.Geometry> geometryList in intersectingCurves)
+            {
+                List<Curve> curveList = new List<Curve>();
+                foreach (Autodesk.DesignScript.Geometry.Geometry geometry in geometryList)
+                {
+                    curveList.Add(geometry as Curve);
                 }
                 castIntersectingCurves.Add(curveList);
             }
 
             // Create polycurves from the grouped intersecting curves. 
-            List<PolyCurve> polyCurves = new List<PolyCurve>(); 
-            foreach (List<Curve> curveList in castIntersectingCurves) 
+            List<PolyCurve> polyCurves = new List<PolyCurve>();
+            foreach (List<Curve> curveList in castIntersectingCurves)
             {
                 polyCurves.Add(PolyCurve.ByJoinedCurves(curveList, 0.001, false));
             }
 
             // Get the average center point of the input curves.
             List<Autodesk.DesignScript.Geometry.Point> allPoints = new List<Autodesk.DesignScript.Geometry.Point>();
-            foreach (Curve curve in allCurves) 
+            foreach (Curve curve in allCurves)
             {
                 // Get the start, mid, and end points of all the input curves.
                 allPoints.Add(curve.StartPoint);
