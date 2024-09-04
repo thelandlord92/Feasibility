@@ -850,7 +850,24 @@ namespace Common
             {
                 throw new ArgumentException("The number of split widths must match the number of points");
             }
-            
+
+            // Check if there are any intersecting geometries
+            for (int i = 0; i < inputCurves.Count; i++)
+            {
+                for (int j = 0; j < inputCurves.Count; j++)
+                {
+                    // Skip self-intersection check
+                    if (i == j)
+                        continue;
+
+                    // Check if curve[i] intersects with curve[j]
+                    if (inputCurves[i].DoesIntersect(inputCurves[j]))
+                    {
+                        throw new Exception("No intersecting curves allowed");
+                    }
+                }
+            }
+
             // Get the curves of the input curves. Flatten any polycurves into their consistuent curves.
             List<Curve> allCurves = new List<Curve>();
             foreach (Curve curve in inputCurves)
