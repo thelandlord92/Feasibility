@@ -820,21 +820,37 @@ namespace Common
         /// </summary>
         /// <param name="inputCurves">The input polycurve.</param>
         /// <param name="points">The list of points.</param>
-        /// <param name="splitWidth">The width of the split gap at the points.</param>
-        /// <returns name="gapCurves">The curves at the split gaps.</returns>
+        /// <param name="splitWidths">The width of the split gap at the points.</param>
+        /// <returns name="gapCurves">The curves within the split gaps.</returns>
+        /// <returns name="splitCenter">The input points projected onto the curves and at the center of the split.</returns>
         /// <returns name="splitCurves">The resulting curves from splitting the input curves.</returns>
-        [MultiReturn(new[] { "gapCurves", "splitCurves" })]
-        public static Dictionary<string, List<Curve>> SplitCurvesByPoints(
+        /// <returns name="splitPoints">The points on either side of the input points used in splitting the curves.</returns>
+        [MultiReturn(new[] { "gapCurves", "splitCenter", "splitCurves", "splitPoints" })]
+        public static Dictionary<string, object> SplitCurvesByPoints(
             List<Curve> inputCurves,
             List<Autodesk.DesignScript.Geometry.Point> points,
-            float splitWidth = 1)
+            List<float> splitWidths)
         {
-            // Send an error if the split width is less than 0.001.
-            if (splitWidth < 0.001)
+            // Throw an error if the split width is less than 0.001.
+            foreach (float width in splitWidths) 
             {
-                throw new ArgumentException("The split width cannot be less than 0.001");
+                if (width < 0.001)
+                {
+                    throw new ArgumentException("The split width cannot be less than 0.001");
+                }
             }
 
+            // Ensure the splitWidths has the same length as points or duplicate the single value if only one provided.
+            if (splitWidths.Count == 1)
+            {
+                float singleWidth = splitWidths[0];
+                splitWidths = Enumerable.Repeat(singleWidth, points.Count).ToList();
+            }
+            else if (splitWidths.Count != points.Count)
+            {
+                throw new ArgumentException("The number of split widths must match the number of points");
+            }
+            
             // Get the curves of the input curves. Flatten any polycurves into their consistuent curves.
             List<Curve> allCurves = new List<Curve>();
             foreach (Curve curve in inputCurves)
@@ -951,7 +967,7 @@ namespace Common
                 pointGroups[currentString].Add(currentPoint);
             }
 
-            // Convert the dictionary values to a list of lists.
+            // Convert the point dictionary values to a list of lists.
             groupedPoints = pointGroups.Values.ToList();
 
             // Project the points onto the curves.
@@ -979,28 +995,62 @@ namespace Common
             }
 
             // Create a list of numbers to indicate half of the split width.
-            List<float> entranceHalfDistances = Maths.Range(splitWidth / 2, -splitWidth / 2, 2);
-
-            // Create points from the curve parameter with the split widths.
-            List<List<Autodesk.DesignScript.Geometry.Point>> splitPoints = new List<List<Autodesk.DesignScript.Geometry.Point>>();
-            for (int i = 0; i < groupedCurves.Count; i++)
+            List<List<float>> entranceHalfDistances = new List<List<float>>();
+            foreach (float width in splitWidths) 
             {
-                List<Autodesk.DesignScript.Geometry.Point> pointList = new List<Autodesk.DesignScript.Geometry.Point>();
-                for (int j = 0; j < projectedPointParameters[i].Count; j++)
-                {
-                    foreach (float distance in entranceHalfDistances)
-                    {
-                        pointList.Add(groupedCurves[i][0].PointAtChordLength(distance, projectedPointParameters[i][j], true));
-                    }
-                }
-                splitPoints.Add(pointList);
+                entranceHalfDistances.Add(Maths.Range(width / 2, -width / 2, 2));
             }
 
-            // Split the curves with the point lists.
+            // Group the half distances by the curve center point string values.
+            List<List<List<float>>> groupedSplitDistances = new List<List<List<float>>>();
+            Dictionary<string, List<List<float>>> distanceGroups = new Dictionary<string, List<List<float>>>();
+
+            for (int i = 0; i < curveCenterPointStrings.Count; i++)
+            {
+                string currentString = curveCenterPointStrings[i];
+                List<float> currentDistances = entranceHalfDistances[i];
+
+                // If the group doesn't exist yet, create it.
+                if (!distanceGroups.ContainsKey(currentString))
+                {
+                    distanceGroups[currentString] = new List<List<float>>();
+                }
+
+                // Add the point to the appropriate group.
+                distanceGroups[currentString].Add(currentDistances);
+            }
+
+            // Convert the distance dictionary values to a list of lists.
+            groupedSplitDistances = distanceGroups.Values.ToList();
+
+            // Create points from the curve parameter with the split widths.##########Adjust here!!!!!!
+            List<List<List<Autodesk.DesignScript.Geometry.Point>>> splitPoints = new List<List<List<Autodesk.DesignScript.Geometry.Point>>>();
+            for (int i = 0; i < groupedCurves.Count; i++)
+            {
+                List<List<Autodesk.DesignScript.Geometry.Point>> pointListGroup = new List<List<Autodesk.DesignScript.Geometry.Point>>();
+                for (int j = 0; j < projectedPointParameters[i].Count; j++)
+                {
+                    List<Autodesk.DesignScript.Geometry.Point> pointList = new List<Autodesk.DesignScript.Geometry.Point>();
+                    for (int k = 0; k < groupedSplitDistances[i][j].Count; k++) 
+                    {
+                        pointList.Add(groupedCurves[i][0].PointAtChordLength(groupedSplitDistances[i][j][k], projectedPointParameters[i][j], true));
+                    }
+                    pointListGroup.Add(pointList);
+                }
+                splitPoints.Add(pointListGroup);
+            }
+
+            // Split the curves with the new splitPoints structure.
             List<List<Curve>> splitCurveLists = new List<List<Curve>>();
             for (int i = 0; i < groupedCurves.Count; i++)
             {
-                splitCurveLists.Add(groupedCurves[i][0].SplitByPoints(splitPoints[i]).ToList());
+                // Flatten the inner lists of splitPoints for the current curve
+                List<Autodesk.DesignScript.Geometry.Point> flatPoints = splitPoints[i]
+                    .SelectMany(innerList => innerList)
+                    .ToList();
+
+                // Split the curve using the flattened list of points
+                splitCurveLists.Add(groupedCurves[i][0].SplitByPoints(flatPoints).ToList());
             }
 
             // Remove the split curves intersecting with the projected points.
@@ -1099,17 +1149,6 @@ namespace Common
                 polyCurves.Add(PolyCurve.ByJoinedCurves(curveList, 0.001, false));
             }
 
-            // Get the average center point of the input curves.
-            List<Autodesk.DesignScript.Geometry.Point> allPoints = new List<Autodesk.DesignScript.Geometry.Point>();
-            foreach (Curve curve in allCurves)
-            {
-                // Get the start, mid, and end points of all the input curves.
-                allPoints.Add(curve.StartPoint);
-                allPoints.Add(curve.PointAtParameter(0.5));
-                allPoints.Add(curve.EndPoint);
-            }
-            Autodesk.DesignScript.Geometry.Point averagePoint = Line.ByBestFitThroughPoints(allPoints).PointAtParameter(0.5);
-
             // Cast the sorted polycurves to curves.
             List<Curve> castSortedPolyCurves = new List<Curve>();
             foreach (PolyCurve curve in polyCurves)
@@ -1117,26 +1156,19 @@ namespace Common
                 castSortedPolyCurves.Add(curve);
             }
 
-            // Sort the polycurves using their angle values around the Y axis.
-            List<Curve> sortedPolyCurves = ReorderCurvePositions(castSortedPolyCurves, averagePoint);
-
-            // Ensure the curves have the same direction.
-            List<Curve> orderedCurves = ReorderCurveDirections(sortedPolyCurves, averagePoint);
-
             // Flatten the gap curve list.
             List<Curve> flattenedGapCurves = splitGapCurveLists.SelectMany(curveList => curveList).ToList();
 
-            // Sort the gap curves using their angle values around the Y axis.
-            List<Curve> sortedGapCurves = ReorderCurvePositions(flattenedGapCurves, averagePoint);
+            // Flatten the projected point list.
+            List<Autodesk.DesignScript.Geometry.Point> flattenedPoints = projectedPoints.SelectMany(pointList => pointList).ToList();
 
-            // Ensure the gap curves have the same direction.
-            List<Curve> orderedGapCurves = ReorderCurveDirections(sortedGapCurves, averagePoint);
-
-            // Create a dictionary to provide both the curves at the split gaps and the created polycurves.
-            Dictionary<string, List<Curve>> curveDictionary = new Dictionary<string, List<Curve>>
+            // Create a dictionary to provide various elements.
+            Dictionary<string, object> curveDictionary = new Dictionary<string, object>
             {
-                { "gapCurves", orderedGapCurves },
-                { "splitCurves", orderedCurves }
+                { "gapCurves", flattenedGapCurves }, // flattenedGapCurves
+                { "splitCenter", flattenedPoints },
+                { "splitCurves", castSortedPolyCurves }, // castSortedPolyCurves
+                { "splitPoints", splitPoints } 
             };
 
             return curveDictionary;
@@ -1248,6 +1280,28 @@ namespace Common
             }
 
             return reversedCurves;
+        }
+
+
+        /// <summary>
+        /// Get the average center point of a list of input curves.
+        /// </summary>
+        /// <param name="curves">The input curves.</param>
+        /// <returns name="averageCenter">The average center point.</returns>
+        public static Autodesk.DesignScript.Geometry.Point CurveListAverageCenter(List<Curve> curves) 
+        {
+            // Get the average center point of the input curves.
+            List<Autodesk.DesignScript.Geometry.Point> allPoints = new List<Autodesk.DesignScript.Geometry.Point>();
+            foreach (Curve curve in curves)
+            {
+                // Get the start, mid, and end points of all the input curves.
+                allPoints.Add(curve.StartPoint);
+                allPoints.Add(curve.PointAtParameter(0.5));
+                allPoints.Add(curve.EndPoint);
+            }
+            Autodesk.DesignScript.Geometry.Point averagePoint = Line.ByBestFitThroughPoints(allPoints).PointAtParameter(0.5);
+
+            return averagePoint;
         }
     }
 }

@@ -206,15 +206,17 @@
             <param name="geometry">A list containg geometry to be sorted based on intersections.</param>
             <returns name="geometryList">A list containing the grouped geometry.</returns>
         </member>
-        <member name="M:Common.GeometryTools.SplitCurvesByPoints(System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Curve},System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Point},System.Single)">
+        <member name="M:Common.GeometryTools.SplitCurvesByPoints(System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Curve},System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Point},System.Collections.Generic.List{System.Single})">
             <summary>
             Split a polycuve with a list of points and return new curves representing the splits.
             </summary>
             <param name="inputCurves">The input polycurve.</param>
             <param name="points">The list of points.</param>
-            <param name="splitWidth">The width of the split gap at the points.</param>
-            <returns name="gapCurves">The curves at the split gaps.</returns>
+            <param name="splitWidths">The width of the split gap at the points.</param>
+            <returns name="gapCurves">The curves within the split gaps.</returns>
+            <returns name="splitCenter">The input points projected onto the curves and at the center of the split.</returns>
             <returns name="splitCurves">The resulting curves from splitting the input curves.</returns>
+            <returns name="splitPoints">The points on either side of the input points used in splitting the curves.</returns>
         </member>
         <member name="M:Common.GeometryTools.ReorderCurvePositions(System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Curve},Autodesk.DesignScript.Geometry.Point)">
             <summary>
@@ -233,6 +235,13 @@
             <param name="curves">The input curves.</param>
             <param name="sortingPoint">A point at the center of the input curves.</param>
             <returns name="orderedCurves">The ordered curves.</returns>
+        </member>
+        <member name="M:Common.GeometryTools.CurveListAverageCenter(System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Curve})">
+            <summary>
+            Get the average center point of a list of input curves.
+            </summary>
+            <param name="curves">The input curves.</param>
+            <returns name="averageCenter">The average center point.</returns>
         </member>
         <member name="T:Common.Maths">
             <summary>
