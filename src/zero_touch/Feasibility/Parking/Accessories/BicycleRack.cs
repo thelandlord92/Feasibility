@@ -11,28 +11,28 @@ namespace Parking.Accessories
     /// <summary>
     /// Wrapper class for the bicycle racks.
     /// </summary>
-    public class BicycleRack
+    internal class BicycleRack
     {
         /// <summary>
         /// The target plane of the bicycle rack.
         /// </summary>
         public Plane TargetPlane { private get; set; }
 
-        private float _rackDiameter;
+        private float _tubeDiameter;
 
         /// <summary>
         /// The diameter of the bicycle rack's tube.
         /// </summary>
-        public float RackDiameter 
-        { 
-            get { return _rackDiameter; }
-            set 
+        public float TubeDiameter
+        {
+            get { return _tubeDiameter; }
+            set
             {
-                if (value == 0) 
+                if (value == 0)
                 {
                     throw new ArgumentException("The rack tube diameter cannot be zero");
                 }
-                _rackDiameter = value;
+                _tubeDiameter = value;
             }
         }
 
@@ -41,10 +41,10 @@ namespace Parking.Accessories
         /// <summary>
         /// The height of the bicycle rack.
         /// </summary>
-        public float RackHeight 
+        public float RackHeight
         {
             get { return _rackHeight; }
-            set 
+            set
             {
                 if (value == 0)
                 {
@@ -59,7 +59,7 @@ namespace Parking.Accessories
         /// <summary>
         /// The length of the bicycle rack.
         /// </summary>
-        public float RackLength 
+        public float RackLength
         {
             get { return _rackLength; }
             set
@@ -77,76 +77,102 @@ namespace Parking.Accessories
         /// </summary>
         public float RackAngle { private get; set; }
 
+        /// <summary>
+        /// The bicycle rack type.
+        /// </summary>
+        public BicycleRackTypes BicycleRackType {  get; set; }
+
 
         /// <summary>
         /// Creates a bicycle rack instance.
         /// </summary>
         /// <param name="targetPlane">The target plane to transform the rack.</param>
-        /// <param name="rackDiameter">The diameter of the bicycle rack's tube.</param>
-        /// <param name="rackHeight">The height of the bicycle rack.</param>
-        /// <param name="rackLength">The length of the bicycle rack.</param>
         /// <param name="rackAngle">The angle of the bicycle rack.</param>
         public BicycleRack(
-            Plane targetPlane,
-            float rackDiameter = 0.032f, 
-            float rackHeight = 1f, 
-            float rackLength = 1.5f, 
+            Plane targetPlane = null,
             float rackAngle = 0f)
         {
             TargetPlane = targetPlane;
-            RackDiameter = rackDiameter;
-            RackHeight = rackHeight;
-            RackLength = rackLength;
             RackAngle = rackAngle;
         }
 
         /// <summary>
         /// To create an inverted U bicycle rack.
         /// </summary>
+        /// <param name="rackHeight">The height of the bicycle rack.</param>
+        /// <param name="rackLength">The length of the bicycle rack.</param>
         /// <param name="cornerRadius">The corner radius of the rack tube.</param>
         /// <param name="basePlateDiameter">The diameter of the rack base plates.</param>
         /// <param name="basePlateThickness">Thickness of the rack base plates.</param>
+        /// <param name="tubeDiameter">The diameter of the bicycle rack's tube.</param>
         /// <returns name="rackSolid">The solid of the bicycle rack.</returns>
         /// <exception cref="Exception"></exception>
         public Solid CreateInvertedURack(
+            float rackHeight = 1f,
+            float rackLength = 1f,
             float cornerRadius = 0.15f, 
             float basePlateDiameter = 0.1f, 
-            float basePlateThickness = 0.01f) 
+            float basePlateThickness = 0.01f,
+            float tubeDiameter = 0.032f) 
         {
+            // Check if the rack height is zero.
+            if (rackHeight <= 0) 
+            {
+                throw new ArgumentException("The rack height cannot be zero");
+            }
+
+            // Check if the rack length is zero.
+            if (rackLength <= 0)
+            {
+                throw new ArgumentException("The rack length cannot be zero");
+            }
+
             // Check if the corner radius is zero.
-            if (cornerRadius == 0)
+            if (cornerRadius <= 0)
             {
                 throw new ArgumentException("The corner radius cannot be zero.");
             }
 
             // Check if the base plate diameter is zero.
-            if (basePlateDiameter == 0)
+            if (basePlateDiameter <= 0)
             {
                 throw new ArgumentException("The base plate diameter cannot be zero.");
             }
 
             // Check if the base plate diameter is zero.
-            if (basePlateThickness == 0)
+            if (basePlateThickness <= 0)
             {
                 throw new ArgumentException("The base plate thickness cannot be zero.");
             }
+
+            // Check if the tube diameter is zero.
+            if (tubeDiameter <= 0)
+            {
+                throw new ArgumentException("The rack tube diameter cannot be zero");
+            }
+
+            // Set the class attributes.
+            RackHeight = rackHeight;
+            RackLength = rackLength;
+            TubeDiameter = tubeDiameter;
+            BicycleRackType = BicycleRackTypes.InvertedURack;
 
             // Create the rack center point.
             Autodesk.DesignScript.Geometry.Point point = Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 0);
 
             // Create the rack points.
             Autodesk.DesignScript.Geometry.Point firstPoint = Autodesk.DesignScript.Geometry.Point.ByCoordinates
-                ((-RackLength / 2) + (RackDiameter / 2), 0);
+                ((-rackLength / 2) + (tubeDiameter / 2), 0);
             Autodesk.DesignScript.Geometry.Point secondPoint = Autodesk.DesignScript.Geometry.Point.ByCoordinates(
-                -RackLength / 2 + RackDiameter / 2,
+                -rackLength / 2 + tubeDiameter / 2,
                 0,
-                RackHeight - RackDiameter/2);
+                rackHeight - tubeDiameter/2);
             Autodesk.DesignScript.Geometry.Point thirdPoint = Autodesk.DesignScript.Geometry.Point.ByCoordinates(
-                RackLength / 2 - RackDiameter / 2,
+                rackLength / 2 - tubeDiameter / 2,
                 0,
-                RackHeight - RackDiameter / 2);
+                rackHeight - tubeDiameter / 2);
             Autodesk.DesignScript.Geometry.Point fourthPoint = Autodesk.DesignScript.Geometry.Point.ByCoordinates(
-                RackLength / 2 - RackDiameter / 2, 0);
+                rackLength / 2 - tubeDiameter / 2, 0);
 
             // Add the rack points to a list.
             List<Autodesk.DesignScript.Geometry.Point> points = new List<Autodesk.DesignScript.Geometry.Point>();
@@ -178,7 +204,7 @@ namespace Parking.Accessories
             }
             
             // Create a circle at the first point.
-            Circle circle = Circle.ByCenterPointRadius(firstPoint, RackDiameter / 2);
+            Circle circle = Circle.ByCenterPointRadius(firstPoint, tubeDiameter / 2);
  
             // Create a list to hold all the solids.
             List<Solid> rackSolids = new List<Solid>();
@@ -244,28 +270,39 @@ namespace Parking.Accessories
             return transformedRack[0] as Solid;
         }
 
-        public BicycleRack WERw(int er) 
-        {
-            return null;
-        }
-
 
         /// <summary>
         /// Create a wave-shaped bicycle rack.
         /// </summary>
+        /// <param name="rackHeight">The height of the bicycle rack.</param>
+        /// <param name="rackLength">The length of the bicycle rack.</param>
         /// <param name="numberOfWaves">The number of waves in the rack.</param>
-        /// <param name="waveOffsetFromBase">The vertical offset of the wave from the base level.</param>
+        /// <param name="waveOffsetFromBase">The vertical offset of the wave tube from the base level.</param>
         /// <param name="plateDiameter">The diameter of the base plates.</param>
         /// <param name="plateThickness">The thickness of the base plates.</param>
+        /// <param name="tubeDiameter">The diameter of the bicycle rack's tube.</param>
         /// <returns>A list of curves representing the wave bicycle rack.</returns>
         /// <exception cref="ArgumentException">Thrown when an invalid argument is provided.</exception>
         public Solid CreateWaveRack(
+            float rackHeight = 1f,
+            float rackLength = 1f,
             int numberOfWaves = 1,
             float waveOffsetFromBase = 0.1f,
             float plateDiameter = 0.1f,
-            float plateThickness = 0.01f)
+            float plateThickness = 0.01f,
+            float tubeDiameter = 0.032f)
         {
             // Validate inputs
+            if (rackHeight <= 0)
+            {
+                throw new ArgumentException("The rack height cannot be zero");
+            }
+
+            if (rackLength <= 0)
+            {
+                throw new ArgumentException("The rack length cannot be zero");
+            }
+
             if (numberOfWaves < 1)
             {
                 throw new ArgumentException("The number of waves must be at least 1.");
@@ -281,29 +318,40 @@ namespace Parking.Accessories
                 throw new ArgumentException("The plate thickness must be greater than zero.");
             }
 
+            if (tubeDiameter <= 0)
+            {
+                throw new ArgumentException("The rack tube diameter cannot be zero");
+            }
+
+            // Set the class attributes.
+            RackHeight = rackHeight;
+            RackLength = rackLength;
+            TubeDiameter = tubeDiameter;
+            BicycleRackType = BicycleRackTypes.WaveRack;
+
             // Create the central point of the rack
             Autodesk.DesignScript.Geometry.Point origin = Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 0);
 
             // Calculate the wave radius
-            float waveRadius = ((RackLength - RackDiameter) / (numberOfWaves * 2 + 1)) / 2;
+            float waveRadius = ((rackLength - tubeDiameter) / (numberOfWaves * 2 + 1)) / 2;
 
             // Create the starting point for the wave
             Autodesk.DesignScript.Geometry.Point startPoint = Autodesk.DesignScript.Geometry.Point.ByCoordinates(
-                (-RackLength / 2) + (RackDiameter / 2), 0);
+                (-rackLength / 2) + (tubeDiameter / 2), 0);
 
             // Create the end point for the wave
             Autodesk.DesignScript.Geometry.Point endPoint = Autodesk.DesignScript.Geometry.Point.ByCoordinates(
-                (RackLength / 2) - (RackDiameter / 2), 0);
+                (rackLength / 2) - (tubeDiameter / 2), 0);
 
             // Create a circle at the start point (representing a cross-section of the rack)
-            Circle crossSection = Circle.ByCenterPointRadius(startPoint, RackDiameter / 2);
+            Circle crossSection = Circle.ByCenterPointRadius(startPoint, tubeDiameter / 2);
 
             // Create the first vertical line of the wave
             List<Curve> leftCurves = new List<Curve>();
             Curve verticalLine = Line.ByStartPointDirectionLength(
                 startPoint,
                 Autodesk.DesignScript.Geometry.Vector.ZAxis(),
-                RackHeight - waveRadius - RackDiameter / 2
+                rackHeight - waveRadius - tubeDiameter / 2
             ) as Curve;
 
             Curve arc;
@@ -311,7 +359,7 @@ namespace Parking.Accessories
             {
                 // Create the arc for the wave
                 Autodesk.DesignScript.Geometry.Point arcCenter = Autodesk.DesignScript.Geometry.Point.ByCoordinates(
-                    startPoint.X + waveRadius, 0, RackHeight - waveRadius - RackDiameter / 2);
+                    startPoint.X + waveRadius, 0, rackHeight - waveRadius - tubeDiameter / 2);
                 Plane arcPlane = Plane.ByOriginNormal(arcCenter, Autodesk.DesignScript.Geometry.Vector.YAxis());
                 arc = EllipseArc.ByPlaneRadiiAngles(arcPlane, waveRadius, waveRadius, -90, 90);
             }
@@ -337,9 +385,9 @@ namespace Parking.Accessories
             {
                 // Create the first wave
                 waveBasePoint = Autodesk.DesignScript.Geometry.Point.ByCoordinates(
-                    (- RackLength / 2) + (RackDiameter / 2) + (waveRadius * 3),
+                    (- rackLength / 2) + (tubeDiameter / 2) + (waveRadius * 3),
                     0, 
-                    waveOffsetFromBase + RackDiameter / 2 + waveRadius);
+                    waveOffsetFromBase + tubeDiameter / 2 + waveRadius);
                 Plane waveBaseArcPlane = Plane.ByOriginNormal(waveBasePoint, Autodesk.DesignScript.Geometry.Vector.YAxis());
                 waveBaseArc = EllipseArc.ByPlaneRadiiAngles(waveBaseArcPlane, waveRadius, waveRadius, -90, -180);
             }

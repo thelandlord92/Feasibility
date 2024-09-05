@@ -324,6 +324,35 @@
             <returns name="textPolyCurves">The polycurves of the text.</returns>
             <returns name="textSolids">The solids of the text.</returns>
         </member>
+        <member name="T:Parking.Accessories.Accessories">
+            <summary>
+            Wrapper class for the parking accessories.
+            Compiles all the required accessories for the parking bay.
+            </summary>
+        </member>
+        <member name="P:Parking.Accessories.Accessories.BicycleRack">
+            <summary>
+            The bicycle rack accessory input.
+            </summary>
+        </member>
+        <member name="P:Parking.Accessories.Accessories.WheelStop">
+            <summary>
+            The wheelstop accessory input.
+            </summary>
+        </member>
+        <member name="P:Parking.Accessories.Accessories.ChargingStation">
+            <summary>
+            The charging station accessory input.
+            </summary>
+        </member>
+        <member name="M:Parking.Accessories.Accessories.#ctor(Parking.Accessories.BicycleRackTypes,Parking.Accessories.ChargingStationTypes,Parking.Accessories.WheelStopTypes)">
+            <summary>
+            To group accessories to be assigned to the parking bay type.
+            </summary>
+            <param name="bicycleRackType">The bicycle rack type.</param>
+            /// <param name="chargingStationType">The charging station type.</param>
+            <param name="wheelStopType">The wheel stop type.</param>
+        </member>
         <member name="T:Parking.Accessories.BicycleRack">
             <summary>
             Wrapper class for the bicycle racks.
@@ -334,7 +363,7 @@
             The target plane of the bicycle rack.
             </summary>
         </member>
-        <member name="P:Parking.Accessories.BicycleRack.RackDiameter">
+        <member name="P:Parking.Accessories.BicycleRack.TubeDiameter">
             <summary>
             The diameter of the bicycle rack's tube.
             </summary>
@@ -354,34 +383,42 @@
             The angle of the bicycle rack.
             </summary>
         </member>
-        <member name="M:Parking.Accessories.BicycleRack.#ctor(Autodesk.DesignScript.Geometry.Plane,System.Single,System.Single,System.Single,System.Single)">
+        <member name="P:Parking.Accessories.BicycleRack.BicycleRackType">
+            <summary>
+            The bicycle rack type.
+            </summary>
+        </member>
+        <member name="M:Parking.Accessories.BicycleRack.#ctor(Autodesk.DesignScript.Geometry.Plane,System.Single)">
             <summary>
             Creates a bicycle rack instance.
             </summary>
             <param name="targetPlane">The target plane to transform the rack.</param>
-            <param name="rackDiameter">The diameter of the bicycle rack's tube.</param>
-            <param name="rackHeight">The height of the bicycle rack.</param>
-            <param name="rackLength">The length of the bicycle rack.</param>
             <param name="rackAngle">The angle of the bicycle rack.</param>
         </member>
-        <member name="M:Parking.Accessories.BicycleRack.CreateInvertedURack(System.Single,System.Single,System.Single)">
+        <member name="M:Parking.Accessories.BicycleRack.CreateInvertedURack(System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)">
             <summary>
             To create an inverted U bicycle rack.
             </summary>
+            <param name="rackHeight">The height of the bicycle rack.</param>
+            <param name="rackLength">The length of the bicycle rack.</param>
             <param name="cornerRadius">The corner radius of the rack tube.</param>
             <param name="basePlateDiameter">The diameter of the rack base plates.</param>
             <param name="basePlateThickness">Thickness of the rack base plates.</param>
+            <param name="tubeDiameter">The diameter of the bicycle rack's tube.</param>
             <returns name="rackSolid">The solid of the bicycle rack.</returns>
             <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="M:Parking.Accessories.BicycleRack.CreateWaveRack(System.Int32,System.Single,System.Single,System.Single)">
+        <member name="M:Parking.Accessories.BicycleRack.CreateWaveRack(System.Single,System.Single,System.Int32,System.Single,System.Single,System.Single,System.Single)">
             <summary>
             Create a wave-shaped bicycle rack.
             </summary>
+            <param name="rackHeight">The height of the bicycle rack.</param>
+            <param name="rackLength">The length of the bicycle rack.</param>
             <param name="numberOfWaves">The number of waves in the rack.</param>
-            <param name="waveOffsetFromBase">The vertical offset of the wave from the base level.</param>
+            <param name="waveOffsetFromBase">The vertical offset of the wave tube from the base level.</param>
             <param name="plateDiameter">The diameter of the base plates.</param>
             <param name="plateThickness">The thickness of the base plates.</param>
+            <param name="tubeDiameter">The diameter of the bicycle rack's tube.</param>
             <returns>A list of curves representing the wave bicycle rack.</returns>
             <exception cref="T:System.ArgumentException">Thrown when an invalid argument is provided.</exception>
         </member>
@@ -680,7 +717,12 @@
             To set the parking type.
             </summary>
         </member>
-        <member name="M:Parking.ParkingBay.#ctor(System.Single,System.Single,System.Single,System.Single,System.Boolean,System.Boolean,Parking.ParkingType)">
+        <member name="P:Parking.ParkingBay.Accessories">
+            <summary>
+            The required parking accessory configuration.
+            </summary>
+        </member>
+        <member name="M:Parking.ParkingBay.#ctor(System.Single,System.Single,System.Single,System.Single,System.Boolean,System.Boolean,Parking.ParkingType,Parking.Accessories.Accessories)">
             <summary>
             Creates a parking bay instance.
             </summary>
@@ -691,6 +733,7 @@
             <param name="flipHorizontal">flip the parking bay horizontally.</param>
             <param name="flipVertical">flip the parking bay vertically</param>
             <param name="parkingType">The type of parking bay. Note that this parameter controls the displayed signage.</param>
+            <param name="accessories">The required parking accessory configuration.</param>
         </member>
         <member name="M:Parking.ParkingBay.ParkingBayTransformations(Autodesk.DesignScript.Geometry.Rectangle)">
             <summary>

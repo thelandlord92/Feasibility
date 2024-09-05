@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Parking;
 using Common;
+using Parking.Accessories;
 
 namespace Parking
 {
@@ -44,7 +45,7 @@ namespace Parking
         /// <summary>
         /// The parking bay rectangle geometry.
         /// </summary>
-        public Rectangle Geometry { get; private set; }
+        internal Rectangle Geometry { get; private set; }
 
         /// <summary>
         /// Flip the parking bay horizontally.
@@ -61,6 +62,11 @@ namespace Parking
         /// </summary>
         public ParkingType ParkingType { private get; set; }
 
+        /// <summary>
+        /// The required parking accessory configuration.
+        /// </summary>
+        internal Accessories.Accessories Accessories { get; set; }
+
 
         /// <summary>
         /// Creates a parking bay instance.
@@ -72,6 +78,7 @@ namespace Parking
         /// <param name="flipHorizontal">flip the parking bay horizontally.</param>
         /// <param name="flipVertical">flip the parking bay vertically</param>
         /// <param name="parkingType">The type of parking bay. Note that this parameter controls the displayed signage.</param>
+        /// <param name="accessories">The required parking accessory configuration.</param>
         public ParkingBay(
             //Point targetPosition,
             //Point patternCenter,
@@ -81,7 +88,8 @@ namespace Parking
             float bayNumber = 10,
             bool flipHorizontal = false,
             bool flipVertical = false,
-            ParkingType parkingType = ParkingType.EV)
+            ParkingType parkingType = ParkingType.EV,
+            Accessories.Accessories accessories = null)
         { 
             //TargetPosition = targetPosition;
             BayWidth = bayWidth;
@@ -92,6 +100,7 @@ namespace Parking
             FlipHorizontal = flipHorizontal;
             FlipVertical = flipVertical;
             ParkingType = parkingType;
+            Accessories = accessories;
         }
 
 
@@ -471,6 +480,22 @@ namespace Parking
             }
 
             return numberingCurves;
+        }
+
+
+        public object CreateBicycleRack() 
+        {
+            object rackSolid;
+            if (Accessories.BicycleRack.BicycleRackType == BicycleRackTypes.NoRack)
+            {
+                rackSolid = "No rack required";
+            }
+            else 
+            {
+                throw new Exception("This rack type has not been specified.");
+            }
+
+            return rackSolid;
         }
     }
 }

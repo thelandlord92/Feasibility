@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Parking.Accessories
 {
-    public class ChargingStation
+    internal class ChargingStation
     {
     }
 }
