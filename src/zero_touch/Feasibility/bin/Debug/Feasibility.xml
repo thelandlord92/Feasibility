@@ -22,13 +22,13 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="T:Common.GeometryTools">
+        <member name="T:Common.GeometryTools.GeometryUtilities">
             <summary>
-            Wrapper class for geometry.
+            Wrapper class for geometry utilities.
             Contains common geometrical operations.
             </summary>
         </member>
-        <member name="M:Common.GeometryTools.AddTransformations(System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Geometry},Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Plane,Autodesk.DesignScript.Geometry.Vector,System.Single,System.Single,System.Single)">
+        <member name="M:Common.GeometryTools.GeometryUtilities.AddTransformations(System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Geometry},Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Plane,Autodesk.DesignScript.Geometry.Vector,System.Single,System.Single,System.Single)">
             <summary>
             To add transformations to input geometry.
             </summary>
@@ -41,7 +41,19 @@
             <param name="scaleFactor">The scale of the geometry at the host plane.</param>
             <returns></returns>
         </member>
-        <member name="M:Common.GeometryTools.CreateBoundingRectangle(Autodesk.DesignScript.Geometry.PolyCurve,System.Single)">
+        <member name="M:Common.GeometryTools.GeometryUtilities.SortIntersectingGeometry(System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Geometry})">
+            <summary>
+            To group intersecting geometry.
+            </summary>
+            <param name="geometry">A list containg geometry to be sorted based on intersections.</param>
+            <returns name="geometryList">A list containing the grouped geometry.</returns>
+        </member>
+        <member name="T:Common.GeometryTools.Curves">
+            <summary>
+            Wrapper class for curves.
+            </summary>
+        </member>
+        <member name="M:Common.GeometryTools.Curves.CreateBoundingRectangle(Autodesk.DesignScript.Geometry.PolyCurve,System.Single)">
             <summary>
             Creates a bounding rectangle around a polycurve. Thanks to Jacob Small for the logic.
             </summary>
@@ -49,7 +61,7 @@
             <param name="rotation">The rotation value of the created bounding rectangle.</param>
             <returns name="boundingRectangle">The bounding rectangle.</returns>
         </member>
-        <member name="M:Common.GeometryTools.SetOutLines(Autodesk.DesignScript.Geometry.Rectangle,System.Single,System.Single)">
+        <member name="M:Common.GeometryTools.Curves.SetOutLines(Autodesk.DesignScript.Geometry.Rectangle,System.Single,System.Single)">
             <summary>
             Creates setout curves using a rectangle as reference.
             </summary>
@@ -58,23 +70,7 @@
             <param name="restLineOffset">The offset distance of the remaining lines.</param>
             <returns name="setOutLines">The setout lines.</returns>
         </member>
-        <member name="M:Common.GeometryTools.SurfacePerimeter(Autodesk.DesignScript.Geometry.Surface)">
-            <summary>
-            Get the perimeter polycurve of a surface.
-            </summary>
-            <param name="surface">The surface input.</param>
-            <returns name="polyCurve">The closed perimeter polycurve.</returns>
-        </member>
-        <member name="M:Common.GeometryTools.CheckSurfacePlanarity(Autodesk.DesignScript.Geometry.Surface)">
-            <summary>
-            Check the planarity of an input surface. Returns an error if the surface is not planar.
-            If planar it returns the surface.
-            </summary>
-            <param name="surface">The input surface.</param>
-            <returns name="planarSurface">The planar surface.</returns>
-            <exception cref="T:System.ArgumentException"></exception>
-        </member>
-        <member name="M:Common.GeometryTools.CheckCurvePlanarity(Autodesk.DesignScript.Geometry.Curve)">
+        <member name="M:Common.GeometryTools.Curves.CheckCurvePlanarity(Autodesk.DesignScript.Geometry.Curve)">
             <summary>
             Check the planarity of an input curve. Returns an error if the curve.
             If planar it returns the curve.
@@ -83,24 +79,7 @@
             <returns name="planarCurve">The planar curve.</returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="M:Common.GeometryTools.PullSurfaceToPlane(Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Plane)">
-            <summary>
-            Pull a surface onto a plane, in the plane's normal direction.
-            </summary>
-            <param name="surface">The input surface.</param>
-            <param name="plane">The target plane.</param>
-            <returns name="pulledSurface">The new surface pulled onto the plane.</returns>
-        </member>
-        <member name="M:Common.GeometryTools.SurfacePlane(Autodesk.DesignScript.Geometry.Surface)">
-            <summary>
-            Get the plane of a horizontal planar surface.
-            Returns an error if the surface is not planar and horizontal.
-            </summary>
-            <param name="surface">The surface input.</param>
-            <returns name="surfacePlane">The surface plane.</returns>
-            <exception cref="T:System.ArgumentException"></exception>
-        </member>
-        <member name="M:Common.GeometryTools.ProjectCurves(Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Curve)">
+        <member name="M:Common.GeometryTools.Curves.ProjectCurves(Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Curve)">
             <summary>
             To project curves onto a planar and horizontal surface.
             </summary>
@@ -109,40 +88,7 @@
             <returns></returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="M:Common.GeometryTools.CreateOffsetSurfaceEdges(Autodesk.DesignScript.Geometry.Surface,System.Single,System.Single,System.Single)">
-            <summary>
-            Create planar offset polycurve edges from a surface and fillet the corners if required.
-            </summary>
-            <param name="surface">The surface input.</param>
-            <param name="offsetDistance">The perimeter offset distance.</param>
-            <param name="concaveFillet">The fillet radius at the concave corner.</param>
-            <param name="convexFillet">The fillet radius at the convex corner.</param>
-            <returns>The offset surface polycurves.</returns>
-            <exception cref="T:System.Exception"></exception>
-        </member>
-        <member name="M:Common.GeometryTools.OffsetSurface(Autodesk.DesignScript.Geometry.Surface,System.Single,System.Single,System.Single)">
-            <summary>
-            Create an offset surface from the surface's offset edges..
-            </summary>
-            <param name="surface">The surface input.</param>
-            <param name="offsetDistance">The perimeter offset distance.</param>
-            <param name="concaveFillet">The fillet radius at the concave corner.</param>
-            <param name="convexFillet">The fillet radius at the convex corner.</param>
-            <returns name="offsetSurface">The offset surface.</returns>
-            <exception cref="T:System.Exception"></exception>
-        </member>
-        <member name="M:Common.GeometryTools.PerimeterSurface(Autodesk.DesignScript.Geometry.Surface,System.Single,System.Single,System.Single)">
-            <summary>
-            To create a surface along the perimeter of a surface.
-            </summary>
-            <param name="surface">The input surface.</param>
-            <param name="surfaceWidth">The width of the perimeter surface.</param>
-            <param name="internalConcaveFillet">The fillet radius at the internal concave corners.</param>
-            <param name="internalConvexFillet">The fillet radius at the internal convex corners.</param>
-            <returns name="perimeterSurface">The perimeter surface.</returns>
-            <exception cref="T:System.Exception"></exception>
-        </member>
-        <member name="M:Common.GeometryTools.PolyCurveCornerCurvePairs(Autodesk.DesignScript.Geometry.PolyCurve)">
+        <member name="M:Common.GeometryTools.Curves.PolyCurveCornerCurvePairs(Autodesk.DesignScript.Geometry.PolyCurve)">
             <summary>
             Creates curve pairs per corner of the input polycurve. 
             Note that the curve pair directions have been reversed towards the corners.
@@ -150,7 +96,7 @@
             <param name="curve">The input polycurve.</param>
             <returns name="curvePairs">A list of the paired curves.</returns>
         </member>
-        <member name="M:Common.GeometryTools.PolyCurveCornerVectorPairs(Autodesk.DesignScript.Geometry.PolyCurve)">
+        <member name="M:Common.GeometryTools.Curves.PolyCurveCornerVectorPairs(Autodesk.DesignScript.Geometry.PolyCurve)">
             <summary>
             Creates vector pairs per corner of the input polycurve. 
             Note that the vector pair directions have been reversed towards the corners.
@@ -158,7 +104,7 @@
             <param name="curve">The input polycurve.</param>
             <returns name="vectors">A list of the paired vectors.</returns>
         </member>
-        <member name="M:Common.GeometryTools.PolyCurveCornerAngles(Autodesk.DesignScript.Geometry.PolyCurve)">
+        <member name="M:Common.GeometryTools.Curves.PolyCurveCornerAngles(Autodesk.DesignScript.Geometry.PolyCurve)">
             <summary>
             Calculates the corner angles for polycurves of any shape and edge conditions.
             The calculation is done using the polycurve's end tangents.
@@ -166,27 +112,57 @@
             <param name="curve">The input polycurve.</param>
             <returns name="cornerAngles">The polycurve's corner angles.</returns>
         </member>
-        <member name="M:Common.GeometryTools.PolyCurveEdgeTypes(Autodesk.DesignScript.Geometry.PolyCurve)">
+        <member name="M:Common.GeometryTools.Curves.PolyCurveEdgeTypes(Autodesk.DesignScript.Geometry.PolyCurve)">
             <summary>
             Return a string list of the curve types that make up a polycurve.
             </summary>
             <param name="curve">The input polycurve.</param>
             <returns name="curveTypes">The curve types.</returns>
         </member>
-        <member name="M:Common.GeometryTools.DashedPattern(Autodesk.DesignScript.Geometry.Curve,System.Single,System.Single,System.Single)">
+        <member name="M:Common.GeometryTools.Curves.SplitCurvesByPoints(System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Curve},System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Point},System.Collections.Generic.List{System.Single})">
             <summary>
-            Creates a dashed pattern along a curve.
+            Split a polycuve with a list of points and return new curves representing the splits.
             </summary>
-            <param name="curve">The input curve to create the dashes along.</param>
-            <param name="dashLength">The length of the dashes.</param>
-            <param name="dashGap">The length of the gap between the dashes.</param>
-            <param name="dashThickness">The thickness of the dashed line.</param>
-            <returns name="dashCenterCurves">Polycurves representing the center of the dashes.</returns>
-            <returns name="dashOutlines">Polycurves representing the outline of the dashes.</returns>
-            <returns name="dashSurfaces">The dash surfaces.</returns>
-            <exception cref="T:System.Exception"></exception>
+            <param name="inputCurves">The input polycurve.</param>
+            <param name="points">The list of points.</param>
+            <param name="splitWidths">The width of the split gap at the points.</param>
+            <returns name="gapCurves">The curves within the split gaps.</returns>
+            <returns name="splitCenter">The input points projected onto the curves and at the center of the split.</returns>
+            <returns name="splitCurves">The resulting curves from splitting the input curves.</returns>
+            <returns name="splitPoints">The points on either side of the input points used in splitting the curves.</returns>
         </member>
-        <member name="M:Common.GeometryTools.DiagonalHatchPattern(Autodesk.DesignScript.Geometry.Curve,System.Single,System.Single,System.Single,System.Single)">
+        <member name="M:Common.GeometryTools.Curves.ReorderCurvePositions(System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Curve},Autodesk.DesignScript.Geometry.Point)">
+            <summary>
+            Reorder a list of curves based on their angle from the Y axis.
+            Best for ordering disorganized curves generated from concave surface perimeters.
+            </summary>
+            <param name="curves">The input curves.</param>
+            <param name="sortingPoint">A point at the center of the input curves.</param>
+            <returns name="orderedPolyCurves">The ordered curves.</returns>
+        </member>
+        <member name="M:Common.GeometryTools.Curves.ReorderCurveDirections(System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Curve},Autodesk.DesignScript.Geometry.Point)">
+            <summary>
+            To reorder input curves in the same direction given a point at their center.
+            Best for ordering disorganized curves generated from concave surface perimeters.
+            </summary>
+            <param name="curves">The input curves.</param>
+            <param name="sortingPoint">A point at the center of the input curves.</param>
+            <returns name="orderedCurves">The ordered curves.</returns>
+        </member>
+        <member name="M:Common.GeometryTools.Curves.CurveListAverageCenter(System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Curve})">
+            <summary>
+            Get the average center point of a list of input curves.
+            </summary>
+            <param name="curves">The input curves.</param>
+            <returns name="averageCenter">The average center point.</returns>
+        </member>
+        <member name="T:Common.GeometryTools.Patterns.BoundaryPatterns">
+            <summary>
+            Wrapper class for boundary patterns.
+            Contains patterns generated within a closed curve.
+            </summary>
+        </member>
+        <member name="M:Common.GeometryTools.Patterns.BoundaryPatterns.DiagonalHatchPattern(Autodesk.DesignScript.Geometry.Curve,System.Single,System.Single,System.Single,System.Single)">
             <summary>
             To create a diagonal hatch pattern.
             </summary>
@@ -199,49 +175,94 @@
             <returns name="hatchOutlines">The perimeter curves of the hatch surface.</returns>
             <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="M:Common.GeometryTools.SortIntersectingGeometry(System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Geometry})">
+        <member name="T:Common.GeometryTools.Patterns.LinearPatterns">
             <summary>
-            To group intersecting geometry.
+            Wrapper class for the linear patterns.
             </summary>
-            <param name="geometry">A list containg geometry to be sorted based on intersections.</param>
-            <returns name="geometryList">A list containing the grouped geometry.</returns>
         </member>
-        <member name="M:Common.GeometryTools.SplitCurvesByPoints(System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Curve},System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Point},System.Collections.Generic.List{System.Single})">
+        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.DashedPattern(Autodesk.DesignScript.Geometry.Curve,System.Single,System.Single,System.Single)">
             <summary>
-            Split a polycuve with a list of points and return new curves representing the splits.
+            Creates a dashed pattern along a curve.
             </summary>
-            <param name="inputCurves">The input polycurve.</param>
-            <param name="points">The list of points.</param>
-            <param name="splitWidths">The width of the split gap at the points.</param>
-            <returns name="gapCurves">The curves within the split gaps.</returns>
-            <returns name="splitCenter">The input points projected onto the curves and at the center of the split.</returns>
-            <returns name="splitCurves">The resulting curves from splitting the input curves.</returns>
-            <returns name="splitPoints">The points on either side of the input points used in splitting the curves.</returns>
+            <param name="curve">The input curve to create the dashes along.</param>
+            <param name="dashLength">The length of the dashes.</param>
+            <param name="dashGap">The length of the gap between the dashes.</param>
+            <param name="dashThickness">The thickness of the dashed line.</param>
+            <returns name="dashCenterCurves">Polycurves representing the center of the dashes.</returns>
+            <returns name="dashOutlines">Polycurves representing the outline of the dashes.</returns>
+            <returns name="dashSurfaces">The dash surfaces.</returns>
+            <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="M:Common.GeometryTools.ReorderCurvePositions(System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Curve},Autodesk.DesignScript.Geometry.Point)">
+        <member name="T:Common.GeometryTools.Surfaces">
             <summary>
-            Reorder a list of curves based on their angle from the Y axis.
-            Best for ordering disorganized curves generated from concave surface perimeters.
+            Wrapper class for surfaces.
             </summary>
-            <param name="curves">The input curves.</param>
-            <param name="sortingPoint">A point at the center of the input curves.</param>
-            <returns name="orderedPolyCurves">The ordered curves.</returns>
         </member>
-        <member name="M:Common.GeometryTools.ReorderCurveDirections(System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Curve},Autodesk.DesignScript.Geometry.Point)">
+        <member name="M:Common.GeometryTools.Surfaces.SurfacePerimeter(Autodesk.DesignScript.Geometry.Surface)">
             <summary>
-            To reorder input curves in the same direction given a point at their center.
-            Best for ordering disorganized curves generated from concave surface perimeters.
+            Get the perimeter polycurve of a surface.
             </summary>
-            <param name="curves">The input curves.</param>
-            <param name="sortingPoint">A point at the center of the input curves.</param>
-            <returns name="orderedCurves">The ordered curves.</returns>
+            <param name="surface">The surface input.</param>
+            <returns name="polyCurve">The closed perimeter polycurve.</returns>
         </member>
-        <member name="M:Common.GeometryTools.CurveListAverageCenter(System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Curve})">
+        <member name="M:Common.GeometryTools.Surfaces.CheckSurfacePlanarity(Autodesk.DesignScript.Geometry.Surface)">
             <summary>
-            Get the average center point of a list of input curves.
+            Check the planarity of an input surface. Returns an error if the surface is not planar.
+            If planar it returns the surface.
             </summary>
-            <param name="curves">The input curves.</param>
-            <returns name="averageCenter">The average center point.</returns>
+            <param name="surface">The input surface.</param>
+            <returns name="planarSurface">The planar surface.</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Common.GeometryTools.Surfaces.PullSurfaceToPlane(Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Plane)">
+            <summary>
+            Pull a surface onto a plane, in the plane's normal direction.
+            </summary>
+            <param name="surface">The input surface.</param>
+            <param name="plane">The target plane.</param>
+            <returns name="pulledSurface">The new surface pulled onto the plane.</returns>
+        </member>
+        <member name="M:Common.GeometryTools.Surfaces.SurfacePlane(Autodesk.DesignScript.Geometry.Surface)">
+            <summary>
+            Get the plane of a horizontal planar surface.
+            Returns an error if the surface is not planar and horizontal.
+            </summary>
+            <param name="surface">The surface input.</param>
+            <returns name="surfacePlane">The surface plane.</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Common.GeometryTools.Surfaces.CreateOffsetSurfaceEdges(Autodesk.DesignScript.Geometry.Surface,System.Single,System.Single,System.Single)">
+            <summary>
+            Create planar offset polycurve edges from a surface and fillet the corners if required.
+            </summary>
+            <param name="surface">The surface input.</param>
+            <param name="offsetDistance">The perimeter offset distance.</param>
+            <param name="concaveFillet">The fillet radius at the concave corner.</param>
+            <param name="convexFillet">The fillet radius at the convex corner.</param>
+            <returns>The offset surface polycurves.</returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:Common.GeometryTools.Surfaces.OffsetSurface(Autodesk.DesignScript.Geometry.Surface,System.Single,System.Single,System.Single)">
+            <summary>
+            Create an offset surface from the surface's offset edges..
+            </summary>
+            <param name="surface">The surface input.</param>
+            <param name="offsetDistance">The perimeter offset distance.</param>
+            <param name="concaveFillet">The fillet radius at the concave corner.</param>
+            <param name="convexFillet">The fillet radius at the convex corner.</param>
+            <returns name="offsetSurface">The offset surface.</returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:Common.GeometryTools.Surfaces.PerimeterSurface(Autodesk.DesignScript.Geometry.Surface,System.Single,System.Single,System.Single)">
+            <summary>
+            To create a surface along the perimeter of a surface.
+            </summary>
+            <param name="surface">The input surface.</param>
+            <param name="surfaceWidth">The width of the perimeter surface.</param>
+            <param name="internalConcaveFillet">The fillet radius at the internal concave corners.</param>
+            <param name="internalConvexFillet">The fillet radius at the internal convex corners.</param>
+            <returns name="perimeterSurface">The perimeter surface.</returns>
+            <exception cref="T:System.Exception"></exception>
         </member>
         <member name="T:Common.Maths">
             <summary>

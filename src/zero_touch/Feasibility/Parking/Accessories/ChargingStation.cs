@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Feasibility.Parking
+namespace Parking.Accessories
 {
-    internal class ChargingStation
+    public class ChargingStation
     {
     }
 }

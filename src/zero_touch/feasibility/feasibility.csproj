@@ -141,7 +141,12 @@
   <ItemGroup>
     <Compile Include="About\About.cs" />
     <Compile Include="Buildings\Buildings.cs" />
-    <Compile Include="Common\GeometryTools.cs" />
+    <Compile Include="Common\GeometryTools\GeometryUtilities.cs" />
+    <Compile Include="Common\GeometryTools\Curves.cs" />
+    <Compile Include="Common\GeometryTools\Patterns\BoundaryPatterns.cs" />
+    <Compile Include="Common\GeometryTools\Patterns\LinearPatterns.cs" />
+    <Compile Include="Common\GeometryTools\Surfaces.cs" />
+    <Compile Include="Common\GeometryTools\Vectors.cs" />
     <Compile Include="Common\Maths.cs" />
     <Compile Include="Common\Text.cs" />
     <Compile Include="Erven\Erven.cs" />
@@ -152,12 +157,17 @@
     <Compile Include="Parking\Accessories\ChargingStationTypes.cs" />
     <Compile Include="Parking\Accessories\WheelStop.cs" />
     <Compile Include="Parking\Accessories\WheelStopTypes.cs" />
+    <Compile Include="Parking\Entrances.cs" />
+    <Compile Include="Parking\EntranceTypes.cs" />
     <Compile Include="Parking\ExclusionBays.cs" />
     <Compile Include="Parking\InternalBays.cs" />
     <Compile Include="Parking\Layouts.cs" />
     <Compile Include="Parking\ParkingBay.cs" />
     <Compile Include="Parking\Patterns.cs" />
     <Compile Include="Parking\PerimeterBays.cs" />
+    <Compile Include="Parking\Routes\RouteEndTypes.cs" />
+    <Compile Include="Parking\Routes\Routes.cs" />
+    <Compile Include="Parking\Routes\RouteTypes.cs" />
     <Compile Include="Parking\Signage.cs" />
     <Compile Include="Parking\SignageResources.cs" />
     <Compile Include="Parking\ParkingTypes.cs" />

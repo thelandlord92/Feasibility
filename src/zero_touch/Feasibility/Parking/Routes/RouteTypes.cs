@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Parking.Accessories
+namespace Feasibility.Parking
 {
-    public class WheelStop
+    internal class RouteTypes
     {
     }
 }

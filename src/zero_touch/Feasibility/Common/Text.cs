@@ -357,7 +357,7 @@ namespace Common
             }
 
             // Transform the text surfaces.
-            List<Autodesk.DesignScript.Geometry.Geometry> transTextSurfaces = Common.GeometryTools.AddTransformations(
+            List<Autodesk.DesignScript.Geometry.Geometry> transTextSurfaces = Common.GeometryTools.GeometryUtilities.AddTransformations(
                 castTextSurfaces,
                 Point.ByCoordinates(0, 0),
                 plane,
@@ -368,7 +368,7 @@ namespace Common
             );
 
             // Transform the text polycurves.
-            List<Autodesk.DesignScript.Geometry.Geometry> transTextPolyCurves = Common.GeometryTools.AddTransformations(
+            List<Autodesk.DesignScript.Geometry.Geometry> transTextPolyCurves = Common.GeometryTools.GeometryUtilities.AddTransformations(
                 castTextPolyCurves,
                 Point.ByCoordinates(0, 0),
                 plane,
@@ -379,7 +379,7 @@ namespace Common
             );
 
             // Transform the text solids.
-            List<Autodesk.DesignScript.Geometry.Geometry> transTextSolids = Common.GeometryTools.AddTransformations(
+            List<Autodesk.DesignScript.Geometry.Geometry> transTextSolids = Common.GeometryTools.GeometryUtilities.AddTransformations(
                 castTextSolids,
                 Point.ByCoordinates(0, 0),
                 plane,

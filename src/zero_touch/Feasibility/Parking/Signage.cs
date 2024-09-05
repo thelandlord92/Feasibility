@@ -114,7 +114,7 @@ namespace Parking
             // move the signage along the plane normal.
             float offsetDistance = initialSignageOffset  * scaleFactor;
 
-            List<Geometry> signageGeometry = Common.GeometryTools.AddTransformations(
+            List<Geometry> signageGeometry = Common.GeometryTools.GeometryUtilities.AddTransformations(
                 geometries.ToList(),
                 signageCenter,
                 locationPlane,

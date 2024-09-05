@@ -1,94 +1,20 @@
 ﻿using Autodesk.DesignScript.Geometry;
+using Autodesk.DesignScript.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Common;
-using CoreNodeModels;
-using Autodesk.DesignScript.Runtime;
-using Parking;
-using System.Windows.Media;
-using System.Windows;
-using System.Windows.Controls;
 
-namespace Common
+namespace Common.GeometryTools
 {
     /// <summary>
-    /// Wrapper class for geometry.
-    /// Contains common geometrical operations.
+    /// Wrapper class for curves.
     /// </summary>
-    public class GeometryTools
+    public class Curves
     {
-        // this hides the overall class as a node.
-        private GeometryTools() { }
-
-
-        /// <summary>
-        /// To add transformations to input geometry.
-        /// </summary>
-        /// <param name="geometry">The geometry to be transformed.</param>
-        /// <param name="geometryPlaneNormal">The normal direction of the geometry's plane.</param>
-        /// <param name="geometryLocation">The point from which the geometry is to be transformed.</param>
-        /// <param name="hostPlane">The target host plane.</param>
-        /// <param name="rotation">The rotation of the geometry around the center of the host plane.</param>
-        /// <param name="planeOffset">The offset of the geometry along host plane's normal.</param>
-        /// <param name="scaleFactor">The scale of the geometry at the host plane.</param>
-        /// <returns></returns>
-        public static List<Autodesk.DesignScript.Geometry.Geometry> AddTransformations(
-            List<Autodesk.DesignScript.Geometry.Geometry> geometry,
-            Autodesk.DesignScript.Geometry.Point geometryLocation,
-            Plane hostPlane,
-            [DefaultArgument("Vector.ZAxis()")] Autodesk.DesignScript.Geometry.Vector geometryPlaneNormal,
-            float rotation = 0,
-            float planeOffset = 0,
-            float scaleFactor = 1)
-        {
-            // add a plane at the location point of the geometry.
-            Plane geometryPlane = Plane.ByOriginNormal(geometryLocation, geometryPlaneNormal);
-
-            // transform the geometry to the host plane.
-            List<Autodesk.DesignScript.Geometry.Geometry> transGeometry = new List<Autodesk.DesignScript.Geometry.Geometry>();
-            foreach (Autodesk.DesignScript.Geometry.Geometry geom in geometry) 
-            { 
-                if (geom != null) 
-                {
-                    transGeometry.Add(geom.Transform(CoordinateSystem.ByPlane(geometryPlane), CoordinateSystem.ByPlane(hostPlane)));
-                }
-            }
-
-            // rotate the geometry at the host plane.
-            List<Autodesk.DesignScript.Geometry.Geometry> rotatedGeometry = new List<Autodesk.DesignScript.Geometry.Geometry>();  
-            foreach (Autodesk.DesignScript.Geometry.Geometry geom in transGeometry) 
-            { 
-                if (geom != null) 
-                {
-                    rotatedGeometry.Add(geom.Rotate(hostPlane, rotation));
-                }
-            }
-
-            // scale the geometry at the host plane.
-            List<Autodesk.DesignScript.Geometry.Geometry> scaledGeometry = new List<Autodesk.DesignScript.Geometry.Geometry>();
-            foreach (Autodesk.DesignScript.Geometry.Geometry geom in rotatedGeometry) 
-            {
-                if (geom != null) 
-                { 
-                    scaledGeometry.Add(geom.Scale(hostPlane, scaleFactor, scaleFactor, scaleFactor));
-                }
-            }
-
-            // move the geometry along the host plane normal.
-            List<Autodesk.DesignScript.Geometry.Geometry> movedGeometry = new List<Autodesk.DesignScript.Geometry.Geometry>();
-            foreach (Autodesk.DesignScript.Geometry.Geometry geom in scaledGeometry) 
-            { 
-                if (geom != null) 
-                { 
-                    movedGeometry.Add(geom.Translate(hostPlane.Normal, planeOffset));
-                }
-            }
-
-            return movedGeometry;
-        }
+        // Hides the overall class a node.
+        private Curves() { }
 
 
         /// <summary>
@@ -166,47 +92,6 @@ namespace Common
             }
 
             return setoutLines;
-            
-        }
-
-
-        /// <summary>
-        /// Get the perimeter polycurve of a surface.
-        /// </summary>
-        /// <param name="surface">The surface input.</param>
-        /// <returns name="polyCurve">The closed perimeter polycurve.</returns>
-        public static PolyCurve SurfacePerimeter(Surface surface)
-        {
-            // get the perimeter curve of the surface.
-            Curve[] perimeterCurves = surface.PerimeterCurves();
-            PolyCurve perimeterCurve = PolyCurve.ByJoinedCurves(perimeterCurves, 0.001, false, 0);
-
-            return perimeterCurve;
-        }
-
-
-        /// <summary>
-        /// Check the planarity of an input surface. Returns an error if the surface is not planar.
-        /// If planar it returns the surface.
-        /// </summary>
-        /// <param name="surface">The input surface.</param>
-        /// <returns name="planarSurface">The planar surface.</returns>
-        /// <exception cref="ArgumentException"></exception>
-        public static Surface CheckSurfacePlanarity(Surface surface) 
-        {
-            // get the max and min point of the surface bounding box.
-            Autodesk.DesignScript.Geometry.Point minPoint = surface.BoundingBox.MinPoint;
-            Autodesk.DesignScript.Geometry.Point maxPoint = surface.BoundingBox.MaxPoint;
-
-            // check if the surface is planar and horizontal.
-            Surface _surface = null;
-            if (maxPoint.Z > minPoint.Z)
-            {
-                throw new ArgumentException(nameof(surface), "The surface must be horizontal and planar.");
-            }
-            _surface = surface;
-
-            return _surface;
         }
 
 
@@ -223,7 +108,7 @@ namespace Common
             Autodesk.DesignScript.Geometry.Point minPoint = curve.BoundingBox.MinPoint;
             Autodesk.DesignScript.Geometry.Point maxPoint = curve.BoundingBox.MaxPoint;
 
-            // check if the surface is planar and horizontal.
+            // check if the curve is planar and horizontal.
             Curve _curve = null;
             if (maxPoint.Z > minPoint.Z)
             {
@@ -232,59 +117,6 @@ namespace Common
             _curve = curve;
 
             return _curve;
-        }
-
-
-        /// <summary>
-        /// Pull a surface onto a plane, in the plane's normal direction.
-        /// </summary>
-        /// <param name="surface">The input surface.</param>
-        /// <param name="plane">The target plane.</param>
-        /// <returns name="pulledSurface">The new surface pulled onto the plane.</returns>
-        public static Surface PullSurfaceToPlane(Surface surface, [DefaultArgument("Plane.XY()")]Plane plane)
-        {
-            Surface newSurface;
-            try 
-            {
-                // get the perimeter polycurve of the surface.
-                PolyCurve curve = SurfacePerimeter(surface);
-
-                // pull the polycurve onto the plane.
-                PolyCurve pulledCurve = curve.PullOntoPlane(plane) as PolyCurve;
-
-                // create the new surface.
-                newSurface = Surface.ByPatch(pulledCurve);
-            }
-            catch 
-            {
-                throw new Exception("The surface cannot be projected likely because its projected edges " +
-                    "overlap or are perpendicular to the input plane.");
-            }
-            
-
-            return newSurface;
-        }
-
-
-        /// <summary>
-        /// Get the plane of a horizontal planar surface.
-        /// Returns an error if the surface is not planar and horizontal.
-        /// </summary>
-        /// <param name="surface">The surface input.</param>
-        /// <returns name="surfacePlane">The surface plane.</returns>
-        /// <exception cref="ArgumentException"></exception>
-        private static Plane SurfacePlane(Surface surface)
-        {
-            // check if the surface is planar and horizontal.
-            Surface _surface = CheckSurfacePlanarity(surface);
-
-            // get the perimeter curve of the surface.
-            PolyCurve perimeterCurve = SurfacePerimeter(_surface);
-
-            // get the plane of the perimeter curve.
-            Plane curvePlane = perimeterCurve.BasePlane();
-
-            return curvePlane;
         }
 
 
@@ -298,7 +130,7 @@ namespace Common
         private static Curve ProjectCurves(Surface surface, Curve curve)
         {
             // get the plane of the perimeter curve.
-            Plane curvePlane = SurfacePlane(surface);
+            Plane curvePlane = Common.GeometryTools.Surfaces.SurfacePlane(surface);
 
             // pull the curve onto the plane.
             Curve pulledCurve = curve.PullOntoPlane(curvePlane);
@@ -308,179 +140,19 @@ namespace Common
 
 
         /// <summary>
-        /// Create planar offset polycurve edges from a surface and fillet the corners if required.
-        /// </summary>
-        /// <param name="surface">The surface input.</param>
-        /// <param name="offsetDistance">The perimeter offset distance.</param>
-        /// <param name="concaveFillet">The fillet radius at the concave corner.</param>
-        /// <param name="convexFillet">The fillet radius at the convex corner.</param>
-        /// <returns>The offset surface polycurves.</returns>
-        /// <exception cref="Exception"></exception>
-        public static List<PolyCurve> CreateOffsetSurfaceEdges(
-            Surface surface, 
-            float offsetDistance, 
-            float concaveFillet = 0, 
-            float convexFillet = 0)
-        {
-            // Check if the surface is planar and horizontal.
-            Surface _surface = CheckSurfacePlanarity(surface);
-
-            // Get the surface perimeter curve.
-            PolyCurve perimeterCurve = SurfacePerimeter(_surface);
-
-            // offset the perimeter curve.
-            Curve[] offsetCurves = perimeterCurve.OffsetMany(offsetDistance, SurfacePlane(_surface).Normal);
-
-            // Offset the perimeter curve.
-            List<PolyCurve> joinedCurves = new List<PolyCurve>();
-            try
-            {
-                // Check if the area of the offset curve is greater than that of the original surface.
-                foreach (Curve curve in offsetCurves)
-                {
-                    if (Surface.ByPatch(curve).Area > _surface.Area)
-                    {
-                        Curve[] offsetCurvesAlt = perimeterCurve.OffsetMany(-offsetDistance, SurfacePlane(surface).Normal);
-                        foreach (Curve curveAlt in offsetCurvesAlt)
-                        {
-                            joinedCurves.Add(curveAlt as PolyCurve);
-                        }
-                    }
-                    else
-                    {
-                        joinedCurves.Add(curve as PolyCurve);
-                    }
-                }
-            }
-            catch 
-            {
-                throw new Exception("The surface cannot be offset. Reduce the offset distance.");
-            }
-            // Round the concave corners of the offset curves.
-            List<PolyCurve> concaveRoundedCurves = new List<PolyCurve>();
-            foreach (PolyCurve curve in joinedCurves)
-            {
-                if (concaveFillet > 0)
-                {
-                    try
-                    {
-                        concaveRoundedCurves.Add(curve.Fillet(concaveFillet, false));
-                    }
-                    catch
-                    {
-                        concaveRoundedCurves.Add(curve);
-                    }
-                }
-                else
-                {
-                    concaveRoundedCurves.Add(curve);
-                }
-            }
-
-            // Round the convex corners of the concave rounded curves.
-            List<PolyCurve> convexRoundedCurves = new List<PolyCurve>();
-            foreach (PolyCurve curve in concaveRoundedCurves)
-            {
-                if (convexFillet > 0)
-                {
-                    try
-                    {
-                        convexRoundedCurves.Add(curve.Fillet(convexFillet, true));
-                    }
-                    catch
-                    {
-                        convexRoundedCurves.Add(curve);
-                    }
-                }
-                else
-                {
-                    convexRoundedCurves.Add(curve);
-                }
-            }
-
-            return convexRoundedCurves;
-        }
-
-
-        /// <summary>
-        /// Create an offset surface from the surface's offset edges..
-        /// </summary>
-        /// <param name="surface">The surface input.</param>
-        /// <param name="offsetDistance">The perimeter offset distance.</param>
-        /// <param name="concaveFillet">The fillet radius at the concave corner.</param>
-        /// <param name="convexFillet">The fillet radius at the convex corner.</param>
-        /// <returns name="offsetSurface">The offset surface.</returns>
-        /// <exception cref="Exception"></exception>
-        public static Surface OffsetSurface(
-            Surface surface,
-            float offsetDistance,
-            float concaveFillet = 0,
-            float convexFillet = 0)
-        {
-            // create the offset edges.
-            List<PolyCurve> offsetEdges = CreateOffsetSurfaceEdges(surface, offsetDistance, concaveFillet, convexFillet);
-
-            // create surfaces from the curve loops.
-            List<Surface> offsetSurfaces = new List<Surface>();
-            foreach (PolyCurve curve in offsetEdges)
-            {
-                offsetSurfaces.Add(Surface.ByPatch(curve));
-            }
-
-            // join thes surfaces into a single surface.
-            Surface finalSurface = Surface.ByUnion(offsetSurfaces);
-
-            return finalSurface;
-        }
-
-
-        /// <summary>
-        /// To create a surface along the perimeter of a surface.
-        /// </summary>
-        /// <param name="surface">The input surface.</param>
-        /// <param name="surfaceWidth">The width of the perimeter surface.</param>
-        /// <param name="internalConcaveFillet">The fillet radius at the internal concave corners.</param>
-        /// <param name="internalConvexFillet">The fillet radius at the internal convex corners.</param>
-        /// <returns name="perimeterSurface">The perimeter surface.</returns>
-        /// <exception cref="Exception"></exception>
-        public static Surface PerimeterSurface(
-            Surface surface, 
-            float surfaceWidth, 
-            float internalConcaveFillet = 0,
-            float internalConvexFillet = 0)
-        {
-            // create the internal surface for subtraction.
-            List<Surface> internalSurfaces = new List<Surface>();
-            try
-            {
-                internalSurfaces.Add(OffsetSurface(surface, surfaceWidth, internalConcaveFillet, internalConvexFillet));
-            }
-            catch
-            {
-                throw new Exception("The surface cannot be created. Reduce the surface width.");
-            };
-
-            // subtract the internal surface from the primary surface.
-            Surface perimeterSurface = surface.Difference(internalSurfaces);
-
-            return perimeterSurface;
-        }
-
-
-        /// <summary>
         /// Creates curve pairs per corner of the input polycurve. 
         /// Note that the curve pair directions have been reversed towards the corners.
         /// </summary>
         /// <param name="curve">The input polycurve.</param>
         /// <returns name="curvePairs">A list of the paired curves.</returns>
-        public static List<List<Curve>> PolyCurveCornerCurvePairs(PolyCurve curve) 
+        public static List<List<Curve>> PolyCurveCornerCurvePairs(PolyCurve curve)
         {
             // explode the polycurve.
             List<Curve> explodedCurves = curve.Curves().ToList();
 
             // create the reversed corner curve pairs.
             List<Curve> reversedCurves = new List<Curve>();
-            if (explodedCurves.Count > 1) 
+            if (explodedCurves.Count > 1)
             {
                 // shift the curve list elements to the right by 1.
                 List<Curve> shiftedCurves = new List<Curve>();
@@ -493,7 +165,7 @@ namespace Common
                     reversedCurves.Add(c.Reverse());
                 }
             }
-            else 
+            else
             {
                 throw new ArgumentException("The polycurve must have more than one side.");
             }
@@ -512,15 +184,15 @@ namespace Common
         /// </summary>
         /// <param name="curve">The input polycurve.</param>
         /// <returns name="vectors">A list of the paired vectors.</returns>
-        public static List<List<Autodesk.DesignScript.Geometry.Vector>> PolyCurveCornerVectorPairs(PolyCurve curve) 
+        public static List<List<Autodesk.DesignScript.Geometry.Vector>> PolyCurveCornerVectorPairs(PolyCurve curve)
         {
             // get the corner curve pairs.
             List<List<Curve>> curvePairs = PolyCurveCornerCurvePairs(curve);
 
             // get the curve vectors.
             List<List<Autodesk.DesignScript.Geometry.Vector>> vectorPairs = new List<List<Autodesk.DesignScript.Geometry.Vector>>();
-            foreach (List<Curve> curvePair in curvePairs) 
-            { 
+            foreach (List<Curve> curvePair in curvePairs)
+            {
                 List<Autodesk.DesignScript.Geometry.Vector> vectorPair = new List<Autodesk.DesignScript.Geometry.Vector>();
                 vectorPair.Add(curvePair[0].TangentAtParameter(0));
                 vectorPair.Add(curvePair[1].TangentAtParameter(0));
@@ -538,17 +210,17 @@ namespace Common
         /// </summary>
         /// <param name="curve">The input polycurve.</param>
         /// <returns name="cornerAngles">The polycurve's corner angles.</returns>
-        public static List<float> PolyCurveCornerAngles(PolyCurve curve) 
+        public static List<float> PolyCurveCornerAngles(PolyCurve curve)
         {
             // get the corner vector pairs.
-            List<List<Autodesk.DesignScript.Geometry.Vector>> vectorPairs = PolyCurveCornerVectorPairs (curve);
+            List<List<Autodesk.DesignScript.Geometry.Vector>> vectorPairs = PolyCurveCornerVectorPairs(curve);
 
             // calculate the angle between the tangent vectors.
             List<float> cornerAngles = new List<float>();
-            foreach (List<Autodesk.DesignScript.Geometry.Vector> vectorPair in vectorPairs) 
-            { 
-               float angle = (float)(vectorPair[0].AngleAboutAxis(vectorPair[1], Autodesk.DesignScript.Geometry.Vector.ZAxis()));
-               cornerAngles.Add(angle);    
+            foreach (List<Autodesk.DesignScript.Geometry.Vector> vectorPair in vectorPairs)
+            {
+                float angle = (float)(vectorPair[0].AngleAboutAxis(vectorPair[1], Autodesk.DesignScript.Geometry.Vector.ZAxis()));
+                cornerAngles.Add(angle);
             }
 
             return cornerAngles;
@@ -560,7 +232,7 @@ namespace Common
         /// </summary>
         /// <param name="curve">The input polycurve.</param>
         /// <returns name="curveTypes">The curve types.</returns>
-        public static List<string> PolyCurveEdgeTypes(PolyCurve curve) 
+        public static List<string> PolyCurveEdgeTypes(PolyCurve curve)
         {
             // explode the polycurve.
             List<Curve> explodedCurves = curve.Curves().ToList();
@@ -573,245 +245,7 @@ namespace Common
                 curveTypes.Add(curveType);
             }
 
-     
-
             return curveTypes;
-        }
-
-
-        /// <summary>
-        /// Creates a dashed pattern along a curve.
-        /// </summary>
-        /// <param name="curve">The input curve to create the dashes along.</param>
-        /// <param name="dashLength">The length of the dashes.</param>
-        /// <param name="dashGap">The length of the gap between the dashes.</param>
-        /// <param name="dashThickness">The thickness of the dashed line.</param>
-        /// <returns name="dashCenterCurves">Polycurves representing the center of the dashes.</returns>
-        /// <returns name="dashOutlines">Polycurves representing the outline of the dashes.</returns>
-        /// <returns name="dashSurfaces">The dash surfaces.</returns>
-        /// <exception cref="Exception"></exception>
-        [MultiReturn(new[] { "dashCenterCurves", "dashOutlines", "dashSurfaces"})]
-        public static Dictionary<string, object> DashedPattern(
-            [DefaultArgument("Line.ByStartPointEndPoint(Point.ByCoordinates(0, 100), Point.ByCoordinates(0, 0))")] Curve curve,
-            float dashLength = 5,
-            float dashGap = 2,
-            float dashThickness = 2) 
-        {
-            // Throw excpetion if inputs less than 0.001.
-            if (dashLength < 0.001 || dashGap < 0.001 || dashThickness < 0.001) 
-            {
-                throw new ArgumentException("dash length, gap, and thickness cannot be less than 0.001");
-            }
-
-            // Get the start and end points.
-            Autodesk.DesignScript.Geometry.Point startPoint = curve.StartPoint;
-            Autodesk.DesignScript.Geometry.Point endPoint = curve.EndPoint;
-
-            // Create the first setout points.
-            Autodesk.DesignScript.Geometry.Point setoutStartPoint = curve.PointAtSegmentLength(dashLength);
-            List<Autodesk.DesignScript.Geometry.Point> firstSetoutPoints = curve.PointsAtSegmentLengthFromPoint(setoutStartPoint, (dashLength + dashGap)).ToList();
-
-            // Create the second setout points.
-            List<Autodesk.DesignScript.Geometry.Point> secondSetoutPoints = curve.PointsAtSegmentLengthFromPoint(startPoint, (dashLength + dashGap)).ToList();
-
-            // Transpose the setout points to create point pairs.
-            List<List<Autodesk.DesignScript.Geometry.Point>> zippedPoints = firstSetoutPoints
-                .Zip(secondSetoutPoints, (first, second) => new List<Autodesk.DesignScript.Geometry.Point> { first, second })
-                .ToList();
-
-            // Combine all the points.
-            List<Autodesk.DesignScript.Geometry.Point> combinedPoints = new List<Autodesk.DesignScript.Geometry.Point>();
-            combinedPoints.Add(startPoint);
-            foreach (var pair in zippedPoints)
-            {
-                combinedPoints.AddRange(pair);
-            }
-            combinedPoints.Add(endPoint);
-
-            // Clean the combined points list to remove any null values.
-            combinedPoints = combinedPoints.Where(p => p != null).ToList();
-
-            // Remove any duplicate points from the cleaned point list.
-            combinedPoints = Autodesk.DesignScript.Geometry.Point.PruneDuplicates(combinedPoints, 0.001).ToList();
-
-            // Chop the pruned point list into segments of 2.
-            List<List<Autodesk.DesignScript.Geometry.Point>> choppedPoints = new List<List<Autodesk.DesignScript.Geometry.Point>>();
-            for (int i = 0; i < combinedPoints.Count; i += 2)
-            {
-                if (i + 1 < combinedPoints.Count)
-                {
-                    choppedPoints.Add(new List<Autodesk.DesignScript.Geometry.Point> { combinedPoints[i], combinedPoints[i + 1] });
-                }
-            }
-
-            // Remove points list containing only one point.
-            List<List<Autodesk.DesignScript.Geometry.Point>> filteredPointList = choppedPoints.Where(p => p.Count != 1).ToList();
-
-            // Create polycurves from the point lists. 
-            List<PolyCurve> dashCenterCurves = new List<PolyCurve>();
-            foreach (List<Autodesk.DesignScript.Geometry.Point> pointList in filteredPointList) 
-            {
-                dashCenterCurves.Add(PolyCurve.ByPoints(pointList));
-            }
-
-            // Create polycurves representing the outline of the dashes.
-            List<PolyCurve> dashOutlines = new List<PolyCurve>();
-            foreach (PolyCurve polyCurve in dashCenterCurves)
-            {
-                dashOutlines.Add(PolyCurve.ByThickeningCurveNormal(polyCurve, dashThickness, Autodesk.DesignScript.Geometry.Vector.ZAxis()));
-            }
-
-            // Create surfaces representing the dashes.
-            List<Surface> dashSurfaces = new List<Surface>();
-            foreach (PolyCurve polyCurve1 in dashOutlines)
-            {
-                dashSurfaces.Add(Surface.ByPatch(polyCurve1));
-            }
-
-            return new Dictionary<string, object> 
-            {
-                { "dashCenterCurves", dashCenterCurves },
-                { "dashOutlines", dashOutlines },
-                { "dashSurfaces", dashSurfaces }
-            };
-        }
-
-
-        /// <summary>
-        /// To create a diagonal hatch pattern.
-        /// </summary>
-        /// <param name="curve">The curve within which to define the hatch pattern.</param>
-        /// <param name="borderThickness">The thickness of the pattern's border.</param>
-        /// <param name="hatchThickness">The thickness of the diagonal hatches.</param>
-        /// <param name="hatchSpacing">The spacing between the hatches.</param>
-        /// <param name="hatchRotation">The rotaton of the hatch pattern.</param>
-        /// <returns name="hatchSurface">The surface of the hatch.</returns>
-        /// <returns name="hatchOutlines">The perimeter curves of the hatch surface.</returns>
-        /// <exception cref="Exception"></exception>
-        [MultiReturn(new[] { "hatchSurface", "hatchOutlines"})]
-        public static Dictionary<string, object> DiagonalHatchPattern(
-            Curve curve,
-            float borderThickness = 1f,
-            float hatchThickness = 1f,
-            float hatchSpacing = 5f,
-            float hatchRotation = 45f) 
-        {
-            // Throw excpetion if inputs less than 0.001.
-            if (borderThickness < 0.001 || hatchThickness < 0.001 || hatchSpacing < 0.001)
-            {
-                throw new ArgumentException("borderThickness, hatchThickness, and hatchSpacing cannot be less than 0.001");
-            }
-
-            // Check if the input curve is closed.
-            if (curve.IsClosed == false) 
-            {
-                throw new ArgumentException("The input curve must be closed");
-            }
-
-            // Check the planarity of the input polycuve.
-            Curve curve1 = CheckCurvePlanarity(curve);
-
-            // Create a surface from the curve.
-            Surface surface = Surface.ByPatch(curve1);
-
-            // Add the perimeter surface.
-            Surface perimeterSurface = PerimeterSurface(surface, borderThickness) as Surface;
-
-            // Create the bounding rectangle.
-            Rectangle boundingRectangle = CreateBoundingRectangle(curve1 as PolyCurve, hatchRotation);
-
-            // Create the hatch setout lines.
-            List<Line> lines = SetOutLines(boundingRectangle, hatchSpacing, hatchSpacing);
-
-            // Create the hatch outlines.
-            List<PolyCurve> hatchOutlines = new List<PolyCurve>();
-            foreach (Line line in lines)
-            {
-                hatchOutlines.Add(PolyCurve.ByThickeningCurveNormal(line, hatchThickness, Autodesk.DesignScript.Geometry.Vector.ZAxis()));
-            }
-
-            // Create surfaces from the hatch outlines.
-            List<Surface> hatchSurfaces = new List<Surface>();
-            foreach (PolyCurve hatchOutline in hatchOutlines)
-            { 
-                hatchSurfaces.Add(Surface.ByPatch(hatchOutline));
-            }
-
-            // Intersect the hatch surfaces with hatch area surface.
-            List<Surface> intersectedSurfaces = new List<Surface>();
-            foreach (Surface hatchSurface in hatchSurfaces) 
-            {
-                // Cast the overall and hatch surfaces as geometry.
-                Autodesk.DesignScript.Geometry.Geometry castSurface = surface as Autodesk.DesignScript.Geometry.Geometry;
-                Autodesk.DesignScript.Geometry.Geometry castHatchSurface = hatchSurface as Autodesk.DesignScript.Geometry.Geometry;
-
-                // Intersect the overall and hatch surfaces.
-                Autodesk.DesignScript.Geometry.Geometry[] surfaceList = castSurface.Intersect(castHatchSurface);
-
-                foreach (Autodesk.DesignScript.Geometry.Geometry geometry in surfaceList) 
-                { 
-                    intersectedSurfaces.Add((Surface)geometry);
-                }
-            }
-
-            // Join the perimeter surface and the intersected hatch surfaces.
-            List<Surface> combinedSurfaces = new List<Surface>();
-            combinedSurfaces.AddRange(new List<Surface> { perimeterSurface });
-            combinedSurfaces.AddRange(intersectedSurfaces);
-            Surface joinedSurface = Surface.ByUnion(combinedSurfaces);
-
-            // Get the perimeter curves of the joined surface.
-            Curve[] perimeterCurves = joinedSurface.PerimeterCurves();
-
-            return new Dictionary<string, object>
-            {
-                { "hatchSurface", combinedSurfaces },
-                { "hatchOutlines", perimeterCurves }
-            };
-        }
-
-
-        /// <summary>
-        /// To group intersecting geometry.
-        /// </summary>
-        /// <param name="geometry">A list containg geometry to be sorted based on intersections.</param>
-        /// <returns name="geometryList">A list containing the grouped geometry.</returns>
-        public static List<List<Autodesk.DesignScript.Geometry.Geometry>> SortIntersectingGeometry(List<Autodesk.DesignScript.Geometry.Geometry> geometry)
-        {
-            List<List<Autodesk.DesignScript.Geometry.Geometry>> geoLists = new List<List<Autodesk.DesignScript.Geometry.Geometry>>();
-
-            while (geometry.Any()) // Continue until all geometries are sorted.
-            {
-                // Start with the first geometry and create a new group.
-                Autodesk.DesignScript.Geometry.Geometry currentGeometry = geometry[0];
-                geometry.RemoveAt(0);
-
-                List<Autodesk.DesignScript.Geometry.Geometry> geometryGroup = new List<Autodesk.DesignScript.Geometry.Geometry> { currentGeometry };
-                bool geometryAdded;
-
-                do
-                {
-                    geometryAdded = false;
-
-                    // Iterate over a copy of the remaining geometries.
-                    foreach (Autodesk.DesignScript.Geometry.Geometry otherGeometry in geometry.ToList())
-                    {
-                        // If it intersects with any geometry in the group, add it to the group.
-                        if (geometryGroup.Any(g => g.DoesIntersect(otherGeometry)))
-                        {
-                            geometryGroup.Add(otherGeometry);
-                            geometry.Remove(otherGeometry);
-                            geometryAdded = true; // Mark that we added a geometry.
-                        }
-                    }
-                }
-                while (geometryAdded); // Continue checking until no more geometries are added to the group.
-
-                // Add the completed group to the list of grouped geometries.
-                geoLists.Add(geometryGroup);
-            }
-
-            return geoLists;
         }
 
 
@@ -832,7 +266,7 @@ namespace Common
             List<float> splitWidths)
         {
             // Throw an error if the split width is less than 0.001.
-            foreach (float width in splitWidths) 
+            foreach (float width in splitWidths)
             {
                 if (width < 0.001)
                 {
@@ -1013,7 +447,7 @@ namespace Common
 
             // Create a list of numbers to indicate half of the split width.
             List<List<float>> entranceHalfDistances = new List<List<float>>();
-            foreach (float width in splitWidths) 
+            foreach (float width in splitWidths)
             {
                 entranceHalfDistances.Add(Maths.Range(width / 2, -width / 2, 2));
             }
@@ -1048,7 +482,7 @@ namespace Common
                 for (int j = 0; j < projectedPointParameters[i].Count; j++)
                 {
                     List<Autodesk.DesignScript.Geometry.Point> pointList = new List<Autodesk.DesignScript.Geometry.Point>();
-                    for (int k = 0; k < groupedSplitDistances[i][j].Count; k++) 
+                    for (int k = 0; k < groupedSplitDistances[i][j].Count; k++)
                     {
                         pointList.Add(groupedCurves[i][0].PointAtChordLength(groupedSplitDistances[i][j][k], projectedPointParameters[i][j], true));
                     }
@@ -1145,7 +579,7 @@ namespace Common
             }
 
             // Group the intersecting curves.
-            List<List<Autodesk.DesignScript.Geometry.Geometry>> intersectingCurves = SortIntersectingGeometry(combinedGeometry);
+            List<List<Autodesk.DesignScript.Geometry.Geometry>> intersectingCurves = Common.GeometryTools.GeometryUtilities.SortIntersectingGeometry(combinedGeometry);
 
             // Cast the intersecting curve groups. 
             List<List<Curve>> castIntersectingCurves = new List<List<Curve>>();
@@ -1185,7 +619,7 @@ namespace Common
                 { "gapCurves", flattenedGapCurves }, // flattenedGapCurves
                 { "splitCenter", flattenedPoints },
                 { "splitCurves", castSortedPolyCurves }, // castSortedPolyCurves
-                { "splitPoints", splitPoints } 
+                { "splitPoints", splitPoints }
             };
 
             return curveDictionary;
@@ -1199,7 +633,7 @@ namespace Common
         /// <param name="curves">The input curves.</param>
         /// <param name="sortingPoint">A point at the center of the input curves.</param>
         /// <returns name="orderedPolyCurves">The ordered curves.</returns>
-        public static List<Curve> ReorderCurvePositions(List<Curve> curves, Autodesk.DesignScript.Geometry.Point sortingPoint) 
+        public static List<Curve> ReorderCurvePositions(List<Curve> curves, Autodesk.DesignScript.Geometry.Point sortingPoint)
         {
             // Get the center point of the curve bounding boxes.
             List<Autodesk.DesignScript.Geometry.Point> centerPoints = new List<Autodesk.DesignScript.Geometry.Point>();
@@ -1246,23 +680,23 @@ namespace Common
         /// <param name="curves">The input curves.</param>
         /// <param name="sortingPoint">A point at the center of the input curves.</param>
         /// <returns name="orderedCurves">The ordered curves.</returns>
-        public static List<Curve> ReorderCurveDirections(List<Curve> curves, Autodesk.DesignScript.Geometry.Point sortingPoint) 
-        { 
+        public static List<Curve> ReorderCurveDirections(List<Curve> curves, Autodesk.DesignScript.Geometry.Point sortingPoint)
+        {
             List<float> sortingAngles = new List<float>();
-            foreach (Curve curve in curves) 
-            { 
+            foreach (Curve curve in curves)
+            {
                 // Get the name of the polycurve type.
                 String curveName = curve.GetType().Name;
 
                 Curve selectedCurve;
                 // Check if the curve is a polycurve. If so add the first curve of the polycurve to a list.
-                if (curveName == "PolyCurve") 
+                if (curveName == "PolyCurve")
                 {
                     PolyCurve currentCurve = (PolyCurve)curve;
                     selectedCurve = currentCurve.Curves().ToList()[0];
                 }
-                else 
-                { 
+                else
+                {
                     selectedCurve = curve;
                 }
 
@@ -1283,15 +717,15 @@ namespace Common
 
             // Reverse the curve directions if their tangent angle is greater than 180.
             List<Curve> reversedCurves = new List<Curve>();
-            foreach (Tuple<Curve, float> tuple in curveAnglePairs) 
+            foreach (Tuple<Curve, float> tuple in curveAnglePairs)
             {
                 // Reverse the curve if the sorting angle is greater than 180.
                 if (tuple.Item2 > 180)
                 {
                     reversedCurves.Add(tuple.Item1.Reverse());
                 }
-                else 
-                { 
+                else
+                {
                     reversedCurves.Add(tuple.Item1);
                 }
             }
@@ -1305,7 +739,7 @@ namespace Common
         /// </summary>
         /// <param name="curves">The input curves.</param>
         /// <returns name="averageCenter">The average center point.</returns>
-        public static Autodesk.DesignScript.Geometry.Point CurveListAverageCenter(List<Curve> curves) 
+        public static Autodesk.DesignScript.Geometry.Point CurveListAverageCenter(List<Curve> curves)
         {
             // Get the average center point of the input curves.
             List<Autodesk.DesignScript.Geometry.Point> allPoints = new List<Autodesk.DesignScript.Geometry.Point>();

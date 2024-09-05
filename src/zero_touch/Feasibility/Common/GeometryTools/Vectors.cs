@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Parking.Accessories
+namespace Common.GeometryTools
 {
-    public class WheelStop
+    internal class Vectors
     {
     }
 }

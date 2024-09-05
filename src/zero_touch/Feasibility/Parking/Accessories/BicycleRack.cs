@@ -231,7 +231,7 @@ namespace Parking.Accessories
             }
 
             // Add transformations to the rack.
-            List<Geometry> transformedRack = Common.GeometryTools.AddTransformations(
+            List<Geometry> transformedRack = Common.GeometryTools.GeometryUtilities.AddTransformations(
                 new List<Geometry>() { rackSolid as Geometry },
                 Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 0),
                 _targetPlane,
@@ -242,6 +242,11 @@ namespace Parking.Accessories
             );
 
             return transformedRack[0] as Solid;
+        }
+
+        public BicycleRack WERw(int er) 
+        {
+            return null;
         }
 
 
@@ -433,7 +438,7 @@ namespace Parking.Accessories
             }
 
             // Add transformations to the rack.
-            List<Geometry> transformedRack = Common.GeometryTools.AddTransformations(
+            List<Geometry> transformedRack = Common.GeometryTools.GeometryUtilities.AddTransformations(
                 new List<Geometry>() { rackSolid as Geometry },
                 Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 0),
                 _targetPlane,
