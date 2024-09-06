@@ -11,7 +11,7 @@ namespace Parking.Accessories
     /// <summary>
     /// Wrapper class for the bicycle racks.
     /// </summary>
-    internal class BicycleRack
+    public class BicycleRack
     {
         /// <summary>
         /// The target plane of the bicycle rack.
@@ -80,7 +80,7 @@ namespace Parking.Accessories
         /// <summary>
         /// The bicycle rack type.
         /// </summary>
-        public BicycleRackTypes BicycleRackType {  get; set; }
+        internal BicycleRackTypes BicycleRackType {  get; set; }
 
 
         /// <summary>
@@ -472,6 +472,143 @@ namespace Parking.Accessories
             }
 
             // Join the rack solids 
+            Solid rackSolid = Solid.ByUnion(rackSolids);
+
+            // Create a temp target plane if the target plane input is null.
+            Plane _targetPlane = null;
+            if (TargetPlane == null)
+            {
+                _targetPlane = Plane.ByOriginNormal(origin, Autodesk.DesignScript.Geometry.Vector.ZAxis());
+            }
+            else
+            {
+                _targetPlane = TargetPlane;
+            }
+
+            // Add transformations to the rack.
+            List<Geometry> transformedRack = Common.GeometryTools.GeometryUtilities.AddTransformations(
+                new List<Geometry>() { rackSolid as Geometry },
+                Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 0),
+                _targetPlane,
+                Autodesk.DesignScript.Geometry.Vector.ZAxis(),
+                RackAngle,
+                0,
+                1
+            );
+
+            return transformedRack[0] as Solid;
+        }
+
+
+        /// <summary>
+        /// Create a post and ring bicycle rack.
+        /// </summary>
+        /// <param name="rackHeight">The height of the bicycle rack.</param>
+        /// <param name="rackLength">The length of the bicycle rack.</param>
+        /// <param name="plateDiameter">The diameter of the base plates.</param>
+        /// <param name="plateThickness">The thickness of the base plate.</param>
+        /// <param name="ringHeight">The height of the rack ring.</param>
+        /// <param name="ringCornerRadius">The radius of the ring corners.</param>
+        /// <param name="ringOffset">The offset of the ring from the top of the rack.</param>
+        /// <param name="tubeDiameter">The diameter of the bicycle rack's tube.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public Solid CreatePostandRingRack(
+            float rackHeight = 1f,
+            float rackLength = 0.5f,
+            float plateDiameter = 0.1f,
+            float plateThickness = 0.01f,
+            float ringHeight = 0.5f,
+            float ringCornerRadius = 0.15f,
+            float ringOffset = 0.1f,
+            float tubeDiameter = 0.032f)
+        {
+            // Validate inputs
+            if (rackHeight <= 0)
+            {
+                throw new ArgumentException("The rack height cannot be zero");
+            }
+
+            if (rackLength <= 0)
+            {
+                throw new ArgumentException("The rack length cannot be zero");
+            }
+
+            if (plateDiameter <= 0)
+            {
+                throw new ArgumentException("The plate diameter must be greater than zero.");
+            }
+
+            if (plateThickness <= 0)
+            {
+                throw new ArgumentException("The plate thickness must be greater than zero.");
+            }
+
+            if (ringHeight <= ringCornerRadius * 2 + tubeDiameter)
+            {
+                throw new ArgumentException("The ring height must be at least 2x the corner radius plus the tube diameter.");
+            }
+
+            if (rackLength <= ringCornerRadius * 2 + tubeDiameter)
+            {
+                throw new ArgumentException("The rack length must be at least 2x the corner radius plus the tube diameter.");
+            }
+
+            if (tubeDiameter <= 0)
+            {
+                throw new ArgumentException("The rack tube diameter cannot be zero");
+            }
+
+            // Set the class attributes.
+            RackHeight = rackHeight;
+            RackLength = rackLength;
+            TubeDiameter = tubeDiameter;
+            BicycleRackType = BicycleRackTypes.PostandRingRack;
+
+            // List to hold the rack solids.
+            List<Solid> rackSolids = new List<Solid>();
+
+            // Create the central point of the rack
+            Autodesk.DesignScript.Geometry.Point origin = Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 0);
+
+            // Create point at center of the ring.
+            Autodesk.DesignScript.Geometry.Point ringCenter = Autodesk.DesignScript.Geometry.Point
+                .ByCoordinates(0, 0, rackHeight - (ringOffset + ringHeight / 2));
+
+            // Create a plane at the ring center.
+            Plane rackCenterPlane = Plane.ByOriginNormal(ringCenter, Autodesk.DesignScript.Geometry.Vector.YAxis());
+
+            // Create a rectangle at the ring center plane.
+            PolyCurve ringRectangle = Rectangle
+                .ByWidthLength(rackCenterPlane, ringHeight - tubeDiameter / 2, rackLength - tubeDiameter / 2);
+
+            // Round the corners of the ring rectangle.
+            PolyCurve roundedRectangle = ringRectangle.Fillet(ringCornerRadius, false);
+
+            // Create a circle at the start of the rounded ring rectangle.
+            Circle circle = Circle.ByPlaneRadius(roundedRectangle.PlaneAtParameter(0), tubeDiameter / 2);
+
+            // Create the ring sweep solid.
+            Solid ringSolid = Solid.BySweep(circle, roundedRectangle, false);
+
+            // Top point of the cyclinder at the sphere center.
+            Autodesk.DesignScript.Geometry.Point sphereCenter = Autodesk.DesignScript.Geometry.Point
+                .ByCoordinates(0, 0, rackHeight - tubeDiameter / 2);
+
+            // Create the post.
+            Solid post = Cylinder.ByPointsRadii(origin, sphereCenter, tubeDiameter / 2, tubeDiameter / 2);
+
+            // Add a sphere at the post top.
+            Solid sphere = Sphere.ByCenterPointRadius(sphereCenter, tubeDiameter / 2);
+
+            // Create the base plate.
+            Solid basePlate = Circle.ByCenterPointRadius(origin, plateDiameter / 2).ExtrudeAsSolid(plateThickness);
+
+            // Add the solids to the rack solids list and join them.
+            rackSolids.Add(post);
+            rackSolids.Add(sphere);
+            rackSolids.Add(ringSolid);
+            rackSolids.Add(basePlate);
             Solid rackSolid = Solid.ByUnion(rackSolids);
 
             // Create a temp target plane if the target plane input is null.

@@ -422,6 +422,21 @@
             <returns>A list of curves representing the wave bicycle rack.</returns>
             <exception cref="T:System.ArgumentException">Thrown when an invalid argument is provided.</exception>
         </member>
+        <member name="M:Parking.Accessories.BicycleRack.CreatePostandRingRack(System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Create a post and ring bicycle rack.
+            </summary>
+            <param name="rackHeight">The height of the bicycle rack.</param>
+            <param name="rackLength">The length of the bicycle rack.</param>
+            <param name="plateDiameter">The diameter of the base plates.</param>
+            <param name="plateThickness">The thickness of the base plate.</param>
+            <param name="ringHeight">The height of the rack ring.</param>
+            <param name="ringCornerRadius">The radius of the ring corners.</param>
+            <param name="ringOffset">The offset of the ring from the top of the rack.</param>
+            <param name="tubeDiameter">The diameter of the bicycle rack's tube.</param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
         <member name="T:Parking.Accessories.BicycleRackTypes">
             <summary>
             Defines enums for the bicycle rack types.
