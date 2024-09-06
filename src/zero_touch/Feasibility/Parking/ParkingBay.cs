@@ -483,16 +483,64 @@ namespace Parking
         }
 
 
-        public object CreateBicycleRack() 
+        /// <summary>
+        /// Create a bicycle U rack.
+        /// </summary>
+        /// <param name="rackHeight">Height of the bicycle rack.</param>
+        /// <param name="rackLength">Length of the bicycle rack.</param>
+        /// <param name="rackOffset">Offset of the rack from the side of the parking bay.</param>
+        /// <param name="cornerRadius">Radius at the corner of the rack tube.</param>
+        /// <param name="basePlateDiameter">Diameter of the rack's base plate.</param>
+        /// <param name="basePlateThickness">Thickness of the rack's base plate.</param>
+        /// <param name="tubeDiameter">Diameter of the rack tube.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public Solid BicycleRackCreateURack(
+            float rackHeight = 1f,
+            float rackLength = 1f,
+            float rackOffset = 0.05f,
+            float cornerRadius = 0.15f,
+            float basePlateDiameter = 0.1f,
+            float basePlateThickness = 0.01f,
+            float tubeDiameter = 0.032f) 
         {
-            object rackSolid;
-            if (Accessories.BicycleRack.BicycleRackType == BicycleRackTypes.NoRack)
+            Solid rackSolid;
+
+            if (Accessories.BicycleRack.BicycleRackType == BicycleRackTypes.InvertedURack)
             {
-                rackSolid = "No rack required";
+                // Get the parking rectangle.
+                Rectangle parkingRectangle = CreateRectangle();
+                
+                // Get the fourth curve of the rectangle.
+                Curve fourthCurve = parkingRectangle.CurveAtIndex(3);
+
+                // Get the center of the curve.
+                Autodesk.DesignScript.Geometry.Point point = fourthCurve.PointAtParameter(0.5);
+
+                // Rotate the parking vector.
+                Vector vector = GetParkingDirection().Rotate(Plane.XY(), 90).Reverse();
+
+                // Move the point.
+                Autodesk.DesignScript.Geometry.Point movedPoint = point.Translate(vector, -rackOffset) as Autodesk.DesignScript.Geometry.Point;
+
+                // Create a plane at the point.
+                Plane plane = Plane.ByOriginNormal(movedPoint, Vector.ZAxis());
+
+                // Instantiate the bicycle rack at the plane.
+                Solid bicycleRack = new BicycleRack(plane, -GetRotationAngle() + 90)
+                    .CreateInvertedURack(
+                    rackHeight, 
+                    rackLength, 
+                    cornerRadius, 
+                    basePlateDiameter, 
+                    basePlateThickness,
+                    tubeDiameter);
+
+                rackSolid = bicycleRack;
             }
             else 
             {
-                throw new Exception("This rack type has not been specified.");
+                throw new Exception("This rack type was not specified in the accessories node.");
             }
 
             return rackSolid;

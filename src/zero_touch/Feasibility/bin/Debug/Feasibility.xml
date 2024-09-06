@@ -805,6 +805,20 @@
             <param name="centerOffsetPercentage"></param>
             <returns name="numberingCurves"></returns>
         </member>
+        <member name="M:Parking.ParkingBay.BicycleRackCreateURack(System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Create a bicycle U rack.
+            </summary>
+            <param name="rackHeight">Height of the bicycle rack.</param>
+            <param name="rackLength">Length of the bicycle rack.</param>
+            <param name="rackOffset">Offset of the rack from the side of the parking bay.</param>
+            <param name="cornerRadius">Radius at the corner of the rack tube.</param>
+            <param name="basePlateDiameter">Diameter of the rack's base plate.</param>
+            <param name="basePlateThickness">Thickness of the rack's base plate.</param>
+            <param name="tubeDiameter">Diameter of the rack tube.</param>
+            <returns></returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
         <member name="T:Parking.Patterns">
             <summary>
             Wrapper class for the parking patterns.
@@ -853,10 +867,15 @@
         </member>
         <member name="P:Parking.Patterns.ParkingType">
             <summary>
-            To set the parking signage type.
+            To set the parking type.
             </summary>
         </member>
-        <member name="M:Parking.Patterns.#ctor(Autodesk.DesignScript.Geometry.Curve,System.Int32,System.Single,System.Boolean,System.Single,System.Single,System.Single,Parking.ParkingType)">
+        <member name="P:Parking.Patterns.Accessories">
+            <summary>
+            The required parking accessory configuration.
+            </summary>
+        </member>
+        <member name="M:Parking.Patterns.#ctor(Autodesk.DesignScript.Geometry.Curve,System.Int32,System.Single,System.Boolean,System.Single,System.Single,System.Single,Parking.ParkingType,Parking.Accessories.Accessories)">
             <summary>
             Creates instances of the parking pattern class.
             </summary>
@@ -868,6 +887,7 @@
             <param name="bayAngle">the angle of the parking bays.</param>
             <param name="islandWidth">The width of the non interlocking pattern island.</param>
             <param name="parkingType">The type of parking bay. Note that this parameter controls the displayed signage.</param>
+            <param name="accessories">The required parking accessory configuration.</param>
         </member>
         <member name="M:Parking.Patterns.RequiredBayAngle">
             <summary>

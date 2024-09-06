@@ -78,9 +78,14 @@ namespace Parking
         public float IslandWidth { get; set; }
 
         /// <summary>
-        /// To set the parking signage type.
+        /// To set the parking type.
         /// </summary>
         public ParkingType ParkingType { get; set; }
+
+        /// <summary>
+        /// The required parking accessory configuration.
+        /// </summary>
+        internal Accessories.Accessories Accessories { get; set; }
 
 
         /// <summary>
@@ -94,6 +99,7 @@ namespace Parking
         /// <param name="bayAngle">the angle of the parking bays.</param>
         /// <param name="islandWidth">The width of the non interlocking pattern island.</param>
         /// <param name="parkingType">The type of parking bay. Note that this parameter controls the displayed signage.</param>
+        /// <param name="accessories">The required parking accessory configuration.</param>
         [IsVisibleInDynamoLibrary(true)]
         public Patterns(
             Curve locationLine,
@@ -104,7 +110,8 @@ namespace Parking
             float bayAngle = 30,
             //float patternRotation = 0,
             float islandWidth = 1,
-            ParkingType parkingType = ParkingType.EV) 
+            ParkingType parkingType = ParkingType.EV,
+            Accessories.Accessories accessories = null) 
         { 
             LocationLine = locationLine;
             PatternType = patternType;
@@ -115,6 +122,7 @@ namespace Parking
             //PatternRotation = patternRotation;
             IslandWidth = islandWidth;
             ParkingType = parkingType;
+            Accessories = accessories;
         }
 
 
@@ -350,7 +358,8 @@ namespace Parking
                     10,
                     false,
                     true,
-                    ParkingType);
+                    ParkingType,
+                    Accessories);
                 firstParkingBays.Add(bay);
 
                 // set the location point of the parking bay.
@@ -368,7 +377,8 @@ namespace Parking
                     10,
                     true,
                     true,
-                    ParkingType);
+                    ParkingType,
+                    Accessories);
                 secondParkingBays.Add(bay);
 
                 // set the location point of the parking bay.
@@ -437,7 +447,8 @@ namespace Parking
                         10,
                         false,
                         true,
-                        ParkingType);
+                        ParkingType, 
+                        Accessories);
                     firstParkingBays.Add(bay);
 
                     // set the location point of the parking bay.
@@ -455,7 +466,8 @@ namespace Parking
                         10,
                         true,
                         false,
-                        ParkingType);
+                        ParkingType,
+                        Accessories);
                     secondParkingBays.Add(bay);
 
                     // set the location point of the parking bay.
@@ -528,7 +540,8 @@ namespace Parking
                         10,
                         false,
                         true,
-                        ParkingType);
+                        ParkingType, 
+                        Accessories);
                     firstParkingBays.Add(bay);
 
                     // set the location point of the parking bay.
@@ -547,7 +560,8 @@ namespace Parking
                         10,
                         true,
                         true,
-                        ParkingType);
+                        ParkingType, 
+                        Accessories);
                     secondParkingBays.Add(bay);
 
                     // set the location point of the parking bay.
