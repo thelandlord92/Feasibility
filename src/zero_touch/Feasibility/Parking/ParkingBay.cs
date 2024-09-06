@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Parking;
 using Common;
 using Parking.Accessories;
+using System.Windows;
 
 namespace Parking
 {
@@ -20,7 +21,7 @@ namespace Parking
         /// <summary>
         /// The target position of the parking bay.
         /// </summary>
-        internal Point TargetPosition {  private get; set; }
+        internal Autodesk.DesignScript.Geometry.Point TargetPosition {  private get; set; }
 
         /// <summary>
         /// The width of the parking bay.
@@ -80,8 +81,8 @@ namespace Parking
         /// <param name="parkingType">The type of parking bay. Note that this parameter controls the displayed signage.</param>
         /// <param name="accessories">The required parking accessory configuration.</param>
         public ParkingBay(
-            //Point targetPosition,
-            //Point patternCenter,
+            //Autodesk.DesignScript.Geometry.Point targetPosition,
+            //Autodesk.DesignScript.Geometry.Point patternCenter,
             float bayWidth = (float)2.5,
             float bayLength = 5,
             float bayAngle = 30,
@@ -112,10 +113,10 @@ namespace Parking
         private Rectangle ParkingBayTransformations(Rectangle bayRectangle) 
         {
             // get the start point of the base rectangle.
-            Point startPoint = bayRectangle.StartPoint as Point;
+            Autodesk.DesignScript.Geometry.Point startPoint = bayRectangle.StartPoint as Autodesk.DesignScript.Geometry.Point;
 
             // create plane at rectangle start point for rotation.
-            Plane rotatePlane = Plane.ByOriginNormal(startPoint, Vector.ZAxis());
+            Plane rotatePlane = Plane.ByOriginNormal(startPoint, Autodesk.DesignScript.Geometry.Vector.ZAxis());
 
             // rotate the rectangle. 
             Rectangle rotatedRectangle = bayRectangle.Rotate(rotatePlane, BayAngle) as Rectangle;
@@ -124,8 +125,8 @@ namespace Parking
             CoordinateSystem planeCS = CoordinateSystem.ByPlane(rotatePlane);
 
             // get the x and y axis of the rotation plane coordinate system.
-            Vector coordx = planeCS.XAxis;
-            Vector coordy = planeCS.YAxis;
+            Autodesk.DesignScript.Geometry.Vector coordx = planeCS.XAxis;
+            Autodesk.DesignScript.Geometry.Vector coordy = planeCS.YAxis;
 
             // create the vertical and horizontal mirror planes.
             Plane horizotalMirrorPlane = Plane.ByOriginNormal(startPoint, coordx);
@@ -156,10 +157,10 @@ namespace Parking
             }
 
             // set a temporary target position if the input is null.
-            Point _targetPosition = null;
+            Autodesk.DesignScript.Geometry.Point _targetPosition = null;
             if (TargetPosition == null)
             {
-                _targetPosition = Point.ByCoordinates(0, 0);
+                _targetPosition = Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 0);
             }
             else 
             { 
@@ -167,7 +168,7 @@ namespace Parking
             }
 
             // create a plane at the target position.
-            Plane targetPlane = Plane.ByOriginNormal(_targetPosition, Vector.ZAxis());
+            Plane targetPlane = Plane.ByOriginNormal(_targetPosition, Autodesk.DesignScript.Geometry.Vector.ZAxis());
 
             // get the coordinate system of the target plane.
             CoordinateSystem targetCS = CoordinateSystem.ByPlane(targetPlane);
@@ -230,7 +231,7 @@ namespace Parking
             try 
             {
                 // offset the parking rectangle by the strip thickness.
-                Curve[] stripeOffset = parkingRectangle.OffsetMany(-stripeThickness, Vector.ZAxis()) as Curve[];
+                Curve[] stripeOffset = parkingRectangle.OffsetMany(-stripeThickness, Autodesk.DesignScript.Geometry.Vector.ZAxis()) as Curve[];
 
                 // join the offset curves.
                 Curve joinedCurves = PolyCurve.ByJoinedCurves(stripeOffset, 0.01, false, 0) as Curve;
@@ -247,7 +248,7 @@ namespace Parking
             catch 
             {
                 // offset the parking rectangle by the strip thickness.
-                Curve[] stripeOffset = parkingRectangle.OffsetMany(stripeThickness, Vector.ZAxis()) as Curve[];
+                Curve[] stripeOffset = parkingRectangle.OffsetMany(stripeThickness, Autodesk.DesignScript.Geometry.Vector.ZAxis()) as Curve[];
 
                 // join the offset curves.
                 Curve joinedCurves = PolyCurve.ByJoinedCurves(stripeOffset, 0.01, false, 0) as Curve;
@@ -263,10 +264,10 @@ namespace Parking
             }
 
             // get the center of the parking spot.
-            Point parkingCenter = parkingRectangle.Center();
+            Autodesk.DesignScript.Geometry.Point parkingCenter = parkingRectangle.Center();
 
             // create a plane at the center point.
-            Plane centerPlane = Plane.ByOriginNormal(parkingCenter, Vector.ZAxis());
+            Plane centerPlane = Plane.ByOriginNormal(parkingCenter, Autodesk.DesignScript.Geometry.Vector.ZAxis());
 
             // create the parking stripe entry cut rectangle.
             Rectangle entryRectangle = Rectangle.ByWidthLength(centerPlane, stripeOpeningWidth, stripeThickness * 3);
@@ -309,7 +310,7 @@ namespace Parking
         /// Get the vector along the length of the parking spots.
         /// </summary>
         /// <returns name="lengthVector">vector along the length of the parking bay.</returns>
-        public Vector GetParkingDirection() 
+        public Autodesk.DesignScript.Geometry.Vector GetParkingDirection() 
         {
             // get the parking bay rectangle.
             Rectangle parkingRectangle = CreateRectangle();
@@ -321,7 +322,7 @@ namespace Parking
             List<Line> rectangleLines = rectangleGeometries.OfType<Line>().ToList();
 
             // get the vector of a line at the length of the parking bay.
-            Vector lengthVector = rectangleLines[1].Direction;
+            Autodesk.DesignScript.Geometry.Vector lengthVector = rectangleLines[1].Direction;
 
             return lengthVector;
         }
@@ -334,7 +335,7 @@ namespace Parking
         public float GetRotationAngle() 
         {
             // compute the rotation angle of the parking bay.
-            float rotationAngle = (float)GetParkingDirection().AngleAboutAxis(Vector.YAxis(), Vector.ZAxis());
+            float rotationAngle = (float)GetParkingDirection().AngleAboutAxis(Autodesk.DesignScript.Geometry.Vector.YAxis(), Autodesk.DesignScript.Geometry.Vector.ZAxis());
 
             return rotationAngle;
         }
@@ -344,13 +345,13 @@ namespace Parking
         /// Gets the center points of the placed parking bays.
         /// </summary>
         /// <returns name="parkingCenter">the center point of the parking bay.</returns>
-        public Point GetCenterPoint()
+        public Autodesk.DesignScript.Geometry.Point GetCenterPoint()
         {
             // get the parking bay rectangle.
             Rectangle parkingRectangle = CreateRectangle();
 
             // get the center of the parking bay.
-            Point parkingCenter = parkingRectangle.Center();
+            Autodesk.DesignScript.Geometry.Point parkingCenter = parkingRectangle.Center();
 
             return parkingCenter;
         }
@@ -364,16 +365,16 @@ namespace Parking
         public List<Curve[]> AddSignageOutline(float centerOffsetPercentage = 50) 
         {
             // add the parking bay center point.
-            Point parkingCenter = GetCenterPoint();
+            Autodesk.DesignScript.Geometry.Point parkingCenter = GetCenterPoint();
 
             // calculate the signage center offset distance. 
             float centerOffset = ((BayLength/2) / 100) * centerOffsetPercentage;
 
             // move the point to locate the signage.
-            Point movedPoint = parkingCenter.Translate(GetParkingDirection(), centerOffset) as Point;
+            Autodesk.DesignScript.Geometry.Point movedPoint = parkingCenter.Translate(GetParkingDirection(), centerOffset) as Autodesk.DesignScript.Geometry.Point;
 
             // add a plane at the moved point.
-            Plane plane = Plane.ByOriginNormal(movedPoint, Vector.ZAxis());
+            Plane plane = Plane.ByOriginNormal(movedPoint, Autodesk.DesignScript.Geometry.Vector.ZAxis());
 
             // get the signage resource name.
             string resourcename = SignageResources.ResourceMap[ParkingType];
@@ -406,16 +407,16 @@ namespace Parking
             float centerOffsetPercentage = 50) 
         {
             // Get the center point of the parking bay.
-            Point parkingCenter = GetCenterPoint();
+            Autodesk.DesignScript.Geometry.Point parkingCenter = GetCenterPoint();
 
             // Calculate the signage center offset distance. 
             float centerOffset = ((BayLength / 2) / 100) * centerOffsetPercentage;
 
             // Move the point to locate the numbering.
-            Point movedPoint = parkingCenter.Translate(GetParkingDirection().Reverse(), centerOffset) as Point;
+            Autodesk.DesignScript.Geometry.Point movedPoint = parkingCenter.Translate(GetParkingDirection().Reverse(), centerOffset) as Autodesk.DesignScript.Geometry.Point;
 
             // Add a plane at the moved point.
-            Plane plane = Plane.ByOriginNormal(movedPoint, Vector.ZAxis()) as Plane;
+            Plane plane = Plane.ByOriginNormal(movedPoint, Autodesk.DesignScript.Geometry.Vector.ZAxis()) as Plane;
 
             // Add the text at the plane.
             Dictionary<string, object> text = Text.ByStringPlaneAndScale(
@@ -484,7 +485,7 @@ namespace Parking
 
 
         /// <summary>
-        /// Create a bicycle U rack.
+        /// Create the bicycle U racks.
         /// </summary>
         /// <param name="rackHeight">Height of the bicycle rack.</param>
         /// <param name="rackLength">Length of the bicycle rack.</param>
@@ -518,13 +519,13 @@ namespace Parking
                 Autodesk.DesignScript.Geometry.Point point = fourthCurve.PointAtParameter(0.5);
 
                 // Rotate the parking vector.
-                Vector vector = GetParkingDirection().Rotate(Plane.XY(), 90).Reverse();
+                Autodesk.DesignScript.Geometry.Vector vector = GetParkingDirection().Rotate(Plane.XY(), 90).Reverse();
 
                 // Move the point.
                 Autodesk.DesignScript.Geometry.Point movedPoint = point.Translate(vector, -rackOffset) as Autodesk.DesignScript.Geometry.Point;
 
                 // Create a plane at the point.
-                Plane plane = Plane.ByOriginNormal(movedPoint, Vector.ZAxis());
+                Plane plane = Plane.ByOriginNormal(movedPoint, Autodesk.DesignScript.Geometry.Vector.ZAxis());
 
                 // Instantiate the bicycle rack at the plane.
                 Solid bicycleRack = new BicycleRack(plane, -GetRotationAngle() + 90)
@@ -544,6 +545,80 @@ namespace Parking
             }
 
             return rackSolid;
+        }
+
+
+        /// <summary>
+        /// Create the bicycle wave racks.
+        /// </summary>
+        /// <param name="rackHeight">Height of the bicycle rack.</param>
+        /// <param name="rackLength">Length of the bicycle rack</param>
+        /// <param name="rackOffset">Offset of the rack from the side of the parking bay.</param>
+        /// <param name="numberOfWaves">The number of waves in the racks.</param>
+        /// <param name="waveOffsetFromBase">The vertical offset of the wave tubes from the base level</param>
+        /// <param name="basePlateDiameter">Diameter of the rack's base plate.</param>
+        /// <param name="basePlateThickness">Thickness of the rack's base plate.</param>
+        /// <param name="tubeDiameter">Diameter of the rack tube.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public Solid BicycleRackCreateWaveRack(
+            float rackHeight = 1f,
+            float rackLength = 0.8f,
+            float rackOffset = 0.05f,
+            int numberOfWaves = 1,
+            float waveOffsetFromBase = 0.1f,
+            float basePlateDiameter = 0.1f,
+            float basePlateThickness = 0.01f,
+            float tubeDiameter = 0.032f) 
+        {
+            Solid rackSolid;
+
+            if (Accessories.BicycleRack.BicycleRackType == BicycleRackTypes.WaveRack) 
+            {
+                // Get the parking rectangle.
+                Rectangle parkingRectangle = CreateRectangle();
+
+                // Get the first curve of the rectangle.
+                Curve firstCurve = parkingRectangle.CurveAtIndex(0);
+
+                // Get the center of the curve.
+                Autodesk.DesignScript.Geometry.Point point = firstCurve.PointAtParameter(0.5);
+
+                // Rotate the parking vector.
+                Autodesk.DesignScript.Geometry.Vector vector = GetParkingDirection();
+
+                // Move the point.
+                Autodesk.DesignScript.Geometry.Point movedPoint = point.Translate(vector, -rackOffset) as Autodesk.DesignScript.Geometry.Point;
+
+                // Create a plane at the point.
+                Plane plane = Plane.ByOriginNormal(movedPoint, Autodesk.DesignScript.Geometry.Vector.ZAxis());
+
+                // Instantiate the bicycle rack at the plane.
+                Solid bicycleRack = new BicycleRack(plane, -GetRotationAngle())
+                    .CreateWaveRack(
+                    rackHeight,
+                    rackLength,
+                    numberOfWaves,
+                    waveOffsetFromBase,
+                    basePlateDiameter,
+                    basePlateThickness,
+                    tubeDiameter);
+
+                rackSolid = bicycleRack;
+            }
+            else
+            {
+                throw new Exception("This rack type was not specified in the accessories node.");
+            }
+
+            return rackSolid;
+        }
+
+
+        public Solid BicycleRackCreatePostandRingRack(
+            )
+        {
+            return null;
         }
     }
 }

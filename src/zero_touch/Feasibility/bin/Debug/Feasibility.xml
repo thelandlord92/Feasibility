@@ -822,12 +822,27 @@
         </member>
         <member name="M:Parking.ParkingBay.BicycleRackCreateURack(System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)">
             <summary>
-            Create a bicycle U rack.
+            Create the bicycle U racks.
             </summary>
             <param name="rackHeight">Height of the bicycle rack.</param>
             <param name="rackLength">Length of the bicycle rack.</param>
             <param name="rackOffset">Offset of the rack from the side of the parking bay.</param>
             <param name="cornerRadius">Radius at the corner of the rack tube.</param>
+            <param name="basePlateDiameter">Diameter of the rack's base plate.</param>
+            <param name="basePlateThickness">Thickness of the rack's base plate.</param>
+            <param name="tubeDiameter">Diameter of the rack tube.</param>
+            <returns></returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:Parking.ParkingBay.BicycleRackCreateWaveRack(System.Single,System.Single,System.Single,System.Int32,System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Create the bicycle wave racks.
+            </summary>
+            <param name="rackHeight">Height of the bicycle rack.</param>
+            <param name="rackLength">Length of the bicycle rack</param>
+            <param name="rackOffset">Offset of the rack from the side of the parking bay.</param>
+            <param name="numberOfWaves">The number of waves in the racks.</param>
+            <param name="waveOffsetFromBase">The vertical offset of the wave tubes from the base level</param>
             <param name="basePlateDiameter">Diameter of the rack's base plate.</param>
             <param name="basePlateThickness">Thickness of the rack's base plate.</param>
             <param name="tubeDiameter">Diameter of the rack tube.</param>
