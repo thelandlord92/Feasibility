@@ -168,6 +168,7 @@
     <Compile Include="Parking\Routes\RouteEndTypes.cs" />
     <Compile Include="Parking\Routes\Routes.cs" />
     <Compile Include="Parking\Routes\RouteTypes.cs" />
+    <Compile Include="Parking\SecondaryParkingBay.cs" />
     <Compile Include="Parking\Signage.cs" />
     <Compile Include="Parking\SignageResources.cs" />
     <Compile Include="Parking\ParkingTypes.cs" />

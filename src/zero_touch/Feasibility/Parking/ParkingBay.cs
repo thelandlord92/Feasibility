@@ -552,8 +552,8 @@ namespace Parking
         /// Create the bicycle wave racks.
         /// </summary>
         /// <param name="rackHeight">Height of the bicycle rack.</param>
-        /// <param name="rackLength">Length of the bicycle rack</param>
-        /// <param name="rackOffset">Offset of the rack from the side of the parking bay.</param>
+        /// <param name="rackLength">Length of the bicycle rack.</param>
+        /// <param name="rackOffset">Offset of the rack from the front of the parking bay.</param>
         /// <param name="numberOfWaves">The number of waves in the racks.</param>
         /// <param name="waveOffsetFromBase">The vertical offset of the wave tubes from the base level</param>
         /// <param name="basePlateDiameter">Diameter of the rack's base plate.</param>
@@ -615,10 +615,73 @@ namespace Parking
         }
 
 
+        /// <summary>
+        /// Create the bicycle post and ring rack.
+        /// </summary>
+        /// <param name="rackHeight">Height of the bicycle rack.</param>
+        /// <param name="rackLength">Length of the bicycle rack.</param>
+        /// <param name="rackOffset">Offset of the rack from the side of the parking bay.</param>
+        /// <param name="ringCornerRadius">The radius of the ring corners.</param>
+        /// <param name="ringHeight">The height of the rack ring.</param>
+        /// <param name="ringOffset">The offset of the ring from the top of the rack.</param>
+        /// <param name="basePlateDiameter">The diameter of the base plates.</param>
+        /// <param name="basePlateThickness">Diameter of the rack's base plate.</param>
+        /// <param name="tubeDiameter">Diameter of the rack tube.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public Solid BicycleRackCreatePostandRingRack(
-            )
+            float rackHeight = 1f,
+            float rackLength = 0.5f,
+            float rackOffset = 0.05f,
+            float ringCornerRadius = 0.15f,
+            float ringHeight = 0.5f,
+            float ringOffset = 0.1f,
+            float basePlateDiameter = 0.1f,
+            float basePlateThickness = 0.01f,
+            float tubeDiameter = 0.032f)
         {
-            return null;
+            Solid rackSolid;
+
+            if (Accessories.BicycleRack.BicycleRackType == BicycleRackTypes.PostandRingRack)
+            {
+                // Get the parking rectangle.
+                Rectangle parkingRectangle = CreateRectangle();
+
+                // Get the fourth curve of the rectangle.
+                Curve fourthCurve = parkingRectangle.CurveAtIndex(3);
+
+                // Get the center of the curve.
+                Autodesk.DesignScript.Geometry.Point point = fourthCurve.PointAtParameter(0.5);
+
+                // Rotate the parking vector.
+                Autodesk.DesignScript.Geometry.Vector vector = GetParkingDirection().Rotate(Plane.XY(), 90).Reverse();
+
+                // Move the point.
+                Autodesk.DesignScript.Geometry.Point movedPoint = point.Translate(vector, -rackOffset) as Autodesk.DesignScript.Geometry.Point;
+
+                // Create a plane at the point.
+                Plane plane = Plane.ByOriginNormal(movedPoint, Autodesk.DesignScript.Geometry.Vector.ZAxis());
+
+                // Instantiate the bicycle rack at the plane.
+                Solid bicycleRack = new BicycleRack(plane, -GetRotationAngle() + 90)
+                    .CreatePostandRingRack(
+                    rackHeight,
+                    rackLength,
+                    basePlateDiameter,
+                    basePlateThickness,
+                    ringHeight,
+                    ringCornerRadius,
+                    ringOffset,
+                    tubeDiameter);
+
+                rackSolid = bicycleRack;
+            }
+            else
+            {
+                throw new Exception("This rack type was not specified in the accessories node.");
+            }
+
+            return rackSolid;
         }
     }
 }

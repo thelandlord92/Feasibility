@@ -839,12 +839,28 @@
             Create the bicycle wave racks.
             </summary>
             <param name="rackHeight">Height of the bicycle rack.</param>
-            <param name="rackLength">Length of the bicycle rack</param>
-            <param name="rackOffset">Offset of the rack from the side of the parking bay.</param>
+            <param name="rackLength">Length of the bicycle rack.</param>
+            <param name="rackOffset">Offset of the rack from the front of the parking bay.</param>
             <param name="numberOfWaves">The number of waves in the racks.</param>
             <param name="waveOffsetFromBase">The vertical offset of the wave tubes from the base level</param>
             <param name="basePlateDiameter">Diameter of the rack's base plate.</param>
             <param name="basePlateThickness">Thickness of the rack's base plate.</param>
+            <param name="tubeDiameter">Diameter of the rack tube.</param>
+            <returns></returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:Parking.ParkingBay.BicycleRackCreatePostandRingRack(System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Create the bicycle post and ring rack.
+            </summary>
+            <param name="rackHeight">Height of the bicycle rack.</param>
+            <param name="rackLength">Length of the bicycle rack.</param>
+            <param name="rackOffset">Offset of the rack from the side of the parking bay.</param>
+            <param name="ringCornerRadius">The radius of the ring corners.</param>
+            <param name="ringHeight">The height of the rack ring.</param>
+            <param name="ringOffset">The offset of the ring from the top of the rack.</param>
+            <param name="basePlateDiameter">The diameter of the base plates.</param>
+            <param name="basePlateThickness">Diameter of the rack's base plate.</param>
             <param name="tubeDiameter">Diameter of the rack tube.</param>
             <returns></returns>
             <exception cref="T:System.Exception"></exception>
