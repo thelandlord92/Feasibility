@@ -132,6 +132,16 @@
             <returns name="concaveCornerPoints">The concave corner points.</returns>
             <returns name="convexCornerPoints">The convex corner points.</returns>
         </member>
+        <member name="M:Common.GeometryTools.Curves.SplitPolyCurveByCornerDistances(Autodesk.DesignScript.Geometry.PolyCurve,System.Single,System.Single,System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="curve"></param>
+            <param name="concaveCornerSpacing"></param>
+            <param name="convexCornerSpacing"></param>
+            <param name="elementLength"></param>
+            <returns></returns>
+        </member>
         <member name="M:Common.GeometryTools.Curves.PolyCurveEdgeTypes(Autodesk.DesignScript.Geometry.PolyCurve)">
             <summary>
             Return a string list of the curve types that make up a polycurve.

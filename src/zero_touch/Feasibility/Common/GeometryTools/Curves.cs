@@ -342,12 +342,95 @@ namespace Common.GeometryTools
         }
 
 
-        public static object SplitPolyCurveByCornerDistances(
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="curve"></param>
+        /// <param name="concaveCornerSpacing"></param>
+        /// <param name="convexCornerSpacing"></param>
+        /// <param name="elementLength"></param>
+        /// <returns></returns>
+        public static List<List<Autodesk.DesignScript.Geometry.Point>> SplitPolyCurveByCornerDistances(
             PolyCurve curve,
-            float concaveCornerSpacing,
-            float convexCornerSpacing)
+            float concaveCornerSpacing = 1f,
+            float convexCornerSpacing = 1f,
+            float elementLength = 0f)
         {
-            return null;
+            // Check the planarity of the input polycurve.
+            PolyCurve planarCurve = CheckCurvePlanarity(curve) as PolyCurve;
+
+            // Get the corner angles of the polycurve.
+            List<float> cornerAngles = PolyCurveCornerAngles(planarCurve);
+
+            // Get the concave and concave corner point pairs.
+            Dictionary<string, object> pointDictionary = PolyCurveCornerPointPairs(
+                planarCurve,
+                concaveCornerSpacing,
+                convexCornerSpacing,
+                elementLength
+            );
+
+            List<List<Autodesk.DesignScript.Geometry.Point>> concavePoints = pointDictionary["concaveCornerPoints"] as List<List<Autodesk.DesignScript.Geometry.Point>>;
+            List<List<Autodesk.DesignScript.Geometry.Point>> convexPoints = pointDictionary["convexCornerPoints"] as List<List<Autodesk.DesignScript.Geometry.Point>>;
+
+            // Create a list of indices indicating the position of the concave and convex corners.
+            List<int> allIndices = new List<int>();
+            List<int> concaveIndices = new List<int>();
+            List<int> convexIndices = new List<int>();
+            for (int i = 0; i < cornerAngles.Count; i++)
+            {
+                if (cornerAngles[i] <= 180) 
+                {
+                    concaveIndices.Add(i);
+                }
+                else 
+                {
+                    convexIndices.Add(i);
+                }
+            } 
+            allIndices.AddRange(concaveIndices);
+            allIndices.AddRange(convexIndices);
+
+            // Combine the convex and concave corner points.
+            List<List<Autodesk.DesignScript.Geometry.Point>> cornerPoints = new List<List<Autodesk.DesignScript.Geometry.Point>>();
+            cornerPoints.AddRange(concavePoints);
+            cornerPoints.AddRange(convexPoints);
+
+            // Sort the corner points using the indices.
+            List<List<Autodesk.DesignScript.Geometry.Point>> sortedCornerPoints = cornerPoints
+                .Zip(allIndices, (pointList, index) => new { pointList, index })
+                .OrderBy(x => x.index)
+                .Select(x => x.pointList)
+                .ToList();
+
+            // Reverse the order of the corner point lists in the sorted corner points.
+            List<List<Autodesk.DesignScript.Geometry.Point>> reversedPoints = new List<List<Autodesk.DesignScript.Geometry.Point>>();
+            foreach (List<Autodesk.DesignScript.Geometry.Point> pointList in sortedCornerPoints) 
+            {
+                List<Autodesk.DesignScript.Geometry.Point> reversedList = pointList.ToList(); // Create a copy
+                reversedList.Reverse(); // Reverse in place
+                reversedPoints.Add(reversedList); // Add to the new list
+            }
+
+            // Flatten the corner points.
+            List<Autodesk.DesignScript.Geometry.Point> flattenedCornerPoints = reversedPoints.SelectMany(pointList => pointList).ToList();
+
+            // Shift the flattened points by -1.
+            List<Autodesk.DesignScript.Geometry.Point> shiftedPoints = new List<Autodesk.DesignScript.Geometry.Point>();
+            shiftedPoints.AddRange(flattenedCornerPoints.GetRange(1, flattenedCornerPoints.Count - 1)); // add the rest
+            shiftedPoints.Add(flattenedCornerPoints[0]); // add the last element to the beginning
+
+            // Chop the shifted points in segments of 2.
+            List<List<Autodesk.DesignScript.Geometry.Point>> choppedPoints = new List<List<Autodesk.DesignScript.Geometry.Point>>();
+            for (int i = 0; i < shiftedPoints.Count; i += 2)
+            {
+                if (i + 1 < shiftedPoints.Count)
+                {
+                    choppedPoints.Add(new List<Autodesk.DesignScript.Geometry.Point> { shiftedPoints[i], shiftedPoints[i + 1] });
+                }
+            }
+
+            return choppedPoints;
         }
 
 
