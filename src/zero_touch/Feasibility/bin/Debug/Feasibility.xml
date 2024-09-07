@@ -88,6 +88,13 @@
             <returns></returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
+        <member name="M:Common.GeometryTools.Curves.PolyCurveCorners(Autodesk.DesignScript.Geometry.PolyCurve)">
+            <summary>
+            Returns the corner points of a polycurve.
+            </summary>
+            <param name="curve">The input polycurve.</param>
+            <returns name="cornerPoints">The corner points.</returns>
+        </member>
         <member name="M:Common.GeometryTools.Curves.PolyCurveCornerCurvePairs(Autodesk.DesignScript.Geometry.PolyCurve)">
             <summary>
             Creates curve pairs per corner of the input polycurve. 
@@ -112,6 +119,19 @@
             <param name="curve">The input polycurve.</param>
             <returns name="cornerAngles">The polycurve's corner angles.</returns>
         </member>
+        <member name="M:Common.GeometryTools.Curves.PolyCurveCornerPointPairs(Autodesk.DesignScript.Geometry.PolyCurve,System.Single,System.Single,System.Single)">
+            <summary>
+            Returns the corner point pairs of a polycurve.
+            Note that the concave corner points are dependent on the element length.
+            For the concave corner spacing to be as in the concaveCornerSpacing parameter set the element length to zero.
+            </summary>
+            <param name="curve">The input polycurve</param>
+            <param name="concaveCornerSpacing">Spacing of the points at the concave corners.</param>
+            <param name="convexCornerSpacing">Spacing of the points at the convex corners.</param>
+            <param name="elementLength">The length of the elements to be placed along the edges of the polycurve.</param>
+            <returns name="concaveCornerPoints">The concave corner points.</returns>
+            <returns name="convexCornerPoints">The convex corner points.</returns>
+        </member>
         <member name="M:Common.GeometryTools.Curves.PolyCurveEdgeTypes(Autodesk.DesignScript.Geometry.PolyCurve)">
             <summary>
             Return a string list of the curve types that make up a polycurve.
@@ -121,9 +141,9 @@
         </member>
         <member name="M:Common.GeometryTools.Curves.SplitCurvesByPoints(System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Curve},System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Point},System.Collections.Generic.List{System.Single})">
             <summary>
-            Split a polycuve with a list of points and return new curves representing the splits.
+            Split a list of curves with a list of points and return new curves representing the splits.
             </summary>
-            <param name="inputCurves">The input polycurve.</param>
+            <param name="inputCurves">The input curves.</param>
             <param name="points">The list of points.</param>
             <param name="splitWidths">The width of the split gap at the points.</param>
             <returns name="gapCurves">The curves within the split gaps.</returns>
