@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Xml.Schema;
 using Common;
 
-namespace Parking
+namespace Parking.SurfaceParking
 {
     /// <summary>
     /// Wrapper class for the internal parking bays.

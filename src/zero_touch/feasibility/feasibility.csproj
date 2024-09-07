@@ -159,15 +159,15 @@
     <Compile Include="Parking\Accessories\WheelStopTypes.cs" />
     <Compile Include="Parking\Entrances.cs" />
     <Compile Include="Parking\EntranceTypes.cs" />
-    <Compile Include="Parking\ExclusionBays.cs" />
-    <Compile Include="Parking\InternalBays.cs" />
-    <Compile Include="Parking\Layouts.cs" />
+    <Compile Include="Parking\SurfaceParking\ExclusionBays.cs" />
+    <Compile Include="Parking\SurfaceParking\InternalBays.cs" />
+    <Compile Include="Parking\SurfaceParking\Layouts.cs" />
     <Compile Include="Parking\ParkingBay.cs" />
     <Compile Include="Parking\Patterns.cs" />
-    <Compile Include="Parking\PerimeterBays.cs" />
-    <Compile Include="Parking\Routes\RouteEndTypes.cs" />
-    <Compile Include="Parking\Routes\Routes.cs" />
-    <Compile Include="Parking\Routes\RouteTypes.cs" />
+    <Compile Include="Parking\SurfaceParking\PerimeterBays.cs" />
+    <Compile Include="Routes\RouteEndTypes.cs" />
+    <Compile Include="Routes\Routes.cs" />
+    <Compile Include="Routes\RouteTypes.cs" />
     <Compile Include="Parking\SecondaryParkingBay.cs" />
     <Compile Include="Parking\Signage.cs" />
     <Compile Include="Parking\SignageResources.cs" />
@@ -189,7 +189,9 @@
     <EmbeddedResource Include="Parking\Symbols\pwdParkingSymbol.json" />
     <EmbeddedResource Include="Parking\Symbols\noParkingSymbol.json" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Parking\BasementParking\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
