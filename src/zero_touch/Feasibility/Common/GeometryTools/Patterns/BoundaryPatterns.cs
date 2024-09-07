@@ -111,5 +111,34 @@ namespace Common.GeometryTools.Patterns
             };
         }
 
+
+        public static Dictionary<string, object> CrossHatchPattern()
+        {
+            return null;
+        }
+
+
+        public static Dictionary<string, object> GridPattern() 
+        {
+            return null;
+        }
+
+
+        public static Dictionary<string, object> RadialPattern()
+        {
+            return null;
+        }
+
+
+        public static Dictionary<string, object> StaggeredGridPattern()
+        {
+            return null;
+        }
+
+
+        public static Dictionary<string, object> CheckerBoardPattern()
+        {
+            return null;
+        }
     }
 }

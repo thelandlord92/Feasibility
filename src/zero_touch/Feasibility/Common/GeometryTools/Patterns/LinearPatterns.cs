@@ -113,5 +113,59 @@ namespace Common.GeometryTools.Patterns
                 { "dashSurfaces", dashSurfaces }
             };
         }
+
+
+        public static object NonInterlockingRegular()
+        {
+            return null;
+        }
+
+
+        public static object NonInterlockingBookended()
+        {
+            return null;
+        }
+
+
+        public static object NonInterlockingSegmented()
+        {
+            return null;
+        }
+
+
+        public static object InterlockingRegular()
+        {
+            return null;
+        }
+
+
+        public static object InterlockingBookended()
+        {
+            return null;
+        }
+
+
+        public static object InterlockingSegmented()
+        {
+            return null;
+        }
+
+
+        public static object HerringboneRegular()
+        {
+            return null;
+        }
+
+
+        public static object HerringboneBookended()
+        {
+            return null;
+        }
+
+
+        public static object HerringboneSegmented()
+        {
+            return null;
+        }
     }
 }

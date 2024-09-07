@@ -227,6 +227,67 @@ namespace Common.GeometryTools
         }
 
 
+        [MultiReturn(new[] { "concaveCornerPoints", "convexCornerPoints" })]
+        public static Dictionary<string, List<List<Autodesk.DesignScript.Geometry.Point>>> PolyCurveCornerPoints(
+            PolyCurve curve,
+            float elementLength,
+            float concaveCornerSpacing,
+            float convexCornerSpacing) 
+        {
+            // Check the planarity of the input polycurve.
+            PolyCurve planarCurve = CheckCurvePlanarity(curve) as PolyCurve;
+
+            // Get the corner angles of the polycurve.
+            List<float> cornerAngles = PolyCurveCornerAngles(planarCurve);
+
+            // Get the corner curve pairs of the polycuve.
+            List<List<Curve>> cornerCurvePairs = PolyCurveCornerCurvePairs(planarCurve);
+
+            // Create a tuple of the corner angles and curve pairs.
+            List<Tuple<float, List<Curve>>> angleCurvePairs = cornerAngles
+                .Zip(cornerCurvePairs, (angle, curveList) => Tuple.Create(angle, curveList)).ToList();
+
+            // Sort concave and convex corner curves using LINQ.
+            List<Tuple<float, List<Curve>>> convexCurvePairs = angleCurvePairs
+                .Where(tuple => tuple.Item1 > 180)  // Convex angles
+                .ToList();
+
+            List<Tuple<float, List<Curve>>> concaveCurvePairs = angleCurvePairs
+                .Where(tuple => tuple.Item1 <= 180) // Concave angles
+                .ToList();
+
+            // Add the corner points at the convex corners.
+            List<List<Autodesk.DesignScript.Geometry.Point>> convexCornerPoints = new List<List<Autodesk.DesignScript.Geometry.Point>>();
+            foreach (Tuple<float, List<Curve>> tuple in convexCurvePairs) 
+            {
+                List<Autodesk.DesignScript.Geometry.Point> pointList = new List<Autodesk.DesignScript.Geometry.Point>();
+                foreach (Curve curve1 in tuple.Item2) 
+                { 
+                    pointList.Add(curve1.PointAtChordLength(convexCornerSpacing, 0, true));
+                }
+                convexCornerPoints.Add(pointList);
+            }
+
+            // Add the corner points at the convex corners.
+            List<List<Autodesk.DesignScript.Geometry.Point>> concaveCornerPoints = new List<List<Autodesk.DesignScript.Geometry.Point>>();
+            foreach (Tuple<float, List<Curve>> tuple in concaveCurvePairs)
+            {
+                List<Autodesk.DesignScript.Geometry.Point> pointList = new List<Autodesk.DesignScript.Geometry.Point>();
+                foreach (Curve curve1 in tuple.Item2)
+                {
+                    pointList.Add(curve1.PointAtChordLength(concaveCornerSpacing, 0, true));
+                }
+                concaveCornerPoints.Add(pointList);
+            }
+
+            return new Dictionary<string, List<List<Point>>> 
+            {
+                { "concaveCornerPoints", concaveCornerPoints },
+                { "convexCornerPoints", convexCornerPoints}
+            };
+        }
+
+
         /// <summary>
         /// Return a string list of the curve types that make up a polycurve.
         /// </summary>

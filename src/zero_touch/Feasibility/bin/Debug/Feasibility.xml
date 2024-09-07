@@ -509,32 +509,32 @@
             No wheel stop required.
             </summary>
         </member>
-        <member name="T:Parking.InternalBays">
+        <member name="T:Parking.SurfaceParking.InternalBays">
             <summary>
             Wrapper class for the internal parking bays.
             </summary>
         </member>
-        <member name="P:Parking.InternalBays.LayoutArea">
+        <member name="P:Parking.SurfaceParking.InternalBays.LayoutArea">
             <summary>
             A horizontal planar surface representing the parking area.
             </summary>
         </member>
-        <member name="P:Parking.InternalBays.LayoutPlane">
+        <member name="P:Parking.SurfaceParking.InternalBays.LayoutPlane">
             <summary>
             The host plane of the parking layout.
             </summary>
         </member>
-        <member name="P:Parking.InternalBays.ExclusionArea">
+        <member name="P:Parking.SurfaceParking.InternalBays.ExclusionArea">
             <summary>
             Horizontal planar surfaces representing the exlusion zones.
             </summary>
         </member>
-        <member name="P:Parking.InternalBays.AxialRoute">
+        <member name="P:Parking.SurfaceParking.InternalBays.AxialRoute">
             <summary>
             Axial route curves to mark primary access routes around the parking layout.
             </summary>
         </member>
-        <member name="P:Parking.InternalBays.PatternType">
+        <member name="P:Parking.SurfaceParking.InternalBays.PatternType">
             <summary>
             Set the parking pattern type.
             1 for the non interlocking pattern.
@@ -542,86 +542,86 @@
             3 for the herringbone pattern.
             </summary>
         </member>
-        <member name="P:Parking.InternalBays.AisleType">
+        <member name="P:Parking.SurfaceParking.InternalBays.AisleType">
             <summary>
             Set the internal parking aisle type.
             1 for one way traffic.
             2 for two way traffic.
             </summary>
         </member>
-        <member name="P:Parking.InternalBays.AxialRouteWidth">
+        <member name="P:Parking.SurfaceParking.InternalBays.AxialRouteWidth">
             <summary>
             The width of the axial routes.
             </summary>
         </member>
-        <member name="P:Parking.InternalBays.ExclusionZoneAisleWidth">
+        <member name="P:Parking.SurfaceParking.InternalBays.ExclusionZoneAisleWidth">
             <summary>
             The width of the aisle around the exclusion zone.
             </summary>
         </member>
-        <member name="P:Parking.InternalBays.ExclusionZoneWalkwayWidth">
+        <member name="P:Parking.SurfaceParking.InternalBays.ExclusionZoneWalkwayWidth">
             <summary>
             The width of the walkway around the exclusion zone.
             </summary>
         </member>
-        <member name="P:Parking.InternalBays.ExternalTurningRadius">
+        <member name="P:Parking.SurfaceParking.InternalBays.ExternalTurningRadius">
             <summary>
             The vehicular turning radius at the convex corners of the perimeter aisle.
             </summary>
         </member>
-        <member name="P:Parking.InternalBays.InternalTurningRadius">
+        <member name="P:Parking.SurfaceParking.InternalBays.InternalTurningRadius">
             <summary>
             The vehicular turning radius at the concave corners of the perimeter aisle.
             </summary>
         </member>
-        <member name="P:Parking.InternalBays.InternalOneWayAisleWidth">
+        <member name="P:Parking.SurfaceParking.InternalBays.InternalOneWayAisleWidth">
             <summary>
             The width of the internal one way driving aisle.
             </summary>
         </member>
-        <member name="P:Parking.InternalBays.InternalTwoWayAisleWidth">
+        <member name="P:Parking.SurfaceParking.InternalBays.InternalTwoWayAisleWidth">
             <summary>
             The width of the internal two way driving aisle.
             </summary>
         </member>
-        <member name="P:Parking.InternalBays.IslandCornerRadius">
+        <member name="P:Parking.SurfaceParking.InternalBays.IslandCornerRadius">
             <summary>
             The radius at the corners of the internal parking islands.
             </summary>
         </member>
-        <member name="P:Parking.InternalBays.IslandHeight">
+        <member name="P:Parking.SurfaceParking.InternalBays.IslandHeight">
             <summary>
             the height of the parking islands above the layout level.
             </summary>
         </member>
-        <member name="P:Parking.InternalBays.LayoutRotation">
+        <member name="P:Parking.SurfaceParking.InternalBays.LayoutRotation">
             <summary>
             The rotation values of the internal layouts.
             </summary>
         </member>
-        <member name="P:Parking.InternalBays.PerimeterAisleWidth">
+        <member name="P:Parking.SurfaceParking.InternalBays.PerimeterAisleWidth">
             <summary>
             The width of the perimeter aisle.
             </summary>
         </member>
-        <member name="P:Parking.InternalBays.PerimeterBayDepth">
+        <member name="P:Parking.SurfaceParking.InternalBays.PerimeterBayDepth">
             <summary>
             The depth of the perimeter parking if required.
             </summary>
         </member>
-        <member name="P:Parking.InternalBays.PerimeterWalkWayWidth">
+        <member name="P:Parking.SurfaceParking.InternalBays.PerimeterWalkWayWidth">
             <summary>
             The width of the perimeter walkway.
             </summary>
         </member>
-        <member name="P:Parking.InternalBays.Patterns">
+        <member name="P:Parking.SurfaceParking.InternalBays.Patterns">
             <summary>
             The parking patterns.
             Add a list of parking patterns into this input.
             The first pattern is treated as the primary pattern.
             </summary>
         </member>
-        <member name="M:Parking.InternalBays.#ctor(Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Plane,System.Int32,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Collections.Generic.List{System.Single},System.Single,System.Single,System.Single,System.Collections.Generic.List{Parking.Patterns})">
+        <member name="M:Parking.SurfaceParking.InternalBays.#ctor(Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Plane,System.Int32,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Collections.Generic.List{System.Single},System.Single,System.Single,System.Single,System.Collections.Generic.List{Parking.Patterns})">
             <summary>
             Creates internal parking layout instances.
             </summary>
@@ -640,43 +640,43 @@
             <param name="perimeterWalkwayWidth"></param>
             <param name="patterns"></param>
         </member>
-        <member name="M:Parking.InternalBays.CreateLayoutSurface">
+        <member name="M:Parking.SurfaceParking.InternalBays.CreateLayoutSurface">
             <summary>
             Creates the parking layout surface.
             </summary>
             <returns name="layoutSurface">The parking layout surface.</returns>
         </member>
-        <member name="M:Parking.InternalBays.CreateInternalSurface">
+        <member name="M:Parking.SurfaceParking.InternalBays.CreateInternalSurface">
             <summary>
             Creates the internal parking area surface.
             </summary>
             <returns name="internalSurface">The offset internal surface.</returns>
         </member>
-        <member name="M:Parking.InternalBays.CreatePerimeterRoadSurface">
+        <member name="M:Parking.SurfaceParking.InternalBays.CreatePerimeterRoadSurface">
             <summary>
             Creates the perimter road surface.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Parking.InternalBays.CreateBoundingRectangles">
+        <member name="M:Parking.SurfaceParking.InternalBays.CreateBoundingRectangles">
             <summary>
             Creates the bounding rectangles for the internal parking surfaces.
             </summary>
             <returns name="boundingRectangle">The bounding rectangles.</returns>
         </member>
-        <member name="M:Parking.InternalBays.ConfigurePatternInputs">
+        <member name="M:Parking.SurfaceParking.InternalBays.ConfigurePatternInputs">
             <summary>
             Order and add the correct configuration to the input patterns.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Parking.InternalBays.CreatePatternSetOutLines">
+        <member name="M:Parking.SurfaceParking.InternalBays.CreatePatternSetOutLines">
             <summary>
             Creates the setout curves for the internal parking layout.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Parking.InternalBays.CreateInternalBays">
+        <member name="M:Parking.SurfaceParking.InternalBays.CreateInternalBays">
             <summary>
             Create the internal parking bays.
             </summary>
