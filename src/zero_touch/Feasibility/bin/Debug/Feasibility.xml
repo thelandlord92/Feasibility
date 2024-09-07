@@ -132,14 +132,18 @@
             <returns name="concaveCornerPoints">The concave corner points.</returns>
             <returns name="convexCornerPoints">The convex corner points.</returns>
         </member>
-        <member name="M:Common.GeometryTools.Curves.SplitPolyCurveByCornerDistances(Autodesk.DesignScript.Geometry.PolyCurve,System.Single,System.Single,System.Single)">
+        <member name="M:Common.GeometryTools.Curves.SplitPolyCurveByCornerDistances(Autodesk.DesignScript.Geometry.PolyCurve,System.Single,System.Single,System.Single,System.Single)">
             <summary>
-            
+            Splits a polycurve using distances from its concave and convex corners.
+            Note that the concave corner splits are dependent on the element length.
+            For the concave corner spacing to be as in the concaveCornerSpacing parameter set the element length to zero.
+            Segments that are smaller than the element width are removed.
             </summary>
-            <param name="curve"></param>
-            <param name="concaveCornerSpacing"></param>
-            <param name="convexCornerSpacing"></param>
-            <param name="elementLength"></param>
+            <param name="curve">The input polycurve</param>
+            <param name="concaveCornerSpacing">Spacing of the points at the concave corners.</param>
+            <param name="convexCornerSpacing">Spacing of the points at the convex corners.</param>
+            <param name="elementLength">The length of the elements to be placed along the edges of the polycurve.</param>
+            <param name="elementWidth">The width of the elements to be placed along the edges of the polycurve.</param>
             <returns></returns>
         </member>
         <member name="M:Common.GeometryTools.Curves.PolyCurveEdgeTypes(Autodesk.DesignScript.Geometry.PolyCurve)">

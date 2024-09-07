@@ -343,19 +343,30 @@ namespace Common.GeometryTools
 
 
         /// <summary>
-        /// 
+        /// Splits a polycurve using distances from its concave and convex corners.
+        /// Note that the concave corner splits are dependent on the element length.
+        /// For the concave corner spacing to be as in the concaveCornerSpacing parameter set the element length to zero.
+        /// Segments that are smaller than the element width are removed.
         /// </summary>
-        /// <param name="curve"></param>
-        /// <param name="concaveCornerSpacing"></param>
-        /// <param name="convexCornerSpacing"></param>
-        /// <param name="elementLength"></param>
+        /// <param name="curve">The input polycurve</param>
+        /// <param name="concaveCornerSpacing">Spacing of the points at the concave corners.</param>
+        /// <param name="convexCornerSpacing">Spacing of the points at the convex corners.</param>
+        /// <param name="elementLength">The length of the elements to be placed along the edges of the polycurve.</param>
+        /// <param name="elementWidth">The width of the elements to be placed along the edges of the polycurve.</param>
         /// <returns></returns>
-        public static List<List<Autodesk.DesignScript.Geometry.Point>> SplitPolyCurveByCornerDistances(
+        public static List<List<Curve>> SplitPolyCurveByCornerDistances(
             PolyCurve curve,
             float concaveCornerSpacing = 1f,
             float convexCornerSpacing = 1f,
-            float elementLength = 0f)
+            float elementLength = 0f,
+            float elementWidth = 0f)
         {
+            // Throw exception if concave or convex corner spacing are less than or equal to zero.
+            if (concaveCornerSpacing <= 0f || convexCornerSpacing <= 0f) 
+            {
+                throw new ArgumentException("The concave and convex corner spacing cannot be zero.");
+            }
+
             // Check the planarity of the input polycurve.
             PolyCurve planarCurve = CheckCurvePlanarity(curve) as PolyCurve;
 
@@ -430,7 +441,39 @@ namespace Common.GeometryTools
                 }
             }
 
-            return choppedPoints;
+            // Split the polycurve edges using the points.
+            List<Curve> curves = planarCurve.Curves().ToList();
+            List<List<Curve>> splitCurves = new List<List<Curve>>();
+            for (int i = 0; i < curves.Count; i++) 
+            { 
+                // Calculate the curve length. Calculated as below to accommodate for non straight curves.
+                Autodesk.DesignScript.Geometry.Point startPoint = curves[i].StartPoint;
+                Autodesk.DesignScript.Geometry.Point endPoint = curves[i].EndPoint;
+                float curveLength = (float)Line.ByStartPointEndPoint(startPoint, endPoint).Length;
+
+                // Exclude curves with lengths that are less than the width of the element to be placed.
+                if (curveLength < elementWidth) 
+                { 
+                    continue;
+                }
+                else 
+                {
+                    splitCurves.Add(curves[i].SplitByPoints(choppedPoints[i]).ToList());
+                }  
+            }
+
+            // Get the start and end points of the input polycurve curves.
+            List<List<Autodesk.DesignScript.Geometry.Point>> startEndPoints = new List<List<Autodesk.DesignScript.Geometry.Point>>();
+            foreach (Curve curve1 in curves) 
+            {
+                startEndPoints.Add(new List<Autodesk.DesignScript.Geometry.Point> { curve1.StartPoint, curve1.EndPoint });
+            }
+
+            // ####Create logic to get the curve at the center of the split curves list. The concave 180 degree angle is to be accounted for.
+
+
+
+            return splitCurves;
         }
 
 
