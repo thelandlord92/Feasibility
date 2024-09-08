@@ -137,14 +137,16 @@
             Splits a polycurve using distances from its concave and convex corners.
             Note that the concave corner splits are dependent on the element length.
             For the concave corner spacing to be as in the concaveCornerSpacing parameter set the element length to zero.
-            Segments that are smaller than the element width are removed.
+            Segments with lengths smaller than the element width are removed.
+            The convex corner spacing input has no effect if the input curve has no convex corners.
             </summary>
             <param name="curve">The input polycurve</param>
             <param name="concaveCornerSpacing">Spacing of the points at the concave corners.</param>
             <param name="convexCornerSpacing">Spacing of the points at the convex corners.</param>
             <param name="elementLength">The length of the elements to be placed along the edges of the polycurve.</param>
             <param name="elementWidth">The width of the elements to be placed along the edges of the polycurve.</param>
-            <returns></returns>
+            <returns name="cornerPolyCurves">Polycurves at the corners of the input polycurve.</returns>
+            <returns name="segmentPolyCurves">Polycurves segments betwween the corners of the input polycurve.</returns>
         </member>
         <member name="M:Common.GeometryTools.Curves.PolyCurveEdgeTypes(Autodesk.DesignScript.Geometry.PolyCurve)">
             <summary>

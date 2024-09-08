@@ -346,15 +346,18 @@ namespace Common.GeometryTools
         /// Splits a polycurve using distances from its concave and convex corners.
         /// Note that the concave corner splits are dependent on the element length.
         /// For the concave corner spacing to be as in the concaveCornerSpacing parameter set the element length to zero.
-        /// Segments that are smaller than the element width are removed.
+        /// Segments with lengths smaller than the element width are removed.
+        /// The convex corner spacing input has no effect if the input curve has no convex corners.
         /// </summary>
         /// <param name="curve">The input polycurve</param>
         /// <param name="concaveCornerSpacing">Spacing of the points at the concave corners.</param>
         /// <param name="convexCornerSpacing">Spacing of the points at the convex corners.</param>
         /// <param name="elementLength">The length of the elements to be placed along the edges of the polycurve.</param>
         /// <param name="elementWidth">The width of the elements to be placed along the edges of the polycurve.</param>
-        /// <returns></returns>
-        public static List<List<Curve>> SplitPolyCurveByCornerDistances(
+        /// <returns name="cornerPolyCurves">Polycurves at the corners of the input polycurve.</returns>
+        /// <returns name="segmentPolyCurves">Polycurves segments betwween the corners of the input polycurve.</returns>
+        [MultiReturn(new[] { "cornerPolyCurves", "segmentPolyCurves" })]
+        public static Dictionary<string, List<PolyCurve>> SplitPolyCurveByCornerDistances(
             PolyCurve curve,
             float concaveCornerSpacing = 1f,
             float convexCornerSpacing = 1f,
@@ -362,9 +365,15 @@ namespace Common.GeometryTools
             float elementWidth = 0f)
         {
             // Throw exception if concave or convex corner spacing are less than or equal to zero.
-            if (concaveCornerSpacing <= 0f || convexCornerSpacing <= 0f) 
+            if (concaveCornerSpacing <= 0f || convexCornerSpacing <= 0f)
             {
                 throw new ArgumentException("The concave and convex corner spacing cannot be zero.");
+            }
+
+            // Throw an exception if the input curve is not closed.
+            if (curve.IsClosed == false) 
+            {
+                throw new ArgumentException("Only closed curves are allowed");
             }
 
             // Check the planarity of the input polycurve.
@@ -390,22 +399,31 @@ namespace Common.GeometryTools
             List<int> convexIndices = new List<int>();
             for (int i = 0; i < cornerAngles.Count; i++)
             {
-                if (cornerAngles[i] <= 180) 
+                if (cornerAngles[i] <= 180)
                 {
                     concaveIndices.Add(i);
                 }
-                else 
+                else if (cornerAngles[i] > 180)
                 {
                     convexIndices.Add(i);
                 }
-            } 
+            }
+
             allIndices.AddRange(concaveIndices);
-            allIndices.AddRange(convexIndices);
+
+            if (convexIndices.Count > 0)
+            {
+                allIndices.AddRange(convexIndices); // Add the convex indices to the all indices if the convex indices list is not empty.
+            }
 
             // Combine the convex and concave corner points.
             List<List<Autodesk.DesignScript.Geometry.Point>> cornerPoints = new List<List<Autodesk.DesignScript.Geometry.Point>>();
             cornerPoints.AddRange(concavePoints);
-            cornerPoints.AddRange(convexPoints);
+
+            if (convexIndices.Count > 0)
+            {
+                cornerPoints.AddRange(convexPoints); // Add the convex points to the corner points list if the convex points list is not empty.
+            }
 
             // Sort the corner points using the indices.
             List<List<Autodesk.DesignScript.Geometry.Point>> sortedCornerPoints = cornerPoints
@@ -416,7 +434,7 @@ namespace Common.GeometryTools
 
             // Reverse the order of the corner point lists in the sorted corner points.
             List<List<Autodesk.DesignScript.Geometry.Point>> reversedPoints = new List<List<Autodesk.DesignScript.Geometry.Point>>();
-            foreach (List<Autodesk.DesignScript.Geometry.Point> pointList in sortedCornerPoints) 
+            foreach (List<Autodesk.DesignScript.Geometry.Point> pointList in sortedCornerPoints)
             {
                 List<Autodesk.DesignScript.Geometry.Point> reversedList = pointList.ToList(); // Create a copy
                 reversedList.Reverse(); // Reverse in place
@@ -444,36 +462,128 @@ namespace Common.GeometryTools
             // Split the polycurve edges using the points.
             List<Curve> curves = planarCurve.Curves().ToList();
             List<List<Curve>> splitCurves = new List<List<Curve>>();
-            for (int i = 0; i < curves.Count; i++) 
-            { 
+            for (int i = 0; i < curves.Count; i++)
+            {
                 // Calculate the curve length. Calculated as below to accommodate for non straight curves.
                 Autodesk.DesignScript.Geometry.Point startPoint = curves[i].StartPoint;
                 Autodesk.DesignScript.Geometry.Point endPoint = curves[i].EndPoint;
                 float curveLength = (float)Line.ByStartPointEndPoint(startPoint, endPoint).Length;
 
                 // Exclude curves with lengths that are less than the width of the element to be placed.
-                if (curveLength < elementWidth) 
-                { 
+                if (curveLength < elementWidth)
+                {
                     continue;
                 }
-                else 
+                else
                 {
                     splitCurves.Add(curves[i].SplitByPoints(choppedPoints[i]).ToList());
-                }  
+                }
             }
 
-            // Get the start and end points of the input polycurve curves.
-            List<List<Autodesk.DesignScript.Geometry.Point>> startEndPoints = new List<List<Autodesk.DesignScript.Geometry.Point>>();
-            foreach (Curve curve1 in curves) 
+            // Flatten the split curve list.
+            List<Curve> flattenedSplitCurves = splitCurves.SelectMany(curveList => curveList).ToList();
+
+            // Get the polycurve corner points.
+            List<Autodesk.DesignScript.Geometry.Point> points = PolyCurveCorners(planarCurve);
+
+            // Sort the corner and center curves using their intersections with the corner points.
+            List<Autodesk.DesignScript.Geometry.Geometry> cornerCurves = new List<Autodesk.DesignScript.Geometry.Geometry>();
+            List<Autodesk.DesignScript.Geometry.Geometry> segmentCurves = new List<Autodesk.DesignScript.Geometry.Geometry>();
+
+            // Track the curves already categorized to prevent duplicates.
+            HashSet<Curve> alreadyCategorized = new HashSet<Curve>();
+
+            // Loop through the flattened curves.
+            foreach (Curve curve1 in flattenedSplitCurves)
             {
-                startEndPoints.Add(new List<Autodesk.DesignScript.Geometry.Point> { curve1.StartPoint, curve1.EndPoint });
+                bool isCornerCurve = false;
+
+                // Check if the curve intersects with any corner points and categorize it.
+                for (int i = 0; i < points.Count; i++)
+                {
+                    if (curve1.DoesIntersect(points[i]))
+                    {
+                        // If the angle is 180, it's a segment curve.
+                        if (cornerAngles[i] == 180)
+                        {
+                            segmentCurves.Add(curve1);
+                        }
+                        // Otherwise, it's a corner curve.
+                        else
+                        {
+                            cornerCurves.Add(curve1);
+                        }
+
+                        isCornerCurve = true;
+                        break;  // Exit the loop once it's categorized.
+                    }
+                }
+
+                // If the curve wasn't categorized as a corner curve, it is a segment curve.
+                if (!isCornerCurve && !alreadyCategorized.Contains(curve1))
+                {
+                    segmentCurves.Add(curve1);
+                    alreadyCategorized.Add(curve1);  // Track the categorized curve.
+                }
             }
 
-            // ####Create logic to get the curve at the center of the split curves list. The concave 180 degree angle is to be accounted for.
+            // Group the intersecting corner and segment curves.
+            List<List<Autodesk.DesignScript.Geometry.Geometry>> groupedCornerCurves = GeometryTools.GeometryUtilities
+                .SortIntersectingGeometry(cornerCurves);
+            List<List<Autodesk.DesignScript.Geometry.Geometry>> groupedSegmentCurves = GeometryTools.GeometryUtilities
+                .SortIntersectingGeometry(segmentCurves);
 
+            // Cast the grouped geometry to curves to create polycurves.
+            List<List<Curve>> castCornerCurves = new List<List<Curve>>();
+            foreach (List<Autodesk.DesignScript.Geometry.Geometry> geometries in groupedCornerCurves) 
+            { 
+                List<Curve> curveList = new List<Curve>();
+                foreach (Autodesk.DesignScript.Geometry.Geometry geometry in geometries) 
+                {
+                    curveList.Add(geometry as Curve);
+                }
+                castCornerCurves.Add(curveList);
+            }
 
+            List<List<Curve>> castSegmentCurves = new List<List<Curve>>();
+            foreach (List<Autodesk.DesignScript.Geometry.Geometry> geometries in groupedSegmentCurves)
+            {
+                List<Curve> curveList = new List<Curve>();
+                foreach (Autodesk.DesignScript.Geometry.Geometry geometry in geometries)
+                {
+                    curveList.Add(geometry as Curve);
+                }
+                castSegmentCurves.Add(curveList);
+            }
 
-            return splitCurves;
+            // Create polycurves from the curve groups.
+            List<PolyCurve> cornerPolyCurves = new List<PolyCurve>();
+            foreach (List<Curve> curveList in castCornerCurves) 
+            { 
+                cornerPolyCurves.Add(PolyCurve.ByJoinedCurves(curveList, 0.001, false, 0));
+            }
+
+            List<PolyCurve> segmentPolyCurves = new List<PolyCurve>();
+            foreach (List<Curve> curveList in castSegmentCurves)
+            {
+                PolyCurve polyCurve = PolyCurve.ByJoinedCurves(curveList, 0.001, false, 0);
+
+                // Check that the length of the polycurve is not shorter than the width of the element to be placed.
+                Autodesk.DesignScript.Geometry.Point startPoint = polyCurve.StartPoint;
+                Autodesk.DesignScript.Geometry.Point endPoint = polyCurve.EndPoint;
+                float curveLength = (float)Line.ByStartPointEndPoint(startPoint, endPoint).Length;
+
+                if (curveLength >= elementWidth) 
+                {
+                    segmentPolyCurves.Add(polyCurve);
+                }
+            }
+
+            return new Dictionary<string, List<PolyCurve>> 
+            {
+                { "cornerPolyCurves", cornerPolyCurves },
+                { "segmentPolyCurves", segmentPolyCurves }
+            };
         }
 
 
