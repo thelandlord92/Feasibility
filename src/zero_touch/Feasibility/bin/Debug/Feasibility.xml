@@ -192,6 +192,32 @@
             <param name="curves">The input curves.</param>
             <returns name="averageCenter">The average center point.</returns>
         </member>
+        <member name="T:Common.GeometryTools.MeshVertex">
+            <summary>
+            Defines a vertex class for internal use.
+            </summary>
+        </member>
+        <member name="P:Common.GeometryTools.MeshVertex.Position">
+            <summary>
+            The XYZ postion of the vertex.
+            </summary>
+        </member>
+        <member name="T:Common.GeometryTools.MeshFace">
+            <summary>
+            Defines a mesh face class for internal use.
+            </summary>
+        </member>
+        <member name="T:Common.GeometryTools.Mesh">
+            <summary>
+            Provides mesh generation functionality for the project.
+            </summary>
+        </member>
+        <member name="M:Common.GeometryTools.Mesh.CreateMeshFacesFromPoints(System.Collections.Generic.List{System.Double[]})">
+            <summary>
+            Create a mesh from a list of XYZ points.
+            This method will be visible in Dynamo as a node.
+            </summary>
+        </member>
         <member name="T:Common.GeometryTools.Patterns.BoundaryPatterns">
             <summary>
             Wrapper class for boundary patterns.
@@ -228,6 +254,18 @@
             <returns name="dashOutlines">Polycurves representing the outline of the dashes.</returns>
             <returns name="dashSurfaces">The dash surfaces.</returns>
             <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="T:Common.GeometryTools.Points">
+            <summary>
+            Wrapper class for points.
+            </summary>
+        </member>
+        <member name="M:Common.GeometryTools.Points.CreatePointXYZ(System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Point})">
+            <summary>
+            Get the XYZ values of points.
+            </summary>
+            <param name="points">The input point list.</param>
+            <returns name="xyzValues">The point XYZ values.</returns>
         </member>
         <member name="T:Common.GeometryTools.Surfaces">
             <summary>

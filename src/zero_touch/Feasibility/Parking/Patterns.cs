@@ -143,7 +143,7 @@ namespace Parking
             {
                 bayAngle = BayAngle;
             }
-
+            
             return bayAngle;
         }
 
