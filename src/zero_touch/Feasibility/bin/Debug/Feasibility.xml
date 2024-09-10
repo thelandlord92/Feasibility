@@ -259,12 +259,47 @@
             <summary>
             Base rectangle for use in pattern creation.
             </summary>
-            <param name="rectangleWidth"></param>
-            <param name="rectangleLength"></param>
-            <param name="rectangleRotation"></param>
-            <param name="rectanglePlaneOffset"></param>
-            <param name="hostPlane"></param>
-            <returns></returns>
+            <param name="rectangleWidth">Width of the rectangle.</param>
+            <param name="rectangleLength">Length of the rectangle.</param>
+            <param name="rectangleRotation">Rotation angle of the rectangle.</param>
+            <param name="rectanglePlaneOffset">Offset of the rectangle from the host plane.</param>
+            <param name="hostPlane">Host plane to create the rectangle.</param>
+            <returns name="rectangle">The created rectangle.</returns>
+        </member>
+        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.PatternIdealWidth(System.Single,System.Single)">
+            <summary>
+            Calculate the ideal width of the pattern rectangles against the location curve.
+            </summary>
+            <param name="rectangleWidth">Width of the rectangle.</param>
+            <param name="rectangleRotation">Rotation angle of the rectangle.</param>
+            <returns name="idealWidth">Ideal width of the pattern rectangles against the location curve.</returns>
+        </member>
+        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.LocationCurveChordLength(Autodesk.DesignScript.Geometry.Curve)">
+            <summary>
+            Calculate the chord length of the location curve using its end points.
+            The chord length of a straight line will be equal to the line's length.
+            </summary>
+            <param name="locationCurve">The location curve.</param>
+            <returns name="chordLength">Calculated chord length.</returns>
+        </member>
+        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.PatternLocationCurveCopyNumber(Autodesk.DesignScript.Geometry.Curve,System.Single,System.Single)">
+            <summary>
+            Calculate the number of times to copy the pattern rectangles against the location curve.
+            </summary>
+            <param name="locationCurve">The input curve to place the pattern rectangles along.</param>
+            <param name="rectangleWidth">Width of the rectangle.</param>
+            <param name="rectangleRotation">Rotation angle of the rectangle.</param>
+            <returns name="copyNumber">Pattern rectangle copy number along the location curve.</returns>
+        </member>
+        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.PatternActualLocationCurveWidth(Autodesk.DesignScript.Geometry.Curve,System.Single,System.Single,System.Single)">
+            <summary>
+            Calculate the actual width of the pattern rectangles against the location curve.
+            </summary>
+            <param name="locationCurve">The input curve to place the pattern rectangles along.</param>
+            <param name="rectangleWidth">Width of the rectangle.</param>
+            <param name="rectangleLength">Length of the rectangle.</param>
+            <param name="rectangleRotation">Rotation angle of the rectangle.</param>
+            <returns name="locationCurveWidth">Width of the pattern against the location curve.</returns>
         </member>
         <member name="T:Common.GeometryTools.Points">
             <summary>

@@ -1,5 +1,6 @@
 ﻿using Autodesk.DesignScript.Geometry;
 using Autodesk.DesignScript.Runtime;
+using DesignScript.Builtin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -150,22 +151,125 @@ namespace Common.GeometryTools.Patterns
 
 
         /// <summary>
-        /// Calculate the actual width of the pattern rectangle against the pattern location curve.
+        /// Calculate the ideal width of the pattern rectangles against the location curve.
         /// </summary>
-        /// <param name="rectangleWidth"></param>
-        /// <param name="rectangleLength"></param>
-        /// <param name="rectangleRotation"></param>
-        /// <returns></returns>
-        public static float PatternLocationCurveWidth(
+        /// <param name="rectangleWidth">Width of the rectangle.</param>
+        /// <param name="rectangleRotation">Rotation angle of the rectangle.</param>
+        /// <returns name="idealWidth">Ideal width of the pattern rectangles against the location curve.</returns>
+        public static float PatternIdealWidth(
             float rectangleWidth = 2.5f,
-            float rectangleLength = 5f,
+            float rectangleRotation = 0f)
+        {
+            // Calculate the ideal width of the pattern rectangles against location curve.
+            float idealWidth = (float)(rectangleWidth / DSCore.Math.Cos(rectangleRotation));
+
+            return idealWidth;
+        }
+
+
+        /// <summary>
+        /// Calculate the chord length of the location curve using its end points.
+        /// The chord length of a straight line will be equal to the line's length.
+        /// </summary>
+        /// <param name="locationCurve">The location curve.</param>
+        /// <returns name="chordLength">Calculated chord length.</returns>
+        public static float LocationCurveChordLength(
+            [DefaultArgument("Line.ByStartPointEndPoint(Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 0, 0), Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 100, 0))")] Curve locationCurve) 
+        {
+            // Calculate the chord length of the full location curve using the end points.
+            Autodesk.DesignScript.Geometry.Point startPoint = locationCurve.StartPoint;
+            Autodesk.DesignScript.Geometry.Point endPoint = locationCurve.EndPoint;
+            float chordLength = (float)startPoint.DistanceTo(endPoint);
+
+            return chordLength;
+        }
+
+
+        /// <summary>
+        /// Calculate the number of times to copy the pattern rectangles against the location curve.
+        /// </summary>
+        /// <param name="locationCurve">The input curve to place the pattern rectangles along.</param>
+        /// <param name="rectangleWidth">Width of the rectangle.</param>
+        /// <param name="rectangleRotation">Rotation angle of the rectangle.</param>
+        /// <returns name="copyNumber">Pattern rectangle copy number along the location curve.</returns>
+        public static int PatternLocationCurveCopyNumber(
+            [DefaultArgument("Line.ByStartPointEndPoint(Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 0, 0), Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 100, 0))")] Curve locationCurve,
+            float rectangleWidth = 2.5f,
             float rectangleRotation = 0f) 
         {
-            // Calculate the actual width of the pattern rectangle against location curve.
-            float actualWidth = (float)(rectangleWidth / DSCore.Math.Cos(rectangleRotation));
+            // Get the ideal width of the pattern rectangles against the location curve.
+            float idealWidth = PatternIdealWidth(rectangleWidth, rectangleRotation);
+
+            // Get the chord length of the full location curve..
+            float chordLength = LocationCurveChordLength(locationCurve);
+
+            // Calculate the number of bays to copy along the location curve.
+            int copyNumber;
+            if (chordLength < idealWidth) // Copy number is zero if the chord length of the location curve is less than the ideal width of the pattern retangle.
+            {
+                copyNumber = 0;
+            }
+            else if (chordLength == idealWidth)
+            {
+                copyNumber = 1;
+            }
+            else 
+            {
+                copyNumber = (int)DSCore.Math.Floor(locationCurve.Length / idealWidth);
+            }
+
+            return copyNumber;
+        }
+
+
+        /// <summary>
+        /// Calculate the actual width of the pattern rectangles against the location curve.
+        /// </summary>
+        /// <param name="locationCurve">The input curve to place the pattern rectangles along.</param>
+        /// <param name="rectangleWidth">Width of the rectangle.</param>
+        /// <param name="rectangleLength">Length of the rectangle.</param>
+        /// <param name="rectangleRotation">Rotation angle of the rectangle.</param>
+        /// <returns name="locationCurveWidth">Width of the pattern against the location curve.</returns>
+        public static float PatternActualLocationCurveWidth(
+            [DefaultArgument("Line.ByStartPointEndPoint(Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 0, 0), Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 100, 0))")] Curve locationCurve,
+            float rectangleWidth = 2.5f,
+            float rectangleLength = 5f,
+            float rectangleRotation = 0f)
+        {
+            // Get the ideal width of the pattern rectangles against the location curve.
+            float idealWidth = PatternIdealWidth(rectangleWidth, rectangleRotation);
+
+            // Get the chord length of the full location curve..
+            float chordLength = LocationCurveChordLength(locationCurve);
+
+            // Calculate the actual width of the pattern rectangles against the location curve.
+            float actualWidth;
+            if (chordLength <= idealWidth) 
+            {
+                actualWidth = chordLength;
+            }
+            else 
+            {
+                // Get the pattern copy number.
+                int copyNumber = PatternLocationCurveCopyNumber(
+                    locationCurve,
+                    rectangleWidth,
+                    rectangleRotation
+                );
+
+                // Add points along the location curve to create a polycurve.
+                List<Autodesk.DesignScript.Geometry.Point> points = locationCurve.PointsAtEqualChordLength(copyNumber).ToList();
+
+                // Get the distance between the first and second point in the points list.
+                actualWidth = (float)points[0].DistanceTo(points[1]);
+            }
 
             return actualWidth;
         }
+
+
+        
+
 
         public static object NonInterlockingRegular()
         {
