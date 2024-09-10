@@ -115,6 +115,58 @@ namespace Common.GeometryTools.Patterns
         }
 
 
+        /// <summary>
+        /// Base rectangle for use in pattern creation.
+        /// </summary>
+        /// <param name="rectangleWidth">Width of the rectangle.</param>
+        /// <param name="rectangleLength">Length of the rectangle.</param>
+        /// <param name="rectangleRotation">Rotation angle of the rectangle.</param>
+        /// <param name="rectanglePlaneOffset">Offset of the rectangle from the host plane.</param>
+        /// <param name="hostPlane">Host plane to create the rectangle.</param>
+        /// <returns name="rectangle">The created rectangle.</returns>
+        public static Rectangle BaseRectangle(
+            float rectangleWidth = 2.5f, 
+            float rectangleLength = 5f,
+            float rectangleRotation = 0f,
+            float rectanglePlaneOffset = 0f,
+            [DefaultArgument("Plane.XY()")] Plane hostPlane = null)
+        {
+            // Create the base rectangle at the origin.
+            List<Geometry> rectangle = new List<Geometry> { Rectangle.ByWidthLength(rectangleLength, rectangleWidth) };
+
+            // Add the required transformations to the rectangle.
+            List<Geometry> transformedRectangle = GeometryUtilities.AddTransformations(
+                rectangle,
+                Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 0, 0),
+                hostPlane,
+                Vector.ZAxis(),
+                rectangleRotation,
+                rectanglePlaneOffset,
+                1
+            );
+
+            return transformedRectangle[0] as Rectangle;
+        }
+
+
+        /// <summary>
+        /// Calculate the actual width of the pattern rectangle against the pattern location curve.
+        /// </summary>
+        /// <param name="rectangleWidth"></param>
+        /// <param name="rectangleLength"></param>
+        /// <param name="rectangleRotation"></param>
+        /// <returns></returns>
+        public static float PatternLocationCurveWidth(
+            float rectangleWidth = 2.5f,
+            float rectangleLength = 5f,
+            float rectangleRotation = 0f) 
+        {
+            // Calculate the actual width of the pattern rectangle against location curve.
+            float actualWidth = (float)(rectangleWidth / DSCore.Math.Cos(rectangleRotation));
+
+            return actualWidth;
+        }
+
         public static object NonInterlockingRegular()
         {
             return null;

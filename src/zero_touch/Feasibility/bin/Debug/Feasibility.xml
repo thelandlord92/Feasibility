@@ -255,6 +255,17 @@
             <returns name="dashSurfaces">The dash surfaces.</returns>
             <exception cref="T:System.Exception"></exception>
         </member>
+        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.BaseRectangle(System.Single,System.Single,System.Single,System.Single,Autodesk.DesignScript.Geometry.Plane)">
+            <summary>
+            Base rectangle for use in pattern creation.
+            </summary>
+            <param name="rectangleWidth"></param>
+            <param name="rectangleLength"></param>
+            <param name="rectangleRotation"></param>
+            <param name="rectanglePlaneOffset"></param>
+            <param name="hostPlane"></param>
+            <returns></returns>
+        </member>
         <member name="T:Common.GeometryTools.Points">
             <summary>
             Wrapper class for points.
