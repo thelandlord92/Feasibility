@@ -135,10 +135,13 @@ namespace Common.GeometryTools.Patterns
             // Create the base rectangle at the origin.
             List<Geometry> rectangle = new List<Geometry> { Rectangle.ByWidthLength(rectangleLength, rectangleWidth) };
 
+            // Get the start point of the rectangle. 
+            Autodesk.DesignScript.Geometry.Point startPoint = (rectangle[0] as Rectangle).StartPoint;
+
             // Add the required transformations to the rectangle.
             List<Geometry> transformedRectangle = GeometryUtilities.AddTransformations(
                 rectangle,
-                Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 0, 0),
+                startPoint,
                 hostPlane,
                 Vector.ZAxis(),
                 rectangleRotation,
@@ -278,7 +281,27 @@ namespace Common.GeometryTools.Patterns
             float rectangleWidth = 2.5f,
             float rectangleRotation = 0f)
         {
-            return 5;
+            // Get the ideal width of the pattern rectangles against the location curve.
+            float idealWidth = PatternIdealWidth(rectangleWidth, rectangleRotation);
+
+            // Get the chord length of the full location curve..
+            float chordLength = LocationCurveChordLength(locationCurve);
+
+            // Get the actual width of the rectangles against the location curve.
+            float locationCurveWidth = PatternActualLocationCurveWidth(locationCurve, rectangleWidth, rectangleRotation);
+
+            // Calculate the actual width of the rectangles.
+            float actualWidth;
+            if (chordLength <= idealWidth) 
+            {
+                actualWidth = (float)DSCore.Math.Cos(rectangleRotation * chordLength);
+            }
+            else
+            {
+                actualWidth = (float)DSCore.Math.Cos(rectangleRotation * locationCurveWidth) ;
+            }
+
+            return actualWidth;
         }
 
 
