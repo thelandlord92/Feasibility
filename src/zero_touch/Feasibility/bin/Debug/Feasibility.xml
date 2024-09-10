@@ -81,7 +81,7 @@
             <returns name="planarCurve">The planar curve.</returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
-        <member name="M:Common.GeometryTools.Curves.ProjectCurves(Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Curve)">
+        <member name="M:Common.GeometryTools.Curves.ProjectCurvesOntoSurface(Autodesk.DesignScript.Geometry.Surface,Autodesk.DesignScript.Geometry.Curve)">
             <summary>
             To project curves onto a planar and horizontal surface.
             </summary>
@@ -193,6 +193,40 @@
             </summary>
             <param name="curves">The input curves.</param>
             <returns name="averageCenter">The average center point.</returns>
+        </member>
+        <member name="M:Common.GeometryTools.Curves.PointsAtEqualChordLength(Autodesk.DesignScript.Geometry.Curve,System.Int32)">
+            <summary>
+            Returns points spaced along the input curve at equal chord length based on the input number of divisions.
+            Unlike the default node this node adds the start and end points.
+            </summary>
+            <param name="curve">The input curve.</param>
+            <param name="divisions">Number of divisions.</param>
+            <returns name="points">List of points on curve.</returns>
+        </member>
+        <member name="M:Common.GeometryTools.Curves.CurveParametersAtPoints(Autodesk.DesignScript.Geometry.Curve,System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Point})">
+            <summary>
+            Get the parameters at given points along a curve.
+            </summary>
+            <param name="curve">The input curve.</param>
+            <param name="points">List of points.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.GeometryTools.Curves.CurveNormalsAtPoints(Autodesk.DesignScript.Geometry.Curve,System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Point})">
+            <summary>
+            Get the normals at given points along a curve.
+            This node ensures the normals are pointing towards the same side of the curve even if the curve is a nurbscurve.
+            </summary>
+            <param name="curve">The input curve.</param>
+            <param name="points">List of points.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Common.GeometryTools.Curves.CurveTangentsAtPoints(Autodesk.DesignScript.Geometry.Curve,System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Point})">
+            <summary>
+            Get the tangents at given points along a curve.
+            </summary>
+            <param name="curve">The input curve.</param>
+            <param name="points">List of points.</param>
+            <returns></returns>
         </member>
         <member name="T:Common.GeometryTools.MeshVertex">
             <summary>

@@ -2,6 +2,7 @@
 using Autodesk.DesignScript.Runtime;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -127,7 +128,7 @@ namespace Common.GeometryTools
         /// <param name="curve">The input curve.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        private static Curve ProjectCurves(Surface surface, Curve curve)
+        private static Curve ProjectCurvesOntoSurface(Surface surface, Curve curve)
         {
             // get the plane of the perimeter curve.
             Plane curvePlane = Common.GeometryTools.Surfaces.SurfacePlane(surface);
@@ -1113,6 +1114,116 @@ namespace Common.GeometryTools
             Autodesk.DesignScript.Geometry.Point averagePoint = Line.ByBestFitThroughPoints(allPoints).PointAtParameter(0.5);
 
             return averagePoint;
+        }
+
+
+        /// <summary>
+        /// Returns points spaced along the input curve at equal chord length based on the input number of divisions.
+        /// Unlike the default node this node adds the start and end points.
+        /// </summary>
+        /// <param name="curve">The input curve.</param>
+        /// <param name="divisions">Number of divisions.</param>
+        /// <returns name="points">List of points on curve.</returns>
+        public static List<Autodesk.DesignScript.Geometry.Point> PointsAtEqualChordLength(Curve curve, int divisions = 10) 
+        {
+            // Get the start and end points of the curve.
+            Autodesk.DesignScript.Geometry.Point startPoint = curve.StartPoint;
+            Autodesk.DesignScript.Geometry.Point endPoint = curve.EndPoint;
+
+            // Add points along the curve using the division input.
+            List<Autodesk.DesignScript.Geometry.Point> points = curve.PointsAtEqualChordLength(divisions).ToList();
+
+            // Add the start and end points to the points list.
+            points.Insert(0, startPoint);
+            points.Add(endPoint);
+
+            return points;
+        }
+
+
+        /// <summary>
+        /// Get the parameters at given points along a curve.
+        /// </summary>
+        /// <param name="curve">The input curve.</param>
+        /// <param name="points">List of points.</param>
+        /// <returns>The parameters.</returns>
+        internal static List<float> CurveParametersAtPoints(Curve curve, List<Autodesk.DesignScript.Geometry.Point> points) 
+        {
+            // Get the parameters.
+            List<float> parameters = new List<float>();
+            foreach (Autodesk.DesignScript.Geometry.Point point in points) 
+            { 
+                parameters.Add((float)curve.ParameterAtPoint(point));
+            }
+
+            return parameters;
+        }
+
+
+        /// <summary>
+        /// Get the normals at given points along a curve.
+        /// This node ensures the normals are pointing towards the same side of the curve even if the curve is a nurbscurve.
+        /// </summary>
+        /// <param name="curve">The input curve.</param>
+        /// <param name="points">List of points.</param>
+        /// <returns>The normals at the points.</returns>
+        public static List<Autodesk.DesignScript.Geometry.Vector> CurveNormalsAtPoints(
+            Curve curve, 
+            List<Autodesk.DesignScript.Geometry.Point> points) 
+        {
+            // Get the normal vectors at the points.
+            List<Autodesk.DesignScript.Geometry.Vector> normals = new List<Autodesk.DesignScript.Geometry.Vector>();
+            foreach (Point point in points) 
+            {
+                // Get the parameter at the point.
+                float parameter = (float)curve.ParameterAtPoint(point);
+
+                // Get the normal at the point and add to the vector list.
+                Autodesk.DesignScript.Geometry.Vector normal = curve.NormalAtParameter(parameter);
+
+                // Get the tangent at the point.
+                Autodesk.DesignScript.Geometry.Vector tangent = curve.TangentAtParameter(parameter);
+
+                // Calculate the angle between the normal and the tangents.
+                float angle = (float)tangent.AngleAboutAxis(normal, Autodesk.DesignScript.Geometry.Vector.ZAxis());
+
+                // Reverse the direction of the normal if its angle around the tangent is greater than 90 degrees.
+                if (angle > 90) 
+                {
+                    normals.Add(normal.Reverse());
+                }
+                else 
+                { 
+                    normals.Add(normal);
+                }
+            }
+
+            return normals;
+        }
+
+
+        /// <summary>
+        /// Get the tangents at given points along a curve.
+        /// </summary>
+        /// <param name="curve">The input curve.</param>
+        /// <param name="points">List of points.</param>
+        /// <returns>The tangents at the points.</returns>
+        public static List<Autodesk.DesignScript.Geometry.Vector> CurveTangentsAtPoints(
+            Curve curve,
+            List<Autodesk.DesignScript.Geometry.Point> points)
+        {
+            // Get the tangent vectors at the points.
+            List<Autodesk.DesignScript.Geometry.Vector> tangents = new List<Autodesk.DesignScript.Geometry.Vector>();
+            foreach (Point point in points)
+            {
+                // Get the parameter at the point.
+                float parameter = (float)curve.ParameterAtPoint(point);
+
+                // Get the normal at the point and add to the vector list.
+                tangents.Add(curve.TangentAtParameter(parameter));
+            }
+
+            return tangents;
         }
     }
 }
