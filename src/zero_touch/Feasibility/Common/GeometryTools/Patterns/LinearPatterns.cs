@@ -223,17 +223,15 @@ namespace Common.GeometryTools.Patterns
 
 
         /// <summary>
-        /// Calculate the actual width of the pattern rectangles against the location curve.
+        /// Calculate the width of the pattern rectangles against the location curve.
         /// </summary>
         /// <param name="locationCurve">The input curve to place the pattern rectangles along.</param>
         /// <param name="rectangleWidth">Width of the rectangle.</param>
-        /// <param name="rectangleLength">Length of the rectangle.</param>
         /// <param name="rectangleRotation">Rotation angle of the rectangle.</param>
         /// <returns name="locationCurveWidth">Width of the pattern against the location curve.</returns>
         public static float PatternActualLocationCurveWidth(
             [DefaultArgument("Line.ByStartPointEndPoint(Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 0, 0), Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 100, 0))")] Curve locationCurve,
             float rectangleWidth = 2.5f,
-            float rectangleLength = 5f,
             float rectangleRotation = 0f)
         {
             // Get the ideal width of the pattern rectangles against the location curve.
@@ -268,7 +266,20 @@ namespace Common.GeometryTools.Patterns
         }
 
 
-        
+        /// <summary>
+        /// Calculate the actual width of the rectangles to be created.
+        /// </summary>
+        /// <param name="locationCurve">The input curve to place the pattern rectangles along.</param>
+        /// <param name="rectangleWidth">Width of the rectangle.</param>
+        /// <param name="rectangleRotation">Rotation angle of the rectangle.</param>
+        /// <returns></returns>
+        public static float PatternActualWidth(
+            [DefaultArgument("Line.ByStartPointEndPoint(Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 0, 0), Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 100, 0))")] Curve locationCurve,
+            float rectangleWidth = 2.5f,
+            float rectangleRotation = 0f)
+        {
+            return 5;
+        }
 
 
         public static object NonInterlockingRegular()

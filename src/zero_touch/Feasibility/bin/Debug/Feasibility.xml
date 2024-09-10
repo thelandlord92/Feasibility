@@ -28,7 +28,7 @@
             Contains common geometrical operations.
             </summary>
         </member>
-        <member name="M:Common.GeometryTools.GeometryUtilities.AddTransformations(System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Geometry},Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Plane,Autodesk.DesignScript.Geometry.Vector,System.Single,System.Single,System.Single)">
+        <member name="M:Common.GeometryTools.GeometryUtilities.AddTransformations(System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Geometry},Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Plane,Autodesk.DesignScript.Geometry.Vector,System.Single,System.Single,System.Single,System.Boolean,System.Boolean)">
             <summary>
             To add transformations to input geometry.
             </summary>
@@ -39,7 +39,9 @@
             <param name="rotation">The rotation of the geometry around the center of the host plane.</param>
             <param name="planeOffset">The offset of the geometry along host plane's normal.</param>
             <param name="scaleFactor">The scale of the geometry at the host plane.</param>
-            <returns></returns>
+            <param name="mirrorHorizontal">Mirror the geometry horizontally.</param>
+            <param name="mirrorVertical">Mirror the geometry vertically.</param>
+            <returns name="transformedGeometry">The transformed geometry.</returns>
         </member>
         <member name="M:Common.GeometryTools.GeometryUtilities.SortIntersectingGeometry(System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Geometry})">
             <summary>
@@ -291,15 +293,23 @@
             <param name="rectangleRotation">Rotation angle of the rectangle.</param>
             <returns name="copyNumber">Pattern rectangle copy number along the location curve.</returns>
         </member>
-        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.PatternActualLocationCurveWidth(Autodesk.DesignScript.Geometry.Curve,System.Single,System.Single,System.Single)">
+        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.PatternActualLocationCurveWidth(Autodesk.DesignScript.Geometry.Curve,System.Single,System.Single)">
             <summary>
-            Calculate the actual width of the pattern rectangles against the location curve.
+            Calculate the width of the pattern rectangles against the location curve.
             </summary>
             <param name="locationCurve">The input curve to place the pattern rectangles along.</param>
             <param name="rectangleWidth">Width of the rectangle.</param>
-            <param name="rectangleLength">Length of the rectangle.</param>
             <param name="rectangleRotation">Rotation angle of the rectangle.</param>
             <returns name="locationCurveWidth">Width of the pattern against the location curve.</returns>
+        </member>
+        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.PatternActualWidth(Autodesk.DesignScript.Geometry.Curve,System.Single,System.Single)">
+            <summary>
+            Calculate the actual width of the rectangles to be created.
+            </summary>
+            <param name="locationCurve">The input curve to place the pattern rectangles along.</param>
+            <param name="rectangleWidth">Width of the rectangle.</param>
+            <param name="rectangleRotation">Rotation angle of the rectangle.</param>
+            <returns></returns>
         </member>
         <member name="T:Common.GeometryTools.Points">
             <summary>

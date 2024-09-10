@@ -34,7 +34,9 @@ namespace Common.GeometryTools
         /// <param name="rotation">The rotation of the geometry around the center of the host plane.</param>
         /// <param name="planeOffset">The offset of the geometry along host plane's normal.</param>
         /// <param name="scaleFactor">The scale of the geometry at the host plane.</param>
-        /// <returns></returns>
+        /// <param name="mirrorHorizontal">Mirror the geometry horizontally.</param>
+        /// <param name="mirrorVertical">Mirror the geometry vertically.</param>
+        /// <returns name="transformedGeometry">The transformed geometry.</returns>
         public static List<Autodesk.DesignScript.Geometry.Geometry> AddTransformations(
             List<Autodesk.DesignScript.Geometry.Geometry> geometry,
             Autodesk.DesignScript.Geometry.Point geometryLocation,
@@ -42,12 +44,14 @@ namespace Common.GeometryTools
             [DefaultArgument("Vector.ZAxis()")] Autodesk.DesignScript.Geometry.Vector geometryPlaneNormal,
             float rotation = 0,
             float planeOffset = 0,
-            float scaleFactor = 1)
+            float scaleFactor = 1,
+            bool mirrorHorizontal = false,
+            bool mirrorVertical = false)
         {
-            // add a plane at the location point of the geometry.
+            // Add a plane at the location point of the geometry.
             Plane geometryPlane = Plane.ByOriginNormal(geometryLocation, geometryPlaneNormal);
 
-            // transform the geometry to the host plane.
+            // Transform the geometry to the host plane.
             List<Autodesk.DesignScript.Geometry.Geometry> transGeometry = new List<Autodesk.DesignScript.Geometry.Geometry>();
             foreach (Autodesk.DesignScript.Geometry.Geometry geom in geometry) 
             { 
@@ -57,7 +61,7 @@ namespace Common.GeometryTools
                 }
             }
 
-            // rotate the geometry at the host plane.
+            // Rotate the geometry at the host plane.
             List<Autodesk.DesignScript.Geometry.Geometry> rotatedGeometry = new List<Autodesk.DesignScript.Geometry.Geometry>();  
             foreach (Autodesk.DesignScript.Geometry.Geometry geom in transGeometry) 
             { 
@@ -67,7 +71,7 @@ namespace Common.GeometryTools
                 }
             }
 
-            // scale the geometry at the host plane.
+            // Scale the geometry at the host plane.
             List<Autodesk.DesignScript.Geometry.Geometry> scaledGeometry = new List<Autodesk.DesignScript.Geometry.Geometry>();
             foreach (Autodesk.DesignScript.Geometry.Geometry geom in rotatedGeometry) 
             {
@@ -77,7 +81,7 @@ namespace Common.GeometryTools
                 }
             }
 
-            // move the geometry along the host plane normal.
+            // Move the geometry along the host plane normal.
             List<Autodesk.DesignScript.Geometry.Geometry> movedGeometry = new List<Autodesk.DesignScript.Geometry.Geometry>();
             foreach (Autodesk.DesignScript.Geometry.Geometry geom in scaledGeometry) 
             { 
@@ -87,7 +91,43 @@ namespace Common.GeometryTools
                 }
             }
 
-            return movedGeometry;
+            // Get the x and y axis of the host plane.
+            Autodesk.DesignScript.Geometry.Vector planeX = hostPlane.XAxis;
+            Autodesk.DesignScript.Geometry.Vector planeY = hostPlane.YAxis;
+
+            // Create vertical and horizontal mirror planes.
+            Plane horizontalMirrorPlane = Plane.ByOriginNormal(hostPlane.Origin, planeX);
+            Plane verticalMirrorPlane = Plane.ByOriginNormal(hostPlane.Origin, planeY);
+
+            // Mirror the geometry horizontally.
+            List<Autodesk.DesignScript.Geometry.Geometry> geometryHorizontalMirror = new List<Autodesk.DesignScript.Geometry.Geometry>();
+            if (mirrorHorizontal == true) 
+            {
+                foreach (Autodesk.DesignScript.Geometry.Geometry geom in movedGeometry) 
+                {
+                    geometryHorizontalMirror.Add(geom.Mirror(horizontalMirrorPlane));
+                }
+            }
+            else 
+            {
+                geometryHorizontalMirror = movedGeometry;
+            }
+
+            // Mirror the geometry vertically.
+            List<Autodesk.DesignScript.Geometry.Geometry> geometryVerticalMirror = new List<Autodesk.DesignScript.Geometry.Geometry>();
+            if (mirrorVertical == true)
+            {
+                foreach (Autodesk.DesignScript.Geometry.Geometry geom in geometryHorizontalMirror)
+                {
+                    geometryVerticalMirror.Add(geom.Mirror(verticalMirrorPlane));
+                }
+            }
+            else 
+            {
+                geometryVerticalMirror = geometryHorizontalMirror;
+            }
+
+            return geometryVerticalMirror;
         }
 
 
