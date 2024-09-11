@@ -209,7 +209,7 @@
             </summary>
             <param name="curve">The input curve.</param>
             <param name="points">List of points.</param>
-            <returns></returns>
+            <returns>The parameters.</returns>
         </member>
         <member name="M:Common.GeometryTools.Curves.CurveNormalsAtPoints(Autodesk.DesignScript.Geometry.Curve,System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Point})">
             <summary>
@@ -218,7 +218,7 @@
             </summary>
             <param name="curve">The input curve.</param>
             <param name="points">List of points.</param>
-            <returns></returns>
+            <returns>The normals at the points.</returns>
         </member>
         <member name="M:Common.GeometryTools.Curves.CurveTangentsAtPoints(Autodesk.DesignScript.Geometry.Curve,System.Collections.Generic.List{Autodesk.DesignScript.Geometry.Point})">
             <summary>
@@ -226,7 +226,7 @@
             </summary>
             <param name="curve">The input curve.</param>
             <param name="points">List of points.</param>
-            <returns></returns>
+            <returns>The tangents at the points.</returns>
         </member>
         <member name="T:Common.GeometryTools.MeshVertex">
             <summary>
@@ -291,7 +291,7 @@
             <returns name="dashSurfaces">The dash surfaces.</returns>
             <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.BaseRectangle(System.Single,System.Single,System.Single,System.Single,Autodesk.DesignScript.Geometry.Plane)">
+        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.BaseRectangle(System.Single,System.Single,System.Single,System.Single,System.Boolean,System.Boolean,Autodesk.DesignScript.Geometry.Plane)">
             <summary>
             Base rectangle for use in pattern creation.
             </summary>
@@ -299,6 +299,8 @@
             <param name="rectangleLength">Length of the rectangle.</param>
             <param name="rectangleRotation">Rotation angle of the rectangle.</param>
             <param name="rectanglePlaneOffset">Offset of the rectangle from the host plane.</param>
+            <param name="mirrorHorizontal">Mirror the rectangle horizontally at the host plane center.</param>
+            <param name="mirrorVertical">Mirror the rectangle vertically at the host plane center.</param>
             <param name="hostPlane">Host plane to create the rectangle.</param>
             <returns name="rectangle">The created rectangle.</returns>
         </member>
@@ -344,6 +346,19 @@
             <param name="rectangleWidth">Width of the rectangle.</param>
             <param name="rectangleRotation">Rotation angle of the rectangle.</param>
             <returns></returns>
+        </member>
+        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.NonInterlockingRegularPattern(Autodesk.DesignScript.Geometry.Curve,System.Single,System.Single,System.Single,System.Single,System.Boolean,System.Boolean)">
+            <summary>
+            Creates the non interlocking pattern.
+            </summary>
+            <param name="locationCurve">The input curve to place the pattern rectangles along.</param>
+            <param name="rectangleWidth">Width of the rectangles.</param>
+            <param name="rectangleLength">Length of the rectangles.</param>
+            <param name="rectangleRotation">Rotation angle of the rectangle.</param>
+            <param name="patternOffset">The offset distance of the pattern points from the location line.</param>
+            <param name="patternSideOne"></param>
+            <param name="patternSideTwo"></param>
+            <returns name="points">Points to host the first half of the pattern.</returns>
         </member>
         <member name="T:Common.GeometryTools.Points">
             <summary>

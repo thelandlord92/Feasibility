@@ -123,6 +123,8 @@ namespace Common.GeometryTools.Patterns
         /// <param name="rectangleLength">Length of the rectangle.</param>
         /// <param name="rectangleRotation">Rotation angle of the rectangle.</param>
         /// <param name="rectanglePlaneOffset">Offset of the rectangle from the host plane.</param>
+        /// <param name="mirrorHorizontal">Mirror the rectangle horizontally at the host plane center.</param>
+        /// <param name="mirrorVertical">Mirror the rectangle vertically at the host plane center.</param>
         /// <param name="hostPlane">Host plane to create the rectangle.</param>
         /// <returns name="rectangle">The created rectangle.</returns>
         public static Rectangle BaseRectangle(
@@ -130,6 +132,8 @@ namespace Common.GeometryTools.Patterns
             float rectangleLength = 5f,
             float rectangleRotation = 0f,
             float rectanglePlaneOffset = 0f,
+            bool mirrorHorizontal = false,
+            bool mirrorVertical = false,
             [DefaultArgument("Plane.XY()")] Plane hostPlane = null)
         {
             // Create the base rectangle at the origin.
@@ -146,7 +150,9 @@ namespace Common.GeometryTools.Patterns
                 Vector.ZAxis(),
                 rectangleRotation,
                 rectanglePlaneOffset,
-                1
+                1,
+                mirrorHorizontal,
+                mirrorVertical
             );
 
             return transformedRectangle[0] as Rectangle;
@@ -305,23 +311,156 @@ namespace Common.GeometryTools.Patterns
         }
 
 
-        public static List<Autodesk.DesignScript.Geometry.Point> locationCurvePoints(
+        /// <summary>
+        /// Creates the non interlocking pattern.
+        /// </summary>
+        /// <param name="locationCurve">The input curve to place the pattern rectangles along.</param>
+        /// <param name="rectangleWidth">Width of the rectangles.</param>
+        /// <param name="rectangleLength">Length of the rectangles.</param>
+        /// <param name="rectangleRotation">Rotation angle of the rectangle.</param>
+        /// <param name="patternOffset">The offset distance of the pattern points from the location line.</param>
+        /// <param name="patternSideOne"></param>
+        /// <param name="patternSideTwo"></param>
+        /// <returns name="points">Points to host the first half of the pattern.</returns>
+        public static object NonInterlockingRegularPattern(
             [DefaultArgument("Line.ByStartPointEndPoint(Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 0, 0), Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 100, 0))")] Curve locationCurve,
             float rectangleWidth = 2.5f,
-            float rectangleRotation = 0f)
+            float rectangleLength = 5f,
+            float rectangleRotation = 0f,
+            float patternOffset = 1f,
+            bool patternSideOne = true,
+            bool patternSideTwo = true)
         {
+            // Throw an exception if the user turns off both pattern sides.
+            if (!patternSideOne && !patternSideTwo) 
+            {
+                throw new ArgumentException("Both pattern sides cannot be off.");
+            }
+
             // Get the pattern copy number.
             int copyNumber = PatternLocationCurveCopyNumber(locationCurve, rectangleWidth, rectangleRotation);
 
-            // Get the start and end points of the location curve.
+            // Create the points along the location curve.
+            List<Autodesk.DesignScript.Geometry.Point> curvePoints = Curves.PointsAtEqualChordLength(locationCurve, copyNumber);
 
-            return null;
-        }
+            // Get the normals at the points.
+            List<Autodesk.DesignScript.Geometry.Vector> curveNormals = Curves.CurveNormalsAtPoints(locationCurve, curvePoints);
+
+            // Create the first side pattern.
+            List<object> sideOneRectangles = new List<object>();
+            if (patternSideOne) 
+            {
+                // Move the points along the normal vector. To be used to create a new curve.
+                List<Autodesk.DesignScript.Geometry.Point> movedPoints = new List<Autodesk.DesignScript.Geometry.Point>();
+                for (int i = 0; i < curvePoints.Count; i++)
+                {
+                    movedPoints.Add(curvePoints[i].Translate(curveNormals[i], patternOffset) as Autodesk.DesignScript.Geometry.Point);
+                }
+
+                // Create a new curve from the moved points. This is to accommodate for the lengthening or shortening of the location curve after offset.
+                NurbsCurve newLocationCurve = NurbsCurve.ByPoints(movedPoints);
+
+                // Calculate a new copy number based on the new location curve.
+                int newCopyNumber = PatternLocationCurveCopyNumber(newLocationCurve, rectangleWidth, rectangleRotation);
+
+                // Add the pattern points to the new curve.
+                List<Autodesk.DesignScript.Geometry.Point> patternPoints = Curves.PointsAtEqualChordLength(newLocationCurve, copyNumber);
+
+                // Get the normals at the new points.
+                List<Autodesk.DesignScript.Geometry.Vector> newCurveNormals = Curves.CurveNormalsAtPoints(newLocationCurve, patternPoints);
+
+                // Get the angle of the normals around the Y axis.
+                List<float> normalAnglesAroundY = new List<float>();
+                foreach(Autodesk.DesignScript.Geometry.Vector vector in newCurveNormals) 
+                {
+                    normalAnglesAroundY.Add((float)vector.AngleAboutAxis(Autodesk.DesignScript.Geometry.Vector.YAxis(), Autodesk.DesignScript.Geometry.Vector.ZAxis()) + 90);
+                }
+
+                // Get the width of the rectangles to be created.
+                float actualRectangleWidth = PatternActualWidth(newLocationCurve, rectangleWidth, rectangleRotation);
+
+                // Create the rectangles at the new points.
+                for (int i = 0; i < patternPoints.Count; i++) 
+                {
+                    Rectangle rectangle = BaseRectangle(
+                        actualRectangleWidth,
+                        rectangleLength,
+                        rectangleRotation + normalAnglesAroundY[i],
+                        0,
+                        false,
+                        true,
+                        Plane.ByOriginNormal(patternPoints[i], Autodesk.DesignScript.Geometry.Vector.ZAxis())
+                    );
+                    sideOneRectangles.Add(rectangle);
+                }
+            }
+            else
+            {
+                sideOneRectangles.Add(null);
+            }
+
+            // Create the second side pattern.
+            List<object> sideTwoRectangles = new List<object>();
+            if (patternSideTwo) 
+            {
+                // Move the points along the normal vector. To be used to create a new curve.
+                List<Autodesk.DesignScript.Geometry.Point> movedPoints = new List<Autodesk.DesignScript.Geometry.Point>();
+                for (int i = 0; i < curvePoints.Count; i++)
+                {
+                    movedPoints.Add(curvePoints[i].Translate(curveNormals[i].Reverse(), patternOffset) as Autodesk.DesignScript.Geometry.Point);
+                }
+
+                // Create a new curve from the moved points. This is to accommodate for the lengthening or shortening of the location curve after offset.
+                NurbsCurve newLocationCurve = NurbsCurve.ByPoints(movedPoints);
+
+                // Calculate a new copy number based on the new location curve.
+                int newCopyNumber = PatternLocationCurveCopyNumber(newLocationCurve, rectangleWidth, rectangleRotation);
+
+                // Add the pattern points to the new curve.
+                List<Autodesk.DesignScript.Geometry.Point> patternPoints = Curves.PointsAtEqualChordLength(newLocationCurve, copyNumber);
+                sideTwoRectangles.Add(patternPoints);
+
+                // Get the normals at the new points.
+                List<Autodesk.DesignScript.Geometry.Vector> newCurveNormals = Curves.CurveNormalsAtPoints(newLocationCurve, patternPoints);
+
+                // Get the angle of the normals around the Y axis.
+                List<float> normalAnglesAroundY = new List<float>();
+                foreach (Autodesk.DesignScript.Geometry.Vector vector in newCurveNormals)
+                {
+                    normalAnglesAroundY.Add((float)vector.AngleAboutAxis(Autodesk.DesignScript.Geometry.Vector.YAxis(), Autodesk.DesignScript.Geometry.Vector.ZAxis()) + 90);
+                }
+
+                // Get the width of the rectangles to be created.
+                float actualRectangleWidth = PatternActualWidth(newLocationCurve, rectangleWidth, rectangleRotation);
+
+                // Create the rectangles at the new points.
+                for (int i = 0; i < patternPoints.Count; i++)
+                {
+                    Rectangle rectangle = BaseRectangle(
+                        actualRectangleWidth,
+                        rectangleLength,
+                        rectangleRotation - normalAnglesAroundY[i],
+                        0,
+                        true,
+                        true,
+                        Plane.ByOriginNormal(patternPoints[i], Autodesk.DesignScript.Geometry.Vector.ZAxis())
+                    );
+                    sideTwoRectangles.Add(rectangle);
+                }
+
+            }
 
 
-        public static object NonInterlockingRegular()
-        {
-            return null;
+
+            // Combine the pattern rectangles in a list.
+            List<List<object>> patternRectangles = new List<List<object>>();
+            patternRectangles.Add(sideOneRectangles);
+            patternRectangles.Add(sideTwoRectangles);
+
+
+
+
+            return patternRectangles;
         }
 
 
