@@ -7,145 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Common.GeometryTools.Patterns
+namespace Common.GeometryTools.Patterns.LinearPatterns
 {
     /// <summary>
     /// Wrapper class for the linear patterns.
     /// </summary>
     public class RectangularPatterns
     {
-        /// <summary>
-        /// The input curve to place the pattern rectangles along.
-        /// </summary>
-        internal Curve LocationCurve { get; set; }
-
-        
-        private float _rectangleWidth;
-
-        /// <summary>
-        /// Width of the pattern rectangles.
-        /// </summary>
-        internal float RectangleWidth 
-        { 
-            get { return _rectangleWidth; }
-            set 
-            { 
-                if (value <= 0) 
-                {
-                    throw new ArgumentException("The rectangle width must be greater than zero");
-                }
-                _rectangleWidth = value;
-            }
-        }
-
-
-        private float _rectangleLength;
-
-        /// <summary>
-        /// Length of the pattern rectangles.
-        /// </summary>
-        internal float RectangleLength
-        {
-            get { return _rectangleLength; }
-            set
-            {
-                if (value <= 0)
-                {
-                    throw new ArgumentException("The rectangle length must be greater than zero");
-                }
-                _rectangleLength = value;
-            }
-        }
-
-
-        private float _rectangleRotation;
-
-        /// <summary>
-        /// Rotation angle of the pattern rectangles.
-        /// The rotation angle cannot be less than 0 or greater than 90 degrees.
-        /// </summary>
-        internal float RectangleRotation
-        {
-            get { return _rectangleRotation; }
-            set
-            {
-                if (value <= 0)
-                {
-                    _rectangleRotation = 0;
-                }
-                if (value >= 90)
-                {
-                    _rectangleRotation = 90;
-                }
-                _rectangleRotation = value;
-            }
-        }
-
-
-        private bool _patternSideOne;
-        private bool _patternSideTwo;
-
-
-        /// <summary>
-        /// Turn on/off the first side pattern.
-        /// </summary>
-        internal bool PatternSideOne
-        {
-            get { return _patternSideOne; }
-            set
-            {
-                if (!value && !_patternSideTwo)
-                {
-                    throw new InvalidOperationException("Both pattern sides cannot be off.");
-                }
-                _patternSideOne = value;
-            }
-        }
-
-
-        /// <summary>
-        /// Turn on/off the second side pattern.
-        /// </summary>
-        internal bool PatternSideTwo
-        {
-            get { return _patternSideTwo; }
-            set
-            {
-                if (!value && !_patternSideOne)
-                {
-                    throw new InvalidOperationException("Both pattern sides cannot be off.");
-                }
-                _patternSideTwo = value;
-            }
-        }
-
-
-        /// <summary>
-        /// Create instances of the rectangular patterns.
-        /// </summary>
-        /// <param name="locationCurve">The input curve to place the pattern rectangles along</param>
-        /// <param name="rectangleWidth">Width of the pattern rectangles</param>
-        /// <param name="rectangleLength">Length of the pattern rectangles</param>
-        /// <param name="rectangleRotation">Rotation angle of the pattern rectangles</param>
-        /// <param name="patternSideOne">Turn on/off the first side pattern.</param>
-        /// <param name="patternSideTwo">Turn on/off the second side pattern.</param>
-        public RectangularPatterns(
-            Curve locationCurve,
-            float rectangleWidth = 2.5f,
-            float rectangleLength = 5f,
-            float rectangleRotation = 0f,
-            bool patternSideOne = true,
-            bool patternSideTwo = true) 
-        { 
-            LocationCurve = locationCurve;
-            RectangleWidth = rectangleWidth;
-            RectangleLength = rectangleLength;
-            PatternSideOne = patternSideOne;
-            PatternSideTwo = patternSideTwo;
-        }
-
-
-
+       // Hides the overall class as a node.
+        private RectangularPatterns() { }
 
 
         /// <summary>
@@ -202,7 +72,19 @@ namespace Common.GeometryTools.Patterns
             float rectangleRotation = 0f)
         {
             // Calculate the ideal width of the pattern rectangles against location curve.
-            float idealWidth = (float)(rectangleWidth / DSCore.Math.Cos(rectangleRotation));
+            float idealWidth;
+            if (rectangleRotation <= 0) 
+            {
+                idealWidth = rectangleWidth;
+            }
+            else if (rectangleRotation >= 90)
+            {
+                idealWidth = rectangleWidth;
+            }
+            else 
+            {
+                idealWidth = (float)(rectangleWidth / DSCore.Math.Cos(rectangleRotation));
+            }
 
             return idealWidth;
         }
@@ -246,19 +128,37 @@ namespace Common.GeometryTools.Patterns
 
             // Calculate the number of bays to copy along the location curve.
             int copyNumber;
-            if (chordLength < idealWidth) // Copy number is zero if the chord length of the location curve is less than the ideal width of the pattern retangle.
+            if (rectangleRotation <= 0 || rectangleRotation >= 90) 
             {
-                copyNumber = 0;
-            }
-            else if (chordLength == idealWidth)
-            {
-                copyNumber = 1;
+                if (chordLength < idealWidth) // Copy number is zero if the chord length of the location curve is less than the ideal width of the pattern retangle.
+                {
+                    copyNumber = 1;
+                }
+                else if (chordLength == idealWidth)
+                {
+                    copyNumber = 1;
+                }
+                else
+                {
+                    copyNumber = (int)DSCore.Math.Floor(locationCurve.Length / rectangleWidth);
+                }
             }
             else 
             {
-                copyNumber = (int)DSCore.Math.Floor(locationCurve.Length / idealWidth);
+                if (chordLength < idealWidth) // Copy number is zero if the chord length of the location curve is less than the ideal width of the pattern retangle.
+                {
+                    copyNumber = 1;
+                }
+                else if (chordLength == idealWidth)
+                {
+                    copyNumber = 1;
+                }
+                else
+                {
+                    copyNumber = (int)DSCore.Math.Floor(locationCurve.Length / idealWidth);
+                }
             }
-
+            
             return copyNumber;
         }
 
@@ -330,15 +230,29 @@ namespace Common.GeometryTools.Patterns
 
             // Calculate the actual width of the rectangles.
             float actualWidth;
-            if (chordLength <= idealWidth) 
+            if (rectangleRotation <= 0 || rectangleRotation >= 90) 
             {
-                actualWidth = (float)DSCore.Math.Cos(rectangleRotation) * chordLength;
+                if (chordLength <= idealWidth)
+                {
+                    actualWidth = chordLength;
+                }
+                else 
+                {
+                    actualWidth = rectangleWidth;
+                }
             }
             else
             {
-                actualWidth = (float)DSCore.Math.Cos(rectangleRotation) * locationCurveWidth;
+                if (chordLength <= idealWidth)
+                {
+                    actualWidth = (float)DSCore.Math.Cos(rectangleRotation) * chordLength;
+                }
+                else
+                {
+                    actualWidth = (float)DSCore.Math.Cos(rectangleRotation) * locationCurveWidth;
+                }
             }
-
+            
             return actualWidth;
         }
 
@@ -349,10 +263,10 @@ namespace Common.GeometryTools.Patterns
         /// <param name="locationCurve">The input curve to place the pattern rectangles along.</param>
         /// <param name="rectangleWidth">Width of the rectangles.</param>
         /// <param name="rectangleLength">Length of the rectangles.</param>
-        /// <param name="rectangleRotation">Rotation angle of the rectangle.</param>
+        /// <param name="rectangleRotation">Rotation angle of the rectangle. The rotation angle cannot be less than 0 or greater than 90.</param>
         /// <param name="patternOffset">The offset distance of the pattern points from the location line.</param>
-        /// <param name="patternSideOne"></param>
-        /// <param name="patternSideTwo"></param>
+        /// <param name="patternSideOne">Turn on/off the first pattern side.</param>
+        /// <param name="patternSideTwo">Turn on/off the second pattern side.</param>
         /// <returns name="patternRectangles">Pattern rectangles created along the input location curve.</returns>
         /// <returns name="patternPoints">Placement points of the pattern rectangles.</returns>
         /// <returns name="patternRotation">Rotation values of the placed rectangles.</returns>
@@ -367,10 +281,28 @@ namespace Common.GeometryTools.Patterns
             bool patternSideOne = true,
             bool patternSideTwo = true)
         {
+            // Check the inputs.
+
             // Throw an exception if the user turns off both pattern sides.
             if (!patternSideOne && !patternSideTwo) 
             {
                 throw new ArgumentException("Both pattern sides cannot be off.");
+            }
+
+            // Throw exception if the location curve has more than one segment.
+            if (locationCurve.Explode().Count() > 1) 
+            {
+                throw new ArgumentException("The location curve cannot have more than one segment");
+            }
+
+            // Check the rotation angle.
+            if (rectangleRotation <= 0f) 
+            { 
+                rectangleRotation = 0f;
+            }
+            else if (rectangleRotation >= 90) 
+            {
+                rectangleRotation = 0f;
             }
 
             // Get the pattern copy number.
@@ -386,7 +318,6 @@ namespace Common.GeometryTools.Patterns
             List<Rectangle> sideOneRectangles = new List<Rectangle>();
             List<float> sideOneRotation = new List<float>();
             List<Autodesk.DesignScript.Geometry.Point> sideOnePoints = new List<Autodesk.DesignScript.Geometry.Point>();
-            List<PolyCurve> sideOneTaperedPolyCurves = new List<PolyCurve>();
             if (patternSideOne) 
             {
                 // Move the points along the normal vector. To be used to create a new curve.
@@ -448,7 +379,6 @@ namespace Common.GeometryTools.Patterns
             List<Rectangle> sideTwoRectangles = new List<Rectangle>();
             List<float> sideTwoRotation = new List<float>();
             List<Autodesk.DesignScript.Geometry.Point> sideTwoPoints = new List<Autodesk.DesignScript.Geometry.Point>();
-            List<PolyCurve> sideTwoTaperedPolyCurves = new List<PolyCurve>();
             if (patternSideTwo) 
             {
                 // Move the points along the normal vector. To be used to create a new curve.
@@ -500,8 +430,12 @@ namespace Common.GeometryTools.Patterns
                     );
                     sideTwoRectangles.Add(rectangle);
                 }
-
             }
+
+            // Logic for the tapered rectangles. #####Continue here
+            List<PolyCurve> sideOneTaperedPolyCurves = new List<PolyCurve>();
+            List<PolyCurve> sideTwoTaperedPolyCurves = new List<PolyCurve>();
+
 
             // Combine the pattern rectangles in a list.
             List<List<Rectangle>> patternRectangles = new List<List<Rectangle>>();

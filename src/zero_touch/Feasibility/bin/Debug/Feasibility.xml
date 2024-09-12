@@ -273,12 +273,17 @@
             <returns name="hatchOutlines">The perimeter curves of the hatch surface.</returns>
             <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="T:Common.GeometryTools.Patterns.LinearPatterns">
+        <member name="T:Common.GeometryTools.Patterns.LinearPatterns.DashedPatterns">
             <summary>
-            Wrapper class for the linear patterns.
+            Wrapper class for dashed patterns.
             </summary>
         </member>
-        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.DashedPattern(Autodesk.DesignScript.Geometry.Curve,System.Single,System.Single,System.Single)">
+        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.DashedPatterns.#ctor">
+            <summary>
+            Hides the overall class as a node.
+            </summary>
+        </member>
+        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.DashedPatterns.RectangularDashedPattern(Autodesk.DesignScript.Geometry.Curve,System.Single,System.Single,System.Single)">
             <summary>
             Creates a dashed pattern along a curve.
             </summary>
@@ -291,7 +296,12 @@
             <returns name="dashSurfaces">The dash surfaces.</returns>
             <exception cref="T:System.Exception"></exception>
         </member>
-        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.BaseRectangle(System.Single,System.Single,System.Single,System.Single,System.Boolean,System.Boolean,Autodesk.DesignScript.Geometry.Plane)">
+        <member name="T:Common.GeometryTools.Patterns.LinearPatterns.RectangularPatterns">
+            <summary>
+            Wrapper class for the linear patterns.
+            </summary>
+        </member>
+        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.RectangularPatterns.BaseRectangle(System.Single,System.Single,System.Single,System.Single,System.Boolean,System.Boolean,Autodesk.DesignScript.Geometry.Plane)">
             <summary>
             Base rectangle for use in pattern creation.
             </summary>
@@ -304,7 +314,7 @@
             <param name="hostPlane">Host plane to create the rectangle.</param>
             <returns name="rectangle">The created rectangle.</returns>
         </member>
-        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.PatternIdealWidth(System.Single,System.Single)">
+        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.RectangularPatterns.PatternIdealWidth(System.Single,System.Single)">
             <summary>
             Calculate the ideal width of the pattern rectangles against the location curve.
             </summary>
@@ -312,7 +322,7 @@
             <param name="rectangleRotation">Rotation angle of the rectangle.</param>
             <returns name="idealWidth">Ideal width of the pattern rectangles against the location curve.</returns>
         </member>
-        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.LocationCurveChordLength(Autodesk.DesignScript.Geometry.Curve)">
+        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.RectangularPatterns.LocationCurveChordLength(Autodesk.DesignScript.Geometry.Curve)">
             <summary>
             Calculate the chord length of the location curve using its end points.
             The chord length of a straight line will be equal to the line's length.
@@ -320,7 +330,7 @@
             <param name="locationCurve">The location curve.</param>
             <returns name="chordLength">Calculated chord length.</returns>
         </member>
-        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.PatternLocationCurveCopyNumber(Autodesk.DesignScript.Geometry.Curve,System.Single,System.Single)">
+        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.RectangularPatterns.PatternLocationCurveCopyNumber(Autodesk.DesignScript.Geometry.Curve,System.Single,System.Single)">
             <summary>
             Calculate the number of times to copy the pattern rectangles against the location curve.
             </summary>
@@ -329,7 +339,7 @@
             <param name="rectangleRotation">Rotation angle of the rectangle.</param>
             <returns name="copyNumber">Pattern rectangle copy number along the location curve.</returns>
         </member>
-        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.PatternActualLocationCurveWidth(Autodesk.DesignScript.Geometry.Curve,System.Single,System.Single)">
+        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.RectangularPatterns.PatternActualLocationCurveWidth(Autodesk.DesignScript.Geometry.Curve,System.Single,System.Single)">
             <summary>
             Calculate the width of the pattern rectangles against the location curve.
             </summary>
@@ -338,7 +348,7 @@
             <param name="rectangleRotation">Rotation angle of the rectangle.</param>
             <returns name="locationCurveWidth">Width of the pattern against the location curve.</returns>
         </member>
-        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.PatternActualWidth(Autodesk.DesignScript.Geometry.Curve,System.Single,System.Single)">
+        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.RectangularPatterns.PatternActualWidth(Autodesk.DesignScript.Geometry.Curve,System.Single,System.Single)">
             <summary>
             Calculate the actual width of the rectangles to be created.
             </summary>
@@ -347,17 +357,17 @@
             <param name="rectangleRotation">Rotation angle of the rectangle.</param>
             <returns></returns>
         </member>
-        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.NonInterlockingRegularPattern(Autodesk.DesignScript.Geometry.Curve,System.Single,System.Single,System.Single,System.Single,System.Boolean,System.Boolean)">
+        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.RectangularPatterns.NonInterlockingRegularPattern(Autodesk.DesignScript.Geometry.Curve,System.Single,System.Single,System.Single,System.Single,System.Boolean,System.Boolean)">
             <summary>
             Creates the non interlocking pattern.
             </summary>
             <param name="locationCurve">The input curve to place the pattern rectangles along.</param>
             <param name="rectangleWidth">Width of the rectangles.</param>
             <param name="rectangleLength">Length of the rectangles.</param>
-            <param name="rectangleRotation">Rotation angle of the rectangle.</param>
+            <param name="rectangleRotation">Rotation angle of the rectangle. The rotation angle cannot be less than 0 or greater than 90.</param>
             <param name="patternOffset">The offset distance of the pattern points from the location line.</param>
-            <param name="patternSideOne"></param>
-            <param name="patternSideTwo"></param>
+            <param name="patternSideOne">Turn on/off the first pattern side.</param>
+            <param name="patternSideTwo">Turn on/off the second pattern side.</param>
             <returns name="patternRectangles">Pattern rectangles created along the input location curve.</returns>
             <returns name="patternPoints">Placement points of the pattern rectangles.</returns>
             <returns name="patternRotation">Rotation values of the placed rectangles.</returns>
