@@ -321,8 +321,12 @@ namespace Common.GeometryTools.Patterns
         /// <param name="patternOffset">The offset distance of the pattern points from the location line.</param>
         /// <param name="patternSideOne"></param>
         /// <param name="patternSideTwo"></param>
-        /// <returns name="points">Points to host the first half of the pattern.</returns>
-        public static object NonInterlockingRegularPattern(
+        /// <returns name="patternRectangles">Pattern rectangles created along the input location curve.</returns>
+        /// <returns name="patternPoints">Placement points of the pattern rectangles.</returns>
+        /// <returns name="patternRotation">Rotation values of the placed rectangles.</returns>
+        /// <returns name="taperedPolyCurves">Tapered polycurves.</returns>
+        [MultiReturn(new[] { "patternRectangles", "patternPoints", "patternRotation", "taperedPolyCurves" })]
+        public static Dictionary<string, object> NonInterlockingRegularPattern(
             [DefaultArgument("Line.ByStartPointEndPoint(Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 0, 0), Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 100, 0))")] Curve locationCurve,
             float rectangleWidth = 2.5f,
             float rectangleLength = 5f,
@@ -347,7 +351,10 @@ namespace Common.GeometryTools.Patterns
             List<Autodesk.DesignScript.Geometry.Vector> curveNormals = Curves.CurveNormalsAtPoints(locationCurve, curvePoints);
 
             // Create the first side pattern.
-            List<object> sideOneRectangles = new List<object>();
+            List<Rectangle> sideOneRectangles = new List<Rectangle>();
+            List<float> sideOneRotation = new List<float>();
+            List<Autodesk.DesignScript.Geometry.Point> sideOnePoints = new List<Autodesk.DesignScript.Geometry.Point>();
+            List<PolyCurve> sideOneTaperedPolyCurves = new List<PolyCurve>();
             if (patternSideOne) 
             {
                 // Move the points along the normal vector. To be used to create a new curve.
@@ -364,32 +371,38 @@ namespace Common.GeometryTools.Patterns
                 int newCopyNumber = PatternLocationCurveCopyNumber(newLocationCurve, rectangleWidth, rectangleRotation);
 
                 // Add the pattern points to the new curve.
-                List<Autodesk.DesignScript.Geometry.Point> patternPoints = Curves.PointsAtEqualChordLength(newLocationCurve, copyNumber);
+                List<Autodesk.DesignScript.Geometry.Point> patternPointList = Curves.PointsAtEqualChordLength(newLocationCurve, newCopyNumber);
+                sideOnePoints.AddRange(patternPointList);
 
                 // Get the normals at the new points.
-                List<Autodesk.DesignScript.Geometry.Vector> newCurveNormals = Curves.CurveNormalsAtPoints(newLocationCurve, patternPoints);
+                List<Autodesk.DesignScript.Geometry.Vector> newCurveNormals = Curves.CurveNormalsAtPoints(newLocationCurve, patternPointList);
 
-                // Get the angle of the normals around the Y axis.
-                List<float> normalAnglesAroundY = new List<float>();
-                foreach(Autodesk.DesignScript.Geometry.Vector vector in newCurveNormals) 
+                // Calculate the required rotation of the rectangles at the placement points.
+                List<float> requiredRotation = new List<float>();
+                foreach (Autodesk.DesignScript.Geometry.Vector vector in newCurveNormals)
                 {
-                    normalAnglesAroundY.Add((float)vector.AngleAboutAxis(Autodesk.DesignScript.Geometry.Vector.YAxis(), Autodesk.DesignScript.Geometry.Vector.ZAxis()) + 90);
+                    // Calcualte the angle of the normal around the Y axis.
+                    float normalAnglesAroundY = (float)vector.AngleAboutAxis(Autodesk.DesignScript.Geometry.Vector.YAxis(), Autodesk.DesignScript.Geometry.Vector.ZAxis());
+
+                    // Add the angle to the input rectangle rotation value.
+                    requiredRotation.Add(rectangleRotation + (normalAnglesAroundY + 90));
                 }
+                sideOneRotation.AddRange(requiredRotation);
 
                 // Get the width of the rectangles to be created.
                 float actualRectangleWidth = PatternActualWidth(newLocationCurve, rectangleWidth, rectangleRotation);
 
                 // Create the rectangles at the new points.
-                for (int i = 0; i < patternPoints.Count; i++) 
+                for (int i = 0; i < patternPointList.Count; i++) 
                 {
                     Rectangle rectangle = BaseRectangle(
                         actualRectangleWidth,
                         rectangleLength,
-                        rectangleRotation + normalAnglesAroundY[i],
+                        requiredRotation[i],
                         0,
                         false,
                         true,
-                        Plane.ByOriginNormal(patternPoints[i], Autodesk.DesignScript.Geometry.Vector.ZAxis())
+                        Plane.ByOriginNormal(patternPointList[i], Autodesk.DesignScript.Geometry.Vector.ZAxis())
                     );
                     sideOneRectangles.Add(rectangle);
                 }
@@ -400,7 +413,10 @@ namespace Common.GeometryTools.Patterns
             }
 
             // Create the second side pattern.
-            List<object> sideTwoRectangles = new List<object>();
+            List<Rectangle> sideTwoRectangles = new List<Rectangle>();
+            List<float> sideTwoRotation = new List<float>();
+            List<Autodesk.DesignScript.Geometry.Point> sideTwoPoints = new List<Autodesk.DesignScript.Geometry.Point>();
+            List<PolyCurve> sideTwoTaperedPolyCurves = new List<PolyCurve>();
             if (patternSideTwo) 
             {
                 // Move the points along the normal vector. To be used to create a new curve.
@@ -417,50 +433,71 @@ namespace Common.GeometryTools.Patterns
                 int newCopyNumber = PatternLocationCurveCopyNumber(newLocationCurve, rectangleWidth, rectangleRotation);
 
                 // Add the pattern points to the new curve.
-                List<Autodesk.DesignScript.Geometry.Point> patternPoints = Curves.PointsAtEqualChordLength(newLocationCurve, copyNumber);
-                sideTwoRectangles.Add(patternPoints);
+                List<Autodesk.DesignScript.Geometry.Point> patternPointList = Curves.PointsAtEqualChordLength(newLocationCurve, newCopyNumber);
+                sideTwoPoints.AddRange(patternPointList);
 
                 // Get the normals at the new points.
-                List<Autodesk.DesignScript.Geometry.Vector> newCurveNormals = Curves.CurveNormalsAtPoints(newLocationCurve, patternPoints);
+                List<Autodesk.DesignScript.Geometry.Vector> newCurveNormals = Curves.CurveNormalsAtPoints(newLocationCurve, patternPointList);
 
-                // Get the angle of the normals around the Y axis.
-                List<float> normalAnglesAroundY = new List<float>();
+                // Calculate the required rotation of the rectangles at the placement points.
+                List<float> requiredRotation = new List<float>();
                 foreach (Autodesk.DesignScript.Geometry.Vector vector in newCurveNormals)
                 {
-                    normalAnglesAroundY.Add((float)vector.AngleAboutAxis(Autodesk.DesignScript.Geometry.Vector.YAxis(), Autodesk.DesignScript.Geometry.Vector.ZAxis()) + 90);
+                    // Calcualte the angle of the normal around the Y axis.
+                    float normalAnglesAroundY = (float)vector.AngleAboutAxis(Autodesk.DesignScript.Geometry.Vector.YAxis(), Autodesk.DesignScript.Geometry.Vector.ZAxis());
+
+                    // Subtract the angle from the input rectangle rotation value.
+                    requiredRotation.Add(rectangleRotation -  (normalAnglesAroundY + 90));
                 }
+                sideTwoRotation.AddRange(requiredRotation);
 
                 // Get the width of the rectangles to be created.
                 float actualRectangleWidth = PatternActualWidth(newLocationCurve, rectangleWidth, rectangleRotation);
 
                 // Create the rectangles at the new points.
-                for (int i = 0; i < patternPoints.Count; i++)
+                for (int i = 0; i < patternPointList.Count; i++)
                 {
                     Rectangle rectangle = BaseRectangle(
                         actualRectangleWidth,
                         rectangleLength,
-                        rectangleRotation - normalAnglesAroundY[i],
+                        requiredRotation[i],
                         0,
                         true,
                         true,
-                        Plane.ByOriginNormal(patternPoints[i], Autodesk.DesignScript.Geometry.Vector.ZAxis())
+                        Plane.ByOriginNormal(patternPointList[i], Autodesk.DesignScript.Geometry.Vector.ZAxis())
                     );
                     sideTwoRectangles.Add(rectangle);
                 }
 
             }
 
-
-
             // Combine the pattern rectangles in a list.
-            List<List<object>> patternRectangles = new List<List<object>>();
+            List<List<Rectangle>> patternRectangles = new List<List<Rectangle>>();
             patternRectangles.Add(sideOneRectangles);
             patternRectangles.Add(sideTwoRectangles);
 
+            // Combine the pattern points in a list.
+            List<List<Autodesk.DesignScript.Geometry.Point>> patternPoints = new List<List<Autodesk.DesignScript.Geometry.Point>>();
+            patternPoints.Add(sideOnePoints);
+            patternPoints.Add(sideTwoPoints);
 
+            // Combine the pattern rotation values in a list.
+            List<List<float>> patternRotation = new List<List<float>>();
+            patternRotation.Add(sideOneRotation);
+            patternRotation.Add(sideTwoRotation);
 
+            // Combine the tapered rectangles in a list.
+            List<List<PolyCurve>> taperedPolyCurves = new List<List<PolyCurve>>();
+            taperedPolyCurves.Add(sideOneTaperedPolyCurves);
+            taperedPolyCurves.Add(sideTwoTaperedPolyCurves);
 
-            return patternRectangles;
+            return new Dictionary<string, object> 
+            {
+                { "patternRectangles", patternRectangles },
+                { "patternPoints", patternPoints },
+                { "patternRotation", patternRotation },
+                { "taperedPolyCurves", taperedPolyCurves }
+            };
         }
 
 

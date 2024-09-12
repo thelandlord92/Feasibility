@@ -358,7 +358,10 @@
             <param name="patternOffset">The offset distance of the pattern points from the location line.</param>
             <param name="patternSideOne"></param>
             <param name="patternSideTwo"></param>
-            <returns name="points">Points to host the first half of the pattern.</returns>
+            <returns name="patternRectangles">Pattern rectangles created along the input location curve.</returns>
+            <returns name="patternPoints">Placement points of the pattern rectangles.</returns>
+            <returns name="patternRotation">Rotation values of the placed rectangles.</returns>
+            <returns name="taperedPolyCurves">Tapered polycurves.</returns>
         </member>
         <member name="T:Common.GeometryTools.Points">
             <summary>

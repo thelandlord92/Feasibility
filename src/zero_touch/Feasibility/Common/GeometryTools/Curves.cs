@@ -1126,16 +1126,24 @@ namespace Common.GeometryTools
         /// <returns name="points">List of points on curve.</returns>
         public static List<Autodesk.DesignScript.Geometry.Point> PointsAtEqualChordLength(Curve curve, int divisions = 10) 
         {
-            // Get the start and end points of the curve.
-            Autodesk.DesignScript.Geometry.Point startPoint = curve.StartPoint;
-            Autodesk.DesignScript.Geometry.Point endPoint = curve.EndPoint;
+            try
+            {
+                // Get the start and end points of the curve.
+                Autodesk.DesignScript.Geometry.Point startPoint = curve.StartPoint;
+                Autodesk.DesignScript.Geometry.Point endPoint = curve.EndPoint;
 
-            // Add points along the curve using the division input.
-            List<Autodesk.DesignScript.Geometry.Point> points = curve.PointsAtEqualChordLength(divisions).ToList();
+                // Add points along the curve using the division input.
+                List<Autodesk.DesignScript.Geometry.Point> points = curve.PointsAtEqualChordLength(divisions).ToList();
 
-            // Add the start and end points to the points list.
-            points.Insert(0, startPoint);
-            points.Add(endPoint);
+                // Add the start and end points to the points list.
+                points.Insert(0, startPoint);
+                points.Add(endPoint);
+            };
+            catch ////complete the try catch
+            { 
+                return null;
+            }
+            ;
 
             return points;
         }
