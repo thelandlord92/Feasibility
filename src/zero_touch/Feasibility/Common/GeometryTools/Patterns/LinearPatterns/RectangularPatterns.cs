@@ -12,108 +12,140 @@ namespace Common.GeometryTools.Patterns
     /// <summary>
     /// Wrapper class for the linear patterns.
     /// </summary>
-    public class LinearPatterns
+    public class RectangularPatterns
     {
-        // Hides the overall class as a node.
-        private LinearPatterns() { }
+        /// <summary>
+        /// The input curve to place the pattern rectangles along.
+        /// </summary>
+        internal Curve LocationCurve { get; set; }
+
+        
+        private float _rectangleWidth;
+
+        /// <summary>
+        /// Width of the pattern rectangles.
+        /// </summary>
+        internal float RectangleWidth 
+        { 
+            get { return _rectangleWidth; }
+            set 
+            { 
+                if (value <= 0) 
+                {
+                    throw new ArgumentException("The rectangle width must be greater than zero");
+                }
+                _rectangleWidth = value;
+            }
+        }
+
+
+        private float _rectangleLength;
+
+        /// <summary>
+        /// Length of the pattern rectangles.
+        /// </summary>
+        internal float RectangleLength
+        {
+            get { return _rectangleLength; }
+            set
+            {
+                if (value <= 0)
+                {
+                    throw new ArgumentException("The rectangle length must be greater than zero");
+                }
+                _rectangleLength = value;
+            }
+        }
+
+
+        private float _rectangleRotation;
+
+        /// <summary>
+        /// Rotation angle of the pattern rectangles.
+        /// The rotation angle cannot be less than 0 or greater than 90 degrees.
+        /// </summary>
+        internal float RectangleRotation
+        {
+            get { return _rectangleRotation; }
+            set
+            {
+                if (value <= 0)
+                {
+                    _rectangleRotation = 0;
+                }
+                if (value >= 90)
+                {
+                    _rectangleRotation = 90;
+                }
+                _rectangleRotation = value;
+            }
+        }
+
+
+        private bool _patternSideOne;
+        private bool _patternSideTwo;
 
 
         /// <summary>
-        /// Creates a dashed pattern along a curve.
+        /// Turn on/off the first side pattern.
         /// </summary>
-        /// <param name="curve">The input curve to create the dashes along.</param>
-        /// <param name="dashLength">The length of the dashes.</param>
-        /// <param name="dashGap">The length of the gap between the dashes.</param>
-        /// <param name="dashThickness">The thickness of the dashed line.</param>
-        /// <returns name="dashCenterCurves">Polycurves representing the center of the dashes.</returns>
-        /// <returns name="dashOutlines">Polycurves representing the outline of the dashes.</returns>
-        /// <returns name="dashSurfaces">The dash surfaces.</returns>
-        /// <exception cref="Exception"></exception>
-        [MultiReturn(new[] { "dashCenterCurves", "dashOutlines", "dashSurfaces" })]
-        public static Dictionary<string, object> DashedPattern(
-            [DefaultArgument("Line.ByStartPointEndPoint(Point.ByCoordinates(0, 100), Point.ByCoordinates(0, 0))")] Curve curve,
-            float dashLength = 5,
-            float dashGap = 2,
-            float dashThickness = 2)
+        internal bool PatternSideOne
         {
-            // Throw excpetion if inputs less than 0.001.
-            if (dashLength < 0.001 || dashGap < 0.001 || dashThickness < 0.001)
+            get { return _patternSideOne; }
+            set
             {
-                throw new ArgumentException("dash length, gap, and thickness cannot be less than 0.001");
-            }
-
-            // Get the start and end points.
-            Autodesk.DesignScript.Geometry.Point startPoint = curve.StartPoint;
-            Autodesk.DesignScript.Geometry.Point endPoint = curve.EndPoint;
-
-            // Create the first setout points.
-            Autodesk.DesignScript.Geometry.Point setoutStartPoint = curve.PointAtSegmentLength(dashLength);
-            List<Autodesk.DesignScript.Geometry.Point> firstSetoutPoints = curve.PointsAtSegmentLengthFromPoint(setoutStartPoint, (dashLength + dashGap)).ToList();
-
-            // Create the second setout points.
-            List<Autodesk.DesignScript.Geometry.Point> secondSetoutPoints = curve.PointsAtSegmentLengthFromPoint(startPoint, (dashLength + dashGap)).ToList();
-
-            // Transpose the setout points to create point pairs.
-            List<List<Autodesk.DesignScript.Geometry.Point>> zippedPoints = firstSetoutPoints
-                .Zip(secondSetoutPoints, (first, second) => new List<Autodesk.DesignScript.Geometry.Point> { first, second })
-                .ToList();
-
-            // Combine all the points.
-            List<Autodesk.DesignScript.Geometry.Point> combinedPoints = new List<Autodesk.DesignScript.Geometry.Point>();
-            combinedPoints.Add(startPoint);
-            foreach (var pair in zippedPoints)
-            {
-                combinedPoints.AddRange(pair);
-            }
-            combinedPoints.Add(endPoint);
-
-            // Clean the combined points list to remove any null values.
-            combinedPoints = combinedPoints.Where(p => p != null).ToList();
-
-            // Remove any duplicate points from the cleaned point list.
-            combinedPoints = Autodesk.DesignScript.Geometry.Point.PruneDuplicates(combinedPoints, 0.001).ToList();
-
-            // Chop the pruned point list into segments of 2.
-            List<List<Autodesk.DesignScript.Geometry.Point>> choppedPoints = new List<List<Autodesk.DesignScript.Geometry.Point>>();
-            for (int i = 0; i < combinedPoints.Count; i += 2)
-            {
-                if (i + 1 < combinedPoints.Count)
+                if (!value && !_patternSideTwo)
                 {
-                    choppedPoints.Add(new List<Autodesk.DesignScript.Geometry.Point> { combinedPoints[i], combinedPoints[i + 1] });
+                    throw new InvalidOperationException("Both pattern sides cannot be off.");
                 }
+                _patternSideOne = value;
             }
-
-            // Remove points list containing only one point.
-            List<List<Autodesk.DesignScript.Geometry.Point>> filteredPointList = choppedPoints.Where(p => p.Count != 1).ToList();
-
-            // Create polycurves from the point lists. 
-            List<PolyCurve> dashCenterCurves = new List<PolyCurve>();
-            foreach (List<Autodesk.DesignScript.Geometry.Point> pointList in filteredPointList)
-            {
-                dashCenterCurves.Add(PolyCurve.ByPoints(pointList));
-            }
-
-            // Create polycurves representing the outline of the dashes.
-            List<PolyCurve> dashOutlines = new List<PolyCurve>();
-            foreach (PolyCurve polyCurve in dashCenterCurves)
-            {
-                dashOutlines.Add(PolyCurve.ByThickeningCurveNormal(polyCurve, dashThickness, Autodesk.DesignScript.Geometry.Vector.ZAxis()));
-            }
-
-            // Create surfaces representing the dashes.
-            List<Surface> dashSurfaces = new List<Surface>();
-            foreach (PolyCurve polyCurve1 in dashOutlines)
-            {
-                dashSurfaces.Add(Surface.ByPatch(polyCurve1));
-            }
-
-            return new Dictionary<string, object>
-            {
-                { "dashCenterCurves", dashCenterCurves },
-                { "dashOutlines", dashOutlines },
-                { "dashSurfaces", dashSurfaces }
-            };
         }
+
+
+        /// <summary>
+        /// Turn on/off the second side pattern.
+        /// </summary>
+        internal bool PatternSideTwo
+        {
+            get { return _patternSideTwo; }
+            set
+            {
+                if (!value && !_patternSideOne)
+                {
+                    throw new InvalidOperationException("Both pattern sides cannot be off.");
+                }
+                _patternSideTwo = value;
+            }
+        }
+
+
+        /// <summary>
+        /// Create instances of the rectangular patterns.
+        /// </summary>
+        /// <param name="locationCurve">The input curve to place the pattern rectangles along</param>
+        /// <param name="rectangleWidth">Width of the pattern rectangles</param>
+        /// <param name="rectangleLength">Length of the pattern rectangles</param>
+        /// <param name="rectangleRotation">Rotation angle of the pattern rectangles</param>
+        /// <param name="patternSideOne">Turn on/off the first side pattern.</param>
+        /// <param name="patternSideTwo">Turn on/off the second side pattern.</param>
+        public RectangularPatterns(
+            Curve locationCurve,
+            float rectangleWidth = 2.5f,
+            float rectangleLength = 5f,
+            float rectangleRotation = 0f,
+            bool patternSideOne = true,
+            bool patternSideTwo = true) 
+        { 
+            LocationCurve = locationCurve;
+            RectangleWidth = rectangleWidth;
+            RectangleLength = rectangleLength;
+            PatternSideOne = patternSideOne;
+            PatternSideTwo = patternSideTwo;
+        }
+
+
+
 
 
         /// <summary>

@@ -148,7 +148,8 @@
     <Compile Include="Common\GeometryTools\Curves.cs" />
     <Compile Include="Common\GeometryTools\Meshes.cs" />
     <Compile Include="Common\GeometryTools\Patterns\BoundaryPatterns.cs" />
-    <Compile Include="Common\GeometryTools\Patterns\LinearPatterns.cs" />
+    <Compile Include="Common\GeometryTools\Patterns\LinearPatterns\DashedPatterns.cs" />
+    <Compile Include="Common\GeometryTools\Patterns\LinearPatterns\RectangularPatterns.cs" />
     <Compile Include="Common\GeometryTools\Points.cs" />
     <Compile Include="Common\GeometryTools\Surfaces.cs" />
     <Compile Include="Common\GeometryTools\Vectors.cs" />

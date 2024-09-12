@@ -14,7 +14,7 @@ namespace Common.GeometryTools
     /// </summary>
     public class Curves
     {
-        // Hides the overall class a node.
+        // Hides the overall class as a node.
         private Curves() { }
 
 
