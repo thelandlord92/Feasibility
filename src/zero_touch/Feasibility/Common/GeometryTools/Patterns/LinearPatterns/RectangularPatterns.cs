@@ -266,24 +266,32 @@ namespace Common.GeometryTools.Patterns.LinearPatterns
         /// <returns name="adjustedCurve">Adjusted location curve.</returns>
         public static Curve AdjustLocationCurveLength(Curve locationCurve, float rectangleLength, float rectangleRotation) 
         {
-            // Calculate the distance the rectangle extends beyond the location line when rotated.
-            float extensionDistance = (float)DSCore.Math.Cos(90 - rectangleRotation) * rectangleLength;
-
-            // Add a point to the location curve from its end pont.
-            Autodesk.DesignScript.Geometry.Point point = locationCurve.PointAtChordLength(extensionDistance, 1, false);
-
-            // Split the location curve with the point.
-            List<Curve> curves = locationCurve.SplitByPoints(new List<Autodesk.DesignScript.Geometry.Point>() { point }).ToList();
-
-            // Get the curve intersecting with the start point.
             List<Curve> adjustedLocationCurve = new List<Curve>();
-            foreach (Curve curve in curves) 
+            if (rectangleRotation > 0) 
             {
-                if (curve.DoesIntersect(locationCurve.StartPoint)) 
-                { 
-                    adjustedLocationCurve.Add(curve);
-                };
+                // Calculate the distance the rectangle extends beyond the location line when rotated.
+                float extensionDistance = (float)DSCore.Math.Cos(90 - rectangleRotation) * rectangleLength;
+
+                // Add a point to the location curve from its end pont.
+                Autodesk.DesignScript.Geometry.Point point = locationCurve.PointAtChordLength(extensionDistance, 1, false);
+
+                // Split the location curve with the point.
+                List<Curve> curves = locationCurve.SplitByPoints(new List<Autodesk.DesignScript.Geometry.Point>() { point }).ToList();
+
+                // Get the curve intersecting with the start point.
+                foreach (Curve curve in curves)
+                {
+                    if (curve.DoesIntersect(locationCurve.StartPoint))
+                    {
+                        adjustedLocationCurve.Add(curve);
+                    };
+                }
             }
+            else
+            {
+                adjustedLocationCurve.Add(locationCurve);
+            }
+            
 
             return adjustedLocationCurve[0];
         }
@@ -291,6 +299,7 @@ namespace Common.GeometryTools.Patterns.LinearPatterns
 
         /// <summary>
         /// Creates the non interlocking pattern.
+        /// Keep the rotation at zero for the tapered rectangular pattern to appear accurately.
         /// </summary>
         /// <param name="locationCurve">The input curve to place the pattern rectangles along.</param>
         /// <param name="rectangleWidth">Width of the rectangles.</param>
@@ -331,7 +340,7 @@ namespace Common.GeometryTools.Patterns.LinearPatterns
                 rectangleRotation = 0f;
             }
 
-            // Create the adjusted location curve to account.
+            // Create the adjusted location curve.
             Curve adjustedLocationCurve = AdjustLocationCurveLength(locationCurve, rectangleLength, rectangleRotation);
 
             // Get the pattern copy number.
@@ -495,15 +504,29 @@ namespace Common.GeometryTools.Patterns.LinearPatterns
 
                 // Create surfaces by lofting between the split curves.
                 List<Surface> surfaces = new List<Surface>();
-                for (int i = 0;i < splitInnerCurves.Count; i++) 
-                { 
-                    surfaces.Add(Surface.ByLoft(new List<Curve> { splitInnerCurves[i], splitOuterCurves[i] }));
+                for (int i = 0;i < splitInnerCurves.Count; i++)
+                {
+                    try 
+                    {
+                        surfaces.Add(Surface.ByLoft(new List<Curve> { splitInnerCurves[i], splitOuterCurves[i] }));
+                    }
+                    catch 
+                    { 
+                        surfaces.Add(null);
+                    }  
                 }
 
                 // Get the perimeter polycurves of the surfaces.
                 foreach (Surface surface in surfaces) 
                 {
-                    sideOneTaperedRectangles.Add(Common.GeometryTools.Surfaces.SurfacePerimeter(surface));
+                    if (surface != null) 
+                    {
+                        sideOneTaperedRectangles.Add(Common.GeometryTools.Surfaces.SurfacePerimeter(surface));
+                    }
+                    else 
+                    {
+                        sideOneTaperedRectangles.Add(null);
+                    }
                 }
             }
 
@@ -531,13 +554,27 @@ namespace Common.GeometryTools.Patterns.LinearPatterns
                 List<Surface> surfaces = new List<Surface>();
                 for (int i = 0; i < splitInnerCurves.Count; i++)
                 {
-                    surfaces.Add(Surface.ByLoft(new List<Curve> { splitInnerCurves[i], splitOuterCurves[i] }));
+                    try
+                    {
+                        surfaces.Add(Surface.ByLoft(new List<Curve> { splitInnerCurves[i], splitOuterCurves[i] }));
+                    }
+                    catch
+                    {
+                        surfaces.Add(null);
+                    }
                 }
 
                 // Get the perimeter polycurves of the surfaces.
                 foreach (Surface surface in surfaces)
                 {
-                    sideTwoTaperedRectangles.Add(Common.GeometryTools.Surfaces.SurfacePerimeter(surface));
+                    if (surface != null)
+                    {
+                        sideTwoTaperedRectangles.Add(Common.GeometryTools.Surfaces.SurfacePerimeter(surface));
+                    }
+                    else
+                    {
+                        sideTwoTaperedRectangles.Add(null);
+                    }
                 }
             }
 
@@ -572,9 +609,82 @@ namespace Common.GeometryTools.Patterns.LinearPatterns
         }
 
 
-        public static object NonInterlockingBookended()
+        public static object NonInterlockingBookended(
+            [DefaultArgument("Line.ByStartPointEndPoint(Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 0, 0), Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 100, 0))")] Curve locationCurve,
+            float rectangleWidth = 2.5f,
+            float rectangleLength = 5f,
+            float rectangleRotation = 0f,
+            float patternOffset = 1f,
+            bool patternSideOne = true,
+            bool patternSideTwo = true,
+            float gapWidth = 1)
         {
-            return null;
+            // Check the inputs.
+
+            // Throw an exception if the user turns off both pattern sides.
+            if (!patternSideOne && !patternSideTwo)
+            {
+                throw new ArgumentException("Both pattern sides cannot be off.");
+            }
+
+            // Check the rotation angle.
+            if (rectangleRotation <= 0f)
+            {
+                rectangleRotation = 0f;
+            }
+            else if (rectangleRotation >= 90)
+            {
+                rectangleRotation = 0f;
+            }
+
+            // Check that the gap is not zero.
+            if (gapWidth <= 0) 
+            {
+                throw new ArgumentException("The gap width cannot be zero.");
+            }
+
+            // Create the adjusted location curve.
+            Curve adjustedLocationCurve = AdjustLocationCurveLength(locationCurve, rectangleLength, rectangleRotation);
+
+            // Get the width of the pattern rectangles against the location curve.
+            float actualLocationCurveWidth = PatternActualLocationCurveWidth(adjustedLocationCurve, rectangleWidth, rectangleRotation);
+
+            // Add points at the location line ends for splitting.
+            Autodesk.DesignScript.Geometry.Point startSplitPoint = adjustedLocationCurve.PointAtChordLength(actualLocationCurveWidth + gapWidth/2, 0, true);
+            Autodesk.DesignScript.Geometry.Point endSplitPoint = adjustedLocationCurve.PointAtChordLength(actualLocationCurveWidth + gapWidth/2, 1, false);
+
+            // Split the location curve with the points. 
+            List<Curve> splitCurves = adjustedLocationCurve.SplitByPoints(new List<Autodesk.DesignScript.Geometry.Point> { startSplitPoint }).ToList();
+            List<Curve> startBookendCurve = new List<Curve>();
+            List<Curve> endBookendCurve = new List<Curve>();
+            List<Curve> middleCurve = new List<Curve>();
+            foreach (Curve curve in splitCurves) 
+            {
+                // Get the curve not intersecting with the start point of the adjusted location curve.
+                if (!curve.DoesIntersect(adjustedLocationCurve.EndPoint)) 
+                {
+                    startBookendCurve.Add(curve);
+                }
+
+                // Split the curve that does not intersect with the end split point.
+                else if (curve.DoesIntersect(adjustedLocationCurve.EndPoint)) 
+                {
+                    List<Curve> secondSplitCurves = curve.SplitByPoints(new List<Autodesk.DesignScript.Geometry.Point> { endSplitPoint }).ToList();
+                    foreach (Curve curve1 in secondSplitCurves) 
+                    {
+                        if (!curve1.DoesIntersect(curve.EndPoint)) 
+                        {
+                            middleCurve.Add(curve1);
+                        }
+                        else 
+                        { 
+                            endBookendCurve.Add(curve1);
+                        }
+                    }
+                }
+            }
+
+            return endBookendCurve;
         }
 
 

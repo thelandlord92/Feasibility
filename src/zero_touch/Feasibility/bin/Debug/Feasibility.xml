@@ -369,6 +369,7 @@
         <member name="M:Common.GeometryTools.Patterns.LinearPatterns.RectangularPatterns.NonInterlockingRegularPattern(Autodesk.DesignScript.Geometry.Curve,System.Single,System.Single,System.Single,System.Single,System.Boolean,System.Boolean)">
             <summary>
             Creates the non interlocking pattern.
+            Keep the rotation at zero for the tapered rectangular pattern to appear accurately.
             </summary>
             <param name="locationCurve">The input curve to place the pattern rectangles along.</param>
             <param name="rectangleWidth">Width of the rectangles.</param>
