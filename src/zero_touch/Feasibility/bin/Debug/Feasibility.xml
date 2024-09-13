@@ -357,6 +357,15 @@
             <param name="rectangleRotation">Rotation angle of the rectangle.</param>
             <returns></returns>
         </member>
+        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.RectangularPatterns.AdjustLocationCurveLength(Autodesk.DesignScript.Geometry.Curve,System.Single,System.Single)">
+            <summary>
+            Adjust the location curve to prevent the pattern rectangles from extending beyond the curve endpoints when rotated.
+            </summary>
+            <param name="locationCurve">The input curve to place the pattern rectangles along.</param>
+            <param name="rectangleLength">Length of the rectangles.</param>
+            <param name="rectangleRotation">Rotation angle of the rectangle.</param>
+            <returns name="adjustedCurve">Adjusted location curve.</returns>
+        </member>
         <member name="M:Common.GeometryTools.Patterns.LinearPatterns.RectangularPatterns.NonInterlockingRegularPattern(Autodesk.DesignScript.Geometry.Curve,System.Single,System.Single,System.Single,System.Single,System.Boolean,System.Boolean)">
             <summary>
             Creates the non interlocking pattern.
@@ -371,7 +380,7 @@
             <returns name="patternRectangles">Pattern rectangles created along the input location curve.</returns>
             <returns name="patternPoints">Placement points of the pattern rectangles.</returns>
             <returns name="patternRotation">Rotation values of the placed rectangles.</returns>
-            <returns name="taperedPolyCurves">Tapered polycurves.</returns>
+            <returns name="taperedRectangles">Tapered polycurves.</returns>
         </member>
         <member name="T:Common.GeometryTools.Points">
             <summary>

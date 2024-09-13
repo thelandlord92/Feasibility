@@ -258,6 +258,38 @@ namespace Common.GeometryTools.Patterns.LinearPatterns
 
 
         /// <summary>
+        /// Adjust the location curve to prevent the pattern rectangles from extending beyond the curve endpoints when rotated.
+        /// </summary>
+        /// <param name="locationCurve">The input curve to place the pattern rectangles along.</param>
+        /// <param name="rectangleLength">Length of the rectangles.</param>
+        /// <param name="rectangleRotation">Rotation angle of the rectangle.</param>
+        /// <returns name="adjustedCurve">Adjusted location curve.</returns>
+        public static Curve AdjustLocationCurveLength(Curve locationCurve, float rectangleLength, float rectangleRotation) 
+        {
+            // Calculate the distance the rectangle extends beyond the location line when rotated.
+            float extensionDistance = (float)DSCore.Math.Cos(90 - rectangleRotation) * rectangleLength;
+
+            // Add a point to the location curve from its end pont.
+            Autodesk.DesignScript.Geometry.Point point = locationCurve.PointAtChordLength(extensionDistance, 1, false);
+
+            // Split the location curve with the point.
+            List<Curve> curves = locationCurve.SplitByPoints(new List<Autodesk.DesignScript.Geometry.Point>() { point }).ToList();
+
+            // Get the curve intersecting with the start point.
+            List<Curve> adjustedLocationCurve = new List<Curve>();
+            foreach (Curve curve in curves) 
+            {
+                if (curve.DoesIntersect(locationCurve.StartPoint)) 
+                { 
+                    adjustedLocationCurve.Add(curve);
+                };
+            }
+
+            return adjustedLocationCurve[0];
+        }
+
+
+        /// <summary>
         /// Creates the non interlocking pattern.
         /// </summary>
         /// <param name="locationCurve">The input curve to place the pattern rectangles along.</param>
@@ -270,8 +302,8 @@ namespace Common.GeometryTools.Patterns.LinearPatterns
         /// <returns name="patternRectangles">Pattern rectangles created along the input location curve.</returns>
         /// <returns name="patternPoints">Placement points of the pattern rectangles.</returns>
         /// <returns name="patternRotation">Rotation values of the placed rectangles.</returns>
-        /// <returns name="taperedPolyCurves">Tapered polycurves.</returns>
-        [MultiReturn(new[] { "patternRectangles", "patternPoints", "patternRotation", "taperedPolyCurves" })]
+        /// <returns name="taperedRectangles">Tapered polycurves.</returns>
+        [MultiReturn(new[] { "patternRectangles", "patternPoints", "patternRotation", "taperedRectangles" })]
         public static Dictionary<string, object> NonInterlockingRegularPattern(
             [DefaultArgument("Line.ByStartPointEndPoint(Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 0, 0), Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 100, 0))")] Curve locationCurve,
             float rectangleWidth = 2.5f,
@@ -289,12 +321,6 @@ namespace Common.GeometryTools.Patterns.LinearPatterns
                 throw new ArgumentException("Both pattern sides cannot be off.");
             }
 
-            // Throw exception if the location curve has more than one segment.
-            //if (locationCurve.Explode().Count() > 1) 
-            //{
-                //throw new ArgumentException("The location curve cannot have more than one segment");
-            //}
-
             // Check the rotation angle.
             if (rectangleRotation <= 0f) 
             { 
@@ -305,15 +331,18 @@ namespace Common.GeometryTools.Patterns.LinearPatterns
                 rectangleRotation = 0f;
             }
 
+            // Create the adjusted location curve to account.
+            Curve adjustedLocationCurve = AdjustLocationCurveLength(locationCurve, rectangleLength, rectangleRotation);
+
             // Get the pattern copy number.
-            int copyNumber = PatternLocationCurveCopyNumber(locationCurve, rectangleWidth, rectangleRotation);
+            int copyNumber = PatternLocationCurveCopyNumber(adjustedLocationCurve, rectangleWidth, rectangleRotation);
 
             // Create the points along the location curve.
-            List<Autodesk.DesignScript.Geometry.Point> _curvePoints = (Curves.PointsAtEqualChordLength(locationCurve, copyNumber));
+            List<Autodesk.DesignScript.Geometry.Point> _curvePoints = (Curves.PointsAtEqualChordLength(adjustedLocationCurve, copyNumber));
             List<Autodesk.DesignScript.Geometry.Point> curvePoints = _curvePoints.GetRange(1, _curvePoints.Count -1);
 
             // Get the normals at the points.
-            List<Autodesk.DesignScript.Geometry.Vector> curveNormals = Curves.CurveNormalsAtPoints(locationCurve, curvePoints);
+            List<Autodesk.DesignScript.Geometry.Vector> curveNormals = Curves.CurveNormalsAtPoints(adjustedLocationCurve, curvePoints);
 
             // Create the first side pattern.
             List<Rectangle> sideOneRectangles = new List<Rectangle>();
@@ -433,9 +462,84 @@ namespace Common.GeometryTools.Patterns.LinearPatterns
                 }
             }
 
-            // Logic for the tapered rectangles. #####Continue here
-            List<PolyCurve> sideOneTaperedPolyCurves = new List<PolyCurve>();
-            List<PolyCurve> sideTwoTaperedPolyCurves = new List<PolyCurve>();
+            // Logic for the tapered rectangles.
+
+            // Get the pattern copy number.
+            int taperedCopyNumber = PatternLocationCurveCopyNumber(locationCurve, rectangleWidth, rectangleRotation);
+
+            // Create the points along the location curve.
+            List<Autodesk.DesignScript.Geometry.Point> taperedCurvePoints = (Curves.PointsAtEqualChordLength(locationCurve, taperedCopyNumber));
+
+            // Get the normals at the points.
+            List<Autodesk.DesignScript.Geometry.Vector> taperedRectangleNormals = Curves.CurveNormalsAtPoints(locationCurve, taperedCurvePoints);
+
+            List<PolyCurve> sideOneTaperedRectangles = new List<PolyCurve>();
+            if (patternSideOne) 
+            {
+                // Move the points along the normal vector. To be used to create the inner and outer curve offset points.
+                List<Autodesk.DesignScript.Geometry.Point> innerMovedPoints = new List<Autodesk.DesignScript.Geometry.Point>();
+                List<Autodesk.DesignScript.Geometry.Point> outerMovedPoints = new List<Autodesk.DesignScript.Geometry.Point>();
+                for (int i = 0; i < taperedCurvePoints.Count; i++)
+                {
+                    innerMovedPoints.Add(taperedCurvePoints[i].Translate(taperedRectangleNormals[i], patternOffset) as Autodesk.DesignScript.Geometry.Point);
+                    outerMovedPoints.Add(taperedCurvePoints[i].Translate(taperedRectangleNormals[i], patternOffset + rectangleLength) as Autodesk.DesignScript.Geometry.Point);
+                }
+
+                // Create the inner and outer curves.
+                Curve innerCurve = NurbsCurve.ByPoints(innerMovedPoints);
+                Curve outerCurve = NurbsCurve.ByPoints(outerMovedPoints);
+
+                // Split the inner and outer curve using the moved points.
+                List<Curve> splitInnerCurves = innerCurve.SplitByPoints(innerMovedPoints).ToList();
+                List<Curve> splitOuterCurves = outerCurve.SplitByPoints(outerMovedPoints).ToList();
+
+                // Create surfaces by lofting between the split curves.
+                List<Surface> surfaces = new List<Surface>();
+                for (int i = 0;i < splitInnerCurves.Count; i++) 
+                { 
+                    surfaces.Add(Surface.ByLoft(new List<Curve> { splitInnerCurves[i], splitOuterCurves[i] }));
+                }
+
+                // Get the perimeter polycurves of the surfaces.
+                foreach (Surface surface in surfaces) 
+                {
+                    sideOneTaperedRectangles.Add(Common.GeometryTools.Surfaces.SurfacePerimeter(surface));
+                }
+            }
+
+            List<PolyCurve> sideTwoTaperedRectangles = new List<PolyCurve>();
+            if (patternSideTwo)
+            {
+                // Move the points along the normal vector. To be used to create the inner and outer curve offset points.
+                List<Autodesk.DesignScript.Geometry.Point> innerMovedPoints = new List<Autodesk.DesignScript.Geometry.Point>();
+                List<Autodesk.DesignScript.Geometry.Point> outerMovedPoints = new List<Autodesk.DesignScript.Geometry.Point>();
+                for (int i = 0; i < taperedCurvePoints.Count; i++)
+                {
+                    innerMovedPoints.Add(taperedCurvePoints[i].Translate(taperedRectangleNormals[i].Reverse(), patternOffset) as Autodesk.DesignScript.Geometry.Point);
+                    outerMovedPoints.Add(taperedCurvePoints[i].Translate(taperedRectangleNormals[i].Reverse(), patternOffset + rectangleLength) as Autodesk.DesignScript.Geometry.Point);
+                }
+
+                // Create the inner and outer curves.
+                Curve innerCurve = NurbsCurve.ByPoints(innerMovedPoints);
+                Curve outerCurve = NurbsCurve.ByPoints(outerMovedPoints);
+
+                // Split the inner and outer curve using the moved points.
+                List<Curve> splitInnerCurves = innerCurve.SplitByPoints(innerMovedPoints).ToList();
+                List<Curve> splitOuterCurves = outerCurve.SplitByPoints(outerMovedPoints).ToList();
+
+                // Create surfaces by lofting between the split curves.
+                List<Surface> surfaces = new List<Surface>();
+                for (int i = 0; i < splitInnerCurves.Count; i++)
+                {
+                    surfaces.Add(Surface.ByLoft(new List<Curve> { splitInnerCurves[i], splitOuterCurves[i] }));
+                }
+
+                // Get the perimeter polycurves of the surfaces.
+                foreach (Surface surface in surfaces)
+                {
+                    sideTwoTaperedRectangles.Add(Common.GeometryTools.Surfaces.SurfacePerimeter(surface));
+                }
+            }
 
 
             // Combine the pattern rectangles in a list.
@@ -454,16 +558,16 @@ namespace Common.GeometryTools.Patterns.LinearPatterns
             patternRotation.Add(sideTwoRotation);
 
             // Combine the tapered rectangles in a list.
-            List<List<PolyCurve>> taperedPolyCurves = new List<List<PolyCurve>>();
-            taperedPolyCurves.Add(sideOneTaperedPolyCurves);
-            taperedPolyCurves.Add(sideTwoTaperedPolyCurves);
+            List<List<PolyCurve>> taperedRectangles = new List<List<PolyCurve>>();
+            taperedRectangles.Add(sideOneTaperedRectangles);
+            taperedRectangles.Add(sideTwoTaperedRectangles);
 
             return new Dictionary<string, object> 
             {
                 { "patternRectangles", patternRectangles },
                 { "patternPoints", patternPoints },
                 { "patternRotation", patternRotation },
-                { "taperedPolyCurves", taperedPolyCurves }
+                { "taperedRectangles", taperedRectangles }
             };
         }
 
