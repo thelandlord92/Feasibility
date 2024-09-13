@@ -238,7 +238,7 @@ namespace Common.GeometryTools.Patterns.LinearPatterns
                 }
                 else 
                 {
-                    actualWidth = rectangleWidth;
+                    actualWidth = (float)DSCore.Math.Cos(rectangleRotation) * locationCurveWidth;
                 }
             }
             else
@@ -290,10 +290,10 @@ namespace Common.GeometryTools.Patterns.LinearPatterns
             }
 
             // Throw exception if the location curve has more than one segment.
-            if (locationCurve.Explode().Count() > 1) 
-            {
-                throw new ArgumentException("The location curve cannot have more than one segment");
-            }
+            //if (locationCurve.Explode().Count() > 1) 
+            //{
+                //throw new ArgumentException("The location curve cannot have more than one segment");
+            //}
 
             // Check the rotation angle.
             if (rectangleRotation <= 0f) 
@@ -309,7 +309,8 @@ namespace Common.GeometryTools.Patterns.LinearPatterns
             int copyNumber = PatternLocationCurveCopyNumber(locationCurve, rectangleWidth, rectangleRotation);
 
             // Create the points along the location curve.
-            List<Autodesk.DesignScript.Geometry.Point> curvePoints = Curves.PointsAtEqualChordLength(locationCurve, copyNumber);
+            List<Autodesk.DesignScript.Geometry.Point> _curvePoints = (Curves.PointsAtEqualChordLength(locationCurve, copyNumber));
+            List<Autodesk.DesignScript.Geometry.Point> curvePoints = _curvePoints.GetRange(1, _curvePoints.Count -1);
 
             // Get the normals at the points.
             List<Autodesk.DesignScript.Geometry.Vector> curveNormals = Curves.CurveNormalsAtPoints(locationCurve, curvePoints);
