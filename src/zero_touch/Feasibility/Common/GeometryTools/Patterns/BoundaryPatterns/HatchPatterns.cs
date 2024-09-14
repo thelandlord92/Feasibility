@@ -6,16 +6,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Common.GeometryTools.Patterns
+namespace Common.GeometryTools.Patterns.BoundaryPatterns
 {
     /// <summary>
     /// Wrapper class for boundary patterns.
     /// Contains patterns generated within a closed curve.
     /// </summary>
-    public class BoundaryPatterns
+    public class HatchPatterns
     {
         // Hides the overall class as a node.
-        private BoundaryPatterns() { }
+        private HatchPatterns() { }
 
 
         /// <summary>

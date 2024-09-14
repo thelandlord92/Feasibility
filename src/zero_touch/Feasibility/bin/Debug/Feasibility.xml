@@ -254,13 +254,13 @@
             This method will be visible in Dynamo as a node.
             </summary>
         </member>
-        <member name="T:Common.GeometryTools.Patterns.BoundaryPatterns">
+        <member name="T:Common.GeometryTools.Patterns.BoundaryPatterns.HatchPatterns">
             <summary>
             Wrapper class for boundary patterns.
             Contains patterns generated within a closed curve.
             </summary>
         </member>
-        <member name="M:Common.GeometryTools.Patterns.BoundaryPatterns.DiagonalHatchPattern(Autodesk.DesignScript.Geometry.Curve,System.Single,System.Single,System.Single,System.Single)">
+        <member name="M:Common.GeometryTools.Patterns.BoundaryPatterns.HatchPatterns.DiagonalHatchPattern(Autodesk.DesignScript.Geometry.Curve,System.Single,System.Single,System.Single,System.Single)">
             <summary>
             To create a diagonal hatch pattern.
             </summary>
@@ -382,6 +382,35 @@
             <returns name="patternPoints">Placement points of the pattern rectangles.</returns>
             <returns name="patternRotation">Rotation values of the placed rectangles.</returns>
             <returns name="taperedRectangles">Tapered polycurves.</returns>
+        </member>
+        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.RectangularPatterns.SegmentedPatternSetoutElements(Autodesk.DesignScript.Geometry.Curve,System.Single,System.Single,System.Single,System.String,System.Int32,System.Single,System.Single)">
+            <summary>
+            Creates the set out elements for the segmented pattern.
+            </summary>
+            <param name="locationCurve"></param>
+            <param name="rectangleWidth"></param>
+            <param name="rectangleLength"></param>
+            <param name="rectangleRotation"></param>
+            <param name="patternJustification"></param>
+            <param name="patternSegmentNumber"></param>
+            <param name="patternStartOffset"></param>
+            <param name="centerGapWidth"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Common.GeometryTools.Patterns.LinearPatterns.RectangularPatterns.BookendedPatternSetoutElements(Autodesk.DesignScript.Geometry.Curve,System.Single,System.Single,System.Single,System.String,System.Int32,System.Single)">
+            <summary>
+            
+            </summary>
+            <param name="locationCurve"></param>
+            <param name="rectangleWidth"></param>
+            <param name="rectangleLength"></param>
+            <param name="rectangleRotation"></param>
+            <param name="patternJustification"></param>
+            <param name="patternSegmentNumber"></param>
+            <param name="gapWidth"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="T:Common.GeometryTools.Points">
             <summary>
