@@ -130,7 +130,7 @@ namespace Common.GeometryTools.Patterns.LinearPatterns
             int copyNumber;
             if (rectangleRotation <= 0 || rectangleRotation >= 90) 
             {
-                if (chordLength < idealWidth) // Copy number is zero if the chord length of the location curve is less than the ideal width of the pattern retangle.
+                if (chordLength < idealWidth) // Copy number is one if the chord length of the location curve is less than the ideal width of the pattern retangle.
                 {
                     copyNumber = 1;
                 }
@@ -145,7 +145,7 @@ namespace Common.GeometryTools.Patterns.LinearPatterns
             }
             else 
             {
-                if (chordLength < idealWidth) // Copy number is zero if the chord length of the location curve is less than the ideal width of the pattern retangle.
+                if (chordLength < idealWidth) // Copy number is one if the chord length of the location curve is less than the ideal width of the pattern retangle.
                 {
                     copyNumber = 1;
                 }
@@ -609,6 +609,153 @@ namespace Common.GeometryTools.Patterns.LinearPatterns
         }
 
 
+        public static object BookendedPatternSetoutElements(
+            [DefaultArgument("Line.ByStartPointEndPoint(Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 0, 0), Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 100, 0))")] Curve locationCurve,
+            float rectangleWidth = 2.5f,
+            float rectangleLength = 5f,
+            float rectangleRotation = 0f,
+            float patternOffset = 1f,
+            bool patternSideOne = true,
+            bool patternSideTwo = true,
+            string patternJustification = "center",
+            int patternSegmentNumber = 2,
+            float gapWidth = 0.5f)
+        {
+            // Check the inputs.
+
+            // Check the rotation angle.
+            if (rectangleRotation <= 0f)
+            {
+                rectangleRotation = 0f;
+            }
+            else if (rectangleRotation >= 90)
+            {
+                rectangleRotation = 0f;
+            }
+
+            // Check that the gap is not zero.
+            if (gapWidth <= 0) 
+            {
+                throw new ArgumentException("The gap width cannot be zero.");
+            }
+
+            // Check the justification parameter.
+            if (patternJustification.ToLower() != "center" && patternJustification.ToLower() != "start") 
+            {
+                throw new ArgumentException("The patter justification can only be 'center' or 'start.'");
+            }
+
+            // Create the adjusted location curve.
+            Curve adjustedLocationCurve = AdjustLocationCurveLength(locationCurve, rectangleLength, rectangleRotation);
+
+            // Get the width of the pattern rectangles against the location curve.
+            float actualLocationCurveWidth = PatternActualLocationCurveWidth(adjustedLocationCurve, rectangleWidth, rectangleRotation);
+
+            // Add points at the location line ends for splitting.
+            Autodesk.DesignScript.Geometry.Point startSplitPoint = adjustedLocationCurve.PointAtChordLength(actualLocationCurveWidth, 0, true);
+            Autodesk.DesignScript.Geometry.Point endSplitPoint = adjustedLocationCurve.PointAtChordLength(actualLocationCurveWidth, 1, false);
+            List<Autodesk.DesignScript.Geometry.Point> splitPoints = new List<Autodesk.DesignScript.Geometry.Point> { startSplitPoint, endSplitPoint };
+
+            // Get the center of the adjusted location curve.
+            Autodesk.DesignScript.Geometry.Point centerPoint = adjustedLocationCurve.PointsAtEqualChordLength(2)[0];
+
+            // Split the adjusted location curve with the split points.
+            List<Curve> splitCurves = adjustedLocationCurve.SplitByPoints(splitPoints).ToList();
+            List<Curve> bookendCurves = new List<Curve>();
+            List<Curve> centerCurve = new List<Curve>();
+            List<Curve> centerCurveWithGaps = new List<Curve>();
+            List<Curve> gapCurves = new List<Curve>();
+            List<Autodesk.DesignScript.Geometry.Point> gapCenterPoints = new List<Autodesk.DesignScript.Geometry.Point>();
+            foreach (Curve curve in splitCurves) 
+            {
+                if (!curve.DoesIntersect(centerPoint)) 
+                {
+                    // Add the bookend curves to the bookend curves list.
+                    bookendCurves.Add(curve);
+                }
+                else 
+                {
+                    // Add the curve to the center curve with gaps list for use in the start justified pattern.
+                    centerCurveWithGaps.Add(curve);
+
+                    // Logic to split the center curve with the gap offsets.
+                    Autodesk.DesignScript.Geometry.Point startGapPoint = curve.PointAtChordLength(gapWidth, 0, true);
+                    Autodesk.DesignScript.Geometry.Point endGapPoint = curve.PointAtChordLength(gapWidth, 1, false);
+                    List<Autodesk.DesignScript.Geometry.Point> gapPoints = new List<Autodesk.DesignScript.Geometry.Point> { startGapPoint, endGapPoint };
+
+                    // Split the center curve.
+                    List<Curve> centerCurveSplits = curve.SplitByPoints(gapPoints).ToList();
+                    foreach (Curve curveSplit in centerCurveSplits) 
+                    {
+                        if (!curveSplit.DoesIntersect(centerPoint)) 
+                        { 
+                            // Add the gap curves to the gap curves list.
+                            gapCurves.Add(curveSplit);
+
+                            // Add the center of the gap curves to the gap center point list.
+                            gapCenterPoints.Add(curveSplit.PointsAtEqualChordLength(2)[0]);
+                        }
+                        else 
+                        { 
+                            // Add the center curve to the center curve list.
+                            centerCurve.Add(curveSplit);
+                        }
+                    }
+                }
+            }
+
+            // Calculate the width of one pattern segment from center to center of the gaps. #####Convert this logic for the segmented pattern setout elements method.
+            float segmentWidth = (patternSegmentNumber * actualLocationCurveWidth) + gapWidth;
+
+            // Create split points to split the center curve.
+            List<Autodesk.DesignScript.Geometry.Point> centerSplitPoints = new List<Autodesk.DesignScript.Geometry.Point>();
+            if (patternJustification.ToLower() == "center") 
+            {
+                // Get the parameter of the curve center point.
+                float centerPointParameter = (float)centerCurve[0].ParameterAtPoint(centerPoint);
+
+                // Add a point at half of the required pattern segment width.
+                Autodesk.DesignScript.Geometry.Point halfSegmentPoint;
+                try 
+                {
+                    halfSegmentPoint = centerCurve[0].PointAtChordLength(segmentWidth / 2, centerPointParameter, true);
+                }
+                catch 
+                {
+                    halfSegmentPoint = null;
+                }
+
+                // Set out the split points.
+                if (halfSegmentPoint != null) 
+                { 
+                    centerSplitPoints.AddRange(centerCurve[0].PointsAtChordLengthFromPoint(halfSegmentPoint, segmentWidth));
+                }
+                else 
+                { 
+                    centerSplitPoints.Add(null);
+                }
+            }
+            else if (patternJustification.ToLower() == "start") 
+            {
+                // Add a point from the start point at half the gap width.
+                Autodesk.DesignScript.Geometry.Point setoutPoint= centerCurveWithGaps[0].PointAtChordLength(gapWidth/ 2, 0, true);
+
+                // Set out the split points from the set out point..
+                try 
+                {
+                    centerSplitPoints.AddRange(centerCurveWithGaps[0].PointsAtChordLengthFromPoint(centerCurveWithGaps[0].StartPoint, segmentWidth));
+                }
+                catch
+                { 
+                    centerSplitPoints.Add(null);
+                }
+            } 
+            
+
+            return centerSplitPoints;
+        }
+
+
         public static object NonInterlockingBookended(
             [DefaultArgument("Line.ByStartPointEndPoint(Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 0, 0), Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 100, 0))")] Curve locationCurve,
             float rectangleWidth = 2.5f,
@@ -617,7 +764,8 @@ namespace Common.GeometryTools.Patterns.LinearPatterns
             float patternOffset = 1f,
             bool patternSideOne = true,
             bool patternSideTwo = true,
-            float gapWidth = 1)
+            string patternJustification = "center",
+            float gapWidth = 0.5f)
         {
             // Check the inputs.
 
@@ -638,57 +786,21 @@ namespace Common.GeometryTools.Patterns.LinearPatterns
             }
 
             // Check that the gap is not zero.
-            if (gapWidth <= 0) 
+            if (gapWidth <= 0)
             {
                 throw new ArgumentException("The gap width cannot be zero.");
             }
 
-            // Create the adjusted location curve.
-            Curve adjustedLocationCurve = AdjustLocationCurveLength(locationCurve, rectangleLength, rectangleRotation);
-
-            // Get the width of the pattern rectangles against the location curve.
-            float actualLocationCurveWidth = PatternActualLocationCurveWidth(adjustedLocationCurve, rectangleWidth, rectangleRotation);
-
-            // Add points at the location line ends for splitting.
-            Autodesk.DesignScript.Geometry.Point startSplitPoint = adjustedLocationCurve.PointAtChordLength(actualLocationCurveWidth + gapWidth/2, 0, true);
-            Autodesk.DesignScript.Geometry.Point endSplitPoint = adjustedLocationCurve.PointAtChordLength(actualLocationCurveWidth + gapWidth/2, 1, false);
-
-            // Split the location curve with the points. 
-            List<Curve> splitCurves = adjustedLocationCurve.SplitByPoints(new List<Autodesk.DesignScript.Geometry.Point> { startSplitPoint }).ToList();
-            List<Curve> startBookendCurve = new List<Curve>();
-            List<Curve> endBookendCurve = new List<Curve>();
-            List<Curve> middleCurve = new List<Curve>();
-            foreach (Curve curve in splitCurves) 
+            // Check the justification parameter.
+            if (patternJustification.ToLower() != "center" && patternJustification.ToLower() != "start")
             {
-                // Get the curve not intersecting with the start point of the adjusted location curve.
-                if (!curve.DoesIntersect(adjustedLocationCurve.EndPoint)) 
-                {
-                    startBookendCurve.Add(curve);
-                }
-
-                // Split the curve that does not intersect with the end split point.
-                else if (curve.DoesIntersect(adjustedLocationCurve.EndPoint)) 
-                {
-                    List<Curve> secondSplitCurves = curve.SplitByPoints(new List<Autodesk.DesignScript.Geometry.Point> { endSplitPoint }).ToList();
-                    foreach (Curve curve1 in secondSplitCurves) 
-                    {
-                        if (!curve1.DoesIntersect(curve.EndPoint)) 
-                        {
-                            middleCurve.Add(curve1);
-                        }
-                        else 
-                        { 
-                            endBookendCurve.Add(curve1);
-                        }
-                    }
-                }
+                throw new ArgumentException("The patter justification can only be 'center' or 'start.'");
             }
-
-            return endBookendCurve;
+            return null;
         }
 
 
-        public static object NonInterlockingSegmented()
+            public static object NonInterlockingSegmented()
         {
             return null;
         }
