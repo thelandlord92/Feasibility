@@ -28,7 +28,7 @@ namespace Parking.Accessories
             get { return _tubeDiameter; }
             set
             {
-                if (value == 0)
+                if (value <= 0)
                 {
                     throw new ArgumentException("The rack tube diameter cannot be zero");
                 }
@@ -46,7 +46,7 @@ namespace Parking.Accessories
             get { return _rackHeight; }
             set
             {
-                if (value == 0)
+                if (value <= 0)
                 {
                     throw new ArgumentException("The rack height cannot be zero");
                 }
@@ -64,7 +64,7 @@ namespace Parking.Accessories
             get { return _rackLength; }
             set
             {
-                if (value == 0)
+                if (value <= 0)
                 {
                     throw new ArgumentException("The rack length cannot be zero");
                 }
