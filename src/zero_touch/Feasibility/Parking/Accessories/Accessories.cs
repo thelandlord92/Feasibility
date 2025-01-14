@@ -60,6 +60,8 @@ namespace Parking.Accessories
                     BicycleRack.BicycleRackType = BicycleRackTypes.NoRack;
                     break;
             }
+
+     
             
             
         }
