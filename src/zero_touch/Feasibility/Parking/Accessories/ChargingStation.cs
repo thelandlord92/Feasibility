@@ -173,7 +173,32 @@ namespace Parking.Accessories
                 1
             );
 
+            // Set the charging station type attribute.
+            ChargingStationType = ChargingStationTypes.PoleMounted;
+
             return transformedChargingStation[0] as Solid;
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="baseOffset"></param>
+        /// <param name="baseHeight"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public Solid CreateBoxShapedChargingStation(
+            float baseOffset = 0.1f,
+            float baseHeight = 0.2f)
+        {
+            // Check of the base height is greater or equal to the overall height.
+            if (baseHeight >= Height) 
+            {
+                throw new ArgumentException("The height of the base element cannot be greater than or equal to the overall height");
+            }
+
+
+            return null;
         }
     }
 }
