@@ -496,7 +496,7 @@ namespace Parking
         /// <param name="tubeDiameter">Diameter of the rack tube.</param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public Solid BicycleRackCreateURack(
+        public object BicycleRackCreateURack(
             float rackHeight = 1f,
             float rackLength = 1f,
             float rackOffset = 0.05f,
@@ -505,7 +505,7 @@ namespace Parking
             float basePlateThickness = 0.01f,
             float tubeDiameter = 0.032f) 
         {
-            Solid rackSolid;
+            object rackSolid;
 
             if (Accessories.BicycleRack.BicycleRackType == BicycleRackTypes.InvertedURack)
             {
@@ -541,7 +541,7 @@ namespace Parking
             }
             else 
             {
-                throw new Exception("This rack type was not specified in the accessories node.");
+                rackSolid = "Not specified in the accessories input.";
             }
 
             return rackSolid;
@@ -561,7 +561,7 @@ namespace Parking
         /// <param name="tubeDiameter">Diameter of the rack tube.</param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public Solid BicycleRackCreateWaveRack(
+        public object BicycleRackCreateWaveRack(
             float rackHeight = 1f,
             float rackLength = 0.8f,
             float rackOffset = 0.05f,
@@ -571,7 +571,7 @@ namespace Parking
             float basePlateThickness = 0.01f,
             float tubeDiameter = 0.032f) 
         {
-            Solid rackSolid;
+            object rackSolid;
 
             if (Accessories.BicycleRack.BicycleRackType == BicycleRackTypes.WaveRack) 
             {
@@ -608,7 +608,7 @@ namespace Parking
             }
             else
             {
-                throw new Exception("This rack type was not specified in the accessories node.");
+                rackSolid = "Not specified in the accessories input.";
             }
 
             return rackSolid;
@@ -629,7 +629,7 @@ namespace Parking
         /// <param name="tubeDiameter">Diameter of the rack tube.</param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public Solid BicycleRackCreatePostandRingRack(
+        public object BicycleRackCreatePostandRingRack(
             float rackHeight = 1f,
             float rackLength = 0.5f,
             float rackOffset = 0.05f,
@@ -640,7 +640,7 @@ namespace Parking
             float basePlateThickness = 0.01f,
             float tubeDiameter = 0.032f)
         {
-            Solid rackSolid;
+            object rackSolid;
 
             if (Accessories.BicycleRack.BicycleRackType == BicycleRackTypes.PostandRingRack)
             {
@@ -678,7 +678,7 @@ namespace Parking
             }
             else
             {
-                throw new Exception("This rack type was not specified in the accessories node.");
+                rackSolid = "Not specified in the accessories input.";
             }
 
             return rackSolid;

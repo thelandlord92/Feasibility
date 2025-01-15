@@ -751,10 +751,18 @@
             <summary>
             Creates the box shaped charging station.
             </summary>
-            <param name="baseOffset"></param>
-            <param name="baseHeight"></param>
-            <returns></returns>
+            <param name="baseOffset">Offset of the base element from the vertical face of the charging unit.</param>
+            <param name="baseHeight">Height of the base element.</param>
+            <returns>The solid of the box shaped charging station.</returns>
             <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Parking.Accessories.ChargingStation.CreateSurfaceMountedChargingStation(System.Single,System.Single)">
+            <summary>
+            Creates a surface mounted charging station.
+            </summary>
+            <param name="baseOffset">Vertical offset from the ground plane.</param>
+            <param name="mountOffset">Horizontal offset from the mounting surface.</param>
+            <returns>The solid of the wall mounted charging station.</returns>
         </member>
         <member name="T:Parking.Accessories.ChargingStationTypes">
             <summary>

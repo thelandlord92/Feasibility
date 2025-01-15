@@ -183,9 +183,9 @@ namespace Parking.Accessories
         /// <summary>
         /// Creates the box shaped charging station.
         /// </summary>
-        /// <param name="baseOffset"></param>
-        /// <param name="baseHeight"></param>
-        /// <returns></returns>
+        /// <param name="baseOffset">Offset of the base element from the vertical face of the charging unit.</param>
+        /// <param name="baseHeight">Height of the base element.</param>
+        /// <returns>The solid of the box shaped charging station.</returns>
         /// <exception cref="ArgumentException"></exception>
         public Solid CreateBoxShapedChargingStation(
             float baseOffset = 0.05f,
@@ -236,6 +236,48 @@ namespace Parking.Accessories
 
             // Set the charging station type attribute.
             ChargingStationType = ChargingStationTypes.BoxShaped;
+
+            return transformedChargingStation[0] as Solid;
+        }
+
+
+        /// <summary>
+        /// Creates a surface mounted charging station.
+        /// </summary>
+        /// <param name="baseOffset">Vertical offset from the ground plane.</param>
+        /// <param name="mountOffset">Horizontal offset from the mounting surface.</param>
+        /// <returns>The solid of the wall mounted charging station.</returns>
+        public Solid CreateSurfaceMountedChargingStation(
+            float baseOffset = 0.5f,
+            float mountOffset = 0f)
+        {
+            // Create the hosting point. 
+            Autodesk.DesignScript.Geometry.Point hostingPoint = Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, mountOffset + Depth / 2, baseOffset + Height / 2);
+
+            // Create the solid.
+            Cuboid Solid = Cuboid.ByLengths(hostingPoint, Width, Depth, Height);
+
+            // Create a temp target plane if the target plane input is null.
+            Autodesk.DesignScript.Geometry.Plane _targetPlane = null;
+            if (TargetPlane == null)
+            {
+                _targetPlane = Autodesk.DesignScript.Geometry.Plane.ByOriginNormal(hostingPoint, Autodesk.DesignScript.Geometry.Vector.ZAxis());
+            }
+            else
+            {
+                _targetPlane = TargetPlane;
+            }
+
+            // Add transformations to the charging station.
+            List<Geometry> transformedChargingStation = Common.GeometryTools.GeometryUtilities.AddTransformations(
+                new List<Geometry>() { Solid },
+                Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 0),
+                _targetPlane,
+                Autodesk.DesignScript.Geometry.Vector.ZAxis(),
+                Angle,
+                0,
+                1
+            );
 
             return transformedChargingStation[0] as Solid;
         }
