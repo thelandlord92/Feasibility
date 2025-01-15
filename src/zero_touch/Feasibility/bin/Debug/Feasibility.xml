@@ -747,6 +747,15 @@
             <param name="chargingBoxHeight">The height of the charging unit.</param>
             <returns>The solid of the pole mounted charging station.</returns>
         </member>
+        <member name="M:Parking.Accessories.ChargingStation.CreateBoxShapedChargingStation(System.Single,System.Single)">
+            <summary>
+            Creates the box shaped charging station.
+            </summary>
+            <param name="baseOffset"></param>
+            <param name="baseHeight"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
         <member name="T:Parking.Accessories.ChargingStationTypes">
             <summary>
             Defines enums for charging station types.

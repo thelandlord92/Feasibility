@@ -27,7 +27,7 @@ namespace Parking.Accessories
         /// </summary>
         public float Height 
         {
-            get { return _height; }
+            internal get { return _height; }
             set 
             {
                 if (value <= 0)
@@ -45,7 +45,7 @@ namespace Parking.Accessories
         /// </summary>
         public float Width 
         {
-            get { return _width; }
+            internal get { return _width; }
             set
             {
                 if (value <= 0)
@@ -63,7 +63,7 @@ namespace Parking.Accessories
         /// </summary>
         public float Depth 
         {
-            get { return _depth; }
+            internal get { return _depth; }
             set 
             {
                 if (value <= 0) 
@@ -181,15 +181,15 @@ namespace Parking.Accessories
 
 
         /// <summary>
-        /// 
+        /// Creates the box shaped charging station.
         /// </summary>
         /// <param name="baseOffset"></param>
         /// <param name="baseHeight"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
         public Solid CreateBoxShapedChargingStation(
-            float baseOffset = 0.1f,
-            float baseHeight = 0.2f)
+            float baseOffset = 0.05f,
+            float baseHeight = 0.1f)
         {
             // Check of the base height is greater or equal to the overall height.
             if (baseHeight >= Height) 
@@ -197,8 +197,47 @@ namespace Parking.Accessories
                 throw new ArgumentException("The height of the base element cannot be greater than or equal to the overall height");
             }
 
+            // Create the base point.
+            Autodesk.DesignScript.Geometry.Point basePoint = Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 0, baseHeight/2);
 
-            return null;
+            // Create the base solid.
+            Cuboid baseSolid = Cuboid.ByLengths(basePoint, Width + baseOffset * 2, Depth + baseOffset * 2, baseHeight);
+
+            // Create the top point.
+            Autodesk.DesignScript.Geometry.Point topPoint = Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 0, baseHeight + (Height - baseHeight) / 2);
+
+            // Create the top solid. 
+            Cuboid topSolid = Cuboid.ByLengths(topPoint, Width, Depth, Height - baseHeight);
+
+            // Join the solids.
+            Solid mergedSolids = Solid.ByUnion(new List<Solid>() { baseSolid, topSolid });
+
+            // Create a temp target plane if the target plane input is null.
+            Autodesk.DesignScript.Geometry.Plane _targetPlane = null;
+            if (TargetPlane == null)
+            {
+                _targetPlane = Autodesk.DesignScript.Geometry.Plane.ByOriginNormal(basePoint, Autodesk.DesignScript.Geometry.Vector.ZAxis());
+            }
+            else
+            {
+                _targetPlane = TargetPlane;
+            }
+
+            // Add transformations to the charging station.
+            List<Geometry> transformedChargingStation = Common.GeometryTools.GeometryUtilities.AddTransformations(
+                new List<Geometry>() { mergedSolids as Geometry },
+                Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 0),
+                _targetPlane,
+                Autodesk.DesignScript.Geometry.Vector.ZAxis(),
+                Angle,
+                0,
+                1
+            );
+
+            // Set the charging station type attribute.
+            ChargingStationType = ChargingStationTypes.BoxShaped;
+
+            return transformedChargingStation[0] as Solid;
         }
     }
 }

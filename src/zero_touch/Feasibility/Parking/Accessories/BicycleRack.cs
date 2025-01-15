@@ -25,7 +25,7 @@ namespace Parking.Accessories
         /// </summary>
         public float TubeDiameter
         {
-            get { return _tubeDiameter; }
+            internal get { return _tubeDiameter; }
             set
             {
                 if (value <= 0)
@@ -43,7 +43,7 @@ namespace Parking.Accessories
         /// </summary>
         public float RackHeight
         {
-            get { return _rackHeight; }
+            internal get { return _rackHeight; }
             set
             {
                 if (value <= 0)
@@ -61,7 +61,7 @@ namespace Parking.Accessories
         /// </summary>
         public float RackLength
         {
-            get { return _rackLength; }
+            internal get { return _rackLength; }
             set
             {
                 if (value <= 0)
