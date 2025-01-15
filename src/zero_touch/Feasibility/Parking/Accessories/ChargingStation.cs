@@ -279,6 +279,9 @@ namespace Parking.Accessories
                 1
             );
 
+            // Set the charging station type attribute.
+            ChargingStationType = ChargingStationTypes.SurfaceMounted;
+
             return transformedChargingStation[0] as Solid;
         }
     }

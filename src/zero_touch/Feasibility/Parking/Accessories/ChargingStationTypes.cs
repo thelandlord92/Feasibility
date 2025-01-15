@@ -25,7 +25,7 @@ namespace Parking.Accessories
         /// <summary>
         /// Wall mounted charger type.
         /// </summary>
-        WallMounted,
+        SurfaceMounted,
 
         /// <summary>
         /// No charger required.
