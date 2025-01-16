@@ -848,7 +848,9 @@
             <summary>
             Creates the full length wheel stop.
             </summary>
-            <returns></returns>
+            <returns name="locationPoint">The wheel stop location point.</returns>
+            <returns name="locationCurve">Location curve along the width of the wheel stop.</returns>
+            <returns name="wheelStopSolid">The solid of the wheel stop.</returns>
         </member>
         <member name="T:Parking.Accessories.WheelStopTypes">
             <summary>

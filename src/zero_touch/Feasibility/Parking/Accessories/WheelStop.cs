@@ -1,4 +1,5 @@
 ﻿using Autodesk.DesignScript.Geometry;
+using Autodesk.DesignScript.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -92,7 +93,7 @@ namespace Parking.Accessories
         /// <param name="angle"></param>
         public WheelStop(
             Autodesk.DesignScript.Geometry.Plane targetPlane = null,
-            float height = 1f,
+            float height = 0.1f,
             float width = 0.5f,
             float depth = 0.1f,
             float angle = 0f)
@@ -108,8 +109,11 @@ namespace Parking.Accessories
         /// <summary>
         /// Creates the full length wheel stop.
         /// </summary>
-        /// <returns></returns>
-        public Solid CreateFullLengthWheelStop()
+        /// <returns name="locationPoint">The wheel stop location point.</returns>
+        /// <returns name="locationCurve">Location curve along the width of the wheel stop.</returns>
+        /// <returns name="wheelStopSolid">The solid of the wheel stop.</returns>
+        [MultiReturn(new[] { "locationPoint", "locationCurve", "wheelStopSolid" })]
+        public Dictionary<string, object> CreateFullLengthWheelStop()
         {
             // Create the hosting point. 
             Autodesk.DesignScript.Geometry.Point hostingPoint = Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 0, 0);
@@ -123,7 +127,40 @@ namespace Parking.Accessories
             // Extrude the rectangle.
             Solid solid = baseRectangle.ExtrudeAsSolid(Height);
 
-            return solid;
+            // Create the location curve. 
+            Autodesk.DesignScript.Geometry.Point startPoint = Autodesk.DesignScript.Geometry.Point.ByCoordinates(-Width/2, 0, 0);
+            Autodesk.DesignScript.Geometry.Point endPoint = Autodesk.DesignScript.Geometry.Point.ByCoordinates(Width / 2, 0, 0);
+            Line locationCurve = Line.ByStartPointEndPoint(startPoint, endPoint);
+
+            // Create a temp target plane if the target plane input is null.
+            Autodesk.DesignScript.Geometry.Plane _targetPlane = null;
+            if (TargetPlane == null)
+            {
+                _targetPlane = Autodesk.DesignScript.Geometry.Plane.ByOriginNormal(hostingPoint, Autodesk.DesignScript.Geometry.Vector.ZAxis());
+            }
+            else
+            {
+                _targetPlane = TargetPlane;
+            }
+
+            // Add transformations to the charging station elements.
+            List<Geometry> transformedWheelStop = Common.GeometryTools.GeometryUtilities.AddTransformations(
+                new List<Geometry>() { hostingPoint, locationCurve as Geometry , solid as Geometry},
+                Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 0),
+                _targetPlane,
+                Autodesk.DesignScript.Geometry.Vector.ZAxis(),
+                Angle,
+                0,
+                1
+            );
+
+            // Add the hosting point, location curve and solid to a dictionary.
+            Dictionary<string, object> elementDict = new Dictionary<string, object>();
+            elementDict["locationPoint"] = transformedWheelStop[0];
+            elementDict["locationCurve"] = transformedWheelStop[1];
+            elementDict["wheelStopSolid"] = transformedWheelStop[2];
+
+            return elementDict;
         }
     }
 }
