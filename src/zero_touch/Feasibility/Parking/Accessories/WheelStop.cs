@@ -94,7 +94,7 @@ namespace Parking.Accessories
         public WheelStop(
             Autodesk.DesignScript.Geometry.Plane targetPlane = null,
             float height = 0.1f,
-            float width = 0.5f,
+            float width = 1f,
             float depth = 0.1f,
             float angle = 0f)
         {
@@ -161,6 +161,42 @@ namespace Parking.Accessories
             elementDict["wheelStopSolid"] = transformedWheelStop[2];
 
             return elementDict;
+        }
+
+
+        /// <summary>
+        /// Creates the segmented wheel stop.
+        /// </summary>
+        /// <param name="gapWidth">The center gap width of the wheel stop.</param>
+        /// <returns name="locationPoint">The wheel stop location point.</returns>
+        /// <returns name="locationCurve">Location curve along the width of the wheel stop.</returns>
+        /// <returns name="wheelStopSolid">The solid of the wheel stop.</returns>
+        [MultiReturn(new[] { "locationPoint", "locationCurve", "wheelStopSolid" })]
+        public Dictionary<string, object> CreateSegmentedWheelStop(float gapWidth = 0.2f)
+        {
+            // Check if the gap is greater than or equal to the length of the wheel stop. 
+            if (gapWidth >= Width) 
+            {
+                throw new ArgumentException("The gap cannot be greater or equal to the wheel stop width");
+            }
+
+            // Get the elements of the full length wheel stop.
+            Dictionary<string, object> wheelStop = CreateFullLengthWheelStop();
+
+            // Create solid to subtract from full length wheel stop solid.
+            Rectangle rect = Rectangle.ByWidthLength(TargetPlane, gapWidth, Depth);
+            Solid subSolid = rect.ExtrudeAsSolid(Height);
+
+            // Rotate the solid. 
+            Solid rotatedSolid = subSolid.Rotate(TargetPlane, Angle) as Solid;
+
+            // Subtract the solid from the full length solid.
+            Solid segmentedSolid = (wheelStop["wheelStopSolid"] as Solid).Difference(rotatedSolid);
+
+            // Replace the full length solid with the segmented solid. 
+            wheelStop["wheelStopSolid"] = segmentedSolid;
+
+            return wheelStop;
         }
     }
 }

@@ -852,6 +852,15 @@
             <returns name="locationCurve">Location curve along the width of the wheel stop.</returns>
             <returns name="wheelStopSolid">The solid of the wheel stop.</returns>
         </member>
+        <member name="M:Parking.Accessories.WheelStop.CreateSegmentedWheelStop(System.Single)">
+            <summary>
+            Creates the segmented wheel stop.
+            </summary>
+            <param name="gapWidth">The center gap width of the wheel stop.</param>
+            <returns name="locationPoint">The wheel stop location point.</returns>
+            <returns name="locationCurve">Location curve along the width of the wheel stop.</returns>
+            <returns name="wheelStopSolid">The solid of the wheel stop.</returns>
+        </member>
         <member name="T:Parking.Accessories.WheelStopTypes">
             <summary>
             Defines enums for the wheel stop types
