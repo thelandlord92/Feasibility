@@ -114,7 +114,16 @@ namespace Parking.Accessories
             // Create the hosting point. 
             Autodesk.DesignScript.Geometry.Point hostingPoint = Autodesk.DesignScript.Geometry.Point.ByCoordinates(0, 0, 0);
 
-            return null;
+            // Create a plane at the hosting point. 
+            Autodesk.DesignScript.Geometry.Plane hostPlane = Autodesk.DesignScript.Geometry.Plane.ByOriginNormal(hostingPoint, Autodesk.DesignScript.Geometry.Vector.ZAxis());
+
+            // Create a base rectangle at the plane.
+            Rectangle baseRectangle = Rectangle.ByWidthLength(Width, Depth);
+
+            // Extrude the rectangle.
+            Solid solid = baseRectangle.ExtrudeAsSolid(Height);
+
+            return solid;
         }
     }
 }

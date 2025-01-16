@@ -281,7 +281,7 @@ namespace Parking.Accessories
         /// <param name="plateDiameter">The diameter of the base plates.</param>
         /// <param name="plateThickness">The thickness of the base plates.</param>
         /// <param name="tubeDiameter">The diameter of the bicycle rack's tube.</param>
-        /// <returns>A list of curves representing the wave bicycle rack.</returns>
+        /// <returns>A solid representing the wave bicycle rack.</returns>
         /// <exception cref="ArgumentException">Thrown when an invalid argument is provided.</exception>
         public Solid CreateWaveRack(
             float rackHeight = 1f,
@@ -511,7 +511,7 @@ namespace Parking.Accessories
         /// <param name="ringCornerRadius">The radius of the ring corners.</param>
         /// <param name="ringOffset">The offset of the ring from the top of the rack.</param>
         /// <param name="tubeDiameter">The diameter of the bicycle rack's tube.</param>
-        /// <returns></returns>
+        /// <returns>A solid representing the post and ring bicycle rack.</returns>
         /// <exception cref="ArgumentException"></exception>
         public Solid CreatePostandRingRack(
             float rackHeight = 1f,
