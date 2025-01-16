@@ -11,6 +11,7 @@ using Common;
 using Parking.Accessories;
 using System.Windows;
 using System.ComponentModel;
+using Autodesk.DesignScript.Runtime;
 
 namespace Parking
 {
@@ -686,6 +687,20 @@ namespace Parking
         }
 
 
+        /// <summary>
+        /// Creates the full length wheel stop.
+        /// </summary>
+        /// <param name="height">The height of the wheel stop.</param>
+        /// <param name="width">The width of the wheel stop.</param>
+        /// <param name="depth">The depth of the wheel stop. </param>
+        /// <param name="angle">The angle of the wheel stop.</param>
+        /// <param name="offset">Offset of the wheel stop from the edge of the parking bay.</param>
+        /// <param name="location">Select the required edge location of the wheel stop. Choose from 1-4.</param>
+        /// <returns name="locationPoint">The wheel stop location point.</returns>
+        /// <returns name="locationCurve">Location curve along the width of the wheel stop.</returns>
+        /// <returns name="wheelStopSolid">The solid of the wheel stop.</returns>
+        /// <exception cref="ArgumentException"></exception>
+        [MultiReturn(new[] { "locationPoint", "locationCurve", "wheelStopSolid" })]
         public Dictionary<string, object> WheelStopCreateFullLengthStop(
             float height = 0.1f,
             float width = 1f,
@@ -700,23 +715,36 @@ namespace Parking
                 throw new ArgumentException("The location must be between 1 and 4");
             }
 
+            Dictionary<string, object> wheelStopElements = new Dictionary<string, object>();
             if (Accessories.WheelStop.WheelStopType == WheelStopTypes.FullLengthWheelStop) 
             {
                 // Get the location planes of the wheel stop.
-                List<Autodesk.DesignScript.Geometry.Plane> locationPlanes = Common.GeometryTools.Curves.CurveHorizontalPlanesAtParameters(CreateRectangle(), new List<float> { 0.5f }, -offset)[0];
+                List<List<Autodesk.DesignScript.Geometry.Plane>> locationPlanes = Common.GeometryTools.Curves.CurveHorizontalPlanesAtParameters(CreateRectangle(), new List<float> { 0.5f }, -offset);
 
-                Dictionary<string, object> wheelStopElements = new Dictionary<string, object>();
                 // Add the wheel stop to the location Plane. 
                 if (location == 1)
                 {
-
+                    wheelStopElements = new WheelStop(locationPlanes[0][0], height, width, depth, -GetRotationAngle() + angle).CreateFullLengthWheelStop();
                 }
-
+                else if (location == 2)
+                {
+                    wheelStopElements = new WheelStop(locationPlanes[1][0], height, width, depth, -GetRotationAngle() + 90 + angle).CreateFullLengthWheelStop();
+                }
+                else if (location == 3) 
+                {
+                    wheelStopElements = new WheelStop(locationPlanes[2][0], height, width, depth, -GetRotationAngle() + angle).CreateFullLengthWheelStop();
+                }
+                else 
+                {
+                    wheelStopElements = new WheelStop(locationPlanes[3][0], height, width, depth, -GetRotationAngle() + 90 + angle).CreateFullLengthWheelStop();
+                }
             }
-            
+            else
+            {
+                wheelStopElements = null;
+            }
 
-
-            return new Dictionary<string, object> { };
+            return wheelStopElements;
         }
     }
 }

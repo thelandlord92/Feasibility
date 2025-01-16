@@ -1237,6 +1237,21 @@
             <returns></returns>
             <exception cref="T:System.Exception"></exception>
         </member>
+        <member name="M:Parking.ParkingBay.WheelStopCreateFullLengthStop(System.Single,System.Single,System.Single,System.Single,System.Single,System.Int32)">
+            <summary>
+            Creates the full length wheel stop.
+            </summary>
+            <param name="height">The height of the wheel stop.</param>
+            <param name="width">The width of the wheel stop.</param>
+            <param name="depth">The depth of the wheel stop. </param>
+            <param name="angle">The angle of the wheel stop.</param>
+            <param name="offset">Offset of the wheel stop from the edge of the parking bay.</param>
+            <param name="location">Select the required edge location of the wheel stop. Choose from 1-4.</param>
+            <returns name="locationPoint">The wheel stop location point.</returns>
+            <returns name="locationCurve">Location curve along the width of the wheel stop.</returns>
+            <returns name="wheelStopSolid">The solid of the wheel stop.</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
         <member name="T:Parking.Patterns">
             <summary>
             Wrapper class for the parking patterns.
