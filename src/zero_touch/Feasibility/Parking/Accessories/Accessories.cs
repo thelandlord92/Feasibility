@@ -40,7 +40,7 @@ namespace Parking.Accessories
             ChargingStationTypes chargingStationType = ChargingStationTypes.NoCharger,
             WheelStopTypes wheelStopType = WheelStopTypes.NoWheelStop)
         {
-            // Based on the input enum, set the correct accessory type.
+            // Based on the input enum, set the bicycle rack type.
             switch (bicycleRackType) 
             {
                 case BicycleRackTypes.InvertedURack:
@@ -61,9 +61,44 @@ namespace Parking.Accessories
                     break;
             }
 
-     
-            
-            
+            // Based on the input enum, set the charging station type.
+            switch (chargingStationType) 
+            {
+                case ChargingStationTypes.SurfaceMounted:
+                    ChargingStation = new ChargingStation();
+                    ChargingStation.ChargingStationType = ChargingStationTypes.SurfaceMounted;
+                    break;
+                case ChargingStationTypes.BoxShaped:
+                    ChargingStation = new ChargingStation();
+                    ChargingStation.ChargingStationType = ChargingStationTypes.BoxShaped;
+                    break;
+                case ChargingStationTypes.PoleMounted:
+                    ChargingStation = new ChargingStation();
+                    ChargingStation.ChargingStationType = ChargingStationTypes.PoleMounted;
+                    break;
+                case ChargingStationTypes.NoCharger:
+                    ChargingStation = new ChargingStation();
+                    ChargingStation.ChargingStationType = ChargingStationTypes.NoCharger;
+                    break;
+            }
+
+
+            // Based on the input enum, set the wheel stop type.
+            switch (wheelStopType) 
+            { 
+                case WheelStopTypes.FullLengthWheelStop:
+                    WheelStop = new WheelStop();
+                    WheelStop.WheelStopType = WheelStopTypes.FullLengthWheelStop;
+                    break;
+                case WheelStopTypes.SegmentedWheelStop:
+                    WheelStop = new WheelStop();
+                    WheelStop.WheelStopType = WheelStopTypes.SegmentedWheelStop;
+                    break;
+                case WheelStopTypes.NoWheelStop:
+                    WheelStop = new WheelStop();
+                    WheelStop.WheelStopType = WheelStopTypes.NoWheelStop;
+                    break;
+            }
         }
     }
 }

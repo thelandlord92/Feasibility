@@ -10,6 +10,7 @@ using Parking;
 using Common;
 using Parking.Accessories;
 using System.Windows;
+using System.ComponentModel;
 
 namespace Parking
 {
@@ -682,6 +683,40 @@ namespace Parking
             }
 
             return rackSolid;
+        }
+
+
+        public Dictionary<string, object> WheelStopCreateFullLengthStop(
+            float height = 0.1f,
+            float width = 1f,
+            float depth = 0.1f,
+            float angle = 0f,
+            float offset = 0.1f,
+            int location = 1)
+        {
+            // Check if the location number is less than one or greater than 4.
+            if (location < 1 || location > 4) 
+            {
+                throw new ArgumentException("The location must be between 1 and 4");
+            }
+
+            if (Accessories.WheelStop.WheelStopType == WheelStopTypes.FullLengthWheelStop) 
+            {
+                // Get the location planes of the wheel stop.
+                List<Autodesk.DesignScript.Geometry.Plane> locationPlanes = Common.GeometryTools.Curves.CurveHorizontalPlanesAtParameters(CreateRectangle(), new List<float> { 0.5f }, -offset)[0];
+
+                Dictionary<string, object> wheelStopElements = new Dictionary<string, object>();
+                // Add the wheel stop to the location Plane. 
+                if (location == 1)
+                {
+
+                }
+
+            }
+            
+
+
+            return new Dictionary<string, object> { };
         }
     }
 }

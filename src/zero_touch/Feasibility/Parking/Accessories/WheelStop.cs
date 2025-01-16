@@ -160,6 +160,9 @@ namespace Parking.Accessories
             elementDict["locationCurve"] = transformedWheelStop[1];
             elementDict["wheelStopSolid"] = transformedWheelStop[2];
 
+            // Set the wheel stop type.
+            WheelStopType = WheelStopTypes.FullLengthWheelStop;
+
             return elementDict;
         }
 
@@ -195,6 +198,9 @@ namespace Parking.Accessories
 
             // Replace the full length solid with the segmented solid. 
             wheelStop["wheelStopSolid"] = segmentedSolid;
+
+            // Set the wheel stop type.
+            WheelStopType = WheelStopTypes.SegmentedWheelStop;
 
             return wheelStop;
         }

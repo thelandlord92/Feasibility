@@ -3,24 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|c:\\users\\omoba\\onedrive\\documents\\github\\feasibility\\src\\zero_touch\\feasibility\\parking\\accessories\\wheelstop.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|solutionrelative:parking\\accessories\\wheelstop.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\parking\\accessories\\accessories.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|solutionrelative:parking\\accessories\\accessories.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\common\\geometrytools\\curves.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|solutionrelative:common\\geometrytools\\curves.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|c:\\users\\omoba\\onedrive\\documents\\github\\feasibility\\src\\zero_touch\\feasibility\\parking\\parkingbay.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|solutionrelative:parking\\parkingbay.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\parking\\accessories\\wheelstoptypes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|solutionrelative:parking\\accessories\\wheelstoptypes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|c:\\users\\omoba\\onedrive\\documents\\github\\feasibility\\src\\zero_touch\\feasibility\\parking\\accessories\\chargingstation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|solutionrelative:parking\\accessories\\chargingstation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\common\\geometrytools\\curves.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|solutionrelative:common\\geometrytools\\curves.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\parking\\accessories\\accessories.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|solutionrelative:parking\\accessories\\accessories.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|c:\\users\\omoba\\onedrive\\documents\\github\\feasibility\\src\\zero_touch\\feasibility\\parking\\accessories\\wheelstop.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F3D3EDD3-9C14-436F-B525-9843F0CB6779}|Feasibility.csproj|solutionrelative:parking\\accessories\\wheelstop.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,32 +30,32 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "ParkingBay.cs",
+              "DocumentMoniker": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\Parking\\ParkingBay.cs",
+              "RelativeDocumentMoniker": "Parking\\ParkingBay.cs",
+              "ToolTip": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\Parking\\ParkingBay.cs",
+              "RelativeToolTip": "Parking\\ParkingBay.cs",
+              "ViewState": "AQIAAK8CAAAAAAAAAAAAAMcCAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-16T15:40:32.81Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "Curves.cs",
               "DocumentMoniker": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\Common\\GeometryTools\\Curves.cs",
               "RelativeDocumentMoniker": "Common\\GeometryTools\\Curves.cs",
               "ToolTip": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\Common\\GeometryTools\\Curves.cs",
               "RelativeToolTip": "Common\\GeometryTools\\Curves.cs",
-              "ViewState": "AQIAAOAAAAAAAAAAAAAYwAYBAAAIAAAA",
+              "ViewState": "AQIAAM8EAAAAAAAAAAAuwNkEAABHAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-16T13:32:20.118Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "WheelStop.cs",
-              "DocumentMoniker": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\Parking\\Accessories\\WheelStop.cs",
-              "RelativeDocumentMoniker": "Parking\\Accessories\\WheelStop.cs",
-              "ToolTip": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\Parking\\Accessories\\WheelStop.cs",
-              "RelativeToolTip": "Parking\\Accessories\\WheelStop.cs",
-              "ViewState": "AQIAAH8AAAAAAAAAAAAYwLIAAAANAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-15T16:34:02.643Z",
               "EditorCaption": ""
             },
             {
@@ -73,15 +73,16 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
               "Title": "Accessories.cs",
               "DocumentMoniker": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\Parking\\Accessories\\Accessories.cs",
               "RelativeDocumentMoniker": "Parking\\Accessories\\Accessories.cs",
               "ToolTip": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\Parking\\Accessories\\Accessories.cs",
               "RelativeToolTip": "Parking\\Accessories\\Accessories.cs",
-              "ViewState": "AQIAAB4AAAAAAAAAAAAYwA0AAAASAAAA",
+              "ViewState": "AQIAAD0AAAAAAAAAAAAkwEsAAAA8AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-10T11:17:16.133Z"
+              "WhenOpened": "2025-01-10T11:17:16.133Z",
+              "EditorCaption": ""
             }
           ]
         }
@@ -91,10 +92,10 @@
       "Orientation": 0,
       "VerticalTabListWidth": 256,
       "FloatingWindowState": {
-        "Id": "85d628f0-02ce-4a3d-9364-41513cf88987",
+        "Id": "fc79af38-467c-426e-b560-a54b1647a206",
         "Display": 0,
-        "X": 351,
-        "Y": 82,
+        "X": 342,
+        "Y": 138,
         "Width": 1434,
         "Height": 822,
         "WindowState": 2
@@ -106,15 +107,15 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ChargingStation.cs",
-              "DocumentMoniker": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\Parking\\Accessories\\ChargingStation.cs",
-              "RelativeDocumentMoniker": "Parking\\Accessories\\ChargingStation.cs",
-              "ToolTip": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\Parking\\Accessories\\ChargingStation.cs",
-              "RelativeToolTip": "Parking\\Accessories\\ChargingStation.cs",
-              "ViewState": "AQIAAMwAAAAAAAAAAAAIwOEAAAAMAAAA",
+              "DocumentIndex": 4,
+              "Title": "WheelStop.cs",
+              "DocumentMoniker": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\Parking\\Accessories\\WheelStop.cs",
+              "RelativeDocumentMoniker": "Parking\\Accessories\\WheelStop.cs",
+              "ToolTip": "C:\\Users\\omoba\\OneDrive\\Documents\\GitHub\\Feasibility\\src\\zero_touch\\Feasibility\\Parking\\Accessories\\WheelStop.cs",
+              "RelativeToolTip": "Parking\\Accessories\\WheelStop.cs",
+              "ViewState": "AQIAAKwAAAAAAAAAAADwv8EAAABOAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-16T07:43:06.47Z",
+              "WhenOpened": "2025-01-15T16:34:02.643Z",
               "EditorCaption": ""
             }
           ]
