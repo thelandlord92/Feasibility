@@ -106,7 +106,7 @@ namespace Parking.Accessories
 
 
         /// <summary>
-        /// 
+        /// Creates the full length wheel stop.
         /// </summary>
         /// <returns></returns>
         public Solid CreateFullLengthWheelStop()

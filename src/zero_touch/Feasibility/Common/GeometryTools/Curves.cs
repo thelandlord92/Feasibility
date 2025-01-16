@@ -145,14 +145,14 @@ namespace Common.GeometryTools
         /// </summary>
         /// <param name="curve">The input polycurve.</param>
         /// <returns name="cornerPoints">The corner points.</returns>
-        public static List<Autodesk.DesignScript.Geometry.Point> PolyCurveCorners(PolyCurve curve) 
+        public static List<Autodesk.DesignScript.Geometry.Point> PolyCurveCorners(PolyCurve curve)
         {
             // Explode the polycurve.
             List<Curve> explodedCurves = curve.Curves().ToList();
 
             // Get the corner points of the polycurve.
             List<Autodesk.DesignScript.Geometry.Point> cornerPoints = new List<Autodesk.DesignScript.Geometry.Point>();
-            foreach (Curve curve1 in explodedCurves) 
+            foreach (Curve curve1 in explodedCurves)
             {
                 cornerPoints.Add(curve1.StartPoint);
             }
@@ -265,7 +265,7 @@ namespace Common.GeometryTools
             PolyCurve curve,
             float concaveCornerSpacing = 1f,
             float convexCornerSpacing = 1f,
-            float elementLength = 0f) 
+            float elementLength = 0f)
         {
             // Check the planarity of the input polycurve.
             PolyCurve planarCurve = CheckCurvePlanarity(curve) as PolyCurve;
@@ -291,7 +291,7 @@ namespace Common.GeometryTools
 
             // Add the corner points at the convex corners.
             object convexCornerPoints;
-            if (convexCurvePairs.Count > 0) 
+            if (convexCurvePairs.Count > 0)
             {
                 List<List<Autodesk.DesignScript.Geometry.Point>> cornerPoints = new List<List<Autodesk.DesignScript.Geometry.Point>>();
                 foreach (Tuple<float, List<Curve>> tuple in convexCurvePairs)
@@ -305,11 +305,11 @@ namespace Common.GeometryTools
                 }
                 convexCornerPoints = cornerPoints;
             }
-            else 
+            else
             {
                 convexCornerPoints = null;
             }
-            
+
             // Add the corner points at the concave corners.
             List<List<Autodesk.DesignScript.Geometry.Point>> concaveCornerPoints = new List<List<Autodesk.DesignScript.Geometry.Point>>();
             foreach (Tuple<float, List<Curve>> tuple in concaveCurvePairs)
@@ -317,12 +317,12 @@ namespace Common.GeometryTools
                 List<Autodesk.DesignScript.Geometry.Point> pointList = new List<Autodesk.DesignScript.Geometry.Point>();
                 foreach (Curve curve1 in tuple.Item2)
                 {
-                    if (tuple.Item1 == 180) 
+                    if (tuple.Item1 == 180)
                     {
                         // Create the point.
                         pointList.Add(curve1.PointAtChordLength(0, 0, true));
                     }
-                    else 
+                    else
                     {
                         // Calcualte the offset distance.
                         float distance1 = (float)(elementLength / DSCore.Math.Tan(tuple.Item1 / 2));
@@ -330,12 +330,12 @@ namespace Common.GeometryTools
 
                         // Create the point.
                         pointList.Add(curve1.PointAtChordLength(offsetDistance, 0, true));
-                    } 
+                    }
                 }
                 concaveCornerPoints.Add(pointList);
             }
 
-            return new Dictionary<string, object> 
+            return new Dictionary<string, object>
             {
                 { "concaveCornerPoints", concaveCornerPoints },
                 { "convexCornerPoints", convexCornerPoints}
@@ -372,7 +372,7 @@ namespace Common.GeometryTools
             }
 
             // Throw an exception if the input curve is not closed.
-            if (curve.IsClosed == false) 
+            if (curve.IsClosed == false)
             {
                 throw new ArgumentException("Only closed curves are allowed");
             }
@@ -536,10 +536,10 @@ namespace Common.GeometryTools
 
             // Cast the grouped geometry to curves to create polycurves.
             List<List<Curve>> castCornerCurves = new List<List<Curve>>();
-            foreach (List<Autodesk.DesignScript.Geometry.Geometry> geometries in groupedCornerCurves) 
-            { 
+            foreach (List<Autodesk.DesignScript.Geometry.Geometry> geometries in groupedCornerCurves)
+            {
                 List<Curve> curveList = new List<Curve>();
-                foreach (Autodesk.DesignScript.Geometry.Geometry geometry in geometries) 
+                foreach (Autodesk.DesignScript.Geometry.Geometry geometry in geometries)
                 {
                     curveList.Add(geometry as Curve);
                 }
@@ -559,8 +559,8 @@ namespace Common.GeometryTools
 
             // Create polycurves from the curve groups.
             List<PolyCurve> cornerPolyCurves = new List<PolyCurve>();
-            foreach (List<Curve> curveList in castCornerCurves) 
-            { 
+            foreach (List<Curve> curveList in castCornerCurves)
+            {
                 cornerPolyCurves.Add(PolyCurve.ByJoinedCurves(curveList, 0.001, false, 0));
             }
 
@@ -574,13 +574,13 @@ namespace Common.GeometryTools
                 Autodesk.DesignScript.Geometry.Point endPoint = polyCurve.EndPoint;
                 float curveLength = (float)Line.ByStartPointEndPoint(startPoint, endPoint).Length;
 
-                if (curveLength >= elementWidth) 
+                if (curveLength >= elementWidth)
                 {
                     segmentPolyCurves.Add(polyCurve);
                 }
             }
 
-            return new Dictionary<string, List<PolyCurve>> 
+            return new Dictionary<string, List<PolyCurve>>
             {
                 { "cornerPolyCurves", cornerPolyCurves },
                 { "segmentPolyCurves", segmentPolyCurves }
@@ -1124,13 +1124,13 @@ namespace Common.GeometryTools
         /// <param name="curve">The input curve.</param>
         /// <param name="divisions">Number of divisions.</param>
         /// <returns name="points">List of points on curve.</returns>
-        public static List<Autodesk.DesignScript.Geometry.Point> PointsAtEqualChordLength(Curve curve, int divisions = 10) 
+        public static List<Autodesk.DesignScript.Geometry.Point> PointsAtEqualChordLength(Curve curve, int divisions = 10)
         {
-            if (divisions <= 0) 
+            if (divisions <= 0)
             {
                 throw new ArgumentException("Divisions cannot be less than or equal to zero. Adjust parameters");
             }
-            
+
             // Get the start and end points of the curve.
             Autodesk.DesignScript.Geometry.Point startPoint = curve.StartPoint;
             Autodesk.DesignScript.Geometry.Point endPoint = curve.EndPoint;
@@ -1141,7 +1141,7 @@ namespace Common.GeometryTools
             // Add the start and end points to the points list.
             points.Insert(0, startPoint);
             points.Add(endPoint);
-            
+
             return points;
         }
 
@@ -1152,12 +1152,12 @@ namespace Common.GeometryTools
         /// <param name="curve">The input curve.</param>
         /// <param name="points">List of points.</param>
         /// <returns>The parameters.</returns>
-        internal static List<float> CurveParametersAtPoints(Curve curve, List<Autodesk.DesignScript.Geometry.Point> points) 
+        internal static List<float> CurveParametersAtPoints(Curve curve, List<Autodesk.DesignScript.Geometry.Point> points)
         {
             // Get the parameters.
             List<float> parameters = new List<float>();
-            foreach (Autodesk.DesignScript.Geometry.Point point in points) 
-            { 
+            foreach (Autodesk.DesignScript.Geometry.Point point in points)
+            {
                 parameters.Add((float)curve.ParameterAtPoint(point));
             }
 
@@ -1173,12 +1173,12 @@ namespace Common.GeometryTools
         /// <param name="points">List of points.</param>
         /// <returns>The normals at the points.</returns>
         public static List<Autodesk.DesignScript.Geometry.Vector> CurveNormalsAtPoints(
-            Curve curve, 
-            List<Autodesk.DesignScript.Geometry.Point> points) 
+            Curve curve,
+            List<Autodesk.DesignScript.Geometry.Point> points)
         {
             // Get the normal vectors at the points.
             List<Autodesk.DesignScript.Geometry.Vector> normals = new List<Autodesk.DesignScript.Geometry.Vector>();
-            foreach (Point point in points) 
+            foreach (Point point in points)
             {
                 // Get the parameter at the point.
                 float parameter = (float)curve.ParameterAtPoint(point);
@@ -1193,12 +1193,12 @@ namespace Common.GeometryTools
                 float angle = (float)tangent.AngleAboutAxis(normal, Autodesk.DesignScript.Geometry.Vector.ZAxis());
 
                 // Reverse the direction of the normal if its angle around the tangent is greater than 90 degrees.
-                if (angle > 90) 
+                if (angle > 90)
                 {
                     normals.Add(normal.Reverse());
                 }
-                else 
-                { 
+                else
+                {
                     normals.Add(normal);
                 }
             }
@@ -1229,6 +1229,52 @@ namespace Common.GeometryTools
             }
 
             return tangents;
+        }
+
+
+        /// <summary>
+        /// Creates horizontal planes along the input curves of a polycurve.
+        /// </summary>
+        /// <param name="polyCurve">The input polycurve.</param>
+        /// <param name="parameters">Parameter values indicating the plane locations on the curves.</param>
+        /// <param name="planeOffset">Offset of the planes from the curves.</param>
+        /// <returns></returns>
+        public static List<List<Autodesk.DesignScript.Geometry.Plane>> CurveHorizontalPlanesAtParameters(
+            PolyCurve polyCurve,
+            List<float> parameters,
+            float planeOffset = 0)
+        {
+            // Get the curves of the input curve.
+            List<Curve> curves = polyCurve.Curves().ToList();
+
+            // Create the required planes on the curves.
+            List<List<Autodesk.DesignScript.Geometry.Plane>> planeLists = new List<List<Autodesk.DesignScript.Geometry.Plane>>();
+            foreach (Curve c in curves) 
+            {
+                List<Autodesk.DesignScript.Geometry.Plane> planes = new List<Autodesk.DesignScript.Geometry.Plane>();
+                foreach (float parameter in parameters) 
+                {
+                    // Get the coordinate systems at the parameters.
+                    CoordinateSystem coordSys = c.CoordinateSystemAtParameter(parameter);
+
+                    // Get the x vector of the coordinate system.
+                    Autodesk.DesignScript.Geometry.Vector xVector = coordSys.XAxis;
+
+                    // Create a point at the parameter.
+                    Autodesk.DesignScript.Geometry.Point point = c.PointAtParameter(parameter);
+
+                    // Move the point using the x vector. 
+                    Autodesk.DesignScript.Geometry.Point movedPoint = point.Translate(xVector, planeOffset) as Autodesk.DesignScript.Geometry.Point;
+
+                    // Add the plane to the moved point.
+                    Autodesk.DesignScript.Geometry.Plane plane = Plane.ByOriginNormal(movedPoint, Autodesk.DesignScript.Geometry.Vector.ZAxis());
+
+                    planes.Add(plane);
+                }
+                planeLists.Add(planes);
+            }
+
+            return planeLists;
         }
     }
 }

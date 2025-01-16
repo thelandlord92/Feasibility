@@ -228,6 +228,15 @@
             <param name="points">List of points.</param>
             <returns>The tangents at the points.</returns>
         </member>
+        <member name="M:Common.GeometryTools.Curves.CurveHorizontalPlanesAtParameters(Autodesk.DesignScript.Geometry.PolyCurve,System.Collections.Generic.List{System.Single},System.Single)">
+            <summary>
+            Creates horizontal planes along the input curves of a polycurve.
+            </summary>
+            <param name="polyCurve">The input polycurve.</param>
+            <param name="parameters">Parameter values indicating the plane locations on the curves.</param>
+            <param name="planeOffset">Offset of the planes from the curves.</param>
+            <returns></returns>
+        </member>
         <member name="T:Common.GeometryTools.MeshVertex">
             <summary>
             Defines a vertex class for internal use.
@@ -780,7 +789,7 @@
             Box shaped charger type.
             </summary>
         </member>
-        <member name="F:Parking.Accessories.ChargingStationTypes.WallMounted">
+        <member name="F:Parking.Accessories.ChargingStationTypes.SurfaceMounted">
             <summary>
             Wall mounted charger type.
             </summary>
@@ -789,6 +798,57 @@
             <summary>
             No charger required.
             </summary>
+        </member>
+        <member name="T:Parking.Accessories.WheelStop">
+            <summary>
+            Wrapper class for the wheel stops.
+            </summary>
+        </member>
+        <member name="P:Parking.Accessories.WheelStop.TargetPlane">
+            <summary>
+            The target plane of the wheel stop.
+            </summary>
+        </member>
+        <member name="P:Parking.Accessories.WheelStop.Height">
+            <summary>
+            The height of the wheel stop.
+            </summary>
+        </member>
+        <member name="P:Parking.Accessories.WheelStop.Width">
+            <summary>
+            The width of the wheel stop. 
+            </summary>
+        </member>
+        <member name="P:Parking.Accessories.WheelStop.Depth">
+            <summary>
+            The depth of the wheel stop. 
+            </summary>
+        </member>
+        <member name="P:Parking.Accessories.WheelStop.Angle">
+            <summary>
+            The angle of the wheel stop.
+            </summary>
+        </member>
+        <member name="P:Parking.Accessories.WheelStop.WheelStopType">
+            <summary>
+            The wheel stop type. 
+            </summary>
+        </member>
+        <member name="M:Parking.Accessories.WheelStop.#ctor(Autodesk.DesignScript.Geometry.Plane,System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Creates a wheel stop instance.
+            </summary>
+            <param name="targetPlane">The target plane to transform the wheel stop.</param>
+            <param name="height">The height of the wheel stop.</param>
+            <param name="width">The width of the wheel stop.</param>
+            <param name="depth">The depth of the wheel stop.</param>
+            <param name="angle"></param>
+        </member>
+        <member name="M:Parking.Accessories.WheelStop.CreateFullLengthWheelStop">
+            <summary>
+            Creates the full length wheel stop.
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:Parking.Accessories.WheelStopTypes">
             <summary>
