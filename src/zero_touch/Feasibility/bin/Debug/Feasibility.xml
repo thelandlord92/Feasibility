@@ -1250,6 +1250,7 @@
             <returns name="locationPoint">The wheel stop location point.</returns>
             <returns name="locationCurve">Location curve along the width of the wheel stop.</returns>
             <returns name="wheelStopSolid">The solid of the wheel stop.</returns>
+            <returns name="angle">The angle of the wheel stop.</returns>
             <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="T:Parking.Patterns">

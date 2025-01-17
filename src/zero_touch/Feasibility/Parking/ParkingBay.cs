@@ -699,8 +699,9 @@ namespace Parking
         /// <returns name="locationPoint">The wheel stop location point.</returns>
         /// <returns name="locationCurve">Location curve along the width of the wheel stop.</returns>
         /// <returns name="wheelStopSolid">The solid of the wheel stop.</returns>
+        /// <returns name="angle">The angle of the wheel stop.</returns>
         /// <exception cref="ArgumentException"></exception>
-        [MultiReturn(new[] { "locationPoint", "locationCurve", "wheelStopSolid" })]
+        [MultiReturn(new[] { "locationPoint", "locationCurve", "wheelStopSolid", "angle" })]
         public Dictionary<string, object> WheelStopCreateFullLengthStop(
             float height = 0.1f,
             float width = 1f,
@@ -725,18 +726,22 @@ namespace Parking
                 if (location == 1)
                 {
                     wheelStopElements = new WheelStop(locationPlanes[0][0], height, width, depth, -GetRotationAngle() + angle).CreateFullLengthWheelStop();
+                    wheelStopElements["angle"] = -GetRotationAngle() + angle;
                 }
                 else if (location == 2)
                 {
                     wheelStopElements = new WheelStop(locationPlanes[1][0], height, width, depth, -GetRotationAngle() + 90 + angle).CreateFullLengthWheelStop();
+                    wheelStopElements["angle"] = -GetRotationAngle() + 90 + angle;
                 }
                 else if (location == 3) 
                 {
                     wheelStopElements = new WheelStop(locationPlanes[2][0], height, width, depth, -GetRotationAngle() + angle).CreateFullLengthWheelStop();
+                    wheelStopElements["angle"] = -GetRotationAngle() + angle;
                 }
                 else 
                 {
                     wheelStopElements = new WheelStop(locationPlanes[3][0], height, width, depth, -GetRotationAngle() + 90 + angle).CreateFullLengthWheelStop();
+                    wheelStopElements["angle"] = -GetRotationAngle() + 90 + angle;
                 }
             }
             else
