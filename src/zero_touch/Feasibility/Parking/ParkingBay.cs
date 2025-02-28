@@ -577,7 +577,7 @@ namespace Parking
 
             if (Accessories.BicycleRack.BicycleRackType == BicycleRackTypes.WaveRack) 
             {
-                // Get the parking rectangle.
+                // Get the parking rectangle.test
                 Rectangle parkingRectangle = CreateRectangle();
 
                 // Get the first curve of the rectangle.
