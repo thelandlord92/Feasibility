@@ -1,5 +1,3 @@
-# Feasibility
-
 ![Logo](images/feasibility_logo.png)
 
 ## Project Description
