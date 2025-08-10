@@ -1,0 +1,905 @@
+{
+  "Uuid": "ba3bfc1e-6f50-4f1b-a821-239e7af9349a",
+  "IsCustomNode": true,
+  "Category": "Feasibility.Parking",
+  "Description": "Creates the internal parking and roadway surfaces. ",
+  "Name": "InternalandRoadwaySurfaces",
+  "ElementResolver": {
+    "ResolutionMap": {
+      "Autodesk.DesignScript.Geometry.PolyCurve": {
+        "Key": "Autodesk.DesignScript.Geometry.PolyCurve",
+        "Value": "ProtoGeometry.dll"
+      }
+    }
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Output, DynamoCore",
+      "ElementResolver": null,
+      "Symbol": "//the parking lot surface minus the depth of the perimeter parking bays and perimeter aisle.\r\ninternalParkingSurface",
+      "Id": "a520f5bc46ce4ce1a8fc20221f8e2c49",
+      "NodeType": "OutputNode",
+      "Inputs": [
+        {
+          "Id": "fa696c522f3444498e2d52971186e6c6",
+          "Name": "",
+          "Description": "Output Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "A function output, use with custom nodes"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Output, DynamoCore",
+      "ElementResolver": null,
+      "Symbol": "//a surface covering the length of the perimeter spots and the width of the perimeter aisle.\r\nperimeterRoadwaySurface",
+      "Id": "a5144e1bc96b461191954171e37b4346",
+      "NodeType": "OutputNode",
+      "Inputs": [
+        {
+          "Id": "2b73bca0757a4bb9981596029b83bff2",
+          "Name": "",
+          "Description": "Output Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "A function output, use with custom nodes"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "c7157811f7104cab961abe937e3de4ad",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "bfec5466fd434632842579594890f159",
+          "Name": "surface",
+          "Description": "Autodesk.DesignScript.Geometry.Surface",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b5b7eacb64b34ff6aae81f927e8c8cd9",
+          "Name": "others",
+          "Description": "Other surfaces to subtract\n\nSurface[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "ba56010eda11461cbf050fa1ec3acd36",
+          "Name": "Surface",
+          "Description": "Resulting boolean surface or polySurface",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Surface.Difference@Autodesk.DesignScript.Geometry.Surface[]",
+      "Replication": "Auto",
+      "Description": "The boolean difference of this Surface and the union of input Surfaces. This method might return a polySurface if the resulting boolean is non-manifold or multi-faced.\n\nSurface.Difference (others: Surface[]): Surface"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "716073246ccd44b28efcae32e1d6df93",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "03399e028b6c4fa88c4298e0c15604f0",
+          "Name": "closedCurve",
+          "Description": "Closed curve used as surface boundary\n\nCurve",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "ccf7dd75763a4e589018e9c27be5ba38",
+          "Name": "Surface",
+          "Description": "Surface created by patch",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Surface.ByPatch@Autodesk.DesignScript.Geometry.Curve",
+      "Replication": "Auto",
+      "Description": "Create a Surface by filling in the interior of a closed boundary defined by input Curves.\n\nSurface.ByPatch (closedCurve: Curve): Surface"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "# Import the required libraries.\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\n# Inputs.\r\npolycurve = IN[0]\r\ninternal_fillet_radius = IN[1]\r\nexternal_fillet_radius = IN[2]\r\n\r\n# Add internal fillet to polycurve. Return original if unsuccessful.\r\ntry:\r\n    internal_fillet_curve = PolyCurve.Fillet(polycurve[0], internal_fillet_radius, False)\r\nexcept:\r\n    internal_fillet_curve = polycurve\r\n\r\n\r\n# Add external fillet to polycurve. Return internal fillet curve if unsuccessful.   \r\ntry:\r\n    external_fillet_curve = PolyCurve.Fillet(internal_fillet_curve, external_fillet_radius, True)\r\nexcept:\r\n    external_fillet_curve = internal_fillet_curve\r\n\r\n\r\nOUT = external_fillet_curve\r\n",
+      "Engine": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "70a9284638514409b9e04b42c7d53ae9",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "afa66a1282a6427184235d507463f6bf",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "4aea705f28ad49908080308717412447",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "bbaf53ec05f3469cac3ac896d18da596",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "5953b8cc411541589bead89967b2012a",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded Python script."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "fd47566937cb4c35b4498a78e5047aa3",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "af042c699cff4cd5b0764c50c76e4456",
+          "Name": "closedCurve",
+          "Description": "Closed curve used as surface boundary\n\nCurve",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "812560be507448ef899c13c8f7238b21",
+          "Name": "Surface",
+          "Description": "Surface created by patch",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Surface.ByPatch@Autodesk.DesignScript.Geometry.Curve",
+      "Replication": "Auto",
+      "Description": "Create a Surface by filling in the interior of a closed boundary defined by input Curves.\n\nSurface.ByPatch (closedCurve: Curve): Surface"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "# Import the required libraries.\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\n# Inputs.\r\nsite_curve = IN[0]\r\noffset_distance = IN[1]\r\n\r\n# Offset the boundary curve.\r\n# Return the polycurve to singular curve if the user input offset returns two curves.\r\ncurrent_offset = offset_distance\r\nincrement_value = 0.1\r\nmax_attempts = 1000\r\nattempts = 0\r\n\r\nwhile attempts < max_attempts:\r\n    offset_curve = Curve.OffsetMany(site_curve, current_offset, Vector.ZAxis())\r\n    \r\n    # Check if the offset curve list has more than one curve loop:\r\n    if len(offset_curve) == 1:\r\n        returned_curve = offset_curve\r\n        break\r\n    else:\r\n        # Reduce the offset and try again\r\n        current_offset += increment_value  # Adding to the negative value\r\n        attempts += 1\r\n\r\n# Check if a valid offset curve was found:\r\nif 'returned_curve' not in locals():\r\n    raise Exception(\"Could not reduce the curve offset to one loop after multiple attempts\")\r\n\r\nOUT = returned_curve",
+      "Engine": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "1753f01795e4402c906fd7469ff3ae0b",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "78c464b782ff43b89949c71153085578",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "4fad31dea441464ca51fe58619ba1728",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "3bd2959a660e461e8138126b530fce30",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded Python script."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Output, DynamoCore",
+      "ElementResolver": null,
+      "Symbol": "//the boundary curve of the internal parking area surface.\r\ninternalBoundaryCurve",
+      "Id": "54aa45ccd9aa41089c3ca98e7e7af006",
+      "NodeType": "OutputNode",
+      "Inputs": [
+        {
+          "Id": "6f24ba7ea1f74b8c82d37ff4d9bfc555",
+          "Name": "",
+          "Description": "Output Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "A function output, use with custom nodes"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "9290c0f4dfb9473a9fe416c2c6100a5e",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [
+        {
+          "Id": "44657f72510e4dcdac0d6362d451ede5",
+          "Name": "parking_bay_length",
+          "Description": "parking_bay_length",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "154e9e21d59049d8b2498f7b87a65a30",
+          "Name": "aisle_width",
+          "Description": "aisle_width",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "93beb6333a19469786f39721f615463b",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "-(parking_bay_length + aisle_width);"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "Parameter": {
+        "Name": "concaveCornerRadius",
+        "TypeName": "double",
+        "TypeRank": 0,
+        "DefaultValue": "3.5",
+        "Description": "The vehicle turning radius at the concave corners of the perimeter aisle."
+      },
+      "Id": "7cf4adbe0e504741b41293b577f9de0e",
+      "NodeType": "InputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "39d41d86895346bd9f6d74e0bde22bf2",
+          "Name": "",
+          "Description": "Input Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "Parameter": {
+        "Name": "convexCornerRadius",
+        "TypeName": "double",
+        "TypeRank": 0,
+        "DefaultValue": "5",
+        "Description": "The vehicle turning radius at the convex corners of the perimeter aisle."
+      },
+      "Id": "f69a53fe19b046abad1da3ea4681c5bc",
+      "NodeType": "InputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "bd69c33f26fc4d488f0242d56847774f",
+          "Name": "",
+          "Description": "Input Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "Parameter": {
+        "Name": "boundaryCurve",
+        "TypeName": "Autodesk.DesignScript.Geometry.PolyCurve",
+        "TypeRank": 0,
+        "DefaultValue": null,
+        "Description": "a polycurve representing the boundary of the site area."
+      },
+      "Id": "05a3cdc41bfb4b029cf171bf7246e83e",
+      "NodeType": "InputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "4750a3bae24f48d3b909abce4ff33608",
+          "Name": "",
+          "Description": "Input Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "Parameter": {
+        "Name": "bayLength",
+        "TypeName": "double",
+        "TypeRank": 0,
+        "DefaultValue": "5",
+        "Description": "the length of the vehicular parking bays."
+      },
+      "Id": "15e9df5ba65b43aaaf327968f772d341",
+      "NodeType": "InputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "3c6833f66da14c51b440ee4883907e38",
+          "Name": "",
+          "Description": "Input Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "Parameter": {
+        "Name": "perimeterAisleWidth",
+        "TypeName": "double",
+        "TypeRank": 0,
+        "DefaultValue": "7",
+        "Description": "the width of the perimeter aisle all round the parking layout."
+      },
+      "Id": "bc47af5a39434ccb904c2fc8ba8d4577",
+      "NodeType": "InputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "ad72be15b1224e0c9df7f43b491c6d35",
+          "Name": "",
+          "Description": "Input Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "ba56010eda11461cbf050fa1ec3acd36",
+      "End": "2b73bca0757a4bb9981596029b83bff2",
+      "Id": "f15f87376d93461487f366bd16a38ba4",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "ccf7dd75763a4e589018e9c27be5ba38",
+      "End": "fa696c522f3444498e2d52971186e6c6",
+      "Id": "9c6129effc85465b9d903431d8d28d18",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "ccf7dd75763a4e589018e9c27be5ba38",
+      "End": "b5b7eacb64b34ff6aae81f927e8c8cd9",
+      "Id": "7a1c677d7a9340119d4f95788965cc58",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "5953b8cc411541589bead89967b2012a",
+      "End": "03399e028b6c4fa88c4298e0c15604f0",
+      "Id": "8df0805c9e834d6e85605cbf2a51a88f",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "812560be507448ef899c13c8f7238b21",
+      "End": "bfec5466fd434632842579594890f159",
+      "Id": "0355426f82524e42ab714f8c2605b923",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "3bd2959a660e461e8138126b530fce30",
+      "End": "afa66a1282a6427184235d507463f6bf",
+      "Id": "4d5f0eeeeabd48a7be5e9a76b78febfc",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "3bd2959a660e461e8138126b530fce30",
+      "End": "6f24ba7ea1f74b8c82d37ff4d9bfc555",
+      "Id": "47f38424b5b24c9787c2c3c230774d20",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "93beb6333a19469786f39721f615463b",
+      "End": "4fad31dea441464ca51fe58619ba1728",
+      "Id": "067cdbb1fc4a46d09ad125c9afbaaf98",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "39d41d86895346bd9f6d74e0bde22bf2",
+      "End": "4aea705f28ad49908080308717412447",
+      "Id": "df54809ca15845d789556e6b95fa6cd5",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "bd69c33f26fc4d488f0242d56847774f",
+      "End": "bbaf53ec05f3469cac3ac896d18da596",
+      "Id": "97825925faf14d4890b08f3184b11b01",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "4750a3bae24f48d3b909abce4ff33608",
+      "End": "af042c699cff4cd5b0764c50c76e4456",
+      "Id": "bb2e300262cc4a44aaa3960ae3706f81",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "4750a3bae24f48d3b909abce4ff33608",
+      "End": "78c464b782ff43b89949c71153085578",
+      "Id": "5acbb4b0465f4fe884424491769ad077",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "3c6833f66da14c51b440ee4883907e38",
+      "End": "44657f72510e4dcdac0d6362d451ede5",
+      "Id": "bc25adfbd540420eb026cc2858320e8e",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "ad72be15b1224e0c9df7f43b491c6d35",
+      "End": "154e9e21d59049d8b2498f7b87a65a30",
+      "Id": "9da07156aa3748bbb8616a3a52813f7f",
+      "IsHidden": "False"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Author": "None provided",
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": false,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "3.3.0.6316",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "_Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "ConnectorPins": [],
+    "NodeViews": [
+      {
+        "Id": "a520f5bc46ce4ce1a8fc20221f8e2c49",
+        "Name": "Output",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 4765.195807937182,
+        "Y": 488.0
+      },
+      {
+        "Id": "a5144e1bc96b461191954171e37b4346",
+        "Name": "Output",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 4786.880249049561,
+        "Y": 914.4842614572419
+      },
+      {
+        "Id": "c7157811f7104cab961abe937e3de4ad",
+        "Name": "Surface.Difference",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 4208.042815627401,
+        "Y": 916.6299443105349
+      },
+      {
+        "Id": "716073246ccd44b28efcae32e1d6df93",
+        "Name": "Surface.ByPatch",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 3746.520508446611,
+        "Y": 820.039769029649
+      },
+      {
+        "Id": "70a9284638514409b9e04b42c7d53ae9",
+        "Name": "Python Script",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 3202.869395059931,
+        "Y": 815.7844600886431
+      },
+      {
+        "Id": "fd47566937cb4c35b4498a78e5047aa3",
+        "Name": "Surface.ByPatch",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 3743.834972958981,
+        "Y": 590.6821627840025
+      },
+      {
+        "Id": "1753f01795e4402c906fd7469ff3ae0b",
+        "Name": "Python Script",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 2739.441400127925,
+        "Y": 654.9864594391343
+      },
+      {
+        "Id": "54aa45ccd9aa41089c3ca98e7e7af006",
+        "Name": "Output",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 4782.81257937876,
+        "Y": 1206.6442901371959
+      },
+      {
+        "Id": "9290c0f4dfb9473a9fe416c2c6100a5e",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 2042.564060863938,
+        "Y": 1252.3004440959319
+      },
+      {
+        "Id": "7cf4adbe0e504741b41293b577f9de0e",
+        "Name": "Input",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 927.078305018508,
+        "Y": 522.1464705181352
+      },
+      {
+        "Id": "f69a53fe19b046abad1da3ea4681c5bc",
+        "Name": "Input",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 924.0,
+        "Y": 738.8645796744561
+      },
+      {
+        "Id": "05a3cdc41bfb4b029cf171bf7246e83e",
+        "Name": "Input",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 940.273093384797,
+        "Y": 919.5815607368829
+      },
+      {
+        "Id": "15e9df5ba65b43aaaf327968f772d341",
+        "Name": "Input",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 946.1086082123151,
+        "Y": 1253.9265059033569
+      },
+      {
+        "Id": "bc47af5a39434ccb904c2fc8ba8d4577",
+        "Name": "Input",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 938.134798363373,
+        "Y": 1515.0069389466319
+      }
+    ],
+    "Annotations": [
+      {
+        "Id": "b875f883905f42e99541bf6e31615211",
+        "Title": "Ouputs",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "a520f5bc46ce4ce1a8fc20221f8e2c49",
+          "a5144e1bc96b461191954171e37b4346",
+          "54aa45ccd9aa41089c3ca98e7e7af006"
+        ],
+        "HasNestedGroups": false,
+        "Left": 4755.195807937182,
+        "Top": 415.0,
+        "Width": 781.6844411123793,
+        "Height": 933.1442901371959,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 488.0,
+        "InitialHeight": 890.1442901371959,
+        "TextblockHeight": 63.0,
+        "Background": "#FFFF7BAC"
+      },
+      {
+        "Id": "bd6a5f4885a149909464250f3a9c11cd",
+        "Title": "Create internal parking area and perimeter roadway surfaces.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "716073246ccd44b28efcae32e1d6df93",
+          "70a9284638514409b9e04b42c7d53ae9",
+          "c7157811f7104cab961abe937e3de4ad",
+          "1753f01795e4402c906fd7469ff3ae0b",
+          "9290c0f4dfb9473a9fe416c2c6100a5e",
+          "fd47566937cb4c35b4498a78e5047aa3",
+          "a908366711d94bcca6c109bed845f9ee"
+        ],
+        "HasNestedGroups": false,
+        "Left": 2032.564060863938,
+        "Top": 459.18216278400246,
+        "Width": 2402.9787547634633,
+        "Height": 967.1182813119294,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 532.1821627840025,
+        "InitialHeight": 989.6182813119294,
+        "TextblockHeight": 63.0,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "8ca97fd4ea59445e8020f99acd968fa8",
+        "Title": "Inputs",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "7cf4adbe0e504741b41293b577f9de0e",
+          "f69a53fe19b046abad1da3ea4681c5bc",
+          "05a3cdc41bfb4b029cf171bf7246e83e",
+          "15e9df5ba65b43aaaf327968f772d341",
+          "bc47af5a39434ccb904c2fc8ba8d4577"
+        ],
+        "HasNestedGroups": false,
+        "Left": 914.0,
+        "Top": 449.1464705181352,
+        "Width": 717.078305018508,
+        "Height": 1207.3604684284967,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 522.1464705181352,
+        "InitialHeight": 1164.3604684284967,
+        "TextblockHeight": 63.0,
+        "Background": "#FF848484"
+      },
+      {
+        "Id": "b3029b6c125e42adbc91b32de8bd59bd",
+        "Title": "Create the perimeter roadway surface.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": 4204.042815627401,
+        "Top": 866.1299443105349,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "c7157811f7104cab961abe937e3de4ad"
+      },
+      {
+        "Id": "a908366711d94bcca6c109bed845f9ee",
+        "Title": "Create the full parking layout surface.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": 3755.334972958981,
+        "Top": 540.1821627840025,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "fd47566937cb4c35b4498a78e5047aa3"
+      },
+      {
+        "Id": "bf3c5e55197440df9cdd59f24cb6bb3c",
+        "Title": "Create the internal parking surface.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": 3764.270508446611,
+        "Top": 769.539769029649,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "716073246ccd44b28efcae32e1d6df93"
+      },
+      {
+        "Id": "99f3b993fbe343c68d91a44ffeffbeec",
+        "Title": "Fillet (round) the convex corners of the internal parking surface with the vehicle turning radii parameter. Return the original polycurve if the fillet cannot be achieved.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": 3143.119395059931,
+        "Top": 722.2844600886431,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "70a9284638514409b9e04b42c7d53ae9"
+      },
+      {
+        "Id": "79cedf1944674acdb0f017a3c6350a52",
+        "Title": "Offset the perimeter boundary to create the internal surface for the internal parking spots. Use a while loop to keep one single curve loop if the user offset results in multiple loops.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": 2677.191400127925,
+        "Top": 561.4864594391343,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "1753f01795e4402c906fd7469ff3ae0b"
+      },
+      {
+        "Id": "3c1103b7dbb0425ca20af5177fd35334",
+        "Title": "Here we add the aisle width and parking bay length to offset the external boundary of the parking area.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": 2144.564060863938,
+        "Top": 1187.3004440959319,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "9290c0f4dfb9473a9fe416c2c6100a5e"
+      }
+    ],
+    "X": -345.15928006714427,
+    "Y": -174.63431639983355,
+    "Zoom": 0.8082198663930292
+  }
+}

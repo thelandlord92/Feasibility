@@ -1,0 +1,400 @@
+{
+  "Uuid": "72795d98-5b53-400c-a8cb-d90d2ab5cec1",
+  "IsCustomNode": true,
+  "Category": "Feasibility.Parking",
+  "Description": "To project selected route curves onto a Revit plane. ",
+  "Name": "ProjectRouteCurvesOntoPlane",
+  "ElementResolver": {
+    "ResolutionMap": {
+      "Revit.Elements.Level": {
+        "Key": "Revit.Elements.Level",
+        "Value": "RevitNodes.dll"
+      }
+    }
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "2d0914a2884c4976854ded55c741b8e1",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "012663fed1914ed0900714205eb5f8aa",
+          "Name": "curve",
+          "Description": "Autodesk.DesignScript.Geometry.Curve",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b0b75564ae6649db9f5641dd036e85b7",
+          "Name": "plane",
+          "Description": "The plane on which to pull the curve\n\nPlane",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "850b1e19ad684ab0a313e20ed00c41a2",
+          "Name": "Curve",
+          "Description": "A Curve on the Plane",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Curve.PullOntoPlane@Autodesk.DesignScript.Geometry.Plane",
+      "Replication": "Auto",
+      "Description": "Create a curve by pulling onto plane\n\nCurve.PullOntoPlane (plane: Plane): Curve"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "#Alban de Chasteigner 2020\n#twitter : @geniusloci_bim\n#geniusloci.bim@gmail.com\n\nimport clr\nclr.AddReference('RevitAPI')\nimport Autodesk\nfrom Autodesk.Revit.DB import *\n\nclr.AddReference('RevitNodes')\nimport Revit\nclr.ImportExtensions(Revit.GeometryConversion)\n\nlevels = UnwrapElement(IN[0]) if isinstance(IN[0],list) else [UnwrapElement(IN[0])]\n\t\nplanes = []\nfor level in levels:\n\telev=level.ProjectElevation\n\tpoint=XYZ(0,0,elev)\n\tplanes.append(Plane.CreateByNormalAndOrigin(XYZ.BasisZ,point).ToPlane())\n\n\t\nif isinstance(IN[0], (list)): OUT = planes\nelse: OUT = planes[0]",
+      "Engine": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "7ab96c4628ce4b91bea643842519d86c",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "14e73bb9caa847dd93f188a4ad4a1402",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "0059bbf2d77845dfb0fa99a180dfdb6d",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded Python script."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "Parameter": {
+        "Name": "axialRouteCurves",
+        "TypeName": "var",
+        "TypeRank": -1,
+        "DefaultValue": null,
+        "Description": "lines to define the driving routes of the internal parking area."
+      },
+      "Id": "9a5d3e26251843bcb19880210a81572e",
+      "NodeType": "InputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "b47b9c4e31d54bf684323c0893d644d5",
+          "Name": "",
+          "Description": "Input Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "Parameter": {
+        "Name": "siteLevel",
+        "TypeName": "Revit.Elements.Level",
+        "TypeRank": 0,
+        "DefaultValue": null,
+        "Description": "the site base level."
+      },
+      "Id": "ee46bf7b29d641b78837b4f672a47f07",
+      "NodeType": "InputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "a6c2fa790c9d41b0b51cf3d9de553618",
+          "Name": "",
+          "Description": "Input Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Output, DynamoCore",
+      "ElementResolver": null,
+      "Symbol": "//projected lines to define the driving routes of the internal parking area.\r\nprojectedAxialRouteCurves",
+      "Id": "10e63c6979154d23b8a96f662f238639",
+      "NodeType": "OutputNode",
+      "Inputs": [
+        {
+          "Id": "ac118966171340fb94fa858d3bd0337c",
+          "Name": "",
+          "Description": "Output Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "A function output, use with custom nodes"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Output, DynamoCore",
+      "ElementResolver": null,
+      "Symbol": "//the level's plane.\r\nPlane",
+      "Id": "77287b3354024456b514822ab1228151",
+      "NodeType": "OutputNode",
+      "Inputs": [
+        {
+          "Id": "7ef732299efc4a8c85ff8aad99e5be84",
+          "Name": "",
+          "Description": "Output Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "A function output, use with custom nodes"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "850b1e19ad684ab0a313e20ed00c41a2",
+      "End": "ac118966171340fb94fa858d3bd0337c",
+      "Id": "e42a3b6c15b54c228673f335d55a7b07",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "0059bbf2d77845dfb0fa99a180dfdb6d",
+      "End": "b0b75564ae6649db9f5641dd036e85b7",
+      "Id": "a4ee36eeda88484690fc63c7c2bf9c40",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "0059bbf2d77845dfb0fa99a180dfdb6d",
+      "End": "7ef732299efc4a8c85ff8aad99e5be84",
+      "Id": "81b4fc9d0b7d42ff9e0b73c436495cc6",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "b47b9c4e31d54bf684323c0893d644d5",
+      "End": "012663fed1914ed0900714205eb5f8aa",
+      "Id": "cde5f94daa75481fb7d4e2cf6dd2f588",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "a6c2fa790c9d41b0b51cf3d9de553618",
+      "End": "14e73bb9caa847dd93f188a4ad4a1402",
+      "Id": "e898413b03da4d91843b96ff08534619",
+      "IsHidden": "False"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Author": "None provided",
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": false,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "3.3.0.6316",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "_Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "ConnectorPins": [],
+    "NodeViews": [
+      {
+        "Id": "2d0914a2884c4976854ded55c741b8e1",
+        "Name": "Curve.PullOntoPlane",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 597.7163251376805,
+        "Y": -15.5
+      },
+      {
+        "Id": "7ab96c4628ce4b91bea643842519d86c",
+        "Name": "Level Plane",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 262.5,
+        "Y": 240.6984668263898
+      },
+      {
+        "Id": "9a5d3e26251843bcb19880210a81572e",
+        "Name": "Input",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -556.5,
+        "Y": -14.25
+      },
+      {
+        "Id": "ee46bf7b29d641b78837b4f672a47f07",
+        "Name": "Input",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -555.9692645663614,
+        "Y": 242.61674451819778
+      },
+      {
+        "Id": "10e63c6979154d23b8a96f662f238639",
+        "Name": "Output",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1004.4510532400259,
+        "Y": -16.32393639083284
+      },
+      {
+        "Id": "77287b3354024456b514822ab1228151",
+        "Name": "Output",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1022.1934486719701,
+        "Y": 234.95597845552845
+      }
+    ],
+    "Annotations": [
+      {
+        "Id": "77cb99eb4c38471083b4c3c01a6c4315",
+        "Title": "Project the inputs axial route curves onto a plane.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "2d0914a2884c4976854ded55c741b8e1",
+          "7ab96c4628ce4b91bea643842519d86c"
+        ],
+        "HasNestedGroups": false,
+        "Left": 252.5,
+        "Top": -132.0,
+        "Width": 581.2163251376805,
+        "Height": 504.6984668263898,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": -15.5,
+        "InitialHeight": 410.562184193476,
+        "TextblockHeight": 106.5,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "1c405a6828834d94b287e925411d0ba4",
+        "Title": "Inputs.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "9a5d3e26251843bcb19880210a81572e",
+          "ee46bf7b29d641b78837b4f672a47f07"
+        ],
+        "HasNestedGroups": false,
+        "Left": -566.5,
+        "Top": -87.25,
+        "Width": 644.0,
+        "Height": 471.3667445181978,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": -14.25,
+        "InitialHeight": 422.6018047481391,
+        "TextblockHeight": 63.0,
+        "Background": "#FF848484"
+      },
+      {
+        "Id": "f274880f12224653bdde002d4655ece3",
+        "Title": "Outputs.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "10e63c6979154d23b8a96f662f238639",
+          "77287b3354024456b514822ab1228151"
+        ],
+        "HasNestedGroups": false,
+        "Left": 994.4510532400259,
+        "Top": -89.32393639083284,
+        "Width": 699.5,
+        "Height": 465.7799148463613,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": -16.32393639083284,
+        "InitialHeight": 416.2799148463613,
+        "TextblockHeight": 63.0,
+        "Background": "#FFFF7BAC"
+      },
+      {
+        "Id": "e50b1bd1d323426b9dbbc1754af979ae",
+        "Title": "Get the level's plane. \nFrom the Genius Loci package.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": 251.5,
+        "Top": 127.69846682638979,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "7ab96c4628ce4b91bea643842519d86c"
+      }
+    ],
+    "X": 747.7322517591083,
+    "Y": 530.8979597906566,
+    "Zoom": 0.7658293928515519
+  }
+}

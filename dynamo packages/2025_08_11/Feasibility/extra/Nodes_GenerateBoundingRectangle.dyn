@@ -1,0 +1,690 @@
+{
+  "Uuid": "a772f2f7-33a0-48d2-81db-88f0c1499d1b",
+  "IsCustomNode": false,
+  "Description": "",
+  "Name": "Nodes_GenerateBoundingRectangle",
+  "ElementResolver": {
+    "ResolutionMap": {
+      "Autodesk.DesignScript.Geometry.Surface": {
+        "Key": "Autodesk.DesignScript.Geometry.Surface",
+        "Value": "ProtoGeometry.dll"
+      },
+      "Level": {
+        "Key": "Revit.Elements.Level",
+        "Value": "RevitNodes.dll"
+      },
+      "PolyCurve": {
+        "Key": "Autodesk.DesignScript.Geometry.PolyCurve",
+        "Value": "ProtoGeometry.dll"
+      },
+      "Revit.Elements.Level": {
+        "Key": "Revit.Elements.Level",
+        "Value": "RevitNodes.dll"
+      },
+      "Elements.Element": {
+        "Key": "Revit.Elements.Element",
+        "Value": "RevitNodes.dll"
+      },
+      "Color": {
+        "Key": "DSCore.Color",
+        "Value": "DSCoreNodes.dll"
+      }
+    }
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Nodes.DSFaceSelection, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [
+        "3a59d878-4018-4710-a70c-15210e360051-00072fbb:0:SURFACE"
+      ],
+      "Id": "de2b66db438e4af98545a7f57b68e27c",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "e5031833fed14d5c904cefa98599d8a5",
+          "Name": "Surface",
+          "Description": "The selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Select a face."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "26627161cfa9470c9fc3d42a3b4abc40",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "a94bc4342a3d468fa7591a958f71ef05",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "2;"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "2c20a50851e14ab1b6f8a31fcefb7961",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [
+        {
+          "Id": "dd388f7a7e4645d3a789510df1aad699",
+          "Name": "perimeterRoadwaySurface",
+          "Description": "perimeterRoadwaySurface",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "01d58e1502af439b8f8ab865615fc70c",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "perimeterRoadwaySurface;"
+    },
+    {
+      "ConcreteType": "DSRevitNodesUI.Levels, DSRevitNodesUI",
+      "SelectedIndex": 0,
+      "SelectedString": "Ground Level",
+      "Id": "ca7741ebc47641f196fa2bde13fca810",
+      "NodeType": "ExtensionNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "234e7782b7304c14ac6aca4ef714c03e",
+          "Name": "Levels",
+          "Description": "The selected Levels",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Select a level in the active document"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "ffe9430a651c4942a2f30f1250d52726",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [
+        {
+          "Id": "c94048e2ef954f51b176600c2646ba63",
+          "Name": "internalBoundaryCurve",
+          "Description": "internalBoundaryCurve",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "8a985140579c4fceb8c95a6ef5da7cc6",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "internalBoundaryCurve;"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 360.0,
+      "MinimumValue": 0.0,
+      "StepValue": 1.0,
+      "Id": "6ed6bbdf0c2b45ce95d7321033d7ad09",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "e827c4c599ad4a20a3185275e3a9a6c3",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Produces numeric values",
+      "InputValue": 127.0
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "58de6759-aa80-4c7f-a558-f44049a68a6f",
+      "FunctionType": "Graph",
+      "Id": "602ef9a3240c413a9a06e68e5226ddea",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "a4d293740b734548a4731fb8921e1999",
+          "Name": "boundarySurface",
+          "Description": "the input surface defining the parking area.\n\nSurface",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "78a2d20e20064a9498198aa37daea869",
+          "Name": "siteLevel",
+          "Description": "the site base level.\n\nLevel",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "ba42bf0a482e42c4aa040bab7ee670bb",
+          "Name": "PolyCurve",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "fa200e323d4c4a90ba042775ded999ee",
+          "Name": "Plane",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "To project the boundaries developed from selected faces onto a plane. "
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "ba3bfc1e-6f50-4f1b-a821-239e7af9349a",
+      "FunctionType": "Graph",
+      "Id": "b851c67012894d99b83d8e37e717d390",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "7d9274bd6459449c8af348386eb5da8b",
+          "Name": "concaveCornerRadius",
+          "Description": "The vehicle turning radius at the concave corners of the perimeter aisle.\n\ndouble\nDefault value : 3.5",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "210451e2e6a54139af6ce55783578e60",
+          "Name": "convexCornerRadius",
+          "Description": "The vehicle turning radius at the convex corners of the perimeter aisle.\n\ndouble\nDefault value : 5",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e96f2bfbed2840ff9473b98297709291",
+          "Name": "boundaryCurve",
+          "Description": "a polycurve representing the boundary of the site area.\n\nPolyCurve",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "8df5ae068d0d47e2a9e8563420e02c0d",
+          "Name": "bayLength",
+          "Description": "the length of the vehicular parking bays.\n\ndouble\nDefault value : 5",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "146c17d520174868961b8404c01257c2",
+          "Name": "perimeterAisleWidth",
+          "Description": "the width of the perimeter aisle all round the parking layout.\n\ndouble\nDefault value : 7",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "317f3308e6dc4fc3aaadb5e1349bfe71",
+          "Name": "internalParkingSurface",
+          "Description": "the parking lot surface minus the depth of the perimeter parking bays and perimeter aisle.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "bd7aebc7102f45d8aa56b544e6202d9e",
+          "Name": "perimeterRoadwaySurface",
+          "Description": "a surface covering the length of the perimeter spots and the width of the perimeter aisle.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "444be537997c40d6a55c9eb8aa507c24",
+          "Name": "internalBoundaryCurve",
+          "Description": "the boundary curve of the internal parking area surface.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Creates the internal parking and roadway surfaces. "
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "023838c1-9305-4b17-839c-6f579dcc52b1",
+      "FunctionType": "Graph",
+      "Id": "815b379b97724b17a56b34f61014220e",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "012c8412741d4b95af0dfe1bdc72cb79",
+          "Name": "degrees",
+          "Description": "the degree of rotation to apply to the bounding rectangle\n\ndouble\nDefault value : 0",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d1794b6c74fe4d2b8f13c1173c274f85",
+          "Name": "closedCurve",
+          "Description": "supply the closed curve to be encapsulated by the rectangle\n\nvar",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "067df506dea5439ea956460a35ce68fb",
+          "Name": "Rectangle",
+          "Description": "the generated bounding rectangle",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f80433eae4bf4c759f75cafb2c1adbbd",
+          "Name": "length",
+          "Description": "the length of the rectangle",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "7bc05f060b7745a2836cc66ecdeec0d5",
+          "Name": "width",
+          "Description": "the width of the rectangle",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Generates a rectangle around a planar closed curve, ensuring the curve is completely encapsulated. "
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "e5031833fed14d5c904cefa98599d8a5",
+      "End": "a4d293740b734548a4731fb8921e1999",
+      "Id": "265a4951cb0c47cb92c349627b2fa285",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "a94bc4342a3d468fa7591a958f71ef05",
+      "End": "146c17d520174868961b8404c01257c2",
+      "Id": "1654f1e161f1485ca15d9668b6315a5a",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "234e7782b7304c14ac6aca4ef714c03e",
+      "End": "78a2d20e20064a9498198aa37daea869",
+      "Id": "e2130467f9f4422fbf7f90977ff31047",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "e827c4c599ad4a20a3185275e3a9a6c3",
+      "End": "012c8412741d4b95af0dfe1bdc72cb79",
+      "Id": "e46d1b1bca72451ca52293c1ebec415b",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "ba42bf0a482e42c4aa040bab7ee670bb",
+      "End": "e96f2bfbed2840ff9473b98297709291",
+      "Id": "3eb9a6a61139444b90d4cdf6b96af568",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "bd7aebc7102f45d8aa56b544e6202d9e",
+      "End": "dd388f7a7e4645d3a789510df1aad699",
+      "Id": "36a64099584f40d88f6928df51776265",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "444be537997c40d6a55c9eb8aa507c24",
+      "End": "c94048e2ef954f51b176600c2646ba63",
+      "Id": "8084c31c0fdd43d0994cf40bdd03d731",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "444be537997c40d6a55c9eb8aa507c24",
+      "End": "d1794b6c74fe4d2b8f13c1173c274f85",
+      "Id": "5bb4def5180d4643ad360c9c4f0ba227",
+      "IsHidden": "False"
+    }
+  ],
+  "Dependencies": [
+    "58de6759-aa80-4c7f-a558-f44049a68a6f",
+    "ba3bfc1e-6f50-4f1b-a821-239e7af9349a",
+    "023838c1-9305-4b17-839c-6f579dcc52b1"
+  ],
+  "NodeLibraryDependencies": [
+    {
+      "Name": "ProjectBoundaryOntoPlane.dyf",
+      "ReferenceType": "DYFFile",
+      "Nodes": [
+        "602ef9a3240c413a9a06e68e5226ddea"
+      ]
+    },
+    {
+      "Name": "InternalandRoadwaySurfaces.dyf",
+      "ReferenceType": "DYFFile",
+      "Nodes": [
+        "b851c67012894d99b83d8e37e717d390"
+      ]
+    },
+    {
+      "Name": "GenerateBoundingRectangle.dyf",
+      "ReferenceType": "DYFFile",
+      "Nodes": [
+        "815b379b97724b17a56b34f61014220e"
+      ]
+    }
+  ],
+  "EnableLegacyPolyCurveBehavior": true,
+  "Thumbnail": "",
+  "GraphDocumentationURL": null,
+  "ExtensionWorkspaceData": [
+    {
+      "ExtensionGuid": "28992e1d-abb9-417f-8b1b-05e053bee670",
+      "Name": "Properties",
+      "Version": "2.17",
+      "Data": {}
+    },
+    {
+      "ExtensionGuid": "DFBD9CC0-DB40-457A-939E-8C8555555A9D",
+      "Name": "Generative Design",
+      "Version": "4.0",
+      "Data": {}
+    }
+  ],
+  "Author": "",
+  "Linting": {
+    "activeLinter": "None",
+    "activeLinterId": "7b75fb44-43fd-4631-a878-29f4d5d8399a",
+    "warningCount": 0,
+    "errorCount": 0
+  },
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "3.3.0.6316",
+      "RunType": "Automatic",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "_Background Preview",
+      "EyeX": -79.31404876708984,
+      "EyeY": 165.7667694091797,
+      "EyeZ": -280.2586669921875,
+      "LookX": 36.220420837402344,
+      "LookY": -190.14393615722656,
+      "LookZ": 155.50680541992188,
+      "UpX": 0.16967785358428955,
+      "UpY": 0.6281194090843201,
+      "UpZ": 0.7285038232803345
+    },
+    "ConnectorPins": [],
+    "NodeViews": [
+      {
+        "Id": "de2b66db438e4af98545a7f57b68e27c",
+        "Name": "Select Face",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": -2427.360695132525,
+        "Y": -256.51464869346967
+      },
+      {
+        "Id": "26627161cfa9470c9fc3d42a3b4abc40",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -1703.7270607967373,
+        "Y": -49.96189122087321
+      },
+      {
+        "Id": "2c20a50851e14ab1b6f8a31fcefb7961",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -688.314040863054,
+        "Y": -437.3379661228387
+      },
+      {
+        "Id": "ca7741ebc47641f196fa2bde13fca810",
+        "Name": "Levels",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -2431.8068465612323,
+        "Y": -43.541991757450106
+      },
+      {
+        "Id": "ffe9430a651c4942a2f30f1250d52726",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -681.9087583133878,
+        "Y": -250.8279223191961
+      },
+      {
+        "Id": "6ed6bbdf0c2b45ce95d7321033d7ad09",
+        "Name": "Number Slider",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -2541.259946066362,
+        "Y": 238.82831880533718
+      },
+      {
+        "Id": "602ef9a3240c413a9a06e68e5226ddea",
+        "Name": "ProjectBoundaryOntoPlane",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -1839.4463675549314,
+        "Y": -255.53559873076313
+      },
+      {
+        "Id": "b851c67012894d99b83d8e37e717d390",
+        "Name": "InternalandRoadwaySurfaces",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": -1354.1214867034453,
+        "Y": -322.4135001263644
+      },
+      {
+        "Id": "815b379b97724b17a56b34f61014220e",
+        "Name": "GenerateBoundingRectangle",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -661.9692217587265,
+        "Y": 228.13011630824883
+      }
+    ],
+    "Annotations": [
+      {
+        "Id": "90b8bcd4b6b94dceb4f6c4e580027dda",
+        "Title": "Inputs",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "de2b66db438e4af98545a7f57b68e27c",
+          "ca7741ebc47641f196fa2bde13fca810",
+          "6ed6bbdf0c2b45ce95d7321033d7ad09"
+        ],
+        "HasNestedGroups": false,
+        "Left": -2551.259946066362,
+        "Top": -329.51464869346967,
+        "Width": 377.3992509338368,
+        "Height": 700.3429674988068,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": -256.51464869346967,
+        "InitialHeight": 640.3429674988068,
+        "TextblockHeight": 63.0,
+        "Background": "#FF848484"
+      },
+      {
+        "Id": "50347970ff9849e98f73a6d5f682c9f9",
+        "Title": "Project the parking area boundary curve onto a level.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "602ef9a3240c413a9a06e68e5226ddea"
+        ],
+        "HasNestedGroups": false,
+        "Left": -1849.4463675549314,
+        "Top": -458.5355987307631,
+        "Width": 306.0,
+        "Height": 370.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": -255.53559873076313,
+        "InitialHeight": 145.0,
+        "TextblockHeight": 193.0,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "18a68d6b4cb24155ae5d002e39cae5a3",
+        "Title": "Internal and perimeter roadway surfaces.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "b851c67012894d99b83d8e37e717d390"
+        ],
+        "HasNestedGroups": false,
+        "Left": -1364.1214867034453,
+        "Top": -438.9135001263644,
+        "Width": 423.5,
+        "Height": 395.5,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": -322.4135001263644,
+        "InitialHeight": 145.0,
+        "TextblockHeight": 106.5,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "098b5d9eb8bb44af8ee383bc375be5c5",
+        "Title": "Create the bounding rectangle for the internal parking area.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "815b379b97724b17a56b34f61014220e"
+        ],
+        "HasNestedGroups": false,
+        "Left": -671.9692217587265,
+        "Top": -17.86988369175117,
+        "Width": 308.0,
+        "Height": 448.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 228.13011630824883,
+        "InitialHeight": 145.0,
+        "TextblockHeight": 236.0,
+        "Background": "#FFC1D676"
+      }
+    ],
+    "X": 816.3700631168056,
+    "Y": 341.2229905546309,
+    "Zoom": 0.2981531074595044
+  }
+}
