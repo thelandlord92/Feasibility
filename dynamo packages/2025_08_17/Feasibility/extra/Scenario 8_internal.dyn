@@ -1,0 +1,4587 @@
+{
+  "Uuid": "a772f2f7-33a0-48d2-81db-88f0c1499d1b",
+  "IsCustomNode": false,
+  "Description": "",
+  "Name": "Scenario 3_internal",
+  "ElementResolver": {
+    "ResolutionMap": {
+      "Autodesk.DesignScript.Geometry.Surface": {
+        "Key": "Autodesk.DesignScript.Geometry.Surface",
+        "Value": "ProtoGeometry.dll"
+      },
+      "Level": {
+        "Key": "Revit.Elements.Level",
+        "Value": "RevitNodes.dll"
+      },
+      "PolyCurve": {
+        "Key": "Autodesk.DesignScript.Geometry.PolyCurve",
+        "Value": "ProtoGeometry.dll"
+      },
+      "Revit.Elements.Level": {
+        "Key": "Revit.Elements.Level",
+        "Value": "RevitNodes.dll"
+      },
+      "Elements.Element": {
+        "Key": "Revit.Elements.Element",
+        "Value": "RevitNodes.dll"
+      },
+      "Color": {
+        "Key": "DSCore.Color",
+        "Value": "DSCoreNodes.dll"
+      }
+    }
+  },
+  "Inputs": [
+    {
+      "Id": "7138470ec0bd4edf9ea075e5bb3da842",
+      "Name": "IN_Select Parking Level",
+      "Type": "selection",
+      "Type2": "dropdownSelection",
+      "Value": "Level 0",
+      "Description": "Select a level in the active document",
+      "SelectedIndex": 1
+    },
+    {
+      "Id": "3bb3d4bef48f4250a08c68391529c390",
+      "Name": "IN_Select Parking Region",
+      "Type": "selection",
+      "Type2": "hostSelection",
+      "Value": "3a59d878-4018-4710-a70c-15210e360051-00072fc6:0:SURFACE",
+      "Description": "Select a face."
+    },
+    {
+      "Id": "18d07be8f8c449189fbf6753675ffbf8",
+      "Name": "IN_Bay Setout Line Rotation.",
+      "Type": "number",
+      "Type2": "number",
+      "Value": "0",
+      "MaximumValue": 360.0,
+      "MinimumValue": 0.0,
+      "StepValue": 1.0,
+      "NumberType": "Double",
+      "Description": "Produces numeric values"
+    },
+    {
+      "Id": "bc8a17cb54f54845b26fee0c38f640c8",
+      "Name": "IN_Aisle Type Selector",
+      "Type": "number",
+      "Type2": "number",
+      "Value": "2",
+      "MaximumValue": 2.0,
+      "MinimumValue": 1.0,
+      "StepValue": 1.0,
+      "NumberType": "Integer",
+      "Description": "Produces integer values"
+    },
+    {
+      "Id": "6207019e55e2462e9864b0445731f75c",
+      "Name": "IN_Perimeter Aisle Width",
+      "Type": "number",
+      "Type2": "number",
+      "Value": "7",
+      "MaximumValue": 10.0,
+      "MinimumValue": 7.0,
+      "StepValue": 0.1,
+      "NumberType": "Double",
+      "Description": "Produces numeric values"
+    },
+    {
+      "Id": "0f623abf856e4c359d4ffbffd3c40cf3",
+      "Name": "IN_Internal Turning Radius",
+      "Type": "number",
+      "Type2": "number",
+      "Value": "3.5",
+      "MaximumValue": 10.0,
+      "MinimumValue": 3.5,
+      "StepValue": 0.1,
+      "NumberType": "Double",
+      "Description": "Produces numeric values"
+    },
+    {
+      "Id": "133a8183e4054f5e90172129316b2b65",
+      "Name": "IN_External Turning Radius",
+      "Type": "number",
+      "Type2": "number",
+      "Value": "5",
+      "MaximumValue": 10.0,
+      "MinimumValue": 5.0,
+      "StepValue": 0.1,
+      "NumberType": "Double",
+      "Description": "Produces numeric values"
+    },
+    {
+      "Id": "cbe206fab7fd412995ca6c2bd07c3b24",
+      "Name": "IN_Island Corner Radius",
+      "Type": "number",
+      "Type2": "number",
+      "Value": "1",
+      "MaximumValue": 5.0,
+      "MinimumValue": 0.0,
+      "StepValue": 0.1,
+      "NumberType": "Double",
+      "Description": "Produces numeric values"
+    },
+    {
+      "Id": "c2bea16f32a24c83a54560cc5c193014",
+      "Name": "IN_Parking Bay Width",
+      "Type": "number",
+      "Type2": "number",
+      "Value": "2.5",
+      "MaximumValue": 5.0,
+      "MinimumValue": 0.5,
+      "StepValue": 0.1,
+      "NumberType": "Double",
+      "Description": "Produces numeric values"
+    },
+    {
+      "Id": "5865f6db4e9449edbebdfe72021aaf47",
+      "Name": "IN_Parking Bay Length",
+      "Type": "number",
+      "Type2": "number",
+      "Value": "5",
+      "MaximumValue": 10.0,
+      "MinimumValue": 0.5,
+      "StepValue": 0.1,
+      "NumberType": "Double",
+      "Description": "Produces numeric values"
+    },
+    {
+      "Id": "4764e2d64c2e424192f2267e8d701d84",
+      "Name": "IN_Parking Island Width",
+      "Type": "number",
+      "Type2": "number",
+      "Value": "1",
+      "MaximumValue": 2.0,
+      "MinimumValue": 0.5,
+      "StepValue": 0.1,
+      "NumberType": "Double",
+      "Description": "Produces numeric values"
+    },
+    {
+      "Id": "97ed2d8914a249d8962430a30b73b7f1",
+      "Name": "IN_Parking Angle Selector",
+      "Type": "number",
+      "Type2": "number",
+      "Value": "4",
+      "MaximumValue": 4.0,
+      "MinimumValue": 1.0,
+      "StepValue": 1.0,
+      "NumberType": "Integer",
+      "Description": "Produces integer values"
+    },
+    {
+      "Id": "eef2aa5d2efb4e379b1d3b316f98f638",
+      "Name": "IN_Parking Pattern Selector",
+      "Type": "number",
+      "Type2": "number",
+      "Value": "1",
+      "MaximumValue": 4.0,
+      "MinimumValue": 1.0,
+      "StepValue": 1.0,
+      "NumberType": "Integer",
+      "Description": "Produces integer values"
+    },
+    {
+      "Id": "2138481ed1824f54b331133d791adabe",
+      "Name": "IN_Select Parking Family Type",
+      "Type": "selection",
+      "Type2": "dropdownSelection",
+      "Value": "Parking Bay:Parking Bay",
+      "Description": "All family types available in the document.",
+      "SelectedIndex": 118
+    },
+    {
+      "Id": "847d2dfe3d3b4d15b6bb820d193b1f06",
+      "Name": "IN_Select Island Floor Type",
+      "Type": "selection",
+      "Type2": "dropdownSelection",
+      "Value": "Floor-Upper_160mmConc-CorusComFlor51",
+      "Description": "All floor types available in the document.",
+      "SelectedIndex": 3
+    },
+    {
+      "Id": "e0092b151ab64e969698ec630d59f2bc",
+      "Name": "IN_Parking Island Height",
+      "Type": "number",
+      "Type2": "number",
+      "Value": "0.1",
+      "MaximumValue": 0.2,
+      "MinimumValue": 0.1,
+      "StepValue": 0.01,
+      "NumberType": "Double",
+      "Description": "Produces numeric values"
+    },
+    {
+      "Id": "c5f05fc9cf014f2aa050e0d05f984336",
+      "Name": "IN_One Way Aisle Width",
+      "Type": "number",
+      "Type2": "number",
+      "Value": "4.4",
+      "MaximumValue": 10.0,
+      "MinimumValue": 4.0,
+      "StepValue": 0.1,
+      "NumberType": "Double",
+      "Description": "Produces numeric values"
+    },
+    {
+      "Id": "f741a5412cbe4187a4d68146a2d7ac50",
+      "Name": "IN_Two Way Aisle Width",
+      "Type": "number",
+      "Type2": "number",
+      "Value": "5.4",
+      "MaximumValue": 10.0,
+      "MinimumValue": 4.0,
+      "StepValue": 0.1,
+      "NumberType": "Double",
+      "Description": "Produces numeric values"
+    }
+  ],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "e2d24f7df9fe4039970df63677df1087",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "f32a3b8df21e48b0851878246007596e",
+          "Name": "closedCurve",
+          "Description": "Closed curve used as surface boundary\n\nCurve",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "a21e842e4ac5468aa490bab3bda95083",
+          "Name": "Surface",
+          "Description": "Surface created by patch",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Surface.ByPatch@Autodesk.DesignScript.Geometry.Curve",
+      "Replication": "Auto",
+      "Description": "Create a Surface by filling in the interior of a closed boundary defined by input Curves.\n\nSurface.ByPatch (closedCurve: Curve): Surface"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "f0431cbf69d14c5397fdcf5790aa69df",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "d40e61de537342cda56ac8e5b08d38f3",
+          "Name": "surface",
+          "Description": "Autodesk.DesignScript.Geometry.Surface",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "6270d55871ea445b93402cfea64e8e26",
+          "Name": "Curve[]",
+          "Description": "Curve[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Surface.PerimeterCurves",
+      "Replication": "Auto",
+      "Description": "Return all the boundary Curves of the Surface.\n\nSurface.PerimeterCurves ( ): Curve[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "df634474f254428e836e0eb9561b3df4",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "c953a8258c94487bb731cd7aff6c7edc",
+          "Name": "curves",
+          "Description": "Curves to join into polycurve\n\nCurve[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "06c8031048704f9483158eccfcf1b6ab",
+          "Name": "joinTolerance",
+          "Description": "Tolerance to determine size of gap allowed between curves to be joined\n\ndouble\nDefault value : 0.001",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0a19b07526a24863ab7f7d7db25bcdde",
+          "Name": "trimCurves",
+          "Description": "bool\nDefault value : false",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0941923f01604121bf8430ac2e5bd615",
+          "Name": "trimLength",
+          "Description": "double\nDefault value : 0",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "873fc18d707244ac80db64b34d88ea91",
+          "Name": "PolyCurve",
+          "Description": "Polycurve created by joined curves",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.PolyCurve.ByJoinedCurves@Autodesk.DesignScript.Geometry.Curve[],double,bool,double",
+      "Replication": "Auto",
+      "Description": "Make PolyCurve by joining curves. Flips curve as needed for connectivity. Choose a preferred join tolerance between 1e-6 and 1e-3 units.\n\nPolyCurve.ByJoinedCurves (curves: Curve[], joinTolerance: double = 0.001, trimCurves: bool = false, trimLength: double = 0): PolyCurve"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "78cbf531cee34381ad1d305af3ba0a66",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "aed7f4972e54473da15b67d3cd34da33",
+          "Name": "outlineCurves",
+          "Description": "Curve[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c64e9be46f454e90b44019074940f8bc",
+          "Name": "floorType",
+          "Description": "FloorType",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b3c3e44d8a274c4388ff49a70484e60a",
+          "Name": "level",
+          "Description": "Level",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "8a05ce24bd674e2697d9a9fafd9b2d6b",
+          "Name": "Floor",
+          "Description": "The floor",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Revit.Elements.Floor.ByOutlineTypeAndLevel@Autodesk.DesignScript.Geometry.Curve[],Revit.Elements.FloorType,Revit.Elements.Level",
+      "Replication": "Auto",
+      "Description": "Create a Revit Floor given its curve outline and Level\n\nFloor.ByOutlineTypeAndLevel (outlineCurves: Curve[], floorType: FloorType, level: Level): Floor"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "a02eb14cde9f4a9ca3cac3c54bb04ff1",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "0721561b22c3400b8ebf37bde7221535",
+          "Name": "element",
+          "Description": "Revit.Elements.Element",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0fbf18d203454279bee039674296dbe7",
+          "Name": "parameterName",
+          "Description": "The name of the parameter to set.\n\nstring",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "381cf301715748caa2f89cd8ea38837c",
+          "Name": "value",
+          "Description": "The value.\n\nvar",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "4985c26cfbc34517ba4cd890dd04f376",
+          "Name": "Element",
+          "Description": "Element",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Revit.Elements.Element.SetParameterByName@string,var",
+      "Replication": "Auto",
+      "Description": "Set one of the element's parameters.\n\nElement.SetParameterByName (parameterName: string, value: var): Element"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "ef9bb9746bcd438c9303d1f5b763d704",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "1a9bd13dfcca47eb88fbf8939826a4f1",
+          "Name": "polySurface",
+          "Description": "Autodesk.DesignScript.Geometry.PolySurface",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "bb7cec5ea3fa4f70881eba2874f13ce1",
+          "Name": "Surface[]",
+          "Description": "Surface[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.PolySurface.Surfaces",
+      "Replication": "Auto",
+      "Description": "Return new Surfaces representing the underlying Surfaces.\n\nPolySurface.Surfaces ( ): Surface[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "5db187b5fa2b48a7afcfe798f696c88c",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "8b462866bc5344e0b3c27a2911e45e84",
+          "Name": "geometry",
+          "Description": "The geometry to which you would like to apply color.\n\nGeometry",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "313e2739db1b49dab9204fdffc702cbf",
+          "Name": "color",
+          "Description": "The color.\n\nColor",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "225327a2c18846389e2055def0d929cc",
+          "Name": "GeometryColor",
+          "Description": "A Display object.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Modifiers.GeometryColor.ByGeometryColor@Autodesk.DesignScript.Geometry.Geometry,DSCore.Color",
+      "Replication": "Auto",
+      "Description": "Display geometry using a color.\n\nGeometryColor.ByGeometryColor (geometry: Geometry, color: Color): GeometryColor"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "2f656bf2315b4f00819ff041a1faed8b",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "1e1cf303b83c4804a571b1539abc48e7",
+          "Name": "surfaces",
+          "Description": "Surfaces to join into polysurface\n\nSurface[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "0b31270346be4e26a72836a5502a20de",
+          "Name": "PolySurface",
+          "Description": "PolySurface",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.PolySurface.ByJoinedSurfaces@Autodesk.DesignScript.Geometry.Surface[]",
+      "Replication": "Auto",
+      "Description": "Make Polysurface by joining surfaces.\n\nPolySurface.ByJoinedSurfaces (surfaces: Surface[]): PolySurface"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "9553d789e520433dbc70cd3f89eeedc8",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "04956c7e3f6d4fa28e33e506d1fe1ef9",
+          "Name": "list",
+          "Description": "List containing nulls and empty sublists to clean\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c6f2d23282fc4eee90d2aa7e74878125",
+          "Name": "preserveIndices",
+          "Description": "Provide an option to preserve the indices of the data\n\nbool\nDefault value : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "59186835dde248fda23248de362c35ab",
+          "Name": "list",
+          "Description": "List of transposed lists",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DSCore.List.Clean@var[]..[],bool",
+      "Replication": "Auto",
+      "Description": "Cleans data of nulls and empty lists from a given list of arbitrary dimension\n\nList.Clean (list: var[]..[], preserveIndices: bool = true): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "779629bcb0014d89a9fe71e94f9cc37e",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "4e0927314b0b41399ff1715200603c10",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "\"Height Offset From Level\";"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "5319aade344d4a20a8a09483f346c6b1",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "3e8bd473716041a5a771aa80eb7a2240",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "Color.ByARGB(255,136,254,0);"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "f7a6118f62074cf98f547e164178b7d9",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "78005b7ae3a74186bb58b603493f35ea",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "false;"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSVarArgFunction, DynamoCore",
+      "FunctionSignature": "DSCore.List.Join@var[]..[]",
+      "FunctionType": "VariableArgument",
+      "Id": "496981831104498b87562fc842025454",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "026a53e58b6047a7a9f6b813fcc371ab",
+          "Name": "list0",
+          "Description": "Lists to join into one.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "fa725e72b5794dc9bc3c2d0296ed65ad",
+          "Name": "list",
+          "Description": "Joined list.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Concatenates all given lists into a single list.\n\nList.Join (lists: var[]..[]): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "bba38af47f6847efb438bfe391521fb6",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "10ed7b79956445329ff5dc642a66853c",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "Color.ByARGB(255,0,0,255);"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "be6f10b79eb14ac6b00d9138306d0f78",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "2463dcb769934b5b86602adff4709677",
+          "Name": "geometry",
+          "Description": "The geometry to which you would like to apply color.\n\nGeometry",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "968cfc7339aa4b669cfab4c6b5987670",
+          "Name": "color",
+          "Description": "The color.\n\nColor",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "4fcb2d21821d42e4bb7230a77f5820a7",
+          "Name": "GeometryColor",
+          "Description": "A Display object.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Modifiers.GeometryColor.ByGeometryColor@Autodesk.DesignScript.Geometry.Geometry,DSCore.Color",
+      "Replication": "Auto",
+      "Description": "Display geometry using a color.\n\nGeometryColor.ByGeometryColor (geometry: Geometry, color: Color): GeometryColor"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "94821d506334441f9182f971288a3d7b",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "ef88cc7394ea4216ad7634f884e70d3d",
+          "Name": "list",
+          "Description": "List containing nulls and empty sublists to clean\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "831454661c2f4beca43853a740794f51",
+          "Name": "preserveIndices",
+          "Description": "Provide an option to preserve the indices of the data\n\nbool\nDefault value : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "94721f6d9334444f982b88b6eb63602d",
+          "Name": "list",
+          "Description": "List of transposed lists",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DSCore.List.Clean@var[]..[],bool",
+      "Replication": "Auto",
+      "Description": "Cleans data of nulls and empty lists from a given list of arbitrary dimension\n\nList.Clean (list: var[]..[], preserveIndices: bool = true): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "2e3c697c17914ecdb963990de2363967",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "5cf81640ea0a4c24b4cb5e17eb398a1a",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "false;"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSVarArgFunction, DynamoCore",
+      "FunctionSignature": "DSCore.List.Join@var[]..[]",
+      "FunctionType": "VariableArgument",
+      "Id": "87cfb30b25be404897ddc8e37e4b2810",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "9f94098b07ea4c7a89754f606b725498",
+          "Name": "list0",
+          "Description": "Lists to join into one.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "3a10763c4118400693cce1db566c0e9b",
+          "Name": "list",
+          "Description": "Joined list.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Concatenates all given lists into a single list.\n\nList.Join (lists: var[]..[]): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSVarArgFunction, DynamoCore",
+      "FunctionSignature": "DSCore.List.Join@var[]..[]",
+      "FunctionType": "VariableArgument",
+      "Id": "d7287a6ba87b4104ba4a2aa286a85373",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "f9864168e7fb4533baebeea250bc0bed",
+          "Name": "list0",
+          "Description": "Lists to join into one.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "fa9c5654722246bdade6ae572bbbf616",
+          "Name": "list",
+          "Description": "Joined list.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Concatenates all given lists into a single list.\n\nList.Join (lists: var[]..[]): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSVarArgFunction, DynamoCore",
+      "FunctionSignature": "DSCore.List.Join@var[]..[]",
+      "FunctionType": "VariableArgument",
+      "Id": "7ff9b66cdb3b4196957944f2cf9aa0d8",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "67713a797dc549748cca5822d8cdc807",
+          "Name": "list0",
+          "Description": "Lists to join into one.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "5043bade703045dca713288d26120e05",
+          "Name": "list",
+          "Description": "Joined list.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Concatenates all given lists into a single list.\n\nList.Join (lists: var[]..[]): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "b384aa12c8274435802b2ed7b7b1b0d9",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "4c8ccaa91f0b448b965979f25d62bdbf",
+          "Name": "rectangle",
+          "Description": "Autodesk.DesignScript.Geometry.Rectangle",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "3491725fd5054c83b1f4a7024805b56a",
+          "Name": "double",
+          "Description": "double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Rectangle.Height",
+      "Replication": "Auto",
+      "Description": "The height of the Rectangle\n\nRectangle.Height: double"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "66a87acb3b82483eb643443b6d418fc9",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "aa9541c0e7e3450f8fa6b67b832037ac",
+          "Name": "element",
+          "Description": "Revit.Elements.Element",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d46f7b54a8374ca1b00783ad422ad629",
+          "Name": "parameterName",
+          "Description": "The name of the parameter to set.\n\nstring",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "7801ef64e6c64bac92dee30d14b9e00e",
+          "Name": "value",
+          "Description": "The value.\n\nvar",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "9fa09e56828644db978ec5554bd925d2",
+          "Name": "Element",
+          "Description": "Element",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Revit.Elements.Element.SetParameterByName@string,var",
+      "Replication": "Auto",
+      "Description": "Set one of the element's parameters.\n\nElement.SetParameterByName (parameterName: string, value: var): Element"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "be81c4da4f4f492f9fe048ee9e0cfd06",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "ca8a6fbe85fe4a6aba8220639294359f",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "\"Parking_Bay Length\";"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "8bbcb524f09d4181a52d86e92a67538d",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "5eebacef01b34b54a630f9d8d2f78562",
+          "Name": "familyInstance",
+          "Description": "Revit.Elements.FamilyInstance",
+          "UsingDefaultValue": false,
+          "Level": 1,
+          "UseLevels": true,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "6c297fa016aa4238b310523993b16de4",
+          "Name": "degree",
+          "Description": "The Euler angle around Z-axis.\n\ndouble",
+          "UsingDefaultValue": false,
+          "Level": 1,
+          "UseLevels": true,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "0fd802a9d09f49d483fa03d296f2c643",
+          "Name": "FamilyInstance",
+          "Description": "The result family instance.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Revit.Elements.FamilyInstance.SetRotation@double",
+      "Replication": "Auto",
+      "Description": "Set the Euler angle of the family instance around its local Z-axis.\n\nFamilyInstance.SetRotation (degree: double): FamilyInstance"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "ccb0fd47c0c04594b71008ba68382bba",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "192eba33cb3f45ed84a5882da7f0d760",
+          "Name": "element",
+          "Description": "Revit.Elements.Element",
+          "UsingDefaultValue": false,
+          "Level": 1,
+          "UseLevels": true,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "7c531ceba69e4702941bea298f0cd601",
+          "Name": "parameterName",
+          "Description": "The name of the parameter to set.\n\nstring",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3cfc1be7e92249d68e90a7fc46500e59",
+          "Name": "value",
+          "Description": "The value.\n\nvar",
+          "UsingDefaultValue": false,
+          "Level": 1,
+          "UseLevels": true,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "b4e724ee57a54f55b4dd14b70a1b3be7",
+          "Name": "Element",
+          "Description": "Element",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Revit.Elements.Element.SetParameterByName@string,var",
+      "Replication": "Auto",
+      "Description": "Set one of the element's parameters.\n\nElement.SetParameterByName (parameterName: string, value: var): Element"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "07f935f34a874f15a5b7fdd38ce728de",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "02acfaa1b8d34aafaa4114d1ba1d0bab",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "\"Parking_Bay Width\";"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "b015f25c591d4c13a324f67d1848e168",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "d90a13b779fe44c4804c6eb284ba2f7a",
+          "Name": "polygon",
+          "Description": "Autodesk.DesignScript.Geometry.Polygon",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "97a0200d27884665b8450682b74a15d2",
+          "Name": "Point",
+          "Description": "Point",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Polygon.Center",
+      "Replication": "Auto",
+      "Description": "Returns average point of corners of polygon\n\nPolygon.Center ( ): Point"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "63cf7f9ab8074ad581767e04da28cce2",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "a8136a91d4eb419c814b3bfc95227fac",
+          "Name": "familyType",
+          "Description": "Family Type. Also called Family Symbol.\n\nFamilyType",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2b045f90a8af4a1ca95963823b5f2813",
+          "Name": "point",
+          "Description": "Point in meters.\n\nPoint",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "e3c1cfdebfa44e03a46971bf6be416aa",
+          "Name": "FamilyInstance",
+          "Description": "FamilyInstance",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Revit.Elements.FamilyInstance.ByPoint@Revit.Elements.FamilyType,Autodesk.DesignScript.Geometry.Point",
+      "Replication": "Auto",
+      "Description": "Place a Revit FamilyInstance given the FamilyType (also known as the FamilySymbol in the Revit API) and its coordinates in world space\n\nFamilyInstance.ByPoint (familyType: FamilyType, point: Point): FamilyInstance"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "368c2a78391440b381f7d11cd6a7886d",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "394e9b4503154df99e3671f904cb357e",
+          "Name": "list",
+          "Description": "List to flatten.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "bfc1f6ac8dcb48c4b633864afe781e51",
+          "Name": "amount",
+          "Description": "Layers of list nesting to remove (-1 will remove all list nestings)\n\nint\nDefault value : -1",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "b71b724f62b2455eadd135370380bee2",
+          "Name": "list",
+          "Description": "Flattened list by amount",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DSCore.List.Flatten@var[]..[],int",
+      "Replication": "Auto",
+      "Description": "Flattens a nested list of lists by a certain amount.\n\nList.Flatten (list: var[]..[], amount: int = -1): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "80b190e9e6464adaad39eaaa61d48047",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "2245a0c1b4cc4fd5810b8db29b307555",
+          "Name": "list",
+          "Description": "List to flatten.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1f579b88ea9346a7b1463fe87fd5e604",
+          "Name": "amount",
+          "Description": "Layers of list nesting to remove (-1 will remove all list nestings)\n\nint\nDefault value : -1",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "b870089a734645de9aac51e97966408b",
+          "Name": "list",
+          "Description": "Flattened list by amount",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DSCore.List.Flatten@var[]..[],int",
+      "Replication": "Auto",
+      "Description": "Flattens a nested list of lists by a certain amount.\n\nList.Flatten (list: var[]..[], amount: int = -1): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "139a4b49641c45a7ae7595f6723da944",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "e5d8a456b3594c9d9d20da0b19686c7b",
+          "Name": "list",
+          "Description": "List to flatten.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "33eaaf8aab784861a366b0828ab280e1",
+          "Name": "amount",
+          "Description": "Layers of list nesting to remove (-1 will remove all list nestings)\n\nint\nDefault value : -1",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "0ee2a069be9a4d37bbb7c4726068c36a",
+          "Name": "list",
+          "Description": "Flattened list by amount",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DSCore.List.Flatten@var[]..[],int",
+      "Replication": "Auto",
+      "Description": "Flattens a nested list of lists by a certain amount.\n\nList.Flatten (list: var[]..[], amount: int = -1): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSVarArgFunction, DynamoCore",
+      "FunctionSignature": "DSCore.List.Join@var[]..[]",
+      "FunctionType": "VariableArgument",
+      "Id": "6f2e10737ab74dcb9fa8e9c013cc10ea",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "de06955cf6a440aeb871c8b94fc3e3ae",
+          "Name": "list0",
+          "Description": "Lists to join into one.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "0cf4ee503dc543248a294b472d6fcb32",
+          "Name": "list",
+          "Description": "Joined list.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Concatenates all given lists into a single list.\n\nList.Join (lists: var[]..[]): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "c06ccce0cc464f9492b3ab6a6f10907f",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "b62408956f8241ad99161c151b6139f3",
+          "Name": "list",
+          "Description": "List to flatten.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a3da4f9eb30842ce8718a33b79eed53c",
+          "Name": "amount",
+          "Description": "Layers of list nesting to remove (-1 will remove all list nestings)\n\nint\nDefault value : -1",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "c2bd52b3b18c46c7886a177933fd55b8",
+          "Name": "list",
+          "Description": "Flattened list by amount",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DSCore.List.Flatten@var[]..[],int",
+      "Replication": "Auto",
+      "Description": "Flattens a nested list of lists by a certain amount.\n\nList.Flatten (list: var[]..[], amount: int = -1): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "14173b6caa9442f2a1fee97705dc2bb6",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "ad35b12ac5ba457daff2110a30f91b8a",
+          "Name": "surface",
+          "Description": "Autodesk.DesignScript.Geometry.Surface",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "fec3ad4c822b42d89800e3059e59ebdd",
+          "Name": "Curve[]",
+          "Description": "Curve[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Surface.PerimeterCurves",
+      "Replication": "Auto",
+      "Description": "Return all the boundary Curves of the Surface.\n\nSurface.PerimeterCurves ( ): Curve[]"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Logic.Gate, CoreNodeModels",
+      "InputValue": false,
+      "Id": "b17333062c064c95a062a04d1a606eae",
+      "NodeType": "ExtensionNode",
+      "Inputs": [
+        {
+          "Id": "f2194fc355134f3f8a3e3ce21e006cb0",
+          "Name": ">",
+          "Description": "Data to pass to a downstream node with gated controls.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "d6545dd90e0f4937b513e620493c8d25",
+          "Name": ">",
+          "Description": "Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Block data passing through this node to downstream nodes. Node returns the input data only if the node value is set to Open.\r\n\r\nIn Generative Design workflows, this node should be used to control and block the behavior of nodes that will place elements in Revit"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Logic.Gate, CoreNodeModels",
+      "InputValue": false,
+      "Id": "3e3b9ac98f6449aa878d64dc94e01bc9",
+      "NodeType": "ExtensionNode",
+      "Inputs": [
+        {
+          "Id": "a35f8eee9a9a4d71b74e29aa1287abc7",
+          "Name": ">",
+          "Description": "Data to pass to a downstream node with gated controls.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "27662a6e9425415dbca1f61b5a6042c9",
+          "Name": ">",
+          "Description": "Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Block data passing through this node to downstream nodes. Node returns the input data only if the node value is set to Open.\r\n\r\nIn Generative Design workflows, this node should be used to control and block the behavior of nodes that will place elements in Revit"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "58de6759-aa80-4c7f-a558-f44049a68a6f",
+      "FunctionType": "Graph",
+      "Id": "763100d321454d3ea97f83fda3a635b0",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "2a48c0cf40e74ba4a6c7af4bb4f09142",
+          "Name": "boundarySurface",
+          "Description": "the input surface defining the parking area.\n\nSurface",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d5e182d2cc5f4b4bbc56ce8193259de9",
+          "Name": "siteLevel",
+          "Description": "the site base level.\n\nLevel",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "ef7fca2c60fb487e94445e9680d37f7a",
+          "Name": "PolyCurve",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "82b629c5f66840dfa0bd84d2c4a22588",
+          "Name": "Plane",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "To project the boundaries developed from selected faces onto a plane. "
+    },
+    {
+      "ConcreteType": "DSRevitNodesUI.Levels, DSRevitNodesUI",
+      "SelectedIndex": 1,
+      "SelectedString": "Level 0",
+      "Id": "7138470ec0bd4edf9ea075e5bb3da842",
+      "NodeType": "ExtensionNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "07216c473aeb462db8ff5ed0a5f61a7f",
+          "Name": "Levels",
+          "Description": "The selected Levels",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Select a level in the active document"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.DSFaceSelection, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [
+        "3a59d878-4018-4710-a70c-15210e360051-00072fc6:0:SURFACE"
+      ],
+      "Id": "3bb3d4bef48f4250a08c68391529c390",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "35baa0c468044cd78b2ac39436b9ecfc",
+          "Name": "Surface",
+          "Description": "The selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Select a face."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 360.0,
+      "MinimumValue": 0.0,
+      "StepValue": 1.0,
+      "Id": "18d07be8f8c449189fbf6753675ffbf8",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "39d05f0683cd4c87ad7bff5cb9c01917",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Produces numeric values",
+      "InputValue": 0.0
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.IntegerSlider, CoreNodeModels",
+      "NumberType": "Integer",
+      "MaximumValue": 2,
+      "MinimumValue": 1,
+      "StepValue": 1,
+      "Id": "bc8a17cb54f54845b26fee0c38f640c8",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "baca6515a8034dd691814fb670052dcc",
+          "Name": "",
+          "Description": "Int64",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Produces integer values",
+      "InputValue": 2
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 10.0,
+      "MinimumValue": 7.0,
+      "StepValue": 0.1,
+      "Id": "6207019e55e2462e9864b0445731f75c",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "8580daad564d43d6aa7d4b3104c357af",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Produces numeric values",
+      "InputValue": 7.0
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 10.0,
+      "MinimumValue": 3.5,
+      "StepValue": 0.1,
+      "Id": "0f623abf856e4c359d4ffbffd3c40cf3",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "cc4b8e5a96b941c5aa52dfa6a103d1db",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Produces numeric values",
+      "InputValue": 3.5
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 10.0,
+      "MinimumValue": 5.0,
+      "StepValue": 0.1,
+      "Id": "133a8183e4054f5e90172129316b2b65",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "015cd546b9c04eae9b19e73dd3ae1ab2",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Produces numeric values",
+      "InputValue": 5.0
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 5.0,
+      "MinimumValue": 0.0,
+      "StepValue": 0.1,
+      "Id": "cbe206fab7fd412995ca6c2bd07c3b24",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "7f3bb45185a04f4b901a30eaf470d846",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Produces numeric values",
+      "InputValue": 1.0
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 5.0,
+      "MinimumValue": 0.5,
+      "StepValue": 0.1,
+      "Id": "c2bea16f32a24c83a54560cc5c193014",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "aa4af5ebc4ef41c6a26789679c9da8ce",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Produces numeric values",
+      "InputValue": 2.5
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 10.0,
+      "MinimumValue": 0.5,
+      "StepValue": 0.1,
+      "Id": "5865f6db4e9449edbebdfe72021aaf47",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "611b73361eda481ab90180499ce44f6b",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Produces numeric values",
+      "InputValue": 5.0
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 2.0,
+      "MinimumValue": 0.5,
+      "StepValue": 0.1,
+      "Id": "4764e2d64c2e424192f2267e8d701d84",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "68b0daadb7fd48968c54d67bed0fcfeb",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Produces numeric values",
+      "InputValue": 1.0
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.IntegerSlider, CoreNodeModels",
+      "NumberType": "Integer",
+      "MaximumValue": 4,
+      "MinimumValue": 1,
+      "StepValue": 1,
+      "Id": "97ed2d8914a249d8962430a30b73b7f1",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "97b40eb0f56548bb81be8c6ea44b5216",
+          "Name": "",
+          "Description": "Int64",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Produces integer values",
+      "InputValue": 4
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.IntegerSlider, CoreNodeModels",
+      "NumberType": "Integer",
+      "MaximumValue": 4,
+      "MinimumValue": 1,
+      "StepValue": 1,
+      "Id": "eef2aa5d2efb4e379b1d3b316f98f638",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "44e12c248c294359a475778b0a466b22",
+          "Name": "",
+          "Description": "Int64",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Produces integer values",
+      "InputValue": 1
+    },
+    {
+      "ConcreteType": "DSRevitNodesUI.FamilyTypes, DSRevitNodesUI",
+      "SelectedIndex": 118,
+      "SelectedString": "Parking Bay:Parking Bay",
+      "Id": "2138481ed1824f54b331133d791adabe",
+      "NodeType": "ExtensionNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "dd5611966bc2480b97100ba692b86576",
+          "Name": "Family Type",
+          "Description": "The selected Family Type",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "All family types available in the document."
+    },
+    {
+      "ConcreteType": "DSRevitNodesUI.FloorTypes, DSRevitNodesUI",
+      "SelectedIndex": 3,
+      "SelectedString": "Floor-Upper_160mmConc-CorusComFlor51",
+      "Id": "847d2dfe3d3b4d15b6bb820d193b1f06",
+      "NodeType": "ExtensionNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "d066ec4916e14363837e55b5562964dc",
+          "Name": "Floor Type",
+          "Description": "The selected Floor Type",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "All floor types available in the document."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 0.2,
+      "MinimumValue": 0.1,
+      "StepValue": 0.01,
+      "Id": "e0092b151ab64e969698ec630d59f2bc",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "83d2341df0bb442587796915ef6376e7",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Produces numeric values",
+      "InputValue": 0.1
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 10.0,
+      "MinimumValue": 4.0,
+      "StepValue": 0.1,
+      "Id": "c5f05fc9cf014f2aa050e0d05f984336",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "1e23216bba054d379a14a0b7bf018067",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Produces numeric values",
+      "InputValue": 4.4
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 10.0,
+      "MinimumValue": 4.0,
+      "StepValue": 0.1,
+      "Id": "f741a5412cbe4187a4d68146a2d7ac50",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "37f89517f8994011b0ffc1e113841c39",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Produces numeric values",
+      "InputValue": 5.4
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "ba3bfc1e-6f50-4f1b-a821-239e7af9349a",
+      "FunctionType": "Graph",
+      "Id": "e83f99cc1ba54543a7406d5a5f1ef9c3",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "ca3c44f3ca644becb8abffe1c84f1c0d",
+          "Name": "concaveCornerRadius",
+          "Description": "The vehicle turning radius at the concave corners of the perimeter aisle.\n\ndouble\nDefault value : 3.5",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "641ae9b529324d12acc57f0aaa028368",
+          "Name": "convexCornerRadius",
+          "Description": "The vehicle turning radius at the convex corners of the perimeter aisle.\n\ndouble\nDefault value : 5",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c54e0d6c92804ae695d644fd22043f4a",
+          "Name": "boundaryCurve",
+          "Description": "a polycurve representing the boundary of the site area.\n\nPolyCurve",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ecff4be6855a40e89beb31dccbcbbcf3",
+          "Name": "bayLength",
+          "Description": "the length of the vehicular parking bays.\n\ndouble\nDefault value : 5",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ed633daf52474d438e780a3da2262842",
+          "Name": "perimeterAisleWidth",
+          "Description": "the width of the perimeter aisle all round the parking layout.\n\ndouble\nDefault value : 7",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "1cfa21bf4f0140c0978cdeb956fcebe2",
+          "Name": "internalParkingSurface",
+          "Description": "the parking lot surface minus the depth of the perimeter parking bays and perimeter aisle.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "4832b57023224efcaf9bde840dc1d483",
+          "Name": "perimeterRoadwaySurface",
+          "Description": "a surface covering the length of the perimeter spots and the width of the perimeter aisle.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "bf98a890ed884f71b5791c7424906c53",
+          "Name": "internalBoundaryCurve",
+          "Description": "the boundary curve of the internal parking area surface.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Creates the internal parking and roadway surfaces. "
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "023838c1-9305-4b17-839c-6f579dcc52b1",
+      "FunctionType": "Graph",
+      "Id": "a30a21adc3124ddd92187b54764d92be",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "412844f0a1b0489685289157e35c6613",
+          "Name": "degrees",
+          "Description": "the degree of rotation to apply to the bounding rectangle\n\ndouble\nDefault value : 0",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3cf99e52b278462eba2d2769533a5a3f",
+          "Name": "closedCurve",
+          "Description": "supply the closed curve to be encapsulated by the rectangle\n\nvar",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "457178d29dd44e4eba322fc20fc7b055",
+          "Name": "Rectangle",
+          "Description": "the generated bounding rectangle",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "4c1a98fdd7c747d4a2dd2796dc3a6e6f",
+          "Name": "length",
+          "Description": "the length of the rectangle",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c0746c6a75684d599b0d4d354a1b461c",
+          "Name": "width",
+          "Description": "the width of the rectangle",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Generates a rectangle around a planar closed curve, ensuring the curve is completely encapsulated. "
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "a1585df6-63ab-412c-bbd0-cc224c48e7ef",
+      "FunctionType": "Graph",
+      "Id": "87c75ed104464bacbb1ad8112bf56ebb",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "2d76c4e4f3264ce1be3d3c63d56a61c1",
+          "Name": "patternAngle",
+          "Description": "select the parking pattern angle. 1 for 30 degrees, 2 for 45 degrees, 3 for 60 degrees, and 4 for 90 degrees. These angles do no apply to the herringbone pattern which will always be 45 degrees.\n\nint\nDefault value : 1",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2cfc86085b894c47b845c31b37e4fc98",
+          "Name": "patternType",
+          "Description": "Select \"1\" for the non interlocking pattern which allows for an island between the bay rows, \"2\" for the interlocking pattern, \"3\" for the mirrored interlocking pattern, and \"4\" for the herringbone pattern.\n\nint\nDefault value : 1",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "22818dd318e74b92b3a4c3dff58d8e09",
+          "Name": "islandWidth",
+          "Description": "width of the island between the parking rows of the regular parking pattern.\n\ndouble\nDefault value : 1",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9fc89fda450b448c927ff765fe724807",
+          "Name": "internalRotation",
+          "Description": "the rotation of value of the internal parking bays.\n\ndouble\nDefault value : 45",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9a518f57f9d94acbb0c5c616b985d092",
+          "Name": "bayWidth",
+          "Description": "the width of the vehicular parking bays.\n\ndouble\nDefault value : 2.5",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "681f0355724544a7a92fd1e59b8e4588",
+          "Name": "bayLength",
+          "Description": "the length of the vehicular parking bays.\n\ndouble\nDefault value : 5",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e59dc28ce9e74132aea4ab0d750da164",
+          "Name": "rectangleLength",
+          "Description": "the length of the bounding rectangle\n\ndouble\nDefault value : 20",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "7b58b4e3c15e44328b51328d09a7da89",
+          "Name": "elongatedParkingPatterns",
+          "Description": "the elongated parking patterns for cutting the green surfaces.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9efdebdd9f954bb59f36686955c3f957",
+          "Name": "greenAreaSurfaces",
+          "Description": "the full green area surfaces before cutting.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "5c7b0a367d4f40a181aa4b1c80925f7b",
+          "Name": "replacementElongatedPattern",
+          "Description": "for pattern replacements as required to account for 1-way or 2-way traffic between rows. Used for cutting the green surfaces.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e350b8e1ee614f21b7e4a89e2a4cf787",
+          "Name": "patternWidth",
+          "Description": "the overall width of the parking pattern.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d6ec2e269d464b2d8552bdad81832d47",
+          "Name": "patternCenterLine",
+          "Description": "the pattern center line.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "bff287b8584d4febafdf313ab1de1a87",
+          "Name": "parkingPattern",
+          "Description": "the parking pattern.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0c4461ee14a745919ce9c51f57619523",
+          "Name": "replacementPattern",
+          "Description": "for pattern replacements as required to account for 1-way or 2-way traffic between rows.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Creates the parking patterns."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "08184496-34eb-4034-87bc-39ed305299f5",
+      "FunctionType": "Graph",
+      "Id": "1ac0fd850821405ea5a1001698d60b92",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "b8f9f4685d40400c955f64e333f66efe",
+          "Name": "elongatedParkingPatterns",
+          "Description": "the elongated parking patterns for cutting the green surfaces. Feed from the generate patterns node.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9f7f8fb4d3b84f7c9d6315e1db56fa4f",
+          "Name": "greenAreaSurfaces",
+          "Description": "the full green area surfaces before cutting. Feed from the generate patterns node.\n\nSurface",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "69f4b97abe524aa4b6d7a87d09114edd",
+          "Name": "replacementElongatedPattern",
+          "Description": "for pattern replacements as required to account for 1-way or 2-way traffic between rows. Used for cutting the green surfaces. Feed from the generate patterns node.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "49a99dc977a84a22ab883a2fcf0819b1",
+          "Name": "patternType",
+          "Description": "select \"1\" for the non interlocking pattern which allows for an island between the bay rows, \"2\" for the interlocking pattern, \"3\" for the mirrored interlocking pattern, and \"4\" for the herringbone pattern.\n\nint\nDefault value : 1",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2a72d029b17c40bd99c79ac3b5c25556",
+          "Name": "aisleTypeSelector",
+          "Description": "select \"1\" for one way traffic, and \"2\" for two way traffic. The one way aisle is 4400mm wide and the two way aisle is 5400mm wide. The aisle width will be 7000mm for one way and two way if the parking bay angle is 90 degrees. \n\nint\nDefault value : 1",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c82c9fbd8cc7475bbdc45926d20b10be",
+          "Name": "patternAngle",
+          "Description": "select \"1\" for 30 degree parking, \"2\" for 45 degree parking, \"3\" for 60 degree parking, and \"4\" for 90 degree parking. Note that the angles are not applied to the perimeter parking bays and herringbone pattern. The herringbone pattern will always be at 45 degrees.\n\nint\nDefault value : 1",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c6b26d06c777490286eeb06817e5b09d",
+          "Name": "boundingRectangle",
+          "Description": "the bounding rectangle of the internal parking surface. Feed from the generate bounding rectangle node.\n\nPolyCurve",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "00dcb0760404426681863e7fde3b80f6",
+          "Name": "patternWidth",
+          "Description": "the overall width of the parking pattern. Feed from the generate patterns node.\n\ndouble",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0adf85d2840e4916ac4bdc1f1402cdaa",
+          "Name": "replacementPattern",
+          "Description": "for pattern replacements as required to account for 1-way or 2-way traffic between rows. Feed from the generate patterns node.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "563820681bbe4a45b6255f8c96d44a3f",
+          "Name": "concaveCornerRadius",
+          "Description": "The vehicle turning radius at the concave corners of the perimeter aisle.\n\ndouble\nDefault value : 3.5",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "5073b9f93c65424b81a2b01540386419",
+          "Name": "convexCornerRadius",
+          "Description": "The vehicle turning radius at the convex corners of the perimeter aisle.\n\ndouble\nDefault value : 5",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "08325ff9bbc24180a88de725e33b0f7c",
+          "Name": "islandCornerRadius",
+          "Description": "the radius at the corners of the internal parking islands.\n\ndouble\nDefault value : 1",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "115c4aa8af694310a5536203035b2530",
+          "Name": "oneWayAisleWidth",
+          "Description": "the width of the one way aisle between the parking rows.\n\ndouble\nDefault value : 4.4",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ca117fb8208847edae702c49b4f9208f",
+          "Name": "twoWayAisleWidth",
+          "Description": "the width of the two way aisle between the parking rows.\n\ndouble\nDefault value : 5.4",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "53517a6214fa49dca0b8565b36e8e06b",
+          "Name": "perimeterAisleWidth",
+          "Description": "the width of the perimeter aisle all round the parking layout.\n\ndouble\nDefault value : 7",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "bf883e4a9e7440ea9395272922a77833",
+          "Name": "patternCenterLine",
+          "Description": "the pattern center line. Feed from the generate patterns node.\n\nvar",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "72fdd0504e5b448eb72ac42e7361212f",
+          "Name": "parkingPattern",
+          "Description": "the parking pattern. Feed from the generate patterns node.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "873ad0d5818f485a86e2e83a97955fc1",
+          "Name": "perimeterCurves",
+          "Description": "the perimeter curves of the parking layout.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "bbb91121955447ff8fd48857b44a302a",
+          "Name": "bayLength",
+          "Description": "the length of the vehicular parking bays.\n\ndouble\nDefault value : 5",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "2424bfe7a0cc4f82ab53d4175b191f0e",
+          "Name": "islandSurfaces",
+          "Description": "island surfaces not covered by parking.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e4b0fdd387dc4657bdbafb8805c90d87",
+          "Name": "boundarySurface",
+          "Description": "the input surface defining the full parking area.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e3cf47738ab44d058b0ee55f2710c7ff",
+          "Name": "perimeterRoadwaySurface",
+          "Description": "a surface covering the length of the perimeter spots and the width of the perimeter aisle.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c1c36eedce244bcd99ecc6e31970e76d",
+          "Name": "parkingSpots",
+          "Description": "rectangles representing the internal parking spots.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "29426ba9d2584f399d7098d9406aa399",
+          "Name": "perimeterCurve",
+          "Description": "the closed perimeter curve of the parking layout. ",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0e49ea8b17764a45b905788db5b0d84f",
+          "Name": "rotationAngle",
+          "Description": "the rotation angle for the parking bays loaded into the Revit model.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Creates internal parking bays and allows the delineation of movement routes within the parking layout. "
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "a21e842e4ac5468aa490bab3bda95083",
+      "End": "ad35b12ac5ba457daff2110a30f91b8a",
+      "Id": "97e89b2c748e4f8b86c5a48d90c074d0",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "6270d55871ea445b93402cfea64e8e26",
+      "End": "c953a8258c94487bb731cd7aff6c7edc",
+      "Id": "ef4e45d76e4c4ed2a2c8ce568b78d510",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "873fc18d707244ac80db64b34d88ea91",
+      "End": "a35f8eee9a9a4d71b74e29aa1287abc7",
+      "Id": "a26eedf8c4e64d0bb7e082f789c5216c",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "8a05ce24bd674e2697d9a9fafd9b2d6b",
+      "End": "0721561b22c3400b8ebf37bde7221535",
+      "Id": "e569d3fd481d498fb0e63de7abdd4a38",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "bb7cec5ea3fa4f70881eba2874f13ce1",
+      "End": "d40e61de537342cda56ac8e5b08d38f3",
+      "Id": "df7b5d8195e347169fc93816eec537c7",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "0b31270346be4e26a72836a5502a20de",
+      "End": "1a9bd13dfcca47eb88fbf8939826a4f1",
+      "Id": "42f3ecc0ca2747358b9b833d85c29a83",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "0b31270346be4e26a72836a5502a20de",
+      "End": "8b462866bc5344e0b3c27a2911e45e84",
+      "Id": "c4f01b7b3fb24ba1b59b3f8c97818746",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "59186835dde248fda23248de362c35ab",
+      "End": "b62408956f8241ad99161c151b6139f3",
+      "Id": "a917f16a1917420fa0aae4c1bd01c3c1",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "4e0927314b0b41399ff1715200603c10",
+      "End": "0fbf18d203454279bee039674296dbe7",
+      "Id": "26951e974d8c4a4eb1ab7cee825d3ab0",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "3e8bd473716041a5a771aa80eb7a2240",
+      "End": "313e2739db1b49dab9204fdffc702cbf",
+      "Id": "c917ccbb265645b28841313a986d1459",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "78005b7ae3a74186bb58b603493f35ea",
+      "End": "c6f2d23282fc4eee90d2aa7e74878125",
+      "Id": "65d670520f1448e1873f94676e9e2903",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "fa725e72b5794dc9bc3c2d0296ed65ad",
+      "End": "ef88cc7394ea4216ad7634f884e70d3d",
+      "Id": "40b21252694a426daff0668c0653aea1",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "10ed7b79956445329ff5dc642a66853c",
+      "End": "968cfc7339aa4b669cfab4c6b5987670",
+      "Id": "43fa10b255dc4ca8951b4a4c28303a97",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "94721f6d9334444f982b88b6eb63602d",
+      "End": "2463dcb769934b5b86602adff4709677",
+      "Id": "735ab21e631546b88d0ae86ce51ed6a7",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "5cf81640ea0a4c24b4cb5e17eb398a1a",
+      "End": "831454661c2f4beca43853a740794f51",
+      "Id": "b352d58e1c5d47a9bb43a78486e3ca3b",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "3a10763c4118400693cce1db566c0e9b",
+      "End": "f2194fc355134f3f8a3e3ce21e006cb0",
+      "Id": "0e420b609e054be29fcd7cca676ac480",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "fa9c5654722246bdade6ae572bbbf616",
+      "End": "2245a0c1b4cc4fd5810b8db29b307555",
+      "Id": "ca05f1ffde1a4d3995e63813193df16a",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "5043bade703045dca713288d26120e05",
+      "End": "e5d8a456b3594c9d9d20da0b19686c7b",
+      "Id": "a6d7858afcfb4787b28c41b41bacdc28",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "3491725fd5054c83b1f4a7024805b56a",
+      "End": "67713a797dc549748cca5822d8cdc807",
+      "Id": "5c96f2f931b34365a1a925de44a409c2",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "ca8a6fbe85fe4a6aba8220639294359f",
+      "End": "d46f7b54a8374ca1b00783ad422ad629",
+      "Id": "8f13ef9abc124fffb07dc224be24ebf8",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "0fd802a9d09f49d483fa03d296f2c643",
+      "End": "aa9541c0e7e3450f8fa6b67b832037ac",
+      "Id": "44a87b36d0e74a349e816cfadcbab2e0",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "0fd802a9d09f49d483fa03d296f2c643",
+      "End": "192eba33cb3f45ed84a5882da7f0d760",
+      "Id": "6aecc52597424ea0bfce0d156ee9b91d",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "02acfaa1b8d34aafaa4114d1ba1d0bab",
+      "End": "7c531ceba69e4702941bea298f0cd601",
+      "Id": "b7ae8e5118934940a803e86b3621c1ac",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "97a0200d27884665b8450682b74a15d2",
+      "End": "2b045f90a8af4a1ca95963823b5f2813",
+      "Id": "50bcabdb14f3465c8d0d508a3080955b",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "e3c1cfdebfa44e03a46971bf6be416aa",
+      "End": "5eebacef01b34b54a630f9d8d2f78562",
+      "Id": "09494842a58048799ecc10d9425e7b5c",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "b71b724f62b2455eadd135370380bee2",
+      "End": "d90a13b779fe44c4804c6eb284ba2f7a",
+      "Id": "8cbeced9444f40f4926d8090bcf4a93b",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "b870089a734645de9aac51e97966408b",
+      "End": "6c297fa016aa4238b310523993b16de4",
+      "Id": "a4cacffbc2f944a691a70a32c21a9150",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "0ee2a069be9a4d37bbb7c4726068c36a",
+      "End": "3cfc1be7e92249d68e90a7fc46500e59",
+      "Id": "d6de02cc5843438bb9c3e37164c57d6c",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "0cf4ee503dc543248a294b472d6fcb32",
+      "End": "04956c7e3f6d4fa28e33e506d1fe1ef9",
+      "Id": "0b7b26b333bd4a13a8f7e281dada6f51",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "c2bd52b3b18c46c7886a177933fd55b8",
+      "End": "1e1cf303b83c4804a571b1539abc48e7",
+      "Id": "53bc9119c7474736854e93dec4b48de8",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "fec3ad4c822b42d89800e3059e59ebdd",
+      "End": "873ad0d5818f485a86e2e83a97955fc1",
+      "Id": "c7626f801dcf4bd4bd605b0761c35a03",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "d6545dd90e0f4937b513e620493c8d25",
+      "End": "394e9b4503154df99e3671f904cb357e",
+      "Id": "fb1226d22b264aecaae69ae5e85fce9b",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "27662a6e9425415dbca1f61b5a6042c9",
+      "End": "aed7f4972e54473da15b67d3cd34da33",
+      "Id": "9ace886ce3384d9eacabcf37f8320b76",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "ef7fca2c60fb487e94445e9680d37f7a",
+      "End": "f32a3b8df21e48b0851878246007596e",
+      "Id": "a8a8b6cff50840d0a7776675fa5f8cb3",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "ef7fca2c60fb487e94445e9680d37f7a",
+      "End": "c54e0d6c92804ae695d644fd22043f4a",
+      "Id": "8a8f3fdc408241d38967d3b3ca7804a9",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "07216c473aeb462db8ff5ed0a5f61a7f",
+      "End": "b3c3e44d8a274c4388ff49a70484e60a",
+      "Id": "233ec2268eee4e42ae93706db6da31f5",
+      "IsHidden": "True"
+    },
+    {
+      "Start": "07216c473aeb462db8ff5ed0a5f61a7f",
+      "End": "d5e182d2cc5f4b4bbc56ce8193259de9",
+      "Id": "c47745b2d1b9421f8b7820a413b3e75d",
+      "IsHidden": "True"
+    },
+    {
+      "Start": "35baa0c468044cd78b2ac39436b9ecfc",
+      "End": "2a48c0cf40e74ba4a6c7af4bb4f09142",
+      "Id": "ae955e9c85ce410bb43ceee34d32558b",
+      "IsHidden": "True"
+    },
+    {
+      "Start": "39d05f0683cd4c87ad7bff5cb9c01917",
+      "End": "412844f0a1b0489685289157e35c6613",
+      "Id": "15a2fee5be1d4d838ac72622b750acd9",
+      "IsHidden": "True"
+    },
+    {
+      "Start": "39d05f0683cd4c87ad7bff5cb9c01917",
+      "End": "9fc89fda450b448c927ff765fe724807",
+      "Id": "f3a6edcaf53c4eaca67178f4139d29e4",
+      "IsHidden": "True"
+    },
+    {
+      "Start": "baca6515a8034dd691814fb670052dcc",
+      "End": "2a72d029b17c40bd99c79ac3b5c25556",
+      "Id": "32ba04ddbfd444b8b27727006a8052c7",
+      "IsHidden": "True"
+    },
+    {
+      "Start": "8580daad564d43d6aa7d4b3104c357af",
+      "End": "ed633daf52474d438e780a3da2262842",
+      "Id": "6e400df326344b1b9252d5b433c5b6a2",
+      "IsHidden": "True"
+    },
+    {
+      "Start": "8580daad564d43d6aa7d4b3104c357af",
+      "End": "53517a6214fa49dca0b8565b36e8e06b",
+      "Id": "e8bbb24a7e2e4a8cbd859136badb752f",
+      "IsHidden": "True"
+    },
+    {
+      "Start": "cc4b8e5a96b941c5aa52dfa6a103d1db",
+      "End": "ca3c44f3ca644becb8abffe1c84f1c0d",
+      "Id": "38ee9b59bd8b4fc3b55208f78039b140",
+      "IsHidden": "True"
+    },
+    {
+      "Start": "cc4b8e5a96b941c5aa52dfa6a103d1db",
+      "End": "563820681bbe4a45b6255f8c96d44a3f",
+      "Id": "ae9665ee6f2a4fa08152e9ae976a6fda",
+      "IsHidden": "True"
+    },
+    {
+      "Start": "015cd546b9c04eae9b19e73dd3ae1ab2",
+      "End": "641ae9b529324d12acc57f0aaa028368",
+      "Id": "db46e1c696084990833fc86de3699539",
+      "IsHidden": "True"
+    },
+    {
+      "Start": "015cd546b9c04eae9b19e73dd3ae1ab2",
+      "End": "5073b9f93c65424b81a2b01540386419",
+      "Id": "1515dcb55d1b4174a7e92963ad8462e8",
+      "IsHidden": "True"
+    },
+    {
+      "Start": "7f3bb45185a04f4b901a30eaf470d846",
+      "End": "08325ff9bbc24180a88de725e33b0f7c",
+      "Id": "95d7bb121d0c4d41a674221f8e32bcaa",
+      "IsHidden": "True"
+    },
+    {
+      "Start": "aa4af5ebc4ef41c6a26789679c9da8ce",
+      "End": "9a518f57f9d94acbb0c5c616b985d092",
+      "Id": "38f16438527b492db752837aebf12639",
+      "IsHidden": "True"
+    },
+    {
+      "Start": "611b73361eda481ab90180499ce44f6b",
+      "End": "7801ef64e6c64bac92dee30d14b9e00e",
+      "Id": "71273d1d9f144e3cbb9e573194fb7fd7",
+      "IsHidden": "True"
+    },
+    {
+      "Start": "611b73361eda481ab90180499ce44f6b",
+      "End": "ecff4be6855a40e89beb31dccbcbbcf3",
+      "Id": "21f62f1c351a460982b2a161c642a681",
+      "IsHidden": "True"
+    },
+    {
+      "Start": "611b73361eda481ab90180499ce44f6b",
+      "End": "681f0355724544a7a92fd1e59b8e4588",
+      "Id": "e99906fad3c84678ace6d026ed206eac",
+      "IsHidden": "True"
+    },
+    {
+      "Start": "611b73361eda481ab90180499ce44f6b",
+      "End": "bbb91121955447ff8fd48857b44a302a",
+      "Id": "691ae4ac978c4539bfbcf5473dae43e0",
+      "IsHidden": "True"
+    },
+    {
+      "Start": "68b0daadb7fd48968c54d67bed0fcfeb",
+      "End": "22818dd318e74b92b3a4c3dff58d8e09",
+      "Id": "541e92c22289441baa44c9c29ff8de7c",
+      "IsHidden": "True"
+    },
+    {
+      "Start": "97b40eb0f56548bb81be8c6ea44b5216",
+      "End": "2d76c4e4f3264ce1be3d3c63d56a61c1",
+      "Id": "ada3eeef086a450cbd07c102cc1da402",
+      "IsHidden": "True"
+    },
+    {
+      "Start": "97b40eb0f56548bb81be8c6ea44b5216",
+      "End": "c82c9fbd8cc7475bbdc45926d20b10be",
+      "Id": "97a5b17e7add43edacb756f73b9f1f9d",
+      "IsHidden": "True"
+    },
+    {
+      "Start": "44e12c248c294359a475778b0a466b22",
+      "End": "2cfc86085b894c47b845c31b37e4fc98",
+      "Id": "193ccfafcf574c3b940eb6f65f2db619",
+      "IsHidden": "True"
+    },
+    {
+      "Start": "44e12c248c294359a475778b0a466b22",
+      "End": "49a99dc977a84a22ab883a2fcf0819b1",
+      "Id": "7e2aff396bc44dd294b9370795c2ae02",
+      "IsHidden": "True"
+    },
+    {
+      "Start": "dd5611966bc2480b97100ba692b86576",
+      "End": "a8136a91d4eb419c814b3bfc95227fac",
+      "Id": "33af2779a662413daaba17df4a09c9d5",
+      "IsHidden": "True"
+    },
+    {
+      "Start": "d066ec4916e14363837e55b5562964dc",
+      "End": "c64e9be46f454e90b44019074940f8bc",
+      "Id": "334af47c2f984294961de5732e891672",
+      "IsHidden": "True"
+    },
+    {
+      "Start": "83d2341df0bb442587796915ef6376e7",
+      "End": "381cf301715748caa2f89cd8ea38837c",
+      "Id": "1dac4f1ea8e34f26ba746b49da491de8",
+      "IsHidden": "True"
+    },
+    {
+      "Start": "1e23216bba054d379a14a0b7bf018067",
+      "End": "115c4aa8af694310a5536203035b2530",
+      "Id": "be776f338ec44f0d94d2cee6628e245c",
+      "IsHidden": "True"
+    },
+    {
+      "Start": "37f89517f8994011b0ffc1e113841c39",
+      "End": "ca117fb8208847edae702c49b4f9208f",
+      "Id": "a025efdd37ec4e31b1f8c20a154ddaf1",
+      "IsHidden": "True"
+    },
+    {
+      "Start": "bf98a890ed884f71b5791c7424906c53",
+      "End": "3cf99e52b278462eba2d2769533a5a3f",
+      "Id": "89caaec22d314c5e80b8877edbc5eb32",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "457178d29dd44e4eba322fc20fc7b055",
+      "End": "c6b26d06c777490286eeb06817e5b09d",
+      "Id": "b653a4b113454f95b7c119624724a62b",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "4c1a98fdd7c747d4a2dd2796dc3a6e6f",
+      "End": "e59dc28ce9e74132aea4ab0d750da164",
+      "Id": "e0fef54156994b849b613fea6e3de556",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "7b58b4e3c15e44328b51328d09a7da89",
+      "End": "b8f9f4685d40400c955f64e333f66efe",
+      "Id": "2d0fa1cd4476433ab765c30d52556e42",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "9efdebdd9f954bb59f36686955c3f957",
+      "End": "9f7f8fb4d3b84f7c9d6315e1db56fa4f",
+      "Id": "fc640542da9748f6a7270f3e69bd3c65",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "5c7b0a367d4f40a181aa4b1c80925f7b",
+      "End": "69f4b97abe524aa4b6d7a87d09114edd",
+      "Id": "e2901ce6b1e946ceb99957e4f107954e",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "e350b8e1ee614f21b7e4a89e2a4cf787",
+      "End": "00dcb0760404426681863e7fde3b80f6",
+      "Id": "c37d664f61f44646999547380c65bb17",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "d6ec2e269d464b2d8552bdad81832d47",
+      "End": "bf883e4a9e7440ea9395272922a77833",
+      "Id": "f99fab52355f4856847d763a7d49073d",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "bff287b8584d4febafdf313ab1de1a87",
+      "End": "72fdd0504e5b448eb72ac42e7361212f",
+      "Id": "9131cbf20bf7428a965edee61f917acd",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "0c4461ee14a745919ce9c51f57619523",
+      "End": "0adf85d2840e4916ac4bdc1f1402cdaa",
+      "Id": "ec2c3e56a061457388b84146ba633bf9",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "2424bfe7a0cc4f82ab53d4175b191f0e",
+      "End": "de06955cf6a440aeb871c8b94fc3e3ae",
+      "Id": "6159f3d9d179476a95b02d97b5083462",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "c1c36eedce244bcd99ecc6e31970e76d",
+      "End": "4c8ccaa91f0b448b965979f25d62bdbf",
+      "Id": "a643072959c346f3832126456307ed35",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "c1c36eedce244bcd99ecc6e31970e76d",
+      "End": "9f94098b07ea4c7a89754f606b725498",
+      "Id": "4cad862bc23d4451afbff1021ad20ad9",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "c1c36eedce244bcd99ecc6e31970e76d",
+      "End": "026a53e58b6047a7a9f6b813fcc371ab",
+      "Id": "45305b6190f74703aeda7eb0a9172f59",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "0e49ea8b17764a45b905788db5b0d84f",
+      "End": "f9864168e7fb4533baebeea250bc0bed",
+      "Id": "92b12d7b51ec49bc99be44d5be8c6ac5",
+      "IsHidden": "False"
+    }
+  ],
+  "Dependencies": [
+    "58de6759-aa80-4c7f-a558-f44049a68a6f",
+    "ba3bfc1e-6f50-4f1b-a821-239e7af9349a",
+    "023838c1-9305-4b17-839c-6f579dcc52b1",
+    "a1585df6-63ab-412c-bbd0-cc224c48e7ef",
+    "08184496-34eb-4034-87bc-39ed305299f5"
+  ],
+  "NodeLibraryDependencies": [
+    {
+      "Name": "ProjectBoundaryOntoPlane.dyf",
+      "ReferenceType": "DYFFile",
+      "Nodes": [
+        "763100d321454d3ea97f83fda3a635b0"
+      ]
+    },
+    {
+      "Name": "InternalandRoadwaySurfaces.dyf",
+      "ReferenceType": "DYFFile",
+      "Nodes": [
+        "e83f99cc1ba54543a7406d5a5f1ef9c3"
+      ]
+    },
+    {
+      "Name": "GenerateBoundingRectangle.dyf",
+      "ReferenceType": "DYFFile",
+      "Nodes": [
+        "a30a21adc3124ddd92187b54764d92be"
+      ]
+    },
+    {
+      "Name": "GeneratePatterns.dyf",
+      "ReferenceType": "DYFFile",
+      "Nodes": [
+        "87c75ed104464bacbb1ad8112bf56ebb"
+      ]
+    },
+    {
+      "Name": "InternalBays.dyf",
+      "ReferenceType": "DYFFile",
+      "Nodes": [
+        "1ac0fd850821405ea5a1001698d60b92"
+      ]
+    }
+  ],
+  "EnableLegacyPolyCurveBehavior": true,
+  "Thumbnail": "",
+  "GraphDocumentationURL": null,
+  "ExtensionWorkspaceData": [
+    {
+      "ExtensionGuid": "28992e1d-abb9-417f-8b1b-05e053bee670",
+      "Name": "Properties",
+      "Version": "2.17",
+      "Data": {}
+    },
+    {
+      "ExtensionGuid": "DFBD9CC0-DB40-457A-939E-8C8555555A9D",
+      "Name": "Generative Design",
+      "Version": "4.0",
+      "Data": {}
+    }
+  ],
+  "Author": "",
+  "Linting": {
+    "activeLinter": "None",
+    "activeLinterId": "7b75fb44-43fd-4631-a878-29f4d5d8399a",
+    "warningCount": 0,
+    "errorCount": 0
+  },
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 100.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "3.3.0.6316",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "_Background Preview",
+      "EyeX": -80.33975649718195,
+      "EyeY": 146.85030263848603,
+      "EyeZ": 237.73676399700344,
+      "LookX": 137.1053009033203,
+      "LookY": -231.76058959960938,
+      "LookZ": -155.5775909423828,
+      "UpX": 0.4927261173725128,
+      "UpY": 0.6668033003807068,
+      "UpZ": -0.559101402759552
+    },
+    "ConnectorPins": [],
+    "NodeViews": [
+      {
+        "Id": "e2d24f7df9fe4039970df63677df1087",
+        "Name": "Surface.ByPatch",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": -2038.3407268562496,
+        "Y": -1715.0846227567824
+      },
+      {
+        "Id": "f0431cbf69d14c5397fdcf5790aa69df",
+        "Name": "Surface.PerimeterCurves",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 7774.899189823083,
+        "Y": -110.16498010602015
+      },
+      {
+        "Id": "df634474f254428e836e0eb9561b3df4",
+        "Name": "PolyCurve.ByJoinedCurves",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 8115.091197067691,
+        "Y": -112.71286709563071
+      },
+      {
+        "Id": "78cbf531cee34381ad1d305af3ba0a66",
+        "Name": "Floor.ByOutlineTypeAndLevel",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 8910.834712786826,
+        "Y": -117.49790524167281
+      },
+      {
+        "Id": "a02eb14cde9f4a9ca3cac3c54bb04ff1",
+        "Name": "Element.SetParameterByName",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 9591.793631538585,
+        "Y": -120.87574704231054
+      },
+      {
+        "Id": "ef9bb9746bcd438c9303d1f5b763d704",
+        "Name": "PolySurface.Surfaces",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 7388.5000143572925,
+        "Y": -113.19616340392975
+      },
+      {
+        "Id": "5db187b5fa2b48a7afcfe798f696c88c",
+        "Name": "GeometryColor.ByGeometryColor",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 6059.279767188238,
+        "Y": 537.402816423448
+      },
+      {
+        "Id": "2f656bf2315b4f00819ff041a1faed8b",
+        "Name": "PolySurface.ByJoinedSurfaces",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 5607.827976986198,
+        "Y": 506.19004730619463
+      },
+      {
+        "Id": "9553d789e520433dbc70cd3f89eeedc8",
+        "Name": "List.Clean",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 5028.655835683932,
+        "Y": 699.4757103035374
+      },
+      {
+        "Id": "779629bcb0014d89a9fe71e94f9cc37e",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 9234.397458485295,
+        "Y": 126.64202688066973
+      },
+      {
+        "Id": "5319aade344d4a20a8a09483f346c6b1",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 5307.72382546124,
+        "Y": 978.701878339127
+      },
+      {
+        "Id": "f7a6118f62074cf98f547e164178b7d9",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 4812.662429958777,
+        "Y": 899.6819483050388
+      },
+      {
+        "Id": "496981831104498b87562fc842025454",
+        "Name": "List.Join",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 4525.04328115725,
+        "Y": -192.03682376676102
+      },
+      {
+        "Id": "bba38af47f6847efb438bfe391521fb6",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 5445.823393352053,
+        "Y": 41.95879587022728
+      },
+      {
+        "Id": "be6f10b79eb14ac6b00d9138306d0f78",
+        "Name": "GeometryColor.ByGeometryColor",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 5940.475644443861,
+        "Y": -177.71948571209782
+      },
+      {
+        "Id": "94821d506334441f9182f971288a3d7b",
+        "Name": "List.Clean",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 5004.674534375723,
+        "Y": -186.54818860648606
+      },
+      {
+        "Id": "2e3c697c17914ecdb963990de2363967",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 4786.347286662323,
+        "Y": 13.658049395014359
+      },
+      {
+        "Id": "87cfb30b25be404897ddc8e37e4b2810",
+        "Name": "List.Join",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 2207.7300083171413,
+        "Y": -2987.3633124522416
+      },
+      {
+        "Id": "d7287a6ba87b4104ba4a2aa286a85373",
+        "Name": "List.Join",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 3289.1112269215023,
+        "Y": -3004.50104699206
+      },
+      {
+        "Id": "7ff9b66cdb3b4196957944f2cf9aa0d8",
+        "Name": "List.Join",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 5662.218019698007,
+        "Y": -2174.302309036504
+      },
+      {
+        "Id": "b384aa12c8274435802b2ed7b7b1b0d9",
+        "Name": "Rectangle.Height",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 5284.748263846372,
+        "Y": -1929.381577560899
+      },
+      {
+        "Id": "66a87acb3b82483eb643443b6d418fc9",
+        "Name": "Element.SetParameterByName",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 6595.05487498832,
+        "Y": -3032.2305857612573
+      },
+      {
+        "Id": "be81c4da4f4f492f9fe048ee9e0cfd06",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 6243.995001508811,
+        "Y": -2829.353675243457
+      },
+      {
+        "Id": "8bbcb524f09d4181a52d86e92a67538d",
+        "Name": "FamilyInstance.SetRotation",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 4227.143974173616,
+        "Y": -3021.8056334630874
+      },
+      {
+        "Id": "ccb0fd47c0c04594b71008ba68382bba",
+        "Name": "Element.SetParameterByName",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 6636.55387659032,
+        "Y": -2517.362921347557
+      },
+      {
+        "Id": "07f935f34a874f15a5b7fdd38ce728de",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 6270.634702229518,
+        "Y": -2084.466109401765
+      },
+      {
+        "Id": "b015f25c591d4c13a324f67d1848e168",
+        "Name": "Polygon.Center",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 2994.268512197417,
+        "Y": -2747.1970739959875
+      },
+      {
+        "Id": "63cf7f9ab8074ad581767e04da28cce2",
+        "Name": "FamilyInstance.ByPoint",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 3657.620056866918,
+        "Y": -2779.994580921987
+      },
+      {
+        "Id": "368c2a78391440b381f7d11cd6a7886d",
+        "Name": "List.Flatten",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 2571.1115516020577,
+        "Y": -2985.747779847057
+      },
+      {
+        "Id": "80b190e9e6464adaad39eaaa61d48047",
+        "Name": "List.Flatten",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 3635.415748067661,
+        "Y": -2998.694075726166
+      },
+      {
+        "Id": "139a4b49641c45a7ae7595f6723da944",
+        "Name": "List.Flatten",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 5935.397014689215,
+        "Y": -2178.9237354622887
+      },
+      {
+        "Id": "6f2e10737ab74dcb9fa8e9c013cc10ea",
+        "Name": "List.Join",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 4579.76793000352,
+        "Y": 703.7932724411085
+      },
+      {
+        "Id": "c06ccce0cc464f9492b3ab6a6f10907f",
+        "Name": "List.Flatten",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 5291.479251541533,
+        "Y": 506.88941005089555
+      },
+      {
+        "Id": "14173b6caa9442f2a1fee97705dc2bb6",
+        "Name": "Surface.PerimeterCurves",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": -1349.2729207239718,
+        "Y": 197.31639190032752
+      },
+      {
+        "Id": "b17333062c064c95a062a04d1a606eae",
+        "Name": "Gate",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 2343.0188388094375,
+        "Y": -2751.2525018130364
+      },
+      {
+        "Id": "3e3b9ac98f6449aa878d64dc94e01bc9",
+        "Name": "Gate",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 8486.942369621887,
+        "Y": -113.05601435644962
+      },
+      {
+        "Id": "763100d321454d3ea97f83fda3a635b0",
+        "Name": "ProjectBoundaryOntoPlane",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": -3153.4226548139054,
+        "Y": -2208.6430268779113
+      },
+      {
+        "Id": "7138470ec0bd4edf9ea075e5bb3da842",
+        "Name": "IN_Select Parking Level",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": -5002.9493017657,
+        "Y": -2197.5142176731742
+      },
+      {
+        "Id": "3bb3d4bef48f4250a08c68391529c390",
+        "Name": "IN_Select Parking Region",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": -5000.076044854413,
+        "Y": -2706.616193519953
+      },
+      {
+        "Id": "18d07be8f8c449189fbf6753675ffbf8",
+        "Name": "IN_Bay Setout Line Rotation.",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": -5034.849437599141,
+        "Y": -2428.4908222905888
+      },
+      {
+        "Id": "bc8a17cb54f54845b26fee0c38f640c8",
+        "Name": "IN_Aisle Type Selector",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -5033.227589111694,
+        "Y": -1953.0679715143951
+      },
+      {
+        "Id": "6207019e55e2462e9864b0445731f75c",
+        "Name": "IN_Perimeter Aisle Width",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": -5029.049797064697,
+        "Y": -1715.8780221705056
+      },
+      {
+        "Id": "0f623abf856e4c359d4ffbffd3c40cf3",
+        "Name": "IN_Internal Turning Radius",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": -5030.094245076446,
+        "Y": -1450.2787200884059
+      },
+      {
+        "Id": "133a8183e4054f5e90172129316b2b65",
+        "Name": "IN_External Turning Radius",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": -5033.227589111694,
+        "Y": -1201.3017431645158
+      },
+      {
+        "Id": "cbe206fab7fd412995ca6c2bd07c3b24",
+        "Name": "IN_Island Corner Radius",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": -5026.373520987565,
+        "Y": -954.3568527455291
+      },
+      {
+        "Id": "c2bea16f32a24c83a54560cc5c193014",
+        "Name": "IN_Parking Bay Width",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": -5026.568146188673,
+        "Y": -718.208719629112
+      },
+      {
+        "Id": "5865f6db4e9449edbebdfe72021aaf47",
+        "Name": "IN_Parking Bay Length",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": -5032.250958655845,
+        "Y": -488.40503506525306
+      },
+      {
+        "Id": "4764e2d64c2e424192f2267e8d701d84",
+        "Name": "IN_Parking Island Width",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": -5025.47759495962,
+        "Y": 44.675451696546816
+      },
+      {
+        "Id": "97ed2d8914a249d8962430a30b73b7f1",
+        "Name": "IN_Parking Angle Selector",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -5032.589559180024,
+        "Y": -179.84813953974003
+      },
+      {
+        "Id": "eef2aa5d2efb4e379b1d3b316f98f638",
+        "Name": "IN_Parking Pattern Selector",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -5022.314492010285,
+        "Y": 322.7506116336183
+      },
+      {
+        "Id": "2138481ed1824f54b331133d791adabe",
+        "Name": "IN_Select Parking Family Type",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": -5003.4306501199735,
+        "Y": 779.6404203969062
+      },
+      {
+        "Id": "847d2dfe3d3b4d15b6bb820d193b1f06",
+        "Name": "IN_Select Island Floor Type",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -5051.096202793864,
+        "Y": 569.9591021354729
+      },
+      {
+        "Id": "e0092b151ab64e969698ec630d59f2bc",
+        "Name": "IN_Parking Island Height",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": -5024.178712874493,
+        "Y": 1028.572988159661
+      },
+      {
+        "Id": "c5f05fc9cf014f2aa050e0d05f984336",
+        "Name": "IN_One Way Aisle Width",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": -5023.532761063744,
+        "Y": 1263.977930315936
+      },
+      {
+        "Id": "f741a5412cbe4187a4d68146a2d7ac50",
+        "Name": "IN_Two Way Aisle Width",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": -5020.390979565916,
+        "Y": 1497.0488321515716
+      },
+      {
+        "Id": "e83f99cc1ba54543a7406d5a5f1ef9c3",
+        "Name": "InternalandRoadwaySurfaces",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": -2143.3074326770998,
+        "Y": -2304.1409014959922
+      },
+      {
+        "Id": "a30a21adc3124ddd92187b54764d92be",
+        "Name": "GenerateBoundingRectangle",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": -1196.8813205457948,
+        "Y": -1919.8683444058347
+      },
+      {
+        "Id": "87c75ed104464bacbb1ad8112bf56ebb",
+        "Name": "GeneratePatterns",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": -565.0510816348492,
+        "Y": -210.4480666062786
+      },
+      {
+        "Id": "1ac0fd850821405ea5a1001698d60b92",
+        "Name": "InternalBays",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 1006.5149496462182,
+        "Y": -198.58762092692842
+      }
+    ],
+    "Annotations": [
+      {
+        "Id": "34394d26c07b43449b67694f14d1eb8c",
+        "Title": "Project the site boundary onto the required level.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "763100d321454d3ea97f83fda3a635b0"
+        ],
+        "HasNestedGroups": false,
+        "Left": -3163.4226548139054,
+        "Top": -2368.1430268779113,
+        "Width": 306.0,
+        "Height": 338.5,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": -2208.6430268779113,
+        "InitialHeight": 145.0,
+        "TextblockHeight": 149.5,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "705a9a3781c94010b2870b79f579482a",
+        "Title": "Generate the bounding rectangle of the internal parking area.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "a30a21adc3124ddd92187b54764d92be"
+        ],
+        "HasNestedGroups": false,
+        "Left": -1206.8813205457948,
+        "Top": -2165.8683444058347,
+        "Width": 308.0,
+        "Height": 460.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": -1919.8683444058347,
+        "InitialHeight": 145.0,
+        "TextblockHeight": 236.0,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "5db957b2007c45fba1f7ea25e8a149e0",
+        "Title": "Create site surface.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "e2d24f7df9fe4039970df63677df1087"
+        ],
+        "HasNestedGroups": false,
+        "Left": -2048.3407268562496,
+        "Top": -1831.5846227567824,
+        "Width": 264.5,
+        "Height": 260.5,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": -1715.0846227567824,
+        "InitialHeight": 145.0,
+        "TextblockHeight": 106.5,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "4a3b42f0db584854b148c2aa1189d119",
+        "Title": "Generate the parking patterns.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "87c75ed104464bacbb1ad8112bf56ebb"
+        ],
+        "HasNestedGroups": false,
+        "Left": -575.0510816348492,
+        "Top": -326.9480666062786,
+        "Width": 415.5,
+        "Height": 470.5,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": -210.4480666062786,
+        "InitialHeight": 145.0,
+        "TextblockHeight": 106.5,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "1e9476a710a9410fb8bdf56987c76f82",
+        "Title": "Generate the internal parking spots.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "1ac0fd850821405ea5a1001698d60b92"
+        ],
+        "HasNestedGroups": false,
+        "Left": 996.5149496462182,
+        "Top": -315.0876209269284,
+        "Width": 471.5,
+        "Height": 885.5,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": -198.58762092692842,
+        "InitialHeight": 145.0,
+        "TextblockHeight": 106.5,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "5d5b9580ac0349069a825b58bf42d804",
+        "Title": "Create floors in Revit.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "f0431cbf69d14c5397fdcf5790aa69df",
+          "ef9bb9746bcd438c9303d1f5b763d704",
+          "df634474f254428e836e0eb9561b3df4",
+          "78cbf531cee34381ad1d305af3ba0a66",
+          "a02eb14cde9f4a9ca3cac3c54bb04ff1",
+          "779629bcb0014d89a9fe71e94f9cc37e",
+          "3e3b9ac98f6449aa878d64dc94e01bc9",
+          "dd7bc7e2982645cabfee8c33bc13794a"
+        ],
+        "HasNestedGroups": false,
+        "Left": 7378.5000143572925,
+        "Top": -300.37574704231054,
+        "Width": 2526.7936171812926,
+        "Height": 559.0177739229803,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": -227.37574704231054,
+        "InitialHeight": 451.01777392298027,
+        "TextblockHeight": 63.0,
+        "Background": "#FFFFAA45"
+      },
+      {
+        "Id": "ffed24fe4b9045608580ec4220accc42",
+        "Title": "Colour the islands.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "5319aade344d4a20a8a09483f346c6b1",
+          "5db187b5fa2b48a7afcfe798f696c88c",
+          "2f656bf2315b4f00819ff041a1faed8b",
+          "9553d789e520433dbc70cd3f89eeedc8",
+          "f7a6118f62074cf98f547e164178b7d9",
+          "c06ccce0cc464f9492b3ab6a6f10907f",
+          "6f2e10737ab74dcb9fa8e9c013cc10ea",
+          "328649d1524747b5b28a3f66b52e5417",
+          "156ef43d0b9a4ba2ab25d2b57acc582d"
+        ],
+        "HasNestedGroups": false,
+        "Left": 4518.01793000352,
+        "Top": 405.90281642344803,
+        "Width": 1870.7618371847184,
+        "Height": 716.799061915679,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 478.90281642344803,
+        "InitialHeight": 644.799061915679,
+        "TextblockHeight": 63.0,
+        "Background": "#FF48B9FF"
+      },
+      {
+        "Id": "dace75bbb5044c749056ee56f57d1b77",
+        "Title": "Colour the parking bays.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "bba38af47f6847efb438bfe391521fb6",
+          "be6f10b79eb14ac6b00d9138306d0f78",
+          "94821d506334441f9182f971288a3d7b",
+          "2e3c697c17914ecdb963990de2363967",
+          "496981831104498b87562fc842025454",
+          "4c7a353423144f3dafed74c2f845d19a"
+        ],
+        "HasNestedGroups": false,
+        "Left": 4515.04328115725,
+        "Top": -309.2194857120978,
+        "Width": 1754.9323632866108,
+        "Height": 495.1782815823251,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": -236.21948571209782,
+        "InitialHeight": 423.1782815823251,
+        "TextblockHeight": 63.0,
+        "Background": "#FF48B9FF"
+      },
+      {
+        "Id": "e469a7c429c34a2fbeb891fd729d2058",
+        "Title": "Set the parking bay width and length parameters.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "66a87acb3b82483eb643443b6d418fc9",
+          "be81c4da4f4f492f9fe048ee9e0cfd06",
+          "ccb0fd47c0c04594b71008ba68382bba",
+          "07f935f34a874f15a5b7fdd38ce728de",
+          "139a4b49641c45a7ae7595f6723da944",
+          "7ff9b66cdb3b4196957944f2cf9aa0d8",
+          "b384aa12c8274435802b2ed7b7b1b0d9",
+          "ff8fbfe7b8914e6c872339be0e94560d",
+          "b1e3ef80097e43a29efcc9b61497306e",
+          "2a492f81863a49b6a1d0917c99b27338"
+        ],
+        "HasNestedGroups": false,
+        "Left": 5274.748263846372,
+        "Top": -3226.2305857612573,
+        "Width": 1675.3056127439486,
+        "Height": 1428.8490082003584,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": -3153.2305857612573,
+        "InitialHeight": 1320.8490082003584,
+        "TextblockHeight": 63.0,
+        "Background": "#FFFFAA45"
+      },
+      {
+        "Id": "fd2f960f378240c39b03f5d018043054",
+        "Title": "Place the parking bays in the Revit project.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "b015f25c591d4c13a324f67d1848e168",
+          "63cf7f9ab8074ad581767e04da28cce2",
+          "8bbcb524f09d4181a52d86e92a67538d",
+          "368c2a78391440b381f7d11cd6a7886d",
+          "87cfb30b25be404897ddc8e37e4b2810",
+          "80b190e9e6464adaad39eaaa61d48047",
+          "d7287a6ba87b4104ba4a2aa286a85373",
+          "b17333062c064c95a062a04d1a606eae",
+          "da50e669cd234673a7c8ff8588853ad2",
+          "a792101f989c4a1c8742d611c0c050ee",
+          "8954ee4b238f471bac65724ac8a94141",
+          "5242e20759bf4ddabbd72b9f9fff3d7f",
+          "798a7b558f3f4b82be641944ead1f7db"
+        ],
+        "HasNestedGroups": false,
+        "Left": 2150.7300083171413,
+        "Top": -3201.3056334630874,
+        "Width": 2390.4139658564745,
+        "Height": 598.1085594670999,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": -3128.3056334630874,
+        "InitialHeight": 478.1085594670999,
+        "TextblockHeight": 63.0,
+        "Background": "#FFFFAA45"
+      },
+      {
+        "Id": "35da9969ba7c454d894ee42c74c2a042",
+        "Title": "Create the internal and perimeter roadway surfaces.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "e83f99cc1ba54543a7406d5a5f1ef9c3"
+        ],
+        "HasNestedGroups": false,
+        "Left": -2153.3074326770998,
+        "Top": -2463.6409014959922,
+        "Width": 423.5,
+        "Height": 438.5,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": -2304.1409014959922,
+        "InitialHeight": 145.0,
+        "TextblockHeight": 149.5,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "fe66cd397b604eaea8ac18d114696b7a",
+        "Title": "Get the perimeter curves of the site surface.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "14173b6caa9442f2a1fee97705dc2bb6"
+        ],
+        "HasNestedGroups": false,
+        "Left": -1359.2729207239718,
+        "Top": -5.683608099672483,
+        "Width": 278.0,
+        "Height": 347.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 197.31639190032752,
+        "InitialHeight": 145.0,
+        "TextblockHeight": 193.0,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "68f10299aeb6450a9c07589eaab73423",
+        "Title": "Inputs",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "c2bea16f32a24c83a54560cc5c193014",
+          "5865f6db4e9449edbebdfe72021aaf47",
+          "7138470ec0bd4edf9ea075e5bb3da842",
+          "18d07be8f8c449189fbf6753675ffbf8",
+          "4764e2d64c2e424192f2267e8d701d84",
+          "97ed2d8914a249d8962430a30b73b7f1",
+          "eef2aa5d2efb4e379b1d3b316f98f638",
+          "bc8a17cb54f54845b26fee0c38f640c8",
+          "6207019e55e2462e9864b0445731f75c",
+          "0f623abf856e4c359d4ffbffd3c40cf3",
+          "133a8183e4054f5e90172129316b2b65",
+          "2138481ed1824f54b331133d791adabe",
+          "3bb3d4bef48f4250a08c68391529c390",
+          "cbe206fab7fd412995ca6c2bd07c3b24",
+          "847d2dfe3d3b4d15b6bb820d193b1f06",
+          "e0092b151ab64e969698ec630d59f2bc",
+          "c5f05fc9cf014f2aa050e0d05f984336",
+          "f741a5412cbe4187a4d68146a2d7ac50",
+          "feec357d0ee44542a6ad54cd3991f2ad",
+          "e7fbaddfe53f4c5a9543ce2f0515ab4a",
+          "e1f02f6f7d5642588a84fadfb3c52fbc",
+          "68af3ca39b7b437884da8e5b00b1fbd4",
+          "e5974b365746451297ec535a62b64cc2",
+          "b7130ec9aeb8460484fdbd63a7f41e1f",
+          "e42d00dd4dab4c6fa82a86a5fd300e61",
+          "4f64340826fc47ba994e9c318631a0c5",
+          "2e740c8d5c5d4e13acd7dd1f9895237d",
+          "da2d2791136a4ebda1d3959fddb8e8fe",
+          "3bedfeaa687548f5a89ed4c17eb10db6",
+          "52e3b376955c42afadef3319c424ec76",
+          "b9bb752dcce140b4a170c649ebcf2f58",
+          "4a0b23e87c114979a3abe0a0ba712b01",
+          "c23954904ef1449ba943ed75778ff888",
+          "d0d580c479fb42c5a136d9b51fc3e445",
+          "908e834039dd4583ba167ca1d292f94e",
+          "60080f6d104c4b08848171225c88f8af"
+        ],
+        "HasNestedGroups": false,
+        "Left": -5061.096202793864,
+        "Top": -2838.116193519953,
+        "Width": 462.0,
+        "Height": 4479.165025671525,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": -2765.116193519953,
+        "InitialHeight": 6606.261392492128,
+        "TextblockHeight": 63.0,
+        "Background": "#FF848484"
+      },
+      {
+        "Id": "dd7bc7e2982645cabfee8c33bc13794a",
+        "Title": "Set the height of the parking island floors.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": 9620.543631538585,
+        "Top": -219.37574704231054,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "a02eb14cde9f4a9ca3cac3c54bb04ff1"
+      },
+      {
+        "Id": "328649d1524747b5b28a3f66b52e5417",
+        "Title": "Colour the islands.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": 6158.279767188238,
+        "Top": 486.90281642344803,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "5db187b5fa2b48a7afcfe798f696c88c"
+      },
+      {
+        "Id": "4c7a353423144f3dafed74c2f845d19a",
+        "Title": "Colour the islands.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": 6039.475644443861,
+        "Top": -228.21948571209782,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "be6f10b79eb14ac6b00d9138306d0f78"
+      },
+      {
+        "Id": "5242e20759bf4ddabbd72b9f9fff3d7f",
+        "Title": "Combine all the parking bays into one list.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": 2160.7300083171413,
+        "Top": -3037.8633124522416,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "87cfb30b25be404897ddc8e37e4b2810"
+      },
+      {
+        "Id": "798a7b558f3f4b82be641944ead1f7db",
+        "Title": "Combine all the parking bay rotation angles into one list.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": 3215.6112269215023,
+        "Top": -3069.50104699206,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "d7287a6ba87b4104ba4a2aa286a85373"
+      },
+      {
+        "Id": "2a492f81863a49b6a1d0917c99b27338",
+        "Title": "Combine all the parking bay widths into one list.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": 5598.718019698007,
+        "Top": -2224.802309036504,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "7ff9b66cdb3b4196957944f2cf9aa0d8"
+      },
+      {
+        "Id": "ff8fbfe7b8914e6c872339be0e94560d",
+        "Title": "Set the length of the parking bays in the Revit project.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": 6613.80487498832,
+        "Top": -3145.2305857612573,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "66a87acb3b82483eb643443b6d418fc9"
+      },
+      {
+        "Id": "8954ee4b238f471bac65724ac8a94141",
+        "Title": "Rotate the parking bays.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": 4303.143974173616,
+        "Top": -3120.3056334630874,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "8bbcb524f09d4181a52d86e92a67538d"
+      },
+      {
+        "Id": "b1e3ef80097e43a29efcc9b61497306e",
+        "Title": "Set the width of the parking bays in the Revit project.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": 6657.55387659032,
+        "Top": -2630.362921347557,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "ccb0fd47c0c04594b71008ba68382bba"
+      },
+      {
+        "Id": "da50e669cd234673a7c8ff8588853ad2",
+        "Title": "Place parking bays in Revit project.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": 3694.620056866918,
+        "Top": -2830.494580921987,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "63cf7f9ab8074ad581767e04da28cce2"
+      },
+      {
+        "Id": "a792101f989c4a1c8742d611c0c050ee",
+        "Title": "Get center of parking spots for parking bay placement.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": 2972.268512197417,
+        "Top": -2812.1970739959875,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "b015f25c591d4c13a324f67d1848e168"
+      },
+      {
+        "Id": "156ef43d0b9a4ba2ab25d2b57acc582d",
+        "Title": "Combine all the island surfaces into one list.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": 4528.01793000352,
+        "Top": 653.2932724411085,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "6f2e10737ab74dcb9fa8e9c013cc10ea"
+      },
+      {
+        "Id": "feec357d0ee44542a6ad54cd3991f2ad",
+        "Title": "Define the parking region with a filled region.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": -5000.076044854413,
+        "Top": -2757.116193519953,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "3bb3d4bef48f4250a08c68391529c390"
+      },
+      {
+        "Id": "e7fbaddfe53f4c5a9543ce2f0515ab4a",
+        "Title": "Select the level to host the parking bays.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": -4996.1993017657,
+        "Top": -2248.0142176731742,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "7138470ec0bd4edf9ea075e5bb3da842"
+      },
+      {
+        "Id": "e1f02f6f7d5642588a84fadfb3c52fbc",
+        "Title": "The rotation angle of the setout line of the center bays.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": -5003.599437599141,
+        "Top": -2493.4908222905888,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "18d07be8f8c449189fbf6753675ffbf8"
+      },
+      {
+        "Id": "68af3ca39b7b437884da8e5b00b1fbd4",
+        "Title": "Select \"1\" for one way traffic, and \"2\" for two way traffic.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": -5001.227589111694,
+        "Top": -2018.0679715143951,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "bc8a17cb54f54845b26fee0c38f640c8"
+      },
+      {
+        "Id": "e5974b365746451297ec535a62b64cc2",
+        "Title": "The width of the perimeter aisle for the overall parking layout. ",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": -4989.549797064697,
+        "Top": -1780.8780221705056,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "6207019e55e2462e9864b0445731f75c"
+      },
+      {
+        "Id": "b7130ec9aeb8460484fdbd63a7f41e1f",
+        "Title": "The vehicle turning radius at the concave corners of the perimeter aisle.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": -5004.594245076446,
+        "Top": -1515.2787200884059,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "0f623abf856e4c359d4ffbffd3c40cf3"
+      },
+      {
+        "Id": "e42d00dd4dab4c6fa82a86a5fd300e61",
+        "Title": "The vehicle turning radius at the convex corners of the perimeter aisle.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": -5004.727589111694,
+        "Top": -1266.3017431645158,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "133a8183e4054f5e90172129316b2b65"
+      },
+      {
+        "Id": "4f64340826fc47ba994e9c318631a0c5",
+        "Title": "The radius at the corners of the internal parking islands.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": -4990.373520987565,
+        "Top": -1019.3568527455291,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "cbe206fab7fd412995ca6c2bd07c3b24"
+      },
+      {
+        "Id": "2e740c8d5c5d4e13acd7dd1f9895237d",
+        "Title": "The width of the parking bays.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": -4944.568146188673,
+        "Top": -768.708719629112,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "c2bea16f32a24c83a54560cc5c193014"
+      },
+      {
+        "Id": "da2d2791136a4ebda1d3959fddb8e8fe",
+        "Title": "The length of the parking bays.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": -4952.500958655845,
+        "Top": -538.9050350652531,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "5865f6db4e9449edbebdfe72021aaf47"
+      },
+      {
+        "Id": "3bedfeaa687548f5a89ed4c17eb10db6",
+        "Title": "The width of the island between the non interlocking parking pattern.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": -5001.22759495962,
+        "Top": -20.324548303453184,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "4764e2d64c2e424192f2267e8d701d84"
+      },
+      {
+        "Id": "52e3b376955c42afadef3319c424ec76",
+        "Title": "Select \"1\" for 45 degree parking, \"2\" for 60 degree parking, and \"3\" for 90 degree parking. Note that the angles are not applied to the perimeter parking bays and herringbone pattern. The herringbone pattern will always be at 45 degrees.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": -5006.339559180024,
+        "Top": -287.84813953974003,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "97ed2d8914a249d8962430a30b73b7f1"
+      },
+      {
+        "Id": "b9bb752dcce140b4a170c649ebcf2f58",
+        "Title": "Select \"1\" for the non interlocking pattern which allows for an island between the bay rows, \"2\" for the interlocking pattern, \"3\" for the mirrored interlocking pattern, and \"4\" for the herringbone pattern.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": -4990.814492010285,
+        "Top": 214.7506116336183,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "eef2aa5d2efb4e379b1d3b316f98f638"
+      },
+      {
+        "Id": "4a0b23e87c114979a3abe0a0ba712b01",
+        "Title": "Select the family type that will be used when the parking spots are loaded into the project.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": -4986.4306501199735,
+        "Top": 714.6404203969062,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "2138481ed1824f54b331133d791adabe"
+      },
+      {
+        "Id": "c23954904ef1449ba943ed75778ff888",
+        "Title": "Select the floor family type that will be used when the parking islands are loaded into the project.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": -4973.846202793864,
+        "Top": 504.9591021354729,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "847d2dfe3d3b4d15b6bb820d193b1f06"
+      },
+      {
+        "Id": "d0d580c479fb42c5a136d9b51fc3e445",
+        "Title": "The height of the parking islands above the selected parking level.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": -4998.428712874493,
+        "Top": 963.572988159661,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "e0092b151ab64e969698ec630d59f2bc"
+      },
+      {
+        "Id": "908e834039dd4583ba167ca1d292f94e",
+        "Title": "The width of the one way aisle.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": -4943.032761063744,
+        "Top": 1213.477930315936,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "c5f05fc9cf014f2aa050e0d05f984336"
+      },
+      {
+        "Id": "60080f6d104c4b08848171225c88f8af",
+        "Title": "The width of the two way aisle.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": -4939.640979565916,
+        "Top": 1446.5488321515716,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "f741a5412cbe4187a4d68146a2d7ac50"
+      }
+    ],
+    "X": 449.0723261359331,
+    "Y": 479.1496343658511,
+    "Zoom": 0.050464449367717434
+  }
+}

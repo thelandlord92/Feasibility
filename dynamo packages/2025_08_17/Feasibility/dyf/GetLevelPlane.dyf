@@ -1,0 +1,264 @@
+{
+  "Uuid": "e408b808-78b9-4e9e-adef-40df2693cd5f",
+  "IsCustomNode": true,
+  "Category": "Feasibility.Parking",
+  "Description": "Get the plane from a selected Revit level. ",
+  "Name": "GetLevelPlane",
+  "ElementResolver": {
+    "ResolutionMap": {
+      "Revit.Elements.Level": {
+        "Key": "Revit.Elements.Level",
+        "Value": "RevitNodes.dll"
+      }
+    }
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Output, DynamoCore",
+      "ElementResolver": null,
+      "Symbol": "//the level's plane.\r\nPlane",
+      "Id": "d309ebda999247e88687ddf301d894f8",
+      "NodeType": "OutputNode",
+      "Inputs": [
+        {
+          "Id": "275d9579578b4d9a8fb08b4b54c196d5",
+          "Name": "",
+          "Description": "Output Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "A function output, use with custom nodes"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "#Alban de Chasteigner 2020\n#twitter : @geniusloci_bim\n#geniusloci.bim@gmail.com\n\nimport clr\nclr.AddReference('RevitAPI')\nimport Autodesk\nfrom Autodesk.Revit.DB import *\n\nclr.AddReference('RevitNodes')\nimport Revit\nclr.ImportExtensions(Revit.GeometryConversion)\n\nlevels = UnwrapElement(IN[0]) if isinstance(IN[0],list) else [UnwrapElement(IN[0])]\n\t\nplanes = []\nfor level in levels:\n\telev=level.ProjectElevation\n\tpoint=XYZ(0,0,elev)\n\tplanes.append(Plane.CreateByNormalAndOrigin(XYZ.BasisZ,point).ToPlane())\n\n\t\nif isinstance(IN[0], (list)): OUT = planes\nelse: OUT = planes[0]",
+      "Engine": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "a466a504788e4810947f479a0ec05b1f",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "daf7de6d179142e4a385ce7b1a716784",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "a3cec15ba4e248fb984585118b2dcf39",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded Python script."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "Parameter": {
+        "Name": "siteLevel",
+        "TypeName": "Revit.Elements.Level",
+        "TypeRank": 0,
+        "DefaultValue": null,
+        "Description": "the site base level."
+      },
+      "Id": "b8d651251fad4da4a9107c6be96627ff",
+      "NodeType": "InputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "425a9fd75d7b431a842264991db9b7dc",
+          "Name": "",
+          "Description": "Input Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "a3cec15ba4e248fb984585118b2dcf39",
+      "End": "275d9579578b4d9a8fb08b4b54c196d5",
+      "Id": "b841b02907274835a9302111cc8e10ea",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "425a9fd75d7b431a842264991db9b7dc",
+      "End": "daf7de6d179142e4a385ce7b1a716784",
+      "Id": "d461a59455f44f5c9fdaa728a6ac7b6b",
+      "IsHidden": "False"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Author": "None provided",
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": false,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "3.3.0.6316",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "_Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "ConnectorPins": [],
+    "NodeViews": [
+      {
+        "Id": "d309ebda999247e88687ddf301d894f8",
+        "Name": "Output",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 2268.842467062661,
+        "Y": 703.7628908341683
+      },
+      {
+        "Id": "a466a504788e4810947f479a0ec05b1f",
+        "Name": "Level Plane",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1773.2979174165248,
+        "Y": 706.25
+      },
+      {
+        "Id": "b8d651251fad4da4a9107c6be96627ff",
+        "Name": "Input",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1145.0,
+        "Y": 708.3268501464588
+      }
+    ],
+    "Annotations": [
+      {
+        "Id": "faafabfaa5624dc49f6a7884c1f3062a",
+        "Title": "Outputs.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "d309ebda999247e88687ddf301d894f8"
+        ],
+        "HasNestedGroups": false,
+        "Left": 2258.842467062661,
+        "Top": 630.7628908341683,
+        "Width": 262.5,
+        "Height": 214.5,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 703.7628908341683,
+        "InitialHeight": 171.5,
+        "TextblockHeight": 63.0,
+        "Background": "#FFFF7BAC"
+      },
+      {
+        "Id": "d5facb2157884dbe8c944e64ab22f070",
+        "Title": "",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "a466a504788e4810947f479a0ec05b1f",
+          "08edbb52e2c34aa7835e5940dbb49723"
+        ],
+        "HasNestedGroups": false,
+        "Left": 1752.2979174165248,
+        "Top": 560.25,
+        "Width": 205.5,
+        "Height": 278.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 633.25,
+        "InitialHeight": 286.0,
+        "TextblockHeight": 63.0,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "3c68c2d233b141de949c42c9aebb2de2",
+        "Title": "Inputs.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "b8d651251fad4da4a9107c6be96627ff"
+        ],
+        "HasNestedGroups": false,
+        "Left": 1135.0,
+        "Top": 635.3268501464588,
+        "Width": 355.5,
+        "Height": 214.5,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 708.3268501464588,
+        "InitialHeight": 171.5,
+        "TextblockHeight": 63.0,
+        "Background": "#FF848484"
+      },
+      {
+        "Id": "08edbb52e2c34aa7835e5940dbb49723",
+        "Title": "Get the level's plane. \nFrom the Genius Loci package.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": 1762.2979174165248,
+        "Top": 641.25,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "a466a504788e4810947f479a0ec05b1f"
+      }
+    ],
+    "X": -855.5,
+    "Y": -125.5,
+    "Zoom": 1.0
+  }
+}

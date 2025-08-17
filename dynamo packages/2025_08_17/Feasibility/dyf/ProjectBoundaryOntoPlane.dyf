@@ -1,0 +1,525 @@
+{
+  "Uuid": "58de6759-aa80-4c7f-a558-f44049a68a6f",
+  "IsCustomNode": true,
+  "Category": "Feasibility.Parking",
+  "Description": "To project the boundaries developed from selected faces onto a plane. ",
+  "Name": "ProjectBoundaryOntoPlane",
+  "ElementResolver": {
+    "ResolutionMap": {
+      "Autodesk.DesignScript.Geometry.Surface": {
+        "Key": "Autodesk.DesignScript.Geometry.Surface",
+        "Value": "ProtoGeometry.dll"
+      },
+      "Revit.Elements.Level": {
+        "Key": "Revit.Elements.Level",
+        "Value": "RevitNodes.dll"
+      }
+    }
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "59ef5ebe3b894284a9399f552823352e",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "29b22627bd504f02be39def4a73577c2",
+          "Name": "curves",
+          "Description": "Curves to join into polycurve\n\nCurve[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "773b93ad05414b39b24592e7b2e7088d",
+          "Name": "joinTolerance",
+          "Description": "Tolerance to determine size of gap allowed between curves to be joined\n\ndouble\nDefault value : 0.001",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "658bbd8286354831a87b0337b4151220",
+          "Name": "trimCurves",
+          "Description": "bool\nDefault value : false",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "71524b9931774608a0c4975ae00f5796",
+          "Name": "trimLength",
+          "Description": "double\nDefault value : 0",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "27be193982384e38865b3b6d4380c995",
+          "Name": "PolyCurve",
+          "Description": "Polycurve created by joined curves",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.PolyCurve.ByJoinedCurves@Autodesk.DesignScript.Geometry.Curve[],double,bool,double",
+      "Replication": "Auto",
+      "Description": "Make PolyCurve by joining curves. Flips curve as needed for connectivity. Choose a preferred join tolerance between 1e-6 and 1e-3 units.\n\nPolyCurve.ByJoinedCurves (curves: Curve[], joinTolerance: double = 0.001, trimCurves: bool = false, trimLength: double = 0): PolyCurve"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "09b320a3a1624f4d956cb30ae51ef974",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "b9a84f4631844c44b0961dd73fd234dc",
+          "Name": "curve",
+          "Description": "Autodesk.DesignScript.Geometry.Curve",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "17ac125c915d4c4393cf4ef9ee84a6e5",
+          "Name": "plane",
+          "Description": "The plane on which to pull the curve\n\nPlane",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "d965940ae1034cf7a147dc47b2604780",
+          "Name": "Curve",
+          "Description": "A Curve on the Plane",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Curve.PullOntoPlane@Autodesk.DesignScript.Geometry.Plane",
+      "Replication": "Auto",
+      "Description": "Create a curve by pulling onto plane\n\nCurve.PullOntoPlane (plane: Plane): Curve"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "09fa5b8d3fa747c0b7af7c7f97e09b08",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "2eb82de242c84b979e898a77cf844d7f",
+          "Name": "surface",
+          "Description": "Autodesk.DesignScript.Geometry.Surface",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "3c850fdb7dbf45128fcb5bdef0233f8e",
+          "Name": "Curve[]",
+          "Description": "Curve[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Surface.PerimeterCurves",
+      "Replication": "Auto",
+      "Description": "Return all the boundary Curves of the Surface.\n\nSurface.PerimeterCurves ( ): Curve[]"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "#Alban de Chasteigner 2020\n#twitter : @geniusloci_bim\n#geniusloci.bim@gmail.com\n\nimport clr\nclr.AddReference('RevitAPI')\nimport Autodesk\nfrom Autodesk.Revit.DB import *\n\nclr.AddReference('RevitNodes')\nimport Revit\nclr.ImportExtensions(Revit.GeometryConversion)\n\nlevels = UnwrapElement(IN[0]) if isinstance(IN[0],list) else [UnwrapElement(IN[0])]\n\t\nplanes = []\nfor level in levels:\n\telev=level.ProjectElevation\n\tpoint=XYZ(0,0,elev)\n\tplanes.append(Plane.CreateByNormalAndOrigin(XYZ.BasisZ,point).ToPlane())\n\n\t\nif isinstance(IN[0], (list)): OUT = planes\nelse: OUT = planes[0]",
+      "Engine": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "f1762b4bec294c4fa85916a57ea6900d",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "cbc0852346d14236ad273b4b3451ba19",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "068be5f1cf2f4154a82e2cf726a38933",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded Python script."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "Parameter": {
+        "Name": "boundarySurface",
+        "TypeName": "Autodesk.DesignScript.Geometry.Surface",
+        "TypeRank": 0,
+        "DefaultValue": null,
+        "Description": "the input surface defining the parking area."
+      },
+      "Id": "e23fb3e150c74ba0a5a6739ae840b971",
+      "NodeType": "InputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "8bc499a3863342dc99c4fc03d2be8ead",
+          "Name": "",
+          "Description": "Input Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "Parameter": {
+        "Name": "siteLevel",
+        "TypeName": "Revit.Elements.Level",
+        "TypeRank": 0,
+        "DefaultValue": null,
+        "Description": "the site base level."
+      },
+      "Id": "72db4b80c2c34262b63716a171dd2212",
+      "NodeType": "InputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "b6cb5efe79b4482e930f9a167906376b",
+          "Name": "",
+          "Description": "Input Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Output, DynamoCore",
+      "ElementResolver": null,
+      "Symbol": "PolyCurve",
+      "Id": "43ad61f947c240a780f92c5e9d91ddbd",
+      "NodeType": "OutputNode",
+      "Inputs": [
+        {
+          "Id": "2207dfe960784b0fb68bc0a24d8fdfb2",
+          "Name": "",
+          "Description": "Output Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "A function output, use with custom nodes"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Output, DynamoCore",
+      "ElementResolver": null,
+      "Symbol": "Plane",
+      "Id": "c2e74a539da047a497e66438716710dd",
+      "NodeType": "OutputNode",
+      "Inputs": [
+        {
+          "Id": "a1568f1288c7482f821997e1cb589175",
+          "Name": "",
+          "Description": "Output Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "A function output, use with custom nodes"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "27be193982384e38865b3b6d4380c995",
+      "End": "2207dfe960784b0fb68bc0a24d8fdfb2",
+      "Id": "d68268d3622f45cda93312d4849522ef",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "d965940ae1034cf7a147dc47b2604780",
+      "End": "29b22627bd504f02be39def4a73577c2",
+      "Id": "2f1ef14863564fa8a3e7c8e961ded1fb",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "3c850fdb7dbf45128fcb5bdef0233f8e",
+      "End": "b9a84f4631844c44b0961dd73fd234dc",
+      "Id": "db297c8307d64e8095724a843f096f81",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "068be5f1cf2f4154a82e2cf726a38933",
+      "End": "17ac125c915d4c4393cf4ef9ee84a6e5",
+      "Id": "70479e10b71147d593b3673637e01f12",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "068be5f1cf2f4154a82e2cf726a38933",
+      "End": "a1568f1288c7482f821997e1cb589175",
+      "Id": "35472da46794461d85459f1f8622cc81",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "8bc499a3863342dc99c4fc03d2be8ead",
+      "End": "2eb82de242c84b979e898a77cf844d7f",
+      "Id": "87d705902e144386af8855dea40f5d65",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "b6cb5efe79b4482e930f9a167906376b",
+      "End": "cbc0852346d14236ad273b4b3451ba19",
+      "Id": "930e568cc123457288ceb7d644403a7c",
+      "IsHidden": "False"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Author": "None provided",
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": false,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "3.3.0.6316",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "_Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "ConnectorPins": [],
+    "NodeViews": [
+      {
+        "Id": "59ef5ebe3b894284a9399f552823352e",
+        "Name": "PolyCurve.ByJoinedCurves",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1156.18634852256,
+        "Y": 0.0
+      },
+      {
+        "Id": "09b320a3a1624f4d956cb30ae51ef974",
+        "Name": "Curve.PullOntoPlane",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 745.2838639433153,
+        "Y": 0.399173474492045
+      },
+      {
+        "Id": "09fa5b8d3fa747c0b7af7c7f97e09b08",
+        "Name": "Surface.PerimeterCurves",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 250.0,
+        "Y": 1.3811178294641877
+      },
+      {
+        "Id": "f1762b4bec294c4fa85916a57ea6900d",
+        "Name": "Level Plane",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 304.277659086059,
+        "Y": 438.757235772742
+      },
+      {
+        "Id": "e23fb3e150c74ba0a5a6739ae840b971",
+        "Name": "Input",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -509.91751241274915,
+        "Y": -2.3511264299623917
+      },
+      {
+        "Id": "72db4b80c2c34262b63716a171dd2212",
+        "Name": "Input",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -500.9754699787662,
+        "Y": 438.32414233687405
+      },
+      {
+        "Id": "43ad61f947c240a780f92c5e9d91ddbd",
+        "Name": "Output",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1763.8617097030992,
+        "Y": -4.325972382893838
+      },
+      {
+        "Id": "c2e74a539da047a497e66438716710dd",
+        "Name": "Output",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1789.1899289182966,
+        "Y": 411.6642040605075
+      }
+    ],
+    "Annotations": [
+      {
+        "Id": "6bd0008942f94f5aa3561bb2dd4d5247",
+        "Title": "Pull the site boundary onto the required level.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "59ef5ebe3b894284a9399f552823352e",
+          "09b320a3a1624f4d956cb30ae51ef974",
+          "09fa5b8d3fa747c0b7af7c7f97e09b08",
+          "f1762b4bec294c4fa85916a57ea6900d"
+        ],
+        "HasNestedGroups": false,
+        "Left": 240.0,
+        "Top": -73.0,
+        "Width": 1197.68634852256,
+        "Height": 643.757235772742,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 600.757235772742,
+        "TextblockHeight": 63.0,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "c71df33bc6994de68dbdbd245a6b10fb",
+        "Title": "Inputs",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "e23fb3e150c74ba0a5a6739ae840b971",
+          "72db4b80c2c34262b63716a171dd2212"
+        ],
+        "HasNestedGroups": false,
+        "Left": -519.9175124127491,
+        "Top": -75.35112642996239,
+        "Width": 542.5,
+        "Height": 655.1752687668364,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": -2.3511264299623917,
+        "InitialHeight": 612.1752687668364,
+        "TextblockHeight": 63.0,
+        "Background": "#FF848484"
+      },
+      {
+        "Id": "28a50a42f17b42dbb7bc3cae8d4ffbe7",
+        "Title": "Output",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "43ad61f947c240a780f92c5e9d91ddbd",
+          "c2e74a539da047a497e66438716710dd"
+        ],
+        "HasNestedGroups": false,
+        "Left": 1753.8617097030992,
+        "Top": -77.32597238289384,
+        "Width": 176.5,
+        "Height": 620.9901764434013,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": -4.325972382893838,
+        "InitialHeight": 575.2596139899335,
+        "TextblockHeight": 63.0,
+        "Background": "#FFFF7BAC"
+      },
+      {
+        "Id": "36bc44605c9249e7904b6dbe18c82dc4",
+        "Title": "Get the level's plane. \nFrom the Genius Loci package.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": 293.277659086059,
+        "Top": 325.757235772742,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "f1762b4bec294c4fa85916a57ea6900d"
+      }
+    ],
+    "X": 501.4830370417119,
+    "Y": 634.1239009279029,
+    "Zoom": 0.6468656130924143
+  }
+}

@@ -1,0 +1,4739 @@
+{
+  "Uuid": "a1585df6-63ab-412c-bbd0-cc224c48e7ef",
+  "IsCustomNode": true,
+  "Category": "Feasibility.Parking",
+  "Description": "Creates the parking patterns.",
+  "Name": "GeneratePatterns",
+  "ElementResolver": {
+    "ResolutionMap": {
+      "DSCore.Math": {
+        "Key": "DSCore.Math",
+        "Value": "DSCoreNodes.dll"
+      },
+      "Line": {
+        "Key": "Autodesk.DesignScript.Geometry.Line",
+        "Value": "ProtoGeometry.dll"
+      },
+      "Autodesk.Point": {
+        "Key": "Autodesk.DesignScript.Geometry.Point",
+        "Value": "ProtoGeometry.dll"
+      },
+      "Autodesk.DesignScript.Geometry.Point": {
+        "Key": "Autodesk.DesignScript.Geometry.Point",
+        "Value": "ProtoGeometry.dll"
+      },
+      "Autodesk.Curve": {
+        "Key": "Autodesk.DesignScript.Geometry.Curve",
+        "Value": "ProtoGeometry.dll"
+      },
+      "Autodesk.DesignScript.Geometry.Curve": {
+        "Key": "Autodesk.DesignScript.Geometry.Curve",
+        "Value": "ProtoGeometry.dll"
+      },
+      "Geometry": {
+        "Key": "Autodesk.DesignScript.Geometry.Geometry",
+        "Value": "ProtoGeometry.dll"
+      },
+      "List": {
+        "Key": "List",
+        "Value": "BuiltIn.ds"
+      },
+      "Plane": {
+        "Key": "Autodesk.DesignScript.Geometry.Plane",
+        "Value": "ProtoGeometry.dll"
+      },
+      "Vector": {
+        "Key": "Autodesk.DesignScript.Geometry.Vector",
+        "Value": "ProtoGeometry.dll"
+      },
+      "CoordinateSystem": {
+        "Key": "Autodesk.DesignScript.Geometry.CoordinateSystem",
+        "Value": "ProtoGeometry.dll"
+      },
+      "Rectangle": {
+        "Key": "Autodesk.DesignScript.Geometry.Rectangle",
+        "Value": "ProtoGeometry.dll"
+      },
+      "Autodesk.Surface": {
+        "Key": "Autodesk.DesignScript.Geometry.Surface",
+        "Value": "ProtoGeometry.dll"
+      },
+      "Autodesk.DesignScript.Geometry.Surface": {
+        "Key": "Autodesk.DesignScript.Geometry.Surface",
+        "Value": "ProtoGeometry.dll"
+      }
+    }
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Output, DynamoCore",
+      "ElementResolver": null,
+      "Symbol": "//the elongated parking patterns for cutting the green surfaces.\r\nelongatedParkingPatterns",
+      "Id": "8dc335b1af5e46649d4db98f6c2e10a2",
+      "NodeType": "OutputNode",
+      "Inputs": [
+        {
+          "Id": "f3db537d698546e4bc2f912dada99e31",
+          "Name": "",
+          "Description": "Output Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "A function output, use with custom nodes"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Output, DynamoCore",
+      "ElementResolver": null,
+      "Symbol": "//the full green area surfaces before cutting.\r\ngreenAreaSurfaces",
+      "Id": "f64adbc485544aeb87f033020b893e70",
+      "NodeType": "OutputNode",
+      "Inputs": [
+        {
+          "Id": "16e886a583f846a88de09dba305f6c61",
+          "Name": "",
+          "Description": "Output Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "A function output, use with custom nodes"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Output, DynamoCore",
+      "ElementResolver": null,
+      "Symbol": "//for pattern replacements as required to account for 1-way or 2-way traffic between rows. Used for cutting the green surfaces.\r\nreplacementElongatedPattern",
+      "Id": "d7675b010c91471a922d86b15a3c056d",
+      "NodeType": "OutputNode",
+      "Inputs": [
+        {
+          "Id": "0e94029b7adc4d5fb375ae9abfdd8ff2",
+          "Name": "",
+          "Description": "Output Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "A function output, use with custom nodes"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Output, DynamoCore",
+      "ElementResolver": null,
+      "Symbol": "//the overall width of the parking pattern.\r\npatternWidth",
+      "Id": "8b947944aded49c7838505419e97233d",
+      "NodeType": "OutputNode",
+      "Inputs": [
+        {
+          "Id": "2b30b5afa6324b0b8fe39d123709227d",
+          "Name": "",
+          "Description": "Output Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "A function output, use with custom nodes"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Output, DynamoCore",
+      "ElementResolver": null,
+      "Symbol": "//the pattern center line.\r\npatternCenterLine",
+      "Id": "274e8d64f0c243d78250ea4a60f681ac",
+      "NodeType": "OutputNode",
+      "Inputs": [
+        {
+          "Id": "ece4779dd7904cfd9ba2657500ab5453",
+          "Name": "",
+          "Description": "Output Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "A function output, use with custom nodes"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Output, DynamoCore",
+      "ElementResolver": null,
+      "Symbol": "//the parking pattern.\r\nparkingPattern",
+      "Id": "84f656df93d84c85b5d487a145a8c202",
+      "NodeType": "OutputNode",
+      "Inputs": [
+        {
+          "Id": "7655b8c58f8c43a78919acfbf9f2b169",
+          "Name": "",
+          "Description": "Output Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "A function output, use with custom nodes"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Output, DynamoCore",
+      "ElementResolver": null,
+      "Symbol": "//for pattern replacements as required to account for 1-way or 2-way traffic between rows.\r\nreplacementPattern",
+      "Id": "7719ef8ced9f40eb8aebef60998dce1f",
+      "NodeType": "OutputNode",
+      "Inputs": [
+        {
+          "Id": "3013f618bae742c38718f033e3f7111e",
+          "Name": "",
+          "Description": "Output Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "A function output, use with custom nodes"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "2bd8d32c574c49a5bb87723e2e927f00",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "8007ab6a143641649581b7044da004c5",
+          "Name": "dictionary",
+          "Description": "DesignScript.Builtin.Dictionary",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "133d8e951ced4ef1a44972479897893a",
+          "Name": "key",
+          "Description": "The key in the Dictionary to obtain value for\n\nstring",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "5b46298c2664491fa6ddb9f67524c132",
+          "Name": "value",
+          "Description": "Value at the specified key or null if it is not set",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DesignScript.Builtin.Dictionary.ValueAtKey@string",
+      "Replication": "Auto",
+      "Description": "Obtain the value at a specified key\n\nDictionary.ValueAtKey (key: string): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "84b4ca80da8248499eafe02a0b09333a",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "ed7f2a0d98e9416294d216c46dec9be8",
+          "Name": "dictionary",
+          "Description": "DesignScript.Builtin.Dictionary",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "68ddae9b2093431f8cf86e8b797635b7",
+          "Name": "key",
+          "Description": "The key in the Dictionary to obtain value for\n\nstring",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "56cb2af18c674ab1a25df7f45353bd80",
+          "Name": "value",
+          "Description": "Value at the specified key or null if it is not set",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DesignScript.Builtin.Dictionary.ValueAtKey@string",
+      "Replication": "Auto",
+      "Description": "Obtain the value at a specified key\n\nDictionary.ValueAtKey (key: string): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "26b8a54b6c444e66b509e33696a17104",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "50c354ba009a48a88423a18522cf1750",
+          "Name": "dictionary",
+          "Description": "DesignScript.Builtin.Dictionary",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b2b37e8d2a5848e7aa4fd2f63f32b301",
+          "Name": "key",
+          "Description": "The key in the Dictionary to obtain value for\n\nstring",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "d6bfc5028f234515ad60968a12a4de55",
+          "Name": "value",
+          "Description": "Value at the specified key or null if it is not set",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DesignScript.Builtin.Dictionary.ValueAtKey@string",
+      "Replication": "Auto",
+      "Description": "Obtain the value at a specified key\n\nDictionary.ValueAtKey (key: string): var[]..[]"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.FromObject, CoreNodeModels",
+      "Id": "7dd829c4e2114919b2aae6795b7dc343",
+      "NodeType": "ExtensionNode",
+      "Inputs": [
+        {
+          "Id": "e25efc599b684109958f6c461617cafd",
+          "Name": "object",
+          "Description": "Object to be serialized",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "a954e951f30947268a9e03fd9d28c458",
+          "Name": "string",
+          "Description": "String representation of the object",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Converts an object to a string representation"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "dd31750615e94872b260d8dee6dd7bfa",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "f3ee9c5d01d34230b0ce2453763d03b8",
+          "Name": "keys",
+          "Description": "Keys of dictionary\n\nstring[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "8105263392bd4673b9e7cb8ef5b52c10",
+          "Name": "values",
+          "Description": "Values of dictionary\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "17245ccdf1a9469caf8304e843bf9505",
+          "Name": "dictionary",
+          "Description": "Dictionary from keys and values",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DesignScript.Builtin.Dictionary.ByKeysValues@string[],var[]..[]",
+      "Replication": "Auto",
+      "Description": "Produces a Dictionary with the supplied keys and values. The number of entries is the shorter of keys or values.\n\nDictionary.ByKeysValues (keys: string[], values: var[]..[]): Dictionary"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.FromObject, CoreNodeModels",
+      "Id": "5f04790395f14bbabe4b1f6cf2b47d21",
+      "NodeType": "ExtensionNode",
+      "Inputs": [
+        {
+          "Id": "aaf92239ab7a4ad582e0a6936c8d49de",
+          "Name": "object",
+          "Description": "Object to be serialized",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "2e8cef5dbd544e07890010111e47a967",
+          "Name": "string",
+          "Description": "String representation of the object",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Converts an object to a string representation"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "1776864db5e54170b18687d7e06a1da1",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "4e7012bef61e499bb5d90410cc8ba631",
+          "Name": "keys",
+          "Description": "Keys of dictionary\n\nstring[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "48d535c53d8c41f6946513179f2ac607",
+          "Name": "values",
+          "Description": "Values of dictionary\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "e9a7b81deda642348af4344d36a2eecc",
+          "Name": "dictionary",
+          "Description": "Dictionary from keys and values",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DesignScript.Builtin.Dictionary.ByKeysValues@string[],var[]..[]",
+      "Replication": "Auto",
+      "Description": "Produces a Dictionary with the supplied keys and values. The number of entries is the shorter of keys or values.\n\nDictionary.ByKeysValues (keys: string[], values: var[]..[]): Dictionary"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.FromObject, CoreNodeModels",
+      "Id": "852f67ba98c44c5fb5c85bf09e0c089f",
+      "NodeType": "ExtensionNode",
+      "Inputs": [
+        {
+          "Id": "79a01a7f3fe24c77b41bd7e90db612cd",
+          "Name": "object",
+          "Description": "Object to be serialized",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "7ccf5485f47149be8b0864ea21bee6a3",
+          "Name": "string",
+          "Description": "String representation of the object",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Converts an object to a string representation"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "c4e536be6af94b06a9f1aaf041445dee",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "7a707dd4f0844678a6c50f0744cc4243",
+          "Name": "keys",
+          "Description": "Keys of dictionary\n\nstring[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a9c25c4d059e45cfb25e4507cebbd57e",
+          "Name": "values",
+          "Description": "Values of dictionary\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "0418562f26254be7ad0ec343b32466b9",
+          "Name": "dictionary",
+          "Description": "Dictionary from keys and values",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DesignScript.Builtin.Dictionary.ByKeysValues@string[],var[]..[]",
+      "Replication": "Auto",
+      "Description": "Produces a Dictionary with the supplied keys and values. The number of entries is the shorter of keys or values.\n\nDictionary.ByKeysValues (keys: string[], values: var[]..[]): Dictionary"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "a31d80f3a1094eb1a9c002029a38dc7b",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "2b6a8bff0bf342f2a1d8f2657a4e1d16",
+          "Name": "keys",
+          "Description": "Keys of dictionary\n\nstring[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e246b7e4c1bc4d429ca170e03baa13e7",
+          "Name": "values",
+          "Description": "Values of dictionary\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "c46ecc4cc9ab41eba0ad6d2f1f854b9d",
+          "Name": "dictionary",
+          "Description": "Dictionary from keys and values",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DesignScript.Builtin.Dictionary.ByKeysValues@string[],var[]..[]",
+      "Replication": "Auto",
+      "Description": "Produces a Dictionary with the supplied keys and values. The number of entries is the shorter of keys or values.\n\nDictionary.ByKeysValues (keys: string[], values: var[]..[]): Dictionary"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "813b147d66e643c6a38f4144b9b028b3",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "5592d0ab58db4f20b9cb9a4a4559de6f",
+          "Name": "dictionary",
+          "Description": "DesignScript.Builtin.Dictionary",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "cef9f67fe26e42c09d83c43acf4d9b91",
+          "Name": "key",
+          "Description": "The key in the Dictionary to obtain value for\n\nstring",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "ffaf641bab0442b1aa43ceaa19601910",
+          "Name": "value",
+          "Description": "Value at the specified key or null if it is not set",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DesignScript.Builtin.Dictionary.ValueAtKey@string",
+      "Replication": "Auto",
+      "Description": "Obtain the value at a specified key\n\nDictionary.ValueAtKey (key: string): var[]..[]"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.FromObject, CoreNodeModels",
+      "Id": "1f39fe2b2a8a49b18f12909f7dd36208",
+      "NodeType": "ExtensionNode",
+      "Inputs": [
+        {
+          "Id": "ab9f3549576242d1af75c673022c58f9",
+          "Name": "object",
+          "Description": "Object to be serialized",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "137732ac089e40a382aa67b5de3546b4",
+          "Name": "string",
+          "Description": "String representation of the object",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Converts an object to a string representation"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.FromObject, CoreNodeModels",
+      "Id": "d5d677de06794d72aae888c80ec50429",
+      "NodeType": "ExtensionNode",
+      "Inputs": [
+        {
+          "Id": "8e2a34d4f7f24a6895fb0b1eea5bc7b5",
+          "Name": "object",
+          "Description": "Object to be serialized",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "2d51aecb5172403893a518db7a7277d2",
+          "Name": "string",
+          "Description": "String representation of the object",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Converts an object to a string representation"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.FromObject, CoreNodeModels",
+      "Id": "34026d29f18a4174a6a8816cd23e6c46",
+      "NodeType": "ExtensionNode",
+      "Inputs": [
+        {
+          "Id": "841537d6a82a4022a4b427992418ce37",
+          "Name": "object",
+          "Description": "Object to be serialized",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "f61fc3adffcb49489c1cd84b98dddb90",
+          "Name": "string",
+          "Description": "String representation of the object",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Converts an object to a string representation"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.FromObject, CoreNodeModels",
+      "Id": "c8768e63d6fe49828a85005d8a667c40",
+      "NodeType": "ExtensionNode",
+      "Inputs": [
+        {
+          "Id": "a7cfac968d0045819b583a734825ac9c",
+          "Name": "object",
+          "Description": "Object to be serialized",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "0fe1d01720f345ae96f30ea9df053e46",
+          "Name": "string",
+          "Description": "String representation of the object",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Converts an object to a string representation"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.FromObject, CoreNodeModels",
+      "Id": "993529ba457540afaa457272dc8df821",
+      "NodeType": "ExtensionNode",
+      "Inputs": [
+        {
+          "Id": "14628fb37044465a88b7dab164570509",
+          "Name": "object",
+          "Description": "Object to be serialized",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "ce6e36eb076f4a178a457a6aa534fcab",
+          "Name": "string",
+          "Description": "String representation of the object",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Converts an object to a string representation"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "4ab539f80a614032b36ab0743484c038",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [
+        {
+          "Id": "9470f2967dd44a5da1e8423e86f978cb",
+          "Name": "non_interlocking",
+          "Description": "non_interlocking",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "98c67f496b2f4cb995c01bb67b91cd8c",
+          "Name": "interlocked1",
+          "Description": "interlocked1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "79b2897e67de43a39d8a540b5f801003",
+          "Name": "interlocked2",
+          "Description": "interlocked2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "938127ae55e44e97aaf88d8189653a77",
+          "Name": "herringbone",
+          "Description": "herringbone",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "52ccc153374247919a0ae2b47193ea47",
+          "Name": "",
+          "Description": "Value of expression at line 2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1eb97cf20b2f4e3a8afa71c3aa35e4ac",
+          "Name": "",
+          "Description": "Value of expression at line 5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "//parking pattern selection numbers.\n[1, 2, 3, 4];\n\n//list of parking patterns.\n[non_interlocking, interlocked1, interlocked2, herringbone];"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "ccf17982424f4ab2ba3677ccceaed3eb",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [
+        {
+          "Id": "43d06b100ad2412f9bed1f5f0fba7ebe",
+          "Name": "non_interlocking",
+          "Description": "non_interlocking",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f556f9042c064326a7e5ab22b7244e6e",
+          "Name": "interlocked1",
+          "Description": "interlocked1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "93bd1b17b4df42de91c0961fc74e10ef",
+          "Name": "interlocked2",
+          "Description": "interlocked2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0b9f08a1df4a4d46adc9344018bf0769",
+          "Name": "herringbone",
+          "Description": "herringbone",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "b1edbed774d240f08dfc6c4d2b858c9b",
+          "Name": "",
+          "Description": "Value of expression at line 2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "065c10a038be4356ab1f3b8185f2d7b8",
+          "Name": "",
+          "Description": "Value of expression at line 5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "//parking pattern selection numbers.\n[1, 2, 3, 4];\n\n//list of parking patterns.\n[non_interlocking, interlocked1, interlocked2, herringbone];"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "94b8706321334e8bacd96fd14605b691",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [
+        {
+          "Id": "d349e1ad180a4026ab28b496f69e540d",
+          "Name": "non_interlocking",
+          "Description": "non_interlocking",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a6d69266e7ca4a5a9609aa7499dc8028",
+          "Name": "interlocked1",
+          "Description": "interlocked1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "4491637cd4e24ee7a0b0a88e87cc68ca",
+          "Name": "interlocked2",
+          "Description": "interlocked2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "4d049efbb6cd4f8399dbdf06b7352338",
+          "Name": "herringbone",
+          "Description": "herringbone",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "8d73cb88414340b9841e6f7030c9a00b",
+          "Name": "",
+          "Description": "Value of expression at line 2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c7b3d73376034258954c177457197784",
+          "Name": "",
+          "Description": "Value of expression at line 5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "//parking pattern width selection numbers.\n[1, 2, 3, 4];\n\n//list of parking patterns.\n[non_interlocking, interlocked1, interlocked2, herringbone];"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "e09d35351ccd48ba89dd2f39b437f09a",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [
+        {
+          "Id": "04166770bdef476a83fba4419cd7566b",
+          "Name": "non_interlocking",
+          "Description": "non_interlocking",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "edb39c2db4034fe583de190588443053",
+          "Name": "interlocked1",
+          "Description": "interlocked1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d640792348eb424d8dab9a2b73665ebc",
+          "Name": "interlocked2",
+          "Description": "interlocked2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "28e10d840c1c4191801cf92053b20003",
+          "Name": "herringbone",
+          "Description": "herringbone",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "08a0da1e4e3c437eb9b08a391938cc41",
+          "Name": "",
+          "Description": "Value of expression at line 2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "48fe48d91e59441d8d8a3e3b3d35c9b4",
+          "Name": "",
+          "Description": "Value of expression at line 5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "//parking pattern width selection numbers.\n[1, 2, 3, 4];\n\n//list of elongated parking rectangles.\n[non_interlocking, interlocked1, interlocked2, herringbone];"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "4e9abb844d7a4d01a538b1de4121c2c2",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [
+        {
+          "Id": "6b88b45ca7364914a4cc8100b9874903",
+          "Name": "non_interlocking",
+          "Description": "non_interlocking",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "396990b5b3d2458bb16f203d3c203361",
+          "Name": "interlocked1",
+          "Description": "interlocked1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b21e195302d944368f649d55ade8aff1",
+          "Name": "interlocked2",
+          "Description": "interlocked2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "33be23ace12a4edabfea3ce9e4f504d9",
+          "Name": "herringbone",
+          "Description": "herringbone",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "a6030ef2dd6d4f10bceeb3cda832243b",
+          "Name": "",
+          "Description": "Value of expression at line 2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "86083ab250b54382bd21ad7acd2ba9a4",
+          "Name": "",
+          "Description": "Value of expression at line 5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "//parking pattern width selection numbers.\n[1, 2, 3, 4];\n\n//list of elongated parking rectangles.\n[non_interlocking, interlocked1, interlocked2, herringbone];"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.FromObject, CoreNodeModels",
+      "Id": "995afe0d12d6452fb5bdfc41cc150bac",
+      "NodeType": "ExtensionNode",
+      "Inputs": [
+        {
+          "Id": "1c8cfb60a4ab410a8328b6c9f99d732e",
+          "Name": "object",
+          "Description": "Object to be serialized",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "f7d649408a5d4b01ad1c04504469c00d",
+          "Name": "string",
+          "Description": "String representation of the object",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Converts an object to a string representation"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "f10e9ca65cb947ec963b9df6bca79d16",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "c035eb90e16946f295a117258f642232",
+          "Name": "keys",
+          "Description": "Keys of dictionary\n\nstring[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "eccddb2b533a4aefa9f3907434137c79",
+          "Name": "values",
+          "Description": "Values of dictionary\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "8577ff2f2cc84515a228f02126338d14",
+          "Name": "dictionary",
+          "Description": "Dictionary from keys and values",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DesignScript.Builtin.Dictionary.ByKeysValues@string[],var[]..[]",
+      "Replication": "Auto",
+      "Description": "Produces a Dictionary with the supplied keys and values. The number of entries is the shorter of keys or values.\n\nDictionary.ByKeysValues (keys: string[], values: var[]..[]): Dictionary"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.FromObject, CoreNodeModels",
+      "Id": "947c89217bce48d3aebc57661df9d998",
+      "NodeType": "ExtensionNode",
+      "Inputs": [
+        {
+          "Id": "e6af99ce70ef4f828b83470dd18b1f4c",
+          "Name": "object",
+          "Description": "Object to be serialized",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "9f8af8812c824c618d507fdfa0fa955b",
+          "Name": "string",
+          "Description": "String representation of the object",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Converts an object to a string representation"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "4e1760c78da04e17ad3c531b2711cb61",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "27001a36113c44bc9b5c325c0a0ad69e",
+          "Name": "dictionary",
+          "Description": "DesignScript.Builtin.Dictionary",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3b100cd4ddb74412b98517a120f82217",
+          "Name": "key",
+          "Description": "The key in the Dictionary to obtain value for\n\nstring",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "fc80f458c251490c9b9b96c7689c4e59",
+          "Name": "value",
+          "Description": "Value at the specified key or null if it is not set",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DesignScript.Builtin.Dictionary.ValueAtKey@string",
+      "Replication": "Auto",
+      "Description": "Obtain the value at a specified key\n\nDictionary.ValueAtKey (key: string): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "dd4805dd69844ac4b959504ca491ae23",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [
+        {
+          "Id": "01402219cbbb4e22a570e20360d5ccfd",
+          "Name": "bayWidth",
+          "Description": "bayWidth",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e4d24734218048ffba2aea2e57c29f9b",
+          "Name": "bayLength",
+          "Description": "bayLength",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0edccd040ece4384991129da2c2af803",
+          "Name": "bayAngle",
+          "Description": "bayAngle",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "8c93b8272ae445c68acf5d789a17ead7",
+          "Name": "bounding_curve_length",
+          "Description": "bounding_curve_length",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2fb744c16fa44e8cb05ffc7a10b17718",
+          "Name": "setout_angle",
+          "Description": "setout_angle",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "55a0e2e6cf324d40af7cc95965ab8440",
+          "Name": "",
+          "Description": "Value of expression at line 2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "713484045ae5458e94233f0384b16956",
+          "Name": "",
+          "Description": "Value of expression at line 3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c4194d712b2b415ba8f01aff5741de87",
+          "Name": "",
+          "Description": "Value of expression at line 4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "cab2d0fd765645539a29a9b4bb054ba9",
+          "Name": "",
+          "Description": "Value of expression at line 5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "482e807526044a6a9c21109ed3f73b39",
+          "Name": "",
+          "Description": "actualWidth",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "594ba515947a4fb3a46ef6d49649ceee",
+          "Name": "",
+          "Description": "bay_copy_number",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b7f02852d4224877af9bfe321377805f",
+          "Name": "",
+          "Description": "line",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "5d6af67c46484b5ebdbbbe4c83fd3ab8",
+          "Name": "",
+          "Description": "line_cs",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "6df6fbbec25e47deab61c0341cd6ec3c",
+          "Name": "",
+          "Description": "cs_x_axis",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ba9afd5ede384e89aeff7e47030acc02",
+          "Name": "",
+          "Description": "offset_dim",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0dbc24a9d67d470ba2edc8a9df2d5de2",
+          "Name": "",
+          "Description": "moved_line",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ce9fd4d2e8ce45fc9ff2baea04579476",
+          "Name": "",
+          "Description": "locPoints",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "be6e430281294ddc8e2f2b28296c0845",
+          "Name": "",
+          "Description": "linePlane",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c3954348327148faa1db452f65113c05",
+          "Name": "",
+          "Description": "planeCS",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2e22fad0a78c45639cc139e30d0225dd",
+          "Name": "",
+          "Description": "startPoint",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ac40ec23ebc848c49df0ab34133fa7fd",
+          "Name": "",
+          "Description": "iniPark",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a47ceec257ed4108b228b4947a207393",
+          "Name": "",
+          "Description": "bayStart",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "bd15bc97518b4a70938dfcd2a3a5582f",
+          "Name": "",
+          "Description": "bayPlane",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "eddc3a0a81ae4deb991ef61180210cf2",
+          "Name": "",
+          "Description": "bayCS",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "7918f54d9ccd4d8b95c9c48f07888fe8",
+          "Name": "",
+          "Description": "transBays",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "5a6bbf653d5348cfbecc7d9bb2fdb59b",
+          "Name": "",
+          "Description": "trans_axis",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "04bf4ad2e7a54731b01e598912891c53",
+          "Name": "",
+          "Description": "copied_bays",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0dbeddd96b674215baee1106b3f5e7b8",
+          "Name": "",
+          "Description": "combined_bays",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "628d97cbd6f7437ca85eb7bd4ebe3aea",
+          "Name": "",
+          "Description": "mirror_plane",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b056d6e467be4db9944b633b381ebe1c",
+          "Name": "",
+          "Description": "mirror_bays",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "358d8dc1c6ac43d1ae4bcb4e38520100",
+          "Name": "",
+          "Description": "rotation_point",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a399a342fd31478b9830e1550fb0ad1d",
+          "Name": "",
+          "Description": "rotated_bays1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b44b0109cd8e43e384bb3e1398e80353",
+          "Name": "",
+          "Description": "rotated_bays2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3d1057afc7a04bd2b1aeb6469314b9c8",
+          "Name": "",
+          "Description": "pattern_width_external",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "55a802096ca14b4fb00b0601450f1468",
+          "Name": "",
+          "Description": "pattern_width",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b3f29b0b4cf948eba46294c01372ab42",
+          "Name": "",
+          "Description": "rotated_center_line",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0aee79fe85804123a5b8952a1bdd0fb4",
+          "Name": "",
+          "Description": "center_plane",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "7b51efbb03f44aaabf19c9414fd8ecd0",
+          "Name": "",
+          "Description": "surface_rectangle",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "def9cad8b404401db38958d30eff8b6b",
+          "Name": "",
+          "Description": "rotated_rectangle",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c952860c2d354c35882db69b9cdcc181",
+          "Name": "",
+          "Description": "pattern_surface",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e4f73f5db83944b6867e7a7f01d1232d",
+          "Name": "",
+          "Description": "additional_length",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "804302f725b741a89bca9e6af617a038",
+          "Name": "",
+          "Description": "elongated_spot",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e62c159f31444ac6a7834d9fe6500f94",
+          "Name": "",
+          "Description": "elongated_start",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a9b2d90bb7454c6ea064e6b1a9f1bd41",
+          "Name": "",
+          "Description": "start_plane",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "4f9e81df303149cb9f6c1f8b3a8af3d1",
+          "Name": "",
+          "Description": "bay_plane_cs",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "267c16af64d244fea290f2f8bcb43ec1",
+          "Name": "",
+          "Description": "transform_bays",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "8be9ba60b09f4982a62559df8d79c7e4",
+          "Name": "",
+          "Description": "copy_bays",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ee5f25231576478bb07efdcd4c066af6",
+          "Name": "",
+          "Description": "elongated_pattern",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3a5ef58697a6423cb605fe32ace4eab6",
+          "Name": "",
+          "Description": "mirror_bays2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0c28521d2ff946aa89e181f918ea3992",
+          "Name": "",
+          "Description": "rotated_elongated_bays",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "084f2c67f64d453c965a548a20385f40",
+          "Name": "",
+          "Description": "rotated_elongated_bays2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "//parameters.\nbayWidth;\nbayLength;\nbayAngle;\nbounding_curve_length;\n\n//actual bay width against center line.\nactualWidth = bayWidth / DSCore.Math.Cos(bayAngle);\n\n//calculate number of bays for copying along line.\nbay_copy_number = DSCore.Math.Ceiling(bounding_curve_length / actualWidth);\n\n//create line.\nline = Line.ByStartPointEndPoint(Autodesk.Point.ByCoordinates(),\nAutodesk.Point.ByCoordinates(0,(actualWidth*bay_copy_number),0));\n\n//get line start point coordinate system.\nline_cs = Autodesk.Curve.CoordinateSystemAtParameter (line, 0);\n\n//line start point coordinate system x axis.\ncs_x_axis = line_cs.XAxis;\n\n//create line to place first array of parking bays.\n\t//workout offset dimension.\n\toffset_dim = bayWidth * DSCore.Math.Sin(bayAngle) / 2;\n\t//move center line to offset bays.\n\tmoved_line = Geometry.Translate (line, cs_x_axis, offset_dim);\n\n//bay line location points.\nlocPoints = List.DropItems(Autodesk.Curve.PointAtParameter\n\t(moved_line,0..1..#bay_copy_number+1), -1);\n\n//bay line plane.\nlinePlane = Plane.ByOriginNormal(locPoints,Vector.ZAxis());\n\n//bay line plane coordinate system.\nplaneCS = CoordinateSystem.ByPlane(linePlane);\n\n//line start point.\nstartPoint = Line.StartPoint(line);\n\n//initial parking bay.\niniPark = Geometry.Rotate(Rectangle.ByWidthLength(bayLength,bayWidth),startPoint,\nVector.ZAxis(),bayAngle);\n\n//bay start point.\nbayStart = Autodesk.Curve.StartPoint(iniPark);\n\n//bay plane.\nbayPlane = Plane.ByOriginNormal(bayStart,Vector.ZAxis());\n\n//bay coordinate system.\nbayCS = CoordinateSystem.ByPlane(bayPlane);\n\n//transform bays to line locations.\ntransBays = Geometry.Transform (iniPark,bayCS,planeCS);\n\n//copy the transformed parking bays.\n\t//create the translation  axis.\n\ttrans_axis = Vector.Rotate (cs_x_axis, Vector.ZAxis(), bayAngle);\n\t//copy the parking bays.\n\tcopied_bays = Geometry.Translate (transBays, trans_axis, bayLength);\n\n//combine bays into one list.\ncombined_bays = List.Join ([transBays, copied_bays]);\n\n//mirror pattern.\n\t//create plane for mirroring.\n\tmirror_plane = Plane.ByOriginNormal (startPoint, cs_x_axis);\n\t//mirror bays.\n\tmirror_bays = Geometry.Mirror (combined_bays, mirror_plane);\n\n//rotate combined pattern.\n\t//get rotation center point.\n\trotation_point = line.PointAtParameter (0.5);\n\t//rotate bays type 1.\n\trotated_bays1 = Geometry.Rotate\n\t\t(combined_bays, rotation_point, Vector.ZAxis(), setout_angle);\n\t//rotate bays type 2.\n\trotated_bays2 = Geometry.Rotate\n\t\t(mirror_bays, rotation_point, Vector.ZAxis(), setout_angle);\n\n//calculate overall pattern width.\n\t//width of the pattern from the center overlap zone.\n\tpattern_width_external = DSCore.Math.Cos(bayAngle) * bayLength;\n\t//calculate pattern width.\n\tpattern_width = pattern_width_external * 2 + offset_dim * 2;\n\n\n///****elements for the creation of parking islands****///\n//rotate center line.\nrotated_center_line = Geometry.Rotate\n\t(line, rotation_point, Vector.ZAxis(), setout_angle);\n\n//define rectangular surface covering full parking pattern.\n\t//create center plane.\n\tcenter_plane = Plane.ByOriginNormal\n\t(Autodesk.Curve.PointAtParameter(line, 0.5), Vector.ZAxis());\n\t//create the surface rectangle.\n\tsurface_rectangle = Rectangle.ByWidthLength\n\t\t(center_plane, pattern_width, actualWidth*bay_copy_number);\n\t//rotate the rectangle.\n\trotated_rectangle = Geometry.Rotate\n\t\t(surface_rectangle, rotation_point, Vector.ZAxis(), setout_angle);\n\t//create the pattern surface.\n\tpattern_surface = Autodesk.Surface.ByPatch(rotated_rectangle);\n\n//create elongated parking spots to be used for cutting island geometry.\n\t//workout length to add to the parking bay length.\n\tadditional_length = bayWidth * DSCore.Math.Tan(bayAngle);\n\t//create the initial elongated spot.\n\telongated_spot =\n\t\tGeometry.Rotate(\n\t\t\tRectangle.ByWidthLength((bayLength+additional_length),bayWidth),\n\t\t\tstartPoint,Vector.ZAxis(),bayAngle\n\t\t\t);\n\t//get bay start point.\n\telongated_start = Autodesk.Curve.StartPoint(elongated_spot);\n\t//create plane at start point.\n\tstart_plane = Plane.ByOriginNormal(elongated_start, Vector.ZAxis());\n\t//create coordinate system at the plane.\n\tbay_plane_cs = CoordinateSystem.ByPlane(start_plane);\n\t//transform bays onto centerline locations.\n\ttransform_bays = Geometry.Transform (elongated_spot, bay_plane_cs, planeCS);\n\t//copy the transformed parking bays.\n\tcopy_bays = Geometry.Translate (\n\t\ttransform_bays, trans_axis, (bayLength+additional_length)\n\t\t);\n\t//combine pattern into one list.\n\telongated_pattern = List.Join([transform_bays, copy_bays]);\n\t//mirror the pattern.\n\tmirror_bays2 = Geometry.Mirror (elongated_pattern, mirror_plane);\n\t//rotate the combined pattern.\n\trotated_elongated_bays = Geometry.Rotate\n\t\t(elongated_pattern, rotation_point, Vector.ZAxis(), setout_angle);\n\trotated_elongated_bays2 = Geometry.Rotate\n\t\t(mirror_bays2, rotation_point, Vector.ZAxis(), setout_angle);"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "071245732f1c4207a0b6973bbfa21e31",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [
+        {
+          "Id": "f2e67ac1e5b64be388ede54623170a91",
+          "Name": "bayWidth",
+          "Description": "bayWidth",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e49ef041a7f14748a39987ed144d6719",
+          "Name": "bayLength",
+          "Description": "bayLength",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "24ae00cac4724c8d881cb6cff56ef515",
+          "Name": "bayAngle",
+          "Description": "bayAngle",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2401d3cbe83c489899b01b93c0932fc5",
+          "Name": "bounding_curve_length",
+          "Description": "bounding_curve_length",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "aa08791de0a942acbf52a91bb145bb80",
+          "Name": "island_width",
+          "Description": "island_width",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "441a80a2d5d24960adebd09f42360ebd",
+          "Name": "setout_angle",
+          "Description": "setout_angle",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "a125a4bba43945c888f98dffae1ba5e1",
+          "Name": "",
+          "Description": "Value of expression at line 2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9acd6d7eb7f14859a1662682babb74c1",
+          "Name": "",
+          "Description": "Value of expression at line 3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2c02e4c760174480b176e3ff2592b99b",
+          "Name": "",
+          "Description": "Value of expression at line 4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f224b2da40694e3b81a69ff105040048",
+          "Name": "",
+          "Description": "Value of expression at line 5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "445305826c694ca4bf54787713c04c29",
+          "Name": "",
+          "Description": "Value of expression at line 6",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2b068cf59b514d01b6d4fae45249e35e",
+          "Name": "",
+          "Description": "actualWidth",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "75a149306bc34168abb6d85ab4a998e9",
+          "Name": "",
+          "Description": "bay_copy_number",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "4f6c5bbe61514805ab56f0a17a916e22",
+          "Name": "",
+          "Description": "line",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "02553f069bdd475896ad1c11b8addd25",
+          "Name": "",
+          "Description": "line_cs",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ef70a10761cc4072b3553933b87eb9ab",
+          "Name": "",
+          "Description": "cs_x_axis",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "716c8a8b1f024145a6ac8c0e0cb89ed3",
+          "Name": "",
+          "Description": "moved_line",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0b3f7c2bd01a430d8b90a103d30f5af8",
+          "Name": "",
+          "Description": "locPoints",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "03ba5cb4ad6a4d4382e1ca1ed6c06dec",
+          "Name": "",
+          "Description": "linePlane",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3fe2e0f9ee3749bdba533d7eeb70dbcb",
+          "Name": "",
+          "Description": "planeCS",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "791f3a249f4947d9aec97d59d9f1e6ae",
+          "Name": "",
+          "Description": "startPoint",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "8185f833178947de9fafd1281a716cf1",
+          "Name": "",
+          "Description": "iniPark",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "db6536eba7564404abbe05afaa8e3587",
+          "Name": "",
+          "Description": "bayStart",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "cef8eec32f9348e4a3ce47ddbff7a9ab",
+          "Name": "",
+          "Description": "bayPlane",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "25dfd81b42164d5386b427009d24c4d0",
+          "Name": "",
+          "Description": "bayCS",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "fd6eabce6d0f48ca9afcfdf71653ba9b",
+          "Name": "",
+          "Description": "transBays",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "4be51fd59f3545cdbd86faed8226af29",
+          "Name": "",
+          "Description": "mirror_plane",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0254e0e42bea4702ab7bb8f1c37128c4",
+          "Name": "",
+          "Description": "mirror_bays",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ad6364405b044572bd898158ffdea1b8",
+          "Name": "",
+          "Description": "combined_bays",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "985fd09640cb4c65a7ac6b8d7837dc93",
+          "Name": "",
+          "Description": "rotation_point",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "4ee02932c7e241349285c4a3d172fed5",
+          "Name": "",
+          "Description": "rotated_bays",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f93e5b4e67b646f9800cc238a3a71abd",
+          "Name": "",
+          "Description": "rotated_two_way",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "25d61b711cfd41d98c974466d472266a",
+          "Name": "",
+          "Description": "center_plane",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ab4ee0a410c94174b446968b6da67cce",
+          "Name": "",
+          "Description": "island_curve",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "7b19d83abf4841048853d95d8221da4b",
+          "Name": "",
+          "Description": "width_1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0f9646a070fe4411960d3e9596990fb9",
+          "Name": "",
+          "Description": "width_2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "5304b02e846c45b788930cc5644cb06e",
+          "Name": "",
+          "Description": "pattern_width",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "428beab37bec4492a93b3edbd6d66071",
+          "Name": "",
+          "Description": "rotated_center_line",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9d5ba3e9761347c885c0f9b8c5aa16ac",
+          "Name": "",
+          "Description": "surface_rectangle",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9aa9718896844d98ba6dcc7c79245c4f",
+          "Name": "",
+          "Description": "rotated_rectangle",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3b5604fa6d4e4b90b32fb58dd20d5204",
+          "Name": "",
+          "Description": "pattern_surface",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "929de4d6c26f46a78e7e7688c2db8f24",
+          "Name": "",
+          "Description": "additional_length",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3c7dcad0508b4a8e9d946b3f7529e5af",
+          "Name": "",
+          "Description": "elongated_spot",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "fe29010a62d749e8b6a9eee12d3365ff",
+          "Name": "",
+          "Description": "elongated_start",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "586e32543ecf41a0b7e99f70d5799460",
+          "Name": "",
+          "Description": "start_plane",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "26f4be5dc8234e74a15b9d4751f33cb8",
+          "Name": "",
+          "Description": "bay_plane_cs",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "dda24485c02a4111b2cd05dddc848e95",
+          "Name": "",
+          "Description": "transform_bays",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "424703b7ed32407284d468c4019347e6",
+          "Name": "",
+          "Description": "mirror_elongated_bays",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "4fff441a5a76486e82ae7cdedff71de2",
+          "Name": "",
+          "Description": "elongated_pattern",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "597d8d9c953d469fa7bf60623a4c5072",
+          "Name": "",
+          "Description": "rotated_elongated_bays",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "08f06cfbcadf44a19ad5c1ea01732d18",
+          "Name": "",
+          "Description": "rotated_elongated_two_way",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "//parameters.\nbayWidth;\nbayLength;\nbayAngle;\nbounding_curve_length;\nisland_width;\n\n//actual bay width against center line.\nactualWidth = bayWidth / DSCore.Math.Cos(bayAngle);\n\n//calculate number of bays for copying along line.\nbay_copy_number = DSCore.Math.Ceiling(bounding_curve_length / actualWidth);\n\n//create line.\nline = Line.ByStartPointEndPoint(Autodesk.Point.ByCoordinates(),\nAutodesk.Point.ByCoordinates(0,(actualWidth*bay_copy_number),0));\n\n//get line start point coordinate system.\nline_cs = Autodesk.Curve.CoordinateSystemAtParameter (line, 0);\n\n//line start point coordinate system x axis.\ncs_x_axis = line_cs.XAxis;\n\n//move center line to offset bays from center island.\nmoved_line = Geometry.Translate (line, Vector.Reverse(cs_x_axis), island_width/2);\n\n//bay line location points.\nlocPoints = List.DropItems(Autodesk.Curve.PointAtParameter\n\t(moved_line,0..1..#bay_copy_number+1),-1);\n\n//bay line plane.\nlinePlane = Plane.ByOriginNormal(locPoints,Vector.ZAxis());\n\n//bay line plane coordinate system.\nplaneCS = CoordinateSystem.ByPlane(linePlane);\n\n//line start point.\nstartPoint = Line.StartPoint(line);\n\n//initial parking bay.\niniPark = Geometry.Rotate(Rectangle.ByWidthLength(bayLength,bayWidth),startPoint,\nVector.ZAxis(),bayAngle);\n\n//bay start point.\nbayStart = Autodesk.Curve.StartPoint(iniPark);\n\n//bay plane.\nbayPlane = Plane.ByOriginNormal(bayStart,Vector.ZAxis());\n\n//bay coordinate system.\nbayCS = CoordinateSystem.ByPlane(bayPlane);\n\n//transform bays to line locations.\ntransBays = Geometry.Transform (iniPark,bayCS,planeCS);\n\n//mirror parking bays along location line.\n\t//create plane for mirroring.\n\tmirror_plane = Plane.ByOriginNormal (startPoint, cs_x_axis);\n\t//mirror bays.\n\tmirror_bays = Geometry.Mirror (transBays, mirror_plane);\n\n//combine bays into one list.\ncombined_bays = List.Join ([transBays, mirror_bays]);\n\n//rotate combined pattern.\n\t//get rotation center point.\n\trotation_point = line.PointAtParameter (0.5);\n\t//rotate bays.\n\trotated_bays = Geometry.Rotate\n\t\t(combined_bays, rotation_point, Vector.ZAxis(), setout_angle);\n\n//rotate bays for two-way parking.\nrotated_two_way = Geometry.Rotate\n\t\t(rotated_bays, rotation_point, Vector.ZAxis(), 180);\n\n//create island.\n\t//island center plane.\n\tcenter_plane = Plane.ByOriginNormal\n\t\t(Autodesk.Curve.PointAtParameter(line, 0.5), Vector.ZAxis());\n\tisland_curve = Rectangle.ByWidthLength\n\t\t(center_plane, island_width, actualWidth*bay_copy_number);\n\n//calculate overall pattern width.\n\t//closest triangle width to the island.\n\twidth_1 = bayWidth * DSCore.Math.Sin(bayAngle);\n\t//furthermost triangle width to the island.\n\twidth_2 = DSCore.Math.Cos(bayAngle) * bayLength;\n\t//total pattern width.\n\tpattern_width = (width_1 + width_2) * 2 + island_width;\n\n///****elements for the creation of parking islands****///\n//rotate center line.\nrotated_center_line = Geometry.Rotate\n\t(line, rotation_point, Vector.ZAxis(), setout_angle);\n\n//define rectangular surface covering full parking pattern.\n\t//create the surface rectangle.\n\tsurface_rectangle = Rectangle.ByWidthLength\n\t\t(center_plane, pattern_width, actualWidth*bay_copy_number);\n\t//rotate the rectangle.\n\trotated_rectangle = Geometry.Rotate\n\t\t(surface_rectangle, rotation_point, Vector.ZAxis(), setout_angle);\n\t//create the pattern surface.\n\tpattern_surface = Autodesk.Surface.ByPatch(rotated_rectangle);\n\n//create elongated parking spots to be used for cutting island geometry.\n\t//workout length to add to the parking bay length.\n\tadditional_length = bayWidth * DSCore.Math.Tan(bayAngle);\n\t//create the initial elongated spot.\n\telongated_spot =\n\t\tGeometry.Rotate(\n\t\t\tRectangle.ByWidthLength((bayLength+additional_length),bayWidth),\n\t\t\tstartPoint,Vector.ZAxis(),bayAngle\n\t\t\t);\n\t//get bay start point.\n\telongated_start = Autodesk.Curve.StartPoint(elongated_spot);\n\t//create plane at start point.\n\tstart_plane = Plane.ByOriginNormal(elongated_start, Vector.ZAxis());\n\t//create coordinate system at the plane.\n\tbay_plane_cs = CoordinateSystem.ByPlane(start_plane);\n\t//transform bays onto centerline locations.\n\ttransform_bays = Geometry.Transform (elongated_spot, bay_plane_cs, planeCS);\n\t//mirror bays along centerline.\n\tmirror_elongated_bays = Geometry.Mirror (transform_bays, mirror_plane);\n\t//combine pattern into one list.\n\telongated_pattern = List.Join([transform_bays, mirror_elongated_bays]);\n\t//rotate the combined pattern.\n\trotated_elongated_bays = Geometry.Rotate\n\t\t(elongated_pattern, rotation_point, Vector.ZAxis(), setout_angle);\n\t//rotate elongated bays for two-way parking.\n\trotated_elongated_two_way = Geometry.Rotate\n\t\t(rotated_elongated_bays, rotation_point, Vector.ZAxis(), 180);"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "7b7dcab880134c0ea11652946b7ac6af",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [
+        {
+          "Id": "06958dee9c684972b1c12a1f7c648447",
+          "Name": "bayWidth",
+          "Description": "bayWidth",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "6d000e2f6a4848ab84f86464183f1a99",
+          "Name": "bayLength",
+          "Description": "bayLength",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1262f036da1e460bbb7168be60370681",
+          "Name": "bounding_curve_length",
+          "Description": "bounding_curve_length",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c43e86b74ac141ecb84177c37cf3904f",
+          "Name": "setout_angle",
+          "Description": "setout_angle",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "8c9f6fda37e641af97abd10e6dcbbbb9",
+          "Name": "",
+          "Description": "Value of expression at line 2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "649138fd191a4af7b3882a73d215da4f",
+          "Name": "",
+          "Description": "Value of expression at line 3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9a232c3ac1514005a5746aed8ba4982d",
+          "Name": "",
+          "Description": "bayAngle",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "7aa538b5e2d3486493350fb4d344fb81",
+          "Name": "",
+          "Description": "Value of expression at line 5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "156980dbcdef443ab63fab6f60cc591a",
+          "Name": "",
+          "Description": "actualWidth",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2704454487ec426caca54964e533d84e",
+          "Name": "",
+          "Description": "bay_copy_number",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "77324a308d4d49d3824d68eadcadc6c2",
+          "Name": "",
+          "Description": "line",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f7ed43dfb8c94d8fafffa35768894d88",
+          "Name": "",
+          "Description": "line_cs",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "7743df5141d84f4690e8ff422458956b",
+          "Name": "",
+          "Description": "cs_x_axis",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f8d41521e78d4f8ca7b03bab6912e621",
+          "Name": "",
+          "Description": "offset_dim",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "08055ccb72204410bb612322584954d1",
+          "Name": "",
+          "Description": "moved_line",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ad6b23fe9f804205a686feabb6bc63d1",
+          "Name": "",
+          "Description": "locPoints",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2dfae75a8f7143c6b3427a0be882a519",
+          "Name": "",
+          "Description": "linePlane",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "5c744ca804cb4f35afa16e0fb8b8ad29",
+          "Name": "",
+          "Description": "planeCS",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "50a5f0437afa43878061af02e8e3fc40",
+          "Name": "",
+          "Description": "startPoint",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "fb89c8ad922245299c072e3c679cd3f0",
+          "Name": "",
+          "Description": "iniPark",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "4fc8c14bb5354ddabaf83ee09b649acc",
+          "Name": "",
+          "Description": "bayStart",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b86431bebaca45c1ae31e76b034e2e51",
+          "Name": "",
+          "Description": "bayPlane",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1f122c7202134970bcb3d57bef8fdb54",
+          "Name": "",
+          "Description": "bayCS",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "07eb0d3de5b24393aabf7f795ac25ff7",
+          "Name": "",
+          "Description": "transBays",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e1e8bc6d5e5e46588d084ab899e0db73",
+          "Name": "",
+          "Description": "mirror_plane",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ee7a3acb6df648e7a6cfc8e7e215dc3a",
+          "Name": "",
+          "Description": "mirror_bays",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1b1048bd958d443ea761d10fbdbb50ac",
+          "Name": "",
+          "Description": "moved_mirrored",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "4c44e2f2339d4c53a157fb74988d8035",
+          "Name": "",
+          "Description": "combined_bays",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "043f9056063a4b759ffaafd107025855",
+          "Name": "",
+          "Description": "rotation_point",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3bebb77090f94f6a9d3fe3a5011611af",
+          "Name": "",
+          "Description": "rotated_bays",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3a23ba6fe84b47dbb28705c710a6f5f1",
+          "Name": "",
+          "Description": "rotated_two_way",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "4c274cc1f5274497ac06237d7d942d04",
+          "Name": "",
+          "Description": "pattern_width_external",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9c2cc907b3e54f91af4139c9fc1f7f57",
+          "Name": "",
+          "Description": "pattern_width",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "5390f3af13af427781915133f8ed357d",
+          "Name": "",
+          "Description": "rotated_center_line",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "df851daaed144b65b00f9791b672fbf5",
+          "Name": "",
+          "Description": "center_plane",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "5874de4941d5462b91a2253b288123bd",
+          "Name": "",
+          "Description": "surface_rectangle",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e7a49f53300c473eab9f23fe49460750",
+          "Name": "",
+          "Description": "rotated_rectangle",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "385f60675bc3407d8f932c488d4f4fe4",
+          "Name": "",
+          "Description": "pattern_surface",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "27bab54ffa3e44629cb20155e9bf76b3",
+          "Name": "",
+          "Description": "additional_length",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f91c0ba7cbdb430cb6205a12368d6d56",
+          "Name": "",
+          "Description": "elongated_spot",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3d96fe2d84b24e05badc6b05c97f00ed",
+          "Name": "",
+          "Description": "elongated_start",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "7058918b50374ffd9f9303557ff24da3",
+          "Name": "",
+          "Description": "start_plane",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "feb4a8bb383b48119ab41d1b6dd21ec2",
+          "Name": "",
+          "Description": "bay_plane_cs",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "22cba63c019a4ba5a5e7456b30267515",
+          "Name": "",
+          "Description": "transform_bays",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "836924a67d5a48009a2a1008de326e73",
+          "Name": "",
+          "Description": "mirror_elongated_bays",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1d7e38fcd5064f0681f6e45177478906",
+          "Name": "",
+          "Description": "moved_elongated_bays",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b58791c126db4c199e670ac24a948ff4",
+          "Name": "",
+          "Description": "elongated_pattern",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f72d48cbbd994d2a82be4a51587e5695",
+          "Name": "",
+          "Description": "rotated_elongated_bays",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "56f42f45e7cf49f88cbb000238ed7e67",
+          "Name": "",
+          "Description": "rotated_elongated_two_way",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "//parameters.\nbayWidth;\nbayLength;\nbayAngle = 45;\nbounding_curve_length;\n\n//actual bay width against center line.\nactualWidth = bayWidth / DSCore.Math.Cos(bayAngle);\n\n//calculate number of bays for copying along line.\nbay_copy_number = DSCore.Math.Ceiling(bounding_curve_length / actualWidth);\n\n//create line.\nline = Line.ByStartPointEndPoint(Autodesk.Point.ByCoordinates(),\nAutodesk.Point.ByCoordinates(0,(actualWidth*bay_copy_number),0));\n\n//get line start point coordinate system.\nline_cs = Autodesk.Curve.CoordinateSystemAtParameter (line, 0);\n\n//line start point coordinate system x axis.\ncs_x_axis = line_cs.XAxis;\n\n//create line to place first array of parking bays.\n\t//workout offset dimension.\n\toffset_dim = bayWidth * DSCore.Math.Sin(bayAngle) / 2;\n\t//move center line to offset bays.\n\tmoved_line = Geometry.Translate (line, cs_x_axis, offset_dim);\n\n//bay line location points.\nlocPoints = List.DropItems(Autodesk.Curve.PointAtParameter\n\t(moved_line,0..1..#bay_copy_number+1), -1);\n\n//bay line plane.\nlinePlane = Plane.ByOriginNormal(locPoints,Vector.ZAxis());\n\n//bay line plane coordinate system.\nplaneCS = CoordinateSystem.ByPlane(linePlane);\n\n//line start point.\nstartPoint = Line.StartPoint(line);\n\n//initial parking bay.\niniPark = Geometry.Rotate(Rectangle.ByWidthLength(bayLength,bayWidth),startPoint,\nVector.ZAxis(),bayAngle);\n\n//bay start point.\nbayStart = Autodesk.Curve.StartPoint(iniPark);\n\n//bay plane.\nbayPlane = Plane.ByOriginNormal(bayStart,Vector.ZAxis());\n\n//bay coordinate system.\nbayCS = CoordinateSystem.ByPlane(bayPlane);\n\n//transform bays to line locations.\ntransBays = Geometry.Transform (iniPark,bayCS,planeCS);\n\n//mirror parking bays along location line.\n\t//create plane for mirroring.\n\tmirror_plane = Plane.ByOriginNormal (startPoint, cs_x_axis);\n\t//mirror bays.\n\tmirror_bays = Geometry.Mirror (transBays, mirror_plane);\n\n//move mirrored bays to form herringbone pattern.\nmoved_mirrored = Geometry.Translate (mirror_bays, line.Direction, actualWidth/2);\n\n//combine bays into one list.\ncombined_bays = List.Join ([transBays, moved_mirrored]);\n\n//rotate combined pattern.\n\t//get rotation center point.\n\trotation_point = line.PointAtParameter (0.5);\n\t//rotate bays.\n\trotated_bays = Geometry.Rotate\n\t\t(combined_bays, rotation_point, Vector.ZAxis(), setout_angle);\n\n//rotate bays for two-way parking.\nrotated_two_way = Geometry.Rotate\n\t\t(rotated_bays, rotation_point, Vector.ZAxis(), 180);\n\n//calculate overall pattern width.\n\t//width of the pattern from the center overlap zone.\n\tpattern_width_external = DSCore.Math.Cos(45) * bayLength;\n\t//calculate pattern width.\n\tpattern_width = pattern_width_external * 2 + offset_dim * 2;\n\n///****elements for the creation of parking islands****///\n//rotate center line.\nrotated_center_line = Geometry.Rotate\n\t(line, rotation_point, Vector.ZAxis(), setout_angle);\n\n//define rectangular surface covering full parking pattern.\n\t//create center plane.\n\tcenter_plane = Plane.ByOriginNormal\n\t(Autodesk.Curve.PointAtParameter(line, 0.5), Vector.ZAxis());\n\t//create the surface rectangle.\n\tsurface_rectangle = Rectangle.ByWidthLength\n\t\t(center_plane, pattern_width, actualWidth*bay_copy_number);\n\t//rotate the rectangle.\n\trotated_rectangle = Geometry.Rotate\n\t\t(surface_rectangle, rotation_point, Vector.ZAxis(), setout_angle);\n\t//create the pattern surface.\n\tpattern_surface = Autodesk.Surface.ByPatch(rotated_rectangle);\n\n//create elongated parking spots to be used for cutting island geometry.\n\t//workout length to add to the parking bay length.\n\tadditional_length = bayWidth * DSCore.Math.Tan(45);\n\telongated_spot =\n\t\tGeometry.Rotate(\n\t\t\tRectangle.ByWidthLength((bayLength+additional_length),bayWidth),\n\t\t\tstartPoint,Vector.ZAxis(),bayAngle\n\t\t\t);\n\t//get bay start point.\n\telongated_start = Autodesk.Curve.StartPoint(elongated_spot);\n\t//create plane at start point.\n\tstart_plane = Plane.ByOriginNormal(elongated_start, Vector.ZAxis());\n\t//create coordinate system at the plane.\n\tbay_plane_cs = CoordinateSystem.ByPlane(start_plane);\n\t//transform bays onto centerline locations.\n\ttransform_bays = Geometry.Transform (elongated_spot, bay_plane_cs, planeCS);\n\t//mirror bays along centerline.\n\tmirror_elongated_bays = Geometry.Mirror (transform_bays, mirror_plane);\n\t//move mirrored bays to form herringbone pattern.\n\tmoved_elongated_bays = Geometry.Translate (\n\t\tmirror_elongated_bays, line.Direction, actualWidth/2\n\t\t);\n\t//combine pattern into one list.\n\telongated_pattern = List.Join([transform_bays, moved_elongated_bays]);\n\t//rotate the combined pattern.\n\trotated_elongated_bays = Geometry.Rotate\n\t\t(elongated_pattern, rotation_point, Vector.ZAxis(), setout_angle);\n\t//rotate elongated bays for two-way parking.\n\trotated_elongated_two_way = Geometry.Rotate\n\t\t(rotated_elongated_bays, rotation_point, Vector.ZAxis(), 180);"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "7ef7bc359328456a93004a4e342b5c7b",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [
+        {
+          "Id": "bb5fd60f2ca84f89958708d7f342b3a9",
+          "Name": "non_interlocking",
+          "Description": "non_interlocking",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "707540fa661c44b6a29444e4d31f8d46",
+          "Name": "interlocked1",
+          "Description": "interlocked1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e43942e7b3a14000b473ae3c94c832ce",
+          "Name": "interlocked2",
+          "Description": "interlocked2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1c563f727b26462e97a0f690d3fd7712",
+          "Name": "herringbone",
+          "Description": "herringbone",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "598709ce7ef148009984f4af32cb35d1",
+          "Name": "",
+          "Description": "Value of expression at line 2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0b6e076b31c04b7a8df83f6561b43799",
+          "Name": "",
+          "Description": "Value of expression at line 5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "//parking pattern width selection numbers.\n[1, 2, 3, 4];\n\n//list of parking green area surfaces.\n[non_interlocking, interlocked1, interlocked2, herringbone];"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.FromObject, CoreNodeModels",
+      "Id": "06ba032e8def4d06946cca4dcfd7f479",
+      "NodeType": "ExtensionNode",
+      "Inputs": [
+        {
+          "Id": "b5d579899d2742e196fec7599aa79ce7",
+          "Name": "object",
+          "Description": "Object to be serialized",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "cf27b39c5c164a0db7d277baa0192f65",
+          "Name": "string",
+          "Description": "String representation of the object",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Converts an object to a string representation"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "e6fd2df7f0a14ecf915f9ff27da0a6ec",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "734cb88ac2434a70b5cc01d1efccd526",
+          "Name": "keys",
+          "Description": "Keys of dictionary\n\nstring[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "461c408656fd4b85b21fbe0df6eba952",
+          "Name": "values",
+          "Description": "Values of dictionary\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "98b5b30bcd3a4c89a0f5685992a479d4",
+          "Name": "dictionary",
+          "Description": "Dictionary from keys and values",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DesignScript.Builtin.Dictionary.ByKeysValues@string[],var[]..[]",
+      "Replication": "Auto",
+      "Description": "Produces a Dictionary with the supplied keys and values. The number of entries is the shorter of keys or values.\n\nDictionary.ByKeysValues (keys: string[], values: var[]..[]): Dictionary"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "8083ef3c6f3542f79102133bd48cf7cf",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "3cee0620c85d4ca09eb238f18d948847",
+          "Name": "dictionary",
+          "Description": "DesignScript.Builtin.Dictionary",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "7ff45a02f27546198f865c89adc25a92",
+          "Name": "key",
+          "Description": "The key in the Dictionary to obtain value for\n\nstring",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "ee8f76d4dfbc4eb7a7508242e63b0707",
+          "Name": "value",
+          "Description": "Value at the specified key or null if it is not set",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DesignScript.Builtin.Dictionary.ValueAtKey@string",
+      "Replication": "Auto",
+      "Description": "Obtain the value at a specified key\n\nDictionary.ValueAtKey (key: string): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "4ca083c6af094e1097fb5f474c19f02d",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [
+        {
+          "Id": "5afeb361d7b14f2da16b57ee374ff4ce",
+          "Name": "bounding_rectangle_le...",
+          "Description": "bounding_rectangle_length",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "d9350d2b6a324fecb97295c7f6be8a35",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "bounding_rectangle_length;"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.FromObject, CoreNodeModels",
+      "Id": "170f16b58dc54a99bafb68eea9d4dd75",
+      "NodeType": "ExtensionNode",
+      "Inputs": [
+        {
+          "Id": "202748f829c74b1683ad96d6a395b518",
+          "Name": "object",
+          "Description": "Object to be serialized",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "7d639367177b460e84a036e397cbd384",
+          "Name": "string",
+          "Description": "String representation of the object",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Converts an object to a string representation"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "93d727484a77466eb403179921d7ba32",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "bdd67059eb1241d09d7057938fa10785",
+          "Name": "dictionary",
+          "Description": "DesignScript.Builtin.Dictionary",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "fbdb4b2a56404c8ba2ad81d26af11576",
+          "Name": "key",
+          "Description": "The key in the Dictionary to obtain value for\n\nstring",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "d2ee659aa95946628179c39c6b46b077",
+          "Name": "value",
+          "Description": "Value at the specified key or null if it is not set",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DesignScript.Builtin.Dictionary.ValueAtKey@string",
+      "Replication": "Auto",
+      "Description": "Obtain the value at a specified key\n\nDictionary.ValueAtKey (key: string): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "f57eafe87cae4efe9c1fc8da7596a297",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "3c540889239440cf8fcb79ad2ff57079",
+          "Name": "keys",
+          "Description": "Keys of dictionary\n\nstring[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2e5be1c26bb04c9690f87ba967cfebc3",
+          "Name": "values",
+          "Description": "Values of dictionary\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "d751b9764bc247339dd6e74f73403cf2",
+          "Name": "dictionary",
+          "Description": "Dictionary from keys and values",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DesignScript.Builtin.Dictionary.ByKeysValues@string[],var[]..[]",
+      "Replication": "Auto",
+      "Description": "Produces a Dictionary with the supplied keys and values. The number of entries is the shorter of keys or values.\n\nDictionary.ByKeysValues (keys: string[], values: var[]..[]): Dictionary"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.FromObject, CoreNodeModels",
+      "Id": "d68ca3ce6dc748da84803d38dd6c11c5",
+      "NodeType": "ExtensionNode",
+      "Inputs": [
+        {
+          "Id": "28b9cb951c5941baafc23b868409065d",
+          "Name": "object",
+          "Description": "Object to be serialized",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "f52e9f5faeb148669957baea778619bc",
+          "Name": "string",
+          "Description": "String representation of the object",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Converts an object to a string representation"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.FromObject, CoreNodeModels",
+      "Id": "27ef876421d54a0a84f150236a6c4b93",
+      "NodeType": "ExtensionNode",
+      "Inputs": [
+        {
+          "Id": "d7ea69f080ea49b0950452068b8bd057",
+          "Name": "object",
+          "Description": "Object to be serialized",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "7b3e8e77fa40449bb5d652242c07d2f9",
+          "Name": "string",
+          "Description": "String representation of the object",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Converts an object to a string representation"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "cd1856de85074e19b536c98626a0f8d1",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "7c3f27b8ec9641a2a7bc61a11d861c95",
+          "Name": "",
+          "Description": "Value of expression at line 2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f2dbd276532a4bab9b88e064129b4c7b",
+          "Name": "",
+          "Description": "Value of expression at line 5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "//parking angle selection numbers.\n[1, 2, 3, 4];\n\n//parking angles as per Cape Town parking standards.\n[60, 45, 30, 0];"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "Parameter": {
+        "Name": "patternAngle",
+        "TypeName": "int",
+        "TypeRank": 0,
+        "DefaultValue": "1",
+        "Description": "select the parking pattern angle. 1 for 30 degrees, 2 for 45 degrees, 3 for 60 degrees, and 4 for 90 degrees. These angles do no apply to the herringbone pattern which will always be 45 degrees."
+      },
+      "Id": "7ab9fddec62f4fb0b1ffd2be9fc61bee",
+      "NodeType": "InputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "bcac228f3e8a4d9f8f805a3573e42847",
+          "Name": "",
+          "Description": "Input Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "Parameter": {
+        "Name": "patternType",
+        "TypeName": "int",
+        "TypeRank": 0,
+        "DefaultValue": "1",
+        "Description": "Select \"1\" for the non interlocking pattern which allows for an island between the bay rows, \"2\" for the interlocking pattern, \"3\" for the mirrored interlocking pattern, and \"4\" for the herringbone pattern."
+      },
+      "Id": "0daed5dba5e24f75a0cf21f3fcabb832",
+      "NodeType": "InputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "f0f148b79a68410183f460643938f039",
+          "Name": "",
+          "Description": "Input Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "Parameter": {
+        "Name": "islandWidth",
+        "TypeName": "double",
+        "TypeRank": 0,
+        "DefaultValue": "1",
+        "Description": "width of the island between the parking rows of the regular parking pattern."
+      },
+      "Id": "7ca9391670954450974c3cb9cff09fd1",
+      "NodeType": "InputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "8997cc98654c4fb4ba34988aa904dc08",
+          "Name": "",
+          "Description": "Input Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "Parameter": {
+        "Name": "internalRotation",
+        "TypeName": "double",
+        "TypeRank": 0,
+        "DefaultValue": "45",
+        "Description": "the rotation of value of the internal parking bays."
+      },
+      "Id": "ae66e2fb4df94e1bba325ed02a89639d",
+      "NodeType": "InputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "01340ac2e775418a85a036cdfd5c46a9",
+          "Name": "",
+          "Description": "Input Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "Parameter": {
+        "Name": "bayWidth",
+        "TypeName": "double",
+        "TypeRank": 0,
+        "DefaultValue": "2.5",
+        "Description": "the width of the vehicular parking bays."
+      },
+      "Id": "1c0de5d06ba04ca9813716bb6017631e",
+      "NodeType": "InputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "532a746bcfa54f75a3af96660a470492",
+          "Name": "",
+          "Description": "Input Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "Parameter": {
+        "Name": "bayLength",
+        "TypeName": "double",
+        "TypeRank": 0,
+        "DefaultValue": "5",
+        "Description": "the length of the vehicular parking bays."
+      },
+      "Id": "f8069286e52940f194c97d8cb85e198a",
+      "NodeType": "InputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "e260b4fa856e4df1ba2fcb90ca4abd29",
+          "Name": "",
+          "Description": "Input Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "Parameter": {
+        "Name": "rectangleLength",
+        "TypeName": "double",
+        "TypeRank": 0,
+        "DefaultValue": "20",
+        "Description": "the length of the bounding rectangle"
+      },
+      "Id": "4afd92f5f09149beb1de5c82d8c4825a",
+      "NodeType": "InputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "177f2a2862e84c209df903e3abaa7532",
+          "Name": "",
+          "Description": "Input Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "5b46298c2664491fa6ddb9f67524c132",
+      "End": "7655b8c58f8c43a78919acfbf9f2b169",
+      "Id": "5f78161e15a8457db94ccbd58ebab285",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "56cb2af18c674ab1a25df7f45353bd80",
+      "End": "3013f618bae742c38718f033e3f7111e",
+      "Id": "72b66141f27d45d0877439b1843b247a",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "d6bfc5028f234515ad60968a12a4de55",
+      "End": "2b30b5afa6324b0b8fe39d123709227d",
+      "Id": "579038733bbb4311b9df0508b285d472",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "a954e951f30947268a9e03fd9d28c458",
+      "End": "133d8e951ced4ef1a44972479897893a",
+      "Id": "37545acb910e4c42beb948043fdc0849",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "17245ccdf1a9469caf8304e843bf9505",
+      "End": "8007ab6a143641649581b7044da004c5",
+      "Id": "172d68ec00104d5f8e00c09490ad8c10",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "2e8cef5dbd544e07890010111e47a967",
+      "End": "68ddae9b2093431f8cf86e8b797635b7",
+      "Id": "0a11ff04c16b48b5a6643b5c175d84a5",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "e9a7b81deda642348af4344d36a2eecc",
+      "End": "ed7f2a0d98e9416294d216c46dec9be8",
+      "Id": "ca1acf2073934565ac7950dbb126f0c6",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "7ccf5485f47149be8b0864ea21bee6a3",
+      "End": "b2b37e8d2a5848e7aa4fd2f63f32b301",
+      "Id": "4d6066f456f74e51b031b186cd92faa7",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "0418562f26254be7ad0ec343b32466b9",
+      "End": "50c354ba009a48a88423a18522cf1750",
+      "Id": "1d3457907eb54ff7989f5199e344ffa3",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "c46ecc4cc9ab41eba0ad6d2f1f854b9d",
+      "End": "5592d0ab58db4f20b9cb9a4a4559de6f",
+      "Id": "dc2b851d564f436499900158d3431025",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "ffaf641bab0442b1aa43ceaa19601910",
+      "End": "f3db537d698546e4bc2f912dada99e31",
+      "Id": "3dd73cac54b14213b0d78a1e2b9afdf3",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "137732ac089e40a382aa67b5de3546b4",
+      "End": "f3ee9c5d01d34230b0ce2453763d03b8",
+      "Id": "5984768dfaee48f0a5b12d7a16e0b782",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "137732ac089e40a382aa67b5de3546b4",
+      "End": "f3ee9c5d01d34230b0ce2453763d03b8",
+      "Id": "2dcc25f58c6a453786e61601b707bb6b",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "2d51aecb5172403893a518db7a7277d2",
+      "End": "4e7012bef61e499bb5d90410cc8ba631",
+      "Id": "9cbbb364a35d482196eb1313a489f9cb",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "2d51aecb5172403893a518db7a7277d2",
+      "End": "4e7012bef61e499bb5d90410cc8ba631",
+      "Id": "244e2381474d4651a8140c166e235e60",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "f61fc3adffcb49489c1cd84b98dddb90",
+      "End": "7a707dd4f0844678a6c50f0744cc4243",
+      "Id": "0e89e5fe2959454ab525458faef0403c",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "f61fc3adffcb49489c1cd84b98dddb90",
+      "End": "7a707dd4f0844678a6c50f0744cc4243",
+      "Id": "e8b1f762d0504706b91fa8a2d2411eeb",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "0fe1d01720f345ae96f30ea9df053e46",
+      "End": "2b6a8bff0bf342f2a1d8f2657a4e1d16",
+      "Id": "097b36d05f6141f8b1c176c0632b702f",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "0fe1d01720f345ae96f30ea9df053e46",
+      "End": "2b6a8bff0bf342f2a1d8f2657a4e1d16",
+      "Id": "e08395bd6cdd479eaee3cb756c32a46a",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "ce6e36eb076f4a178a457a6aa534fcab",
+      "End": "cef9f67fe26e42c09d83c43acf4d9b91",
+      "Id": "0005e00924fd47aba56db595885ed93f",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "52ccc153374247919a0ae2b47193ea47",
+      "End": "ab9f3549576242d1af75c673022c58f9",
+      "Id": "8137658ee4f947459dccb06b0aa8559f",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "1eb97cf20b2f4e3a8afa71c3aa35e4ac",
+      "End": "8105263392bd4673b9e7cb8ef5b52c10",
+      "Id": "6dfc8518cc944c8baf4537fe3d2dcf43",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "b1edbed774d240f08dfc6c4d2b858c9b",
+      "End": "8e2a34d4f7f24a6895fb0b1eea5bc7b5",
+      "Id": "b9d38a17a26d4978a3a335952d4b46fb",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "065c10a038be4356ab1f3b8185f2d7b8",
+      "End": "48d535c53d8c41f6946513179f2ac607",
+      "Id": "e3df4cae85cd4e8ab9e7b7e9728e9757",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "8d73cb88414340b9841e6f7030c9a00b",
+      "End": "841537d6a82a4022a4b427992418ce37",
+      "Id": "809aeb8d45ad4255a8e04d78a52b33c8",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "c7b3d73376034258954c177457197784",
+      "End": "a9c25c4d059e45cfb25e4507cebbd57e",
+      "Id": "1db90e64d7044b47842783c9bba25715",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "08a0da1e4e3c437eb9b08a391938cc41",
+      "End": "a7cfac968d0045819b583a734825ac9c",
+      "Id": "205a7f5463f74b50969aa1f033540625",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "48fe48d91e59441d8d8a3e3b3d35c9b4",
+      "End": "e246b7e4c1bc4d429ca170e03baa13e7",
+      "Id": "a1eefecf286e48e5bc76ad8d1de88fa0",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "a6030ef2dd6d4f10bceeb3cda832243b",
+      "End": "e6af99ce70ef4f828b83470dd18b1f4c",
+      "Id": "af118cfcaa3841049a04c73cb1f1b726",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "86083ab250b54382bd21ad7acd2ba9a4",
+      "End": "eccddb2b533a4aefa9f3907434137c79",
+      "Id": "39fb98b522bd41b5b7ea5effa0b29841",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "f7d649408a5d4b01ad1c04504469c00d",
+      "End": "3b100cd4ddb74412b98517a120f82217",
+      "Id": "c0b23a5f70ab463eb0d0ccf69dd3bcf8",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "8577ff2f2cc84515a228f02126338d14",
+      "End": "27001a36113c44bc9b5c325c0a0ad69e",
+      "Id": "ff1651aa302b4468b277060c975495a7",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "9f8af8812c824c618d507fdfa0fa955b",
+      "End": "c035eb90e16946f295a117258f642232",
+      "Id": "0167d5f97fd142b6874cbcda89bb4448",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "9f8af8812c824c618d507fdfa0fa955b",
+      "End": "c035eb90e16946f295a117258f642232",
+      "Id": "0f7d076f83104b0193221e060ab6e1b0",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "fc80f458c251490c9b9b96c7689c4e59",
+      "End": "0e94029b7adc4d5fb375ae9abfdd8ff2",
+      "Id": "e33916df11ff4d78a19e8981628a7e67",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "a399a342fd31478b9830e1550fb0ad1d",
+      "End": "98c67f496b2f4cb995c01bb67b91cd8c",
+      "Id": "168e0bcc047d4dbfb241e72ae1e9ce43",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "a399a342fd31478b9830e1550fb0ad1d",
+      "End": "93bd1b17b4df42de91c0961fc74e10ef",
+      "Id": "cee81b5056874d0c886c0852bbbeb0a2",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "b44b0109cd8e43e384bb3e1398e80353",
+      "End": "79b2897e67de43a39d8a540b5f801003",
+      "Id": "57d7d10b528a4b3789dcf81446490c4f",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "b44b0109cd8e43e384bb3e1398e80353",
+      "End": "f556f9042c064326a7e5ab22b7244e6e",
+      "Id": "157285d10b134ffb97c9e1df1f525a67",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "55a802096ca14b4fb00b0601450f1468",
+      "End": "a6d69266e7ca4a5a9609aa7499dc8028",
+      "Id": "05c0f0af272348a98ec68dad67ffca2b",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "55a802096ca14b4fb00b0601450f1468",
+      "End": "4491637cd4e24ee7a0b0a88e87cc68ca",
+      "Id": "f3bf26cf34094a878bc10c4423872cea",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "c952860c2d354c35882db69b9cdcc181",
+      "End": "707540fa661c44b6a29444e4d31f8d46",
+      "Id": "8cea8039a7024f2eb14d11200433ff85",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "c952860c2d354c35882db69b9cdcc181",
+      "End": "e43942e7b3a14000b473ae3c94c832ce",
+      "Id": "3132c1db538b4daf9916dc8a788d5eeb",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "0c28521d2ff946aa89e181f918ea3992",
+      "End": "edb39c2db4034fe583de190588443053",
+      "Id": "603171ee67f64fcd80a402ff827a6373",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "0c28521d2ff946aa89e181f918ea3992",
+      "End": "b21e195302d944368f649d55ade8aff1",
+      "Id": "eabd9070d1884ba9bee56c3af315de16",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "084f2c67f64d453c965a548a20385f40",
+      "End": "d640792348eb424d8dab9a2b73665ebc",
+      "Id": "371e9ad244704eb9a077133dacf10995",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "084f2c67f64d453c965a548a20385f40",
+      "End": "396990b5b3d2458bb16f203d3c203361",
+      "Id": "7ab9ed69b100459da294602f5007ecac",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "4f6c5bbe61514805ab56f0a17a916e22",
+      "End": "ece4779dd7904cfd9ba2657500ab5453",
+      "Id": "276b378293fa4308975f17d297f003da",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "4ee02932c7e241349285c4a3d172fed5",
+      "End": "9470f2967dd44a5da1e8423e86f978cb",
+      "Id": "e79e75cc007c4d9a859d977e44346920",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "f93e5b4e67b646f9800cc238a3a71abd",
+      "End": "43d06b100ad2412f9bed1f5f0fba7ebe",
+      "Id": "55d9db2fa5644a27a3235f0555a5239d",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "5304b02e846c45b788930cc5644cb06e",
+      "End": "d349e1ad180a4026ab28b496f69e540d",
+      "Id": "3ce8221bcce449c1b9521b59125f5dce",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "3b5604fa6d4e4b90b32fb58dd20d5204",
+      "End": "bb5fd60f2ca84f89958708d7f342b3a9",
+      "Id": "b1754c997fe84694be80e9a041126cae",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "597d8d9c953d469fa7bf60623a4c5072",
+      "End": "04166770bdef476a83fba4419cd7566b",
+      "Id": "f866e255172044c5b26913d6a28f75db",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "08f06cfbcadf44a19ad5c1ea01732d18",
+      "End": "6b88b45ca7364914a4cc8100b9874903",
+      "Id": "bf629eb835a74ff18dfc4cdf3d8cc698",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "3bebb77090f94f6a9d3fe3a5011611af",
+      "End": "938127ae55e44e97aaf88d8189653a77",
+      "Id": "bcf4dbefa6d94f98b3a7739811f38fdc",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "3a23ba6fe84b47dbb28705c710a6f5f1",
+      "End": "0b9f08a1df4a4d46adc9344018bf0769",
+      "Id": "2ed43a91cfbd4a79a9af5e8826082461",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "9c2cc907b3e54f91af4139c9fc1f7f57",
+      "End": "4d049efbb6cd4f8399dbdf06b7352338",
+      "Id": "eb9554047d6a4fb3a678c4cec35e3edb",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "385f60675bc3407d8f932c488d4f4fe4",
+      "End": "1c563f727b26462e97a0f690d3fd7712",
+      "Id": "d8577525c20e4c53b96b20fec679de8a",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "f72d48cbbd994d2a82be4a51587e5695",
+      "End": "28e10d840c1c4191801cf92053b20003",
+      "Id": "c4aa66f17b24448c9e4d272035e0e8ad",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "56f42f45e7cf49f88cbb000238ed7e67",
+      "End": "33be23ace12a4edabfea3ce9e4f504d9",
+      "Id": "bab79f4621654b5dba91a8fd0485f7a6",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "598709ce7ef148009984f4af32cb35d1",
+      "End": "b5d579899d2742e196fec7599aa79ce7",
+      "Id": "b94dcc67cbab46d29332d01285298152",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "0b6e076b31c04b7a8df83f6561b43799",
+      "End": "461c408656fd4b85b21fbe0df6eba952",
+      "Id": "f20117f9c4344535a5ef1f99b7428027",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "cf27b39c5c164a0db7d277baa0192f65",
+      "End": "734cb88ac2434a70b5cc01d1efccd526",
+      "Id": "c329110578b94858b2641891623f107c",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "cf27b39c5c164a0db7d277baa0192f65",
+      "End": "734cb88ac2434a70b5cc01d1efccd526",
+      "Id": "16559cc8666942ecae900712f9e49474",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "98b5b30bcd3a4c89a0f5685992a479d4",
+      "End": "3cee0620c85d4ca09eb238f18d948847",
+      "Id": "bcd99d69ace24c9da9112d385aa01065",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "ee8f76d4dfbc4eb7a7508242e63b0707",
+      "End": "16e886a583f846a88de09dba305f6c61",
+      "Id": "1f283972302342d28251b8a11e9269de",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "d9350d2b6a324fecb97295c7f6be8a35",
+      "End": "8c93b8272ae445c68acf5d789a17ead7",
+      "Id": "2977caa25b69430fbc8739f06e29cfcb",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "d9350d2b6a324fecb97295c7f6be8a35",
+      "End": "2401d3cbe83c489899b01b93c0932fc5",
+      "Id": "094cc7a442fd4bc1ba63e144eaa93af3",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "d9350d2b6a324fecb97295c7f6be8a35",
+      "End": "1262f036da1e460bbb7168be60370681",
+      "Id": "3d64947c955f43a792bfd08cc0011aa2",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "7d639367177b460e84a036e397cbd384",
+      "End": "7ff45a02f27546198f865c89adc25a92",
+      "Id": "9d1a1c4180a846dbb5f14918b4bf8478",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "d2ee659aa95946628179c39c6b46b077",
+      "End": "0edccd040ece4384991129da2c2af803",
+      "Id": "c8b5c71e6d0247178d4c2d8e1e3fae78",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "d2ee659aa95946628179c39c6b46b077",
+      "End": "24ae00cac4724c8d881cb6cff56ef515",
+      "Id": "ffaf226df7b349bb81bd5e44d9b31172",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "d751b9764bc247339dd6e74f73403cf2",
+      "End": "bdd67059eb1241d09d7057938fa10785",
+      "Id": "43b42892c96c442484d4da762f6b128d",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "f52e9f5faeb148669957baea778619bc",
+      "End": "3c540889239440cf8fcb79ad2ff57079",
+      "Id": "89c84794cfb04ae4b50714b66e5208ee",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "f52e9f5faeb148669957baea778619bc",
+      "End": "3c540889239440cf8fcb79ad2ff57079",
+      "Id": "af75fdaa0746473ab90e7ce56afe2a6e",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "7b3e8e77fa40449bb5d652242c07d2f9",
+      "End": "fbdb4b2a56404c8ba2ad81d26af11576",
+      "Id": "880624f507c942c995d4c984c48d9b09",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "7c3f27b8ec9641a2a7bc61a11d861c95",
+      "End": "28b9cb951c5941baafc23b868409065d",
+      "Id": "5cf1d496b74249669764e7d406f88435",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "7c3f27b8ec9641a2a7bc61a11d861c95",
+      "End": "2e5be1c26bb04c9690f87ba967cfebc3",
+      "Id": "449c9cd864e44df68cb1141960c2163b",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "f2dbd276532a4bab9b88e064129b4c7b",
+      "End": "2e5be1c26bb04c9690f87ba967cfebc3",
+      "Id": "cabc56ad42934685a71c7bf12cc0bf5e",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "bcac228f3e8a4d9f8f805a3573e42847",
+      "End": "d7ea69f080ea49b0950452068b8bd057",
+      "Id": "a57f0182a7454151923ac2560dbef551",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "f0f148b79a68410183f460643938f039",
+      "End": "e25efc599b684109958f6c461617cafd",
+      "Id": "a029a352ad5842d680ccbef04054d279",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "f0f148b79a68410183f460643938f039",
+      "End": "aaf92239ab7a4ad582e0a6936c8d49de",
+      "Id": "433275111ae24ee690dc7668c2b6f405",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "f0f148b79a68410183f460643938f039",
+      "End": "79a01a7f3fe24c77b41bd7e90db612cd",
+      "Id": "3a1d16cc708041278ced501eac82880f",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "f0f148b79a68410183f460643938f039",
+      "End": "14628fb37044465a88b7dab164570509",
+      "Id": "ba8238519eeb4759b8468f7cfbebf7ba",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "f0f148b79a68410183f460643938f039",
+      "End": "1c8cfb60a4ab410a8328b6c9f99d732e",
+      "Id": "6cd6a43d707d4d56a1f6c268c881195d",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "f0f148b79a68410183f460643938f039",
+      "End": "202748f829c74b1683ad96d6a395b518",
+      "Id": "6a6390c44ae44ccf8061d7725ccd9430",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "8997cc98654c4fb4ba34988aa904dc08",
+      "End": "aa08791de0a942acbf52a91bb145bb80",
+      "Id": "f272c778792e483fab919051961b5ddf",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "01340ac2e775418a85a036cdfd5c46a9",
+      "End": "2fb744c16fa44e8cb05ffc7a10b17718",
+      "Id": "73e35215d1284dcabd0ef4776eeb0345",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "01340ac2e775418a85a036cdfd5c46a9",
+      "End": "441a80a2d5d24960adebd09f42360ebd",
+      "Id": "68e4010ffe044acaa74fb7f2eb178f5a",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "01340ac2e775418a85a036cdfd5c46a9",
+      "End": "c43e86b74ac141ecb84177c37cf3904f",
+      "Id": "e5fed6d42da0452fbf4c1673dd089dc7",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "532a746bcfa54f75a3af96660a470492",
+      "End": "01402219cbbb4e22a570e20360d5ccfd",
+      "Id": "8ddabcc0bbe947a69175026bc7039c1c",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "532a746bcfa54f75a3af96660a470492",
+      "End": "f2e67ac1e5b64be388ede54623170a91",
+      "Id": "c6bbf5d9c6084293881809981cf9e3b0",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "532a746bcfa54f75a3af96660a470492",
+      "End": "06958dee9c684972b1c12a1f7c648447",
+      "Id": "7c6bd89c49b44e5892a8e81aa40ad6ff",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "e260b4fa856e4df1ba2fcb90ca4abd29",
+      "End": "e4d24734218048ffba2aea2e57c29f9b",
+      "Id": "bb23fd9aa029402985b8727978b021cd",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "e260b4fa856e4df1ba2fcb90ca4abd29",
+      "End": "e49ef041a7f14748a39987ed144d6719",
+      "Id": "53e8f9f8f51d41fe938109ce9933165a",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "e260b4fa856e4df1ba2fcb90ca4abd29",
+      "End": "6d000e2f6a4848ab84f86464183f1a99",
+      "Id": "a03bea6f93d740e98dc04f5cc53d9d40",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "177f2a2862e84c209df903e3abaa7532",
+      "End": "5afeb361d7b14f2da16b57ee374ff4ce",
+      "Id": "b24e8b85504f4c13bb8e951f873664f9",
+      "IsHidden": "False"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Author": "None provided",
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": false,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "3.3.0.6316",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "_Background Preview",
+      "EyeX": 1457.6121826171875,
+      "EyeY": 28523.57421875,
+      "EyeZ": 14364.5537109375,
+      "LookX": -1462.6121826171875,
+      "LookY": -28512.57421875,
+      "LookZ": -14372.5537109375,
+      "UpX": -0.07840051501989365,
+      "UpY": 0.6327049136161804,
+      "UpZ": -0.7704141139984131
+    },
+    "ConnectorPins": [],
+    "NodeViews": [
+      {
+        "Id": "8dc335b1af5e46649d4db98f6c2e10a2",
+        "Name": "Output",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 12820.039109145095,
+        "Y": 2264.89095667253
+      },
+      {
+        "Id": "f64adbc485544aeb87f033020b893e70",
+        "Name": "Output",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 12824.914565738494,
+        "Y": 2416.88338438451
+      },
+      {
+        "Id": "d7675b010c91471a922d86b15a3c056d",
+        "Name": "Output",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 12826.011461017595,
+        "Y": 2606.61148889265
+      },
+      {
+        "Id": "8b947944aded49c7838505419e97233d",
+        "Name": "Output",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 12829.734910804695,
+        "Y": 2809.79551327982
+      },
+      {
+        "Id": "274e8d64f0c243d78250ea4a60f681ac",
+        "Name": "Output",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 12827.799642658694,
+        "Y": 3004.32108814305
+      },
+      {
+        "Id": "84f656df93d84c85b5d487a145a8c202",
+        "Name": "Output",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 12833.068615308093,
+        "Y": 3186.68419310257
+      },
+      {
+        "Id": "7719ef8ced9f40eb8aebef60998dce1f",
+        "Name": "Output",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 12828.680738895695,
+        "Y": 3361.3775800623303
+      },
+      {
+        "Id": "2bd8d32c574c49a5bb87723e2e927f00",
+        "Name": "Dictionary.ValueAtKey",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 10246.520549785793,
+        "Y": 2421.113014172
+      },
+      {
+        "Id": "84b4ca80da8248499eafe02a0b09333a",
+        "Name": "Dictionary.ValueAtKey",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 10252.556753463094,
+        "Y": 3318.79441628744
+      },
+      {
+        "Id": "26b8a54b6c444e66b509e33696a17104",
+        "Name": "Dictionary.ValueAtKey",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 10225.952065378893,
+        "Y": 4287.794868085681
+      },
+      {
+        "Id": "7dd829c4e2114919b2aae6795b7dc343",
+        "Name": "String from Object",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 9794.293649455984,
+        "Y": 2694.7742619639903
+      },
+      {
+        "Id": "dd31750615e94872b260d8dee6dd7bfa",
+        "Name": "Dictionary.ByKeysValues",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 9777.322640208695,
+        "Y": 2424.8880867410103
+      },
+      {
+        "Id": "5f04790395f14bbabe4b1f6cf2b47d21",
+        "Name": "String from Object",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 9800.329853133164,
+        "Y": 3592.4556640794303
+      },
+      {
+        "Id": "1776864db5e54170b18687d7e06a1da1",
+        "Name": "Dictionary.ByKeysValues",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 9783.358843885875,
+        "Y": 3322.5694888564503
+      },
+      {
+        "Id": "852f67ba98c44c5fb5c85bf09e0c089f",
+        "Name": "String from Object",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 9775.257443017174,
+        "Y": 4560.002409297271
+      },
+      {
+        "Id": "c4e536be6af94b06a9f1aaf041445dee",
+        "Name": "Dictionary.ByKeysValues",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 9758.286433769885,
+        "Y": 4290.11623407427
+      },
+      {
+        "Id": "a31d80f3a1094eb1a9c002029a38dc7b",
+        "Name": "Dictionary.ByKeysValues",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 9792.733083945874,
+        "Y": 5298.2949875938
+      },
+      {
+        "Id": "813b147d66e643c6a38f4144b9b028b3",
+        "Name": "Dictionary.ValueAtKey",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 10260.398715554893,
+        "Y": 5295.973621605201
+      },
+      {
+        "Id": "1f39fe2b2a8a49b18f12909f7dd36208",
+        "Name": "String from Object",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 9457.629530379545,
+        "Y": 2290.27100047976
+      },
+      {
+        "Id": "d5d677de06794d72aae888c80ec50429",
+        "Name": "String from Object",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 9463.665734056765,
+        "Y": 3187.9524025952
+      },
+      {
+        "Id": "34026d29f18a4174a6a8816cd23e6c46",
+        "Name": "String from Object",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 9438.593323940775,
+        "Y": 4155.4991478130705
+      },
+      {
+        "Id": "c8768e63d6fe49828a85005d8a667c40",
+        "Name": "String from Object",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 9473.039974116764,
+        "Y": 5163.6779013326
+      },
+      {
+        "Id": "993529ba457540afaa457272dc8df821",
+        "Name": "String from Object",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 9809.704093193173,
+        "Y": 5568.181162816801
+      },
+      {
+        "Id": "4ab539f80a614032b36ab0743484c038",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 8475.572778260415,
+        "Y": 2278.52827723982
+      },
+      {
+        "Id": "ccf17982424f4ab2ba3677ccceaed3eb",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 8481.608981937665,
+        "Y": 3176.20967935526
+      },
+      {
+        "Id": "94b8706321334e8bacd96fd14605b691",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 8456.536571821674,
+        "Y": 4143.75642457318
+      },
+      {
+        "Id": "e09d35351ccd48ba89dd2f39b437f09a",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 8490.983221997674,
+        "Y": 5151.935178092701
+      },
+      {
+        "Id": "4e9abb844d7a4d01a538b1de4121c2c2",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 8473.978562087115,
+        "Y": 6130.709549286491
+      },
+      {
+        "Id": "995afe0d12d6452fb5bdfc41cc150bac",
+        "Name": "String from Object",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 9792.699433282614,
+        "Y": 6546.955534010591
+      },
+      {
+        "Id": "f10e9ca65cb947ec963b9df6bca79d16",
+        "Name": "Dictionary.ByKeysValues",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 9775.728424035315,
+        "Y": 6277.06935878759
+      },
+      {
+        "Id": "947c89217bce48d3aebc57661df9d998",
+        "Name": "String from Object",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 9456.035314206205,
+        "Y": 6142.4522725263905
+      },
+      {
+        "Id": "4e1760c78da04e17ad3c531b2711cb61",
+        "Name": "Dictionary.ValueAtKey",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 10243.394055644294,
+        "Y": 6274.747992798991
+      },
+      {
+        "Id": "dd4805dd69844ac4b959504ca491ae23",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 6765.156650313484,
+        "Y": 5379.151617520791
+      },
+      {
+        "Id": "071245732f1c4207a0b6973bbfa21e31",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 6750.1109218014535,
+        "Y": 462.35320298086015
+      },
+      {
+        "Id": "7b7dcab880134c0ea11652946b7ac6af",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 6759.645597462023,
+        "Y": 2885.72502430674
+      },
+      {
+        "Id": "7ef7bc359328456a93004a4e342b5c7b",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 8484.245661673205,
+        "Y": 7253.754332290131
+      },
+      {
+        "Id": "06ba032e8def4d06946cca4dcfd7f479",
+        "Name": "String from Object",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 9466.302413792295,
+        "Y": 7265.497055530031
+      },
+      {
+        "Id": "e6fd2df7f0a14ecf915f9ff27da0a6ec",
+        "Name": "Dictionary.ByKeysValues",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 9785.995523621415,
+        "Y": 7400.11414179123
+      },
+      {
+        "Id": "8083ef3c6f3542f79102133bd48cf7cf",
+        "Name": "Dictionary.ValueAtKey",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 10253.661155230395,
+        "Y": 7397.792775802631
+      },
+      {
+        "Id": "4ca083c6af094e1097fb5f474c19f02d",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 4592.899790119924,
+        "Y": 2909.4118752971203
+      },
+      {
+        "Id": "170f16b58dc54a99bafb68eea9d4dd75",
+        "Name": "String from Object",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 9802.966532868704,
+        "Y": 7670.000317014231
+      },
+      {
+        "Id": "93d727484a77466eb403179921d7ba32",
+        "Name": "Dictionary.ValueAtKey",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 3372.060855130423,
+        "Y": 2716.46993218762
+      },
+      {
+        "Id": "f57eafe87cae4efe9c1fc8da7596a297",
+        "Name": "Dictionary.ByKeysValues",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 2882.5469924619333,
+        "Y": 2718.27171798578
+      },
+      {
+        "Id": "d68ca3ce6dc748da84803d38dd6c11c5",
+        "Name": "String from Object",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 2463.117356556573,
+        "Y": 2536.5753129234404
+      },
+      {
+        "Id": "27ef876421d54a0a84f150236a6c4b93",
+        "Name": "String from Object",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 2858.3801067178533,
+        "Y": 2984.8410083860904
+      },
+      {
+        "Id": "cd1856de85074e19b536c98626a0f8d1",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 1794.8194846876336,
+        "Y": 2679.94496339354
+      },
+      {
+        "Id": "7ab9fddec62f4fb0b1ffd2be9fc61bee",
+        "Name": "Input",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 431.49463946439346,
+        "Y": 2985.3717920307504
+      },
+      {
+        "Id": "0daed5dba5e24f75a0cf21f3fcabb832",
+        "Name": "Input",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 427.8089871757934,
+        "Y": 1158.1290654743302
+      },
+      {
+        "Id": "7ca9391670954450974c3cb9cff09fd1",
+        "Name": "Input",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 429.6532227485934,
+        "Y": 1827.1235733910898
+      },
+      {
+        "Id": "ae66e2fb4df94e1bba325ed02a89639d",
+        "Name": "Input",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 430.6679227507634,
+        "Y": 2117.04124177267
+      },
+      {
+        "Id": "1c0de5d06ba04ca9813716bb6017631e",
+        "Name": "Input",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 431.84492307949347,
+        "Y": 1368.82931830805
+      },
+      {
+        "Id": "f8069286e52940f194c97d8cb85e198a",
+        "Name": "Input",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 435.5535591813034,
+        "Y": 1590.0135664161999
+      },
+      {
+        "Id": "4afd92f5f09149beb1de5c82d8c4825a",
+        "Name": "Input",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 429.5777319429434,
+        "Y": 2430.6041099696004
+      }
+    ],
+    "Annotations": [
+      {
+        "Id": "44f6f636e732407c986cd531c57b1107",
+        "Title": "Outputs",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "8dc335b1af5e46649d4db98f6c2e10a2",
+          "f64adbc485544aeb87f033020b893e70",
+          "d7675b010c91471a922d86b15a3c056d",
+          "8b947944aded49c7838505419e97233d",
+          "274e8d64f0c243d78250ea4a60f681ac",
+          "84f656df93d84c85b5d487a145a8c202",
+          "7719ef8ced9f40eb8aebef60998dce1f"
+        ],
+        "HasNestedGroups": false,
+        "Left": 12810.039109145095,
+        "Top": 2191.89095667253,
+        "Width": 768.6416297506003,
+        "Height": 1327.9866233898001,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 2264.89095667253,
+        "InitialHeight": 1284.9866233898001,
+        "TextblockHeight": 63.0,
+        "Background": "#FFFF7BAC"
+      },
+      {
+        "Id": "8e7ede332ffc4c51a4298b3f94c91504",
+        "Title": "Parking bay pattern selection.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "7dd829c4e2114919b2aae6795b7dc343",
+          "dd31750615e94872b260d8dee6dd7bfa",
+          "2bd8d32c574c49a5bb87723e2e927f00",
+          "4ab539f80a614032b36ab0743484c038",
+          "1f39fe2b2a8a49b18f12909f7dd36208"
+        ],
+        "HasNestedGroups": false,
+        "Left": 8465.572778260415,
+        "Top": 2205.52827723982,
+        "Width": 2028.947771525378,
+        "Height": 633.2459847241703,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 2278.52827723982,
+        "InitialHeight": 590.2459847241703,
+        "TextblockHeight": 63.0,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "eef4b459fc964fd69be8922564d7fa12",
+        "Title": "Replacement parking bay pattern selection. For replacements as required to account for 1-way or 2-way traffic between rows.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "ccf17982424f4ab2ba3677ccceaed3eb",
+          "5f04790395f14bbabe4b1f6cf2b47d21",
+          "1776864db5e54170b18687d7e06a1da1",
+          "d5d677de06794d72aae888c80ec50429",
+          "84b4ca80da8248499eafe02a0b09333a"
+        ],
+        "HasNestedGroups": false,
+        "Left": 8471.608981937665,
+        "Top": 3103.20967935526,
+        "Width": 2028.9477715254288,
+        "Height": 633.2459847241703,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 3176.20967935526,
+        "InitialHeight": 590.2459847241703,
+        "TextblockHeight": 63.0,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "d30e1340ac0a430f91f19fae6fccc331",
+        "Title": "Parking bay pattern widths.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "94b8706321334e8bacd96fd14605b691",
+          "852f67ba98c44c5fb5c85bf09e0c089f",
+          "c4e536be6af94b06a9f1aaf041445dee",
+          "34026d29f18a4174a6a8816cd23e6c46",
+          "26b8a54b6c444e66b509e33696a17104"
+        ],
+        "HasNestedGroups": false,
+        "Left": 8446.536571821674,
+        "Top": 4070.75642457318,
+        "Width": 2027.4154935572187,
+        "Height": 633.2459847240907,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 4143.75642457318,
+        "InitialHeight": 590.2459847240907,
+        "TextblockHeight": 63.0,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "00cde1ad8ae84ae3a18fd2d45eb1dd8d",
+        "Title": "Elongated parking rectangles. Used for cutting the green surfaces to create the island surfaces.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "e09d35351ccd48ba89dd2f39b437f09a",
+          "993529ba457540afaa457272dc8df821",
+          "a31d80f3a1094eb1a9c002029a38dc7b",
+          "c8768e63d6fe49828a85005d8a667c40",
+          "813b147d66e643c6a38f4144b9b028b3"
+        ],
+        "HasNestedGroups": false,
+        "Left": 8480.983221997674,
+        "Top": 5078.935178092701,
+        "Width": 2027.4154935572187,
+        "Height": 633.2459847240998,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 5151.935178092701,
+        "InitialHeight": 590.2459847240998,
+        "TextblockHeight": 63.0,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "0fdb0f9981034cc3bd987b483ef0d299",
+        "Title": "Replacement elongated parking rectangles. For replacements as required to account for 1-way or 2-way traffic between rows.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "4e9abb844d7a4d01a538b1de4121c2c2",
+          "995afe0d12d6452fb5bdfc41cc150bac",
+          "f10e9ca65cb947ec963b9df6bca79d16",
+          "947c89217bce48d3aebc57661df9d998",
+          "4e1760c78da04e17ad3c531b2711cb61"
+        ],
+        "HasNestedGroups": false,
+        "Left": 8463.978562087115,
+        "Top": 6057.709549286491,
+        "Width": 2027.4154935571787,
+        "Height": 633.2459847240998,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 6130.709549286491,
+        "InitialHeight": 590.2459847240998,
+        "TextblockHeight": 63.0,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "77ae0215f87140db8780822745b83c9c",
+        "Title": "Create non interlocked parking bay pattern.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "071245732f1c4207a0b6973bbfa21e31"
+        ],
+        "HasNestedGroups": false,
+        "Left": 6740.1109218014535,
+        "Top": 389.35320298086015,
+        "Width": 909.5,
+        "Height": 2351.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 462.35320298086015,
+        "InitialHeight": 2308.0,
+        "TextblockHeight": 63.0,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "9ec6bf7befa148e39c465ecd13505a0b",
+        "Title": "Create herringbone parking pattern.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "7b7dcab880134c0ea11652946b7ac6af"
+        ],
+        "HasNestedGroups": false,
+        "Left": 6749.645597462023,
+        "Top": 2812.72502430674,
+        "Width": 902.0,
+        "Height": 2383.5,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 2885.72502430674,
+        "InitialHeight": 2340.5,
+        "TextblockHeight": 63.0,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "2bcd6fc9f67e4ef29f7afd9ca5044e17",
+        "Title": "Create interlocking parking pattern.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "dd4805dd69844ac4b959504ca491ae23"
+        ],
+        "HasNestedGroups": false,
+        "Left": 6755.156650313484,
+        "Top": 5306.151617520791,
+        "Width": 902.0,
+        "Height": 2432.5,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 5379.151617520791,
+        "InitialHeight": 2389.5,
+        "TextblockHeight": 63.0,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "d17f9413691148719a91bc1f2883d469",
+        "Title": "Parking green area surfaces.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "7ef7bc359328456a93004a4e342b5c7b",
+          "e6fd2df7f0a14ecf915f9ff27da0a6ec",
+          "06ba032e8def4d06946cca4dcfd7f479",
+          "8083ef3c6f3542f79102133bd48cf7cf",
+          "170f16b58dc54a99bafb68eea9d4dd75"
+        ],
+        "HasNestedGroups": false,
+        "Left": 8474.245661673205,
+        "Top": 7180.754332290131,
+        "Width": 2027.4154935571896,
+        "Height": 633.2459847240998,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 7253.754332290131,
+        "InitialHeight": 590.2459847240998,
+        "TextblockHeight": 63.0,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "115f7b3becd247318912d2e03ba6075e",
+        "Title": "Length of bounding box curve",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "4ca083c6af094e1097fb5f474c19f02d"
+        ],
+        "HasNestedGroups": false,
+        "Left": 4582.899790119924,
+        "Top": 2792.9118752971203,
+        "Width": 470.5,
+        "Height": 248.5,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 2909.4118752971203,
+        "InitialHeight": 162.0,
+        "TextblockHeight": 106.5,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "d3ff2f3c7c8d4e3d8ab0531eb221a028",
+        "Title": "Parking bay angle selection.",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "f57eafe87cae4efe9c1fc8da7596a297",
+          "cd1856de85074e19b536c98626a0f8d1",
+          "d68ca3ce6dc748da84803d38dd6c11c5",
+          "93d727484a77466eb403179921d7ba32",
+          "27ef876421d54a0a84f150236a6c4b93"
+        ],
+        "HasNestedGroups": false,
+        "Left": 1784.8194846876336,
+        "Top": 2463.5753129234404,
+        "Width": 1835.2413704427895,
+        "Height": 665.26569546265,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 2536.5753129234404,
+        "InitialHeight": 622.26569546265,
+        "TextblockHeight": 63.0,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "18e96c39d98e4a4c83495475ce8e648f",
+        "Title": "Inputs",
+        "DescriptionText": "",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "7ca9391670954450974c3cb9cff09fd1",
+          "ae66e2fb4df94e1bba325ed02a89639d",
+          "4afd92f5f09149beb1de5c82d8c4825a",
+          "7ab9fddec62f4fb0b1ffd2be9fc61bee",
+          "0daed5dba5e24f75a0cf21f3fcabb832",
+          "1c0de5d06ba04ca9813716bb6017631e",
+          "f8069286e52940f194c97d8cb85e198a"
+        ],
+        "HasNestedGroups": false,
+        "Left": 417.8089871757934,
+        "Top": 1085.1290654743302,
+        "Width": 770.6856522886001,
+        "Height": 2058.74272655642,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 1158.1290654743302,
+        "InitialHeight": 2015.7427265564202,
+        "TextblockHeight": 63.0,
+        "Background": "#FF848484"
+      },
+      {
+        "Id": "0f10745412fe4276b3b4565be320b2a4",
+        "Title": "Select the parking angle from the dictionary based on the angle selector parameter.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": 3345.560855130423,
+        "Top": 2651.46993218762,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "93d727484a77466eb403179921d7ba32"
+      },
+      {
+        "Id": "5591f6fd2be548cfa20108312073aa9a",
+        "Title": "Create a dictionary of parking angles.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": 2900.7969924619333,
+        "Top": 2667.77171798578,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "f57eafe87cae4efe9c1fc8da7596a297"
+      },
+      {
+        "Id": "16c473af82f94199905140f6c9e029da",
+        "Title": "Here we create the keys and parking angle values to be added to the dictionary.",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": 1890.0694846876336,
+        "Top": 2614.94496339354,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676",
+        "PinnedNode": "cd1856de85074e19b536c98626a0f8d1"
+      }
+    ],
+    "X": -8990.60151082884,
+    "Y": -1585.0908972836776,
+    "Zoom": 0.7803377012279425
+  }
+}
